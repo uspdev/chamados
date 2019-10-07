@@ -1,25 +1,34 @@
 <?php
 
 return [
-    'title'=> 'USPdev',
+    'title'=> env('APP_NAME'),
     'dashboard_url' => '/',
-    'logout_method' => 'GET',
+    'logout_method' => 'POST',
     'logout_url' => 'logout',
     'login_url' => 'login',
     'menu' => [
         [
-            'text' => 'Item 1',
+            'text' => 'Novo Chamado',
+            'url'  => '/chamados/create',
+        ],
+        [
+            'text' => 'Meus Chamados',
             'url'  => '/item1',
         ],
         [
-            'text' => 'Item 2',
+            'text' => 'Triagem',
             'url'  => '/item2',
             'can'  => '',
         ],
         [
-            'text' => 'Item 3',
+            'text' => 'Fila para atendimento',
             'url'  => '/item3',
-            'can'  => 'admin',
+            'can'  => '',
+        ],
+        [
+            'text' => 'Categorias',
+            'url'  => '/categorias',
+            'can'  => '',
         ],
     ]
 ];

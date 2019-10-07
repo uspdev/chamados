@@ -12,7 +12,7 @@
 
 @section('content')
   @parent
-  <form method="POST" role="form" action="{{ route('chamados.store', [$site->id]) }}">
+  <form method="POST" role="form" action="{{ route('chamados.store') }}">
     @csrf
 
   <div class="form-group">

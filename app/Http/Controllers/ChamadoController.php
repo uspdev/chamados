@@ -43,8 +43,8 @@ class ChamadoController extends Controller
      */
     public function create()
     {
-        /*$this->authorize('sites.view',$site);
-        return view('chamados/create',compact('site')); */
+        //$this->authorize('chamados.view');
+        return view('chamados/create');
     }
 
     /**
