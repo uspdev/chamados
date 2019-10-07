@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Chamado;
-use App\Site;
 use Illuminate\Http\Request;
 use App\Mail\ChamadoMail;
 use Mail;
@@ -28,10 +27,13 @@ class ChamadoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Site $site)
+    public function index()
     {
+        dd("Oh eys");
+        /*
         $this->authorize('sites.view',$site);
         return view('chamados/index',compact('site')); 
+        */
     }
 
     /**
@@ -39,10 +41,10 @@ class ChamadoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Site $site)
+    public function create()
     {
-        $this->authorize('sites.view',$site);
-        return view('chamados/create',compact('site')); 
+        /*$this->authorize('sites.view',$site);
+        return view('chamados/create',compact('site')); */
     }
 
     /**
@@ -51,8 +53,9 @@ class ChamadoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Site $site)
+    public function store(Request $request)
     {
+        /*
         $this->authorize('sites.view',$site);
 
         $request->validate([
@@ -72,6 +75,7 @@ class ChamadoController extends Controller
 
         $request->session()->flash('alert-info', 'Chamado cadastrado com sucesso');
         return redirect("/sites/$site->id");
+        */
     }
 
     /**
@@ -80,10 +84,10 @@ class ChamadoController extends Controller
      * @param  \App\Chamado  $chamado
      * @return \Illuminate\Http\Response
      */
-    public function show(Site $site, Chamado $chamado)
+    public function show(Chamado $chamado)
     {
-        $this->authorize('sites.view',$site);
-        return view('chamados/show',compact('site','chamado')); 
+        /*$this->authorize('sites.view',$site);
+        return view('chamados/show',compact('site','chamado')); */
     }
 
     /**

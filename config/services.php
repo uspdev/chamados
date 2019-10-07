@@ -29,5 +29,11 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+    'senhaunica' => [
+        'client_id' => env('SENHAUNICA_KEY'),
+        'client_secret' => env('SENHAUNICA_SECRET'),
+        'callback_id' => env('SENHAUNICA_CALLBACK_ID'),
+        'redirect' => '/',
+    ],
 
 ];

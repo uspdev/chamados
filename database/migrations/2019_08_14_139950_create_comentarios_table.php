@@ -20,9 +20,9 @@ class CreateComentariosTable extends Migration
             $table->text('comentario');
 
             // relacionamento com users
-            $table->integer('user_id')->unsigned();
+            $table->unsignedBigInteger('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            // relacionamento com sites
+            // relacionamento com chamado
             $table->unsignedBigInteger('chamado_id');
             $table->foreign('chamado_id')->references('id')->on('chamados')->onDelete('cascade');
         });

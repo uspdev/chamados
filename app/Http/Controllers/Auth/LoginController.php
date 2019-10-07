@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Socialite;
+use App\User;
+use Auth;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -35,5 +39,32 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    public function redirectToProvider()
+    {
+        return Socialite::driver('senhaunica')->redirect();
+    }
+
+    public function handleProviderCallback()
+    {
+        $userSenhaUnica = Socialite::driver('senhaunica')->user();
+        $user = User::where('codpes',$userSenhaUnica->codpes)->first();
+        if (is_null($user)) {
+            $user = new User;
+        }
+                
+        // bind do dados retornados
+        $user->codpes = $userSenhaUnica->codpes;
+        $user->email = $userSenhaUnica->email;
+        $user->name = $userSenhaUnica->nompes;
+        $user->save();
+        Auth::login($user, true);
+        return redirect('/');
+    }
+
+    public function logout(Request $request) {
+        Auth::logout();
+        return redirect('/');
     }
 }
