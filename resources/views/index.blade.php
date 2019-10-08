@@ -11,6 +11,6 @@
         @auth
             <script>window.location = "/chamados/create";</script>
         @else
-            Você ainda não fez seu login com a senha única USP <a href="/senhaunica/login"> Faça seu Login! </a>
+            Você ainda não fez seu login com a senha única USP <a href="/login"> Faça seu Login! </a>
         @endauth
 @stop

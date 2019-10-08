@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class CategoriaController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,6 +19,7 @@ class CategoriaController extends Controller
      */
     public function index()
     {
+        $this->authorize('admin');
         $categorias = Categoria::all();
         return view("categorias/index", compact('categorias'));
     }
@@ -25,6 +31,7 @@ class CategoriaController extends Controller
      */
     public function create()
     {
+        $this->authorize('admin');
         return view("categorias/create");
     }
 
@@ -36,6 +43,7 @@ class CategoriaController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('admin');
         $request->validate([
           'nome'  => ['required'],
         ]);
@@ -65,6 +73,7 @@ class CategoriaController extends Controller
      */
     public function edit(Categoria $categoria)
     {
+        $this->authorize('admin');
         return view("categorias/edit",compact('categoria'));
     }
 
@@ -88,6 +97,7 @@ class CategoriaController extends Controller
      */
     public function destroy(Categoria $categoria)
     {
+        $this->authorize('admin');
         $categoria->delete();
         return redirect()->route('categorias.index');
     }

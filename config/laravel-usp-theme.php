@@ -18,7 +18,7 @@ return [
         [
             'text' => 'Triagem',
             'url'  => '/item2',
-            'can'  => '',
+            'can'  => 'admin',
         ],
         [
             'text' => 'Fila para atendimento',
@@ -28,7 +28,7 @@ return [
         [
             'text' => 'Categorias',
             'url'  => '/categorias',
-            'can'  => '',
+            'can'  => 'admin',
         ],
     ]
 ];

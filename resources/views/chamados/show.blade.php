@@ -1,6 +1,6 @@
 @extends('master')
 
-@section('title', 'Dashboard')
+@section('title', 'Chamado')
 
 @section('content_header')
 @stop
@@ -16,10 +16,13 @@
     <div class="card bg-light mb-3">
       <div class="card-header">{{ $chamado->user->name }} - {{ Carbon\Carbon::parse($chamado->created_at)->format('d/m/Y H:i') }}</div>
       <div class="card-body">
-        <b>site</b>: {{ $chamado->site->dominio.config('sites.dnszone') }} <br>
         <b>status</b>: {{ $chamado->status }}<br>
-        <b>tipo</b>: {{ $chamado->tipo }} <br>
-        <p class="card-text">{!! $chamado->descricao !!}</p>
+        <b>categoria</b>: 
+            @if($chamado->categoria)
+                {{ $chamado->categoria->nome  }}
+            @endif
+        <br>
+        <p class="card-text">{!! $chamado->chamado !!}</p>
         @if(!is_null($chamado->fechado_em))
         <div><b>Fechado em</b>: {{ Carbon\Carbon::parse($chamado->fechado_em)->format('d/m/Y H:i') }}</div>
         @endif
@@ -40,7 +43,7 @@
 @endforelse
 
 
-  <form method="POST" role="form" action="{{ route('comentarios.store', [$chamado->id]) }}">
+  <form method="POST" role="form" action="#">
       @csrf
 
       <div class="form-group">

@@ -15,7 +15,7 @@ class Chamado extends Model
         return $this->hasMany('App\Comentario');
     }
 
-    public function site(){
-        return $this->belongsTo('App\Site');
+    public function categoria(){
+        return $this->belongsTo('App\Categoria');
     }
 }

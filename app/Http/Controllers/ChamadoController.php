@@ -3,12 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Chamado;
+use App\Categoria;
 use Illuminate\Http\Request;
 use App\Mail\ChamadoMail;
 use Mail;
 
 class ChamadoController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
     /**
      * Display a listing of the resource.
@@ -17,7 +23,7 @@ class ChamadoController extends Controller
      */
     public function abertos()
     {
-        $this->authorize('admin');
+        //$this->authorize('admin'.$);
         $chamados = Chamado::where('status', 'aberto')->get();
         return view('chamados/abertos',compact('chamados')); 
     }
@@ -29,7 +35,7 @@ class ChamadoController extends Controller
      */
     public function index()
     {
-        dd("Oh eys");
+        $user = \Auth::user();
         /*
         $this->authorize('sites.view',$site);
         return view('chamados/index',compact('site')); 
@@ -43,8 +49,9 @@ class ChamadoController extends Controller
      */
     public function create()
     {
-        //$this->authorize('chamados.view');
-        return view('chamados/create');
+        $this->authorize('chamados.create');
+        $categorias = Categoria::all();
+        return view('chamados/create',compact('categorias'));
     }
 
     /**
@@ -55,27 +62,32 @@ class ChamadoController extends Controller
      */
     public function store(Request $request)
     {
-        /*
-        $this->authorize('sites.view',$site);
+        $this->authorize('chamados.create');
 
         $request->validate([
-          'descricao'  => ['required'],
-          'tipo'       => ['required'],
+          'telefone'         => ['required'],
+          'chamado'         => ['required'],
+          'categoria_id'    => ['required', 'Integer'],
         ]);
+
+        /* Atualiza telefone */
         $user = \Auth::user();
+        $user->telefone = $request->telefone;
+        $user->save();
+
         $chamado = new Chamado;
-        $chamado->descricao = $request->descricao;
-        $chamado->tipo = $request->tipo;
-        $chamado->status = 'aberto';
-        $chamado->site_id = $site->id;
+        $chamado->chamado = $request->chamado;
+        
+        $chamado->categoria_id = $request->categoria_id;
+        $chamado->status = 'triagem';
         $chamado->user_id = $user->id;
         $chamado->save();
 
-        Mail::send(new ChamadoMail($chamado,$user));
+        //Mail::send(new ChamadoMail($chamado,$user));
 
-        $request->session()->flash('alert-info', 'Chamado cadastrado com sucesso');
-        return redirect("/sites/$site->id");
-        */
+        $request->session()->flash('alert-info', 'Chamado enviado com sucesso');
+        return redirect()->route('chamados.show',$chamado->id);
+
     }
 
     /**
@@ -86,8 +98,8 @@ class ChamadoController extends Controller
      */
     public function show(Chamado $chamado)
     {
-        /*$this->authorize('sites.view',$site);
-        return view('chamados/show',compact('site','chamado')); */
+        $this->authorize('chamados.view',$chamado);
+        return view('chamados/show',compact('chamado'));
     }
 
     /**

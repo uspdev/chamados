@@ -21,8 +21,6 @@ class CreateChamadosTable extends Migration
 
             /* Campos opcionais do chamado */
             $table->text('patrimonio')->nullable();
-            $table->text('ramal')->nullable();
-            $table->text('ponto_de_rede')->nullable();
             
             $table->enum('status', ['Triagem', 'Atríbuido','Fechado']);
             $table->dateTime('atribuido_em')->nullable();
