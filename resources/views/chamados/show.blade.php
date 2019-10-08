@@ -14,7 +14,7 @@
 @parent
 
     <div class="card bg-light mb-3">
-      <div class="card-header">{{ $chamado->user->name }} - {{ Carbon\Carbon::parse($chamado->created_at)->format('d/m/Y H:i') }}</div>
+      <div class="card-header">{{ $chamado->user->codpes }} {{ $chamado->user->name }} - {{ Carbon\Carbon::parse($chamado->created_at)->format('d/m/Y H:i') }}</div>
       <div class="card-body">
         <b>status</b>: {{ $chamado->status }}<br>
         <b>categoria</b>: 

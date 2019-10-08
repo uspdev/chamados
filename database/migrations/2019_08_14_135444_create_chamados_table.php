@@ -31,11 +31,12 @@ class CreateChamadosTable extends Migration
             $table->integer('triagem_por')->unsigned()->nullable(); // codpes
             $table->integer('atribuido_para')->unsigned()->nullable(); // codpes
 
-            // relacionamento com users
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            // relacionamento com user
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
+            
             // relacionamento com categorias
-            $table->unsignedBigInteger('categoria_id')->unsigned()->nullable();
+            $table->unsignedBigInteger('categoria_id')->nullable();
             $table->foreign('categoria_id')->references('id')->on('categorias')->onDelete('set null');
         });
     }

@@ -4,8 +4,9 @@
 
 @section('content')
   @parent
-  <form method="POST" role="form" action="{{ route('categorias.store') }}">
+  <form method="POST" role="form" action="{{ route('categorias.update', $categoria) }}">
     @csrf
+    {{ method_field('patch') }}
     @include('categorias/form')
   </form>
 

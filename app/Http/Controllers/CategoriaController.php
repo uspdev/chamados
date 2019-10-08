@@ -86,7 +86,14 @@ class CategoriaController extends Controller
      */
     public function update(Request $request, Categoria $categoria)
     {
-        //
+        $this->authorize('admin');
+        $request->validate([
+          'nome'  => ['required'],
+        ]);
+
+        $categoria->nome = $request->nome;
+        $categoria->save();
+        return redirect()->route('categorias.index');
     }
 
     /**

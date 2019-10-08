@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Chamado;
 use App\Categoria;
+use App\User;
 use Illuminate\Http\Request;
 use App\Mail\ChamadoMail;
 use Mail;
+use Illuminate\Support\Facades\Gate;
 
 class ChamadoController extends Controller
 {
@@ -16,17 +18,6 @@ class ChamadoController extends Controller
         $this->middleware('auth');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function abertos()
-    {
-        //$this->authorize('admin'.$);
-        $chamados = Chamado::where('status', 'aberto')->get();
-        return view('chamados/abertos',compact('chamados')); 
-    }
 
     /**
      * Display a listing of the resource.
@@ -36,10 +27,10 @@ class ChamadoController extends Controller
     public function index()
     {
         $user = \Auth::user();
-        /*
+
         $this->authorize('sites.view',$site);
         return view('chamados/index',compact('site')); 
-        */
+
     }
 
     /**
@@ -70,16 +61,27 @@ class ChamadoController extends Controller
           'categoria_id'    => ['required', 'Integer'],
         ]);
 
-        /* Atualiza telefone */
-        $user = \Auth::user();
-        $user->telefone = $request->telefone;
-        $user->save();
-
         $chamado = new Chamado;
         $chamado->chamado = $request->chamado;
         
         $chamado->categoria_id = $request->categoria_id;
         $chamado->status = 'triagem';
+
+        /* Administradores podem alterar quem fez o chamado */
+        if(!empty($request->codpes) && Gate::allows('admin')) {
+            $user = User::where('codpes',$request->codpes)->first();
+            if (is_null($user)) {
+                $user = new User;
+                $user->codpes = $request->codpes;
+            }
+        } else {
+            $user = \Auth::user(); 
+        }
+
+        /* Atualiza telefone da pessoa */
+        $user->telefone = $request->telefone;
+        $user->save();
+
         $chamado->user_id = $user->id;
         $chamado->save();
 
