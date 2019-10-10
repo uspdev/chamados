@@ -17,7 +17,12 @@ class CreateChamadosTable extends Migration
             $table->bigIncrements('id');
             $table->timestamps();
 
+            /* Campos obrigatórios*/
             $table->text('chamado');
+            $predios = ['Administração', 'Letras','Filosofia e Ciências Sociais',
+                         'História e Geografia','Casa de Cultura Japonesa','Favos','Outro'];
+            $table->enum('predio', $predios);
+            $table->text('sala');
 
             /* Campos opcionais do chamado */
             $table->text('patrimonio')->nullable();

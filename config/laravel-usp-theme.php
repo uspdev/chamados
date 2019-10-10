@@ -13,16 +13,16 @@ return [
         ],
         [
             'text' => 'Meus Chamados',
-            'url'  => '/item1',
+            'url'  => '/chamados',
         ],
         [
             'text' => 'Triagem',
-            'url'  => '/item2',
+            'url'  => '/triagem',
             'can'  => 'admin',
         ],
         [
-            'text' => 'Fila para atendimento',
-            'url'  => '/item3',
+            'text' => 'Atender',
+            'url'  => '/atender',
             'can'  => '',
         ],
         [

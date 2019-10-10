@@ -17,6 +17,10 @@
       <div class="card-header">{{ $chamado->user->codpes }} {{ $chamado->user->name }} - {{ Carbon\Carbon::parse($chamado->created_at)->format('d/m/Y H:i') }}</div>
       <div class="card-body">
         <b>status</b>: {{ $chamado->status }}<br>
+        <b>prédio</b>: {{ $chamado->predio }}<br>
+        <b>sala</b>: {{ $chamado->sala }}<br>
+        <b>triagem por</b>: {{ $chamado->triagem_por }}<br>
+        <b>atribuído para</b>: {{ $chamado->atribuido_para }}<br>
         <b>categoria</b>: 
             @if($chamado->categoria)
                 {{ $chamado->categoria->nome  }}
