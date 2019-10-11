@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use App\Mail\ChamadoMail;
 use Mail;
 use Illuminate\Support\Facades\Gate;
+use App\Rules\Numeros_USP;
+use Carbon\Carbon;
 
 class ChamadoController extends Controller
 {
@@ -32,6 +34,9 @@ class ChamadoController extends Controller
             [2807855,'Gilberto Vargas'],
             [7098274,'Paulo Henrique de Araújo'],
             [4988966,'Lenin Oliveira de Araújo'],
+            [2989060,'Normando Peres Silva Moura'],
+            [4780673,'Wellington da Silva Moura'],
+            [9827360,'Ana Claudia Oze Ferraz']
         ];
     }
 
@@ -69,7 +74,7 @@ class ChamadoController extends Controller
 
         $user = \Auth::user();
         $chamados = Chamado::where('status','=','Atríbuido')->
-                             where('atribuido_para','=',$user->id)->paginate(10);
+                             where('atribuido_para','=',$user->codpes)->paginate(10);
 
         return view('chamados/index',compact('chamados')); 
     }
@@ -185,7 +190,7 @@ class ChamadoController extends Controller
         /* Administradores podem alterar quem fez o chamado */
         if(!empty($request->codpes) && Gate::allows('admin')) {
             $request->validate([
-              'codpes'         => ['Integer'],
+              'codpes'         => ['Integer',new Numeros_USP($request->codpes)],
             ]);
             $user = User::where('codpes',$request->codpes)->first();
             if (is_null($user)) {
@@ -200,6 +205,7 @@ class ChamadoController extends Controller
         if(!empty($request->atribuido_para) && Gate::allows('admin')) {
             $chamado->atribuido_para = $request->atribuido_para;
             $chamado->triagem_por = $user->codpes;
+            $chamado->atribuido_em = Carbon::now();
             $chamado->status = 'Atribuído';
         }
 

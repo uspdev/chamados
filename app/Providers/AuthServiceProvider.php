@@ -31,6 +31,13 @@ class AuthServiceProvider extends ServiceProvider
             return in_array($user->codpes, $admins_id);
         });
 
+        # atendente 
+        Gate::define('atendente', function ($user) {
+            $atendentes = explode(',', config('atendimento.atendentes'));
+            return in_array($user->codpes, $atendentes);
+        });
+
+
         # policies
         Gate::resource('chamados', 'App\Policies\ChamadoPolicy');
         //Gate::resource('comentarios', 'App\Policies\ComentarioPolicy');

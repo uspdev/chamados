@@ -14,13 +14,21 @@
 @parent
 
     <div class="card bg-light mb-3">
-      <div class="card-header">{{ $chamado->user->codpes }} {{ $chamado->user->name }} - {{ Carbon\Carbon::parse($chamado->created_at)->format('d/m/Y H:i') }}</div>
+
+      <div class="card-header">{{ \Uspdev\Replicado\Pessoa::dump($chamado->user->codpes)['nompes'] }} - {{ Carbon\Carbon::parse($chamado->created_at)->format('d/m/Y H:i') }}</div>
       <div class="card-body">
+        <b>id</b>: #{{ $chamado->id }}<br>
         <b>status</b>: {{ $chamado->status }}<br>
+
+        @if($chamado->status == 'Atribuído' or $chamado->status == 'Fechado')
+            <b>triagem por</b>: {{ \Uspdev\Replicado\Pessoa::dump($chamado->triagem_por)['nompes'] }}<br>
+            <b>atribuído para</b>: {{ \Uspdev\Replicado\Pessoa::dump($chamado->atribuido_para)['nompes'] }}<br>
+        @endif
+
         <b>prédio</b>: {{ $chamado->predio }}<br>
         <b>sala</b>: {{ $chamado->sala }}<br>
-        <b>triagem por</b>: {{ $chamado->triagem_por }}<br>
-        <b>atribuído para</b>: {{ $chamado->atribuido_para }}<br>
+        <b>total de comentários</b>: {{ $chamado->comentarios->count() }}<br>
+
         <b>categoria</b>: 
             @if($chamado->categoria)
                 {{ $chamado->categoria->nome  }}
@@ -47,7 +55,7 @@
 @endforelse
 
 
-  <form method="POST" role="form" action="#">
+  <form method="POST" role="form" action="/comentarios/{{$chamado->id}}">
       @csrf
 
       <div class="form-group">
@@ -55,17 +63,17 @@
         <textarea class="form-control" id="comentario" name="comentario" rows="7"></textarea>
       </div>
 
-      @if($chamado->status == 'aberto')
+      @if($chamado->status == 'Triagem' or $chamado->status == 'Atribuído')
       <div class="form-group">
         <button type="submit" class="btn btn-primary" value="">Enviar</button>
       </div>
 
         <div class="form-group">
-          <button type="submit" class="btn btn-danger" name="status" value="fechar">Enviar e fechar chamado</button>
+          <button type="submit" class="btn btn-danger" name="status" value="Fechado">Enviar e fechar chamado</button>
       </div>
       @else
         <div class="form-group">
-          <button type="submit" class="btn btn-danger" name="status" value="abrir">Enviar e reabrir chamado</button>
+          <button type="submit" class="btn btn-danger" name="status" value="Triagem">Enviar e reabrir chamado</button>
       </div>
       @endif
   </form>

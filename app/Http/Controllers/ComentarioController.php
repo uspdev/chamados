@@ -11,6 +11,12 @@ use Mail;
 
 class ComentarioController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -39,7 +45,7 @@ class ComentarioController extends Controller
      */
     public function store(Request $request, Chamado $chamado)
     {
-        $this->authorize('sites.view',$chamado->site);
+        //$this->authorize('chamado.view',$chamado->site);
 
         $request->validate([
           'comentario'  => ['required'],
@@ -53,21 +59,21 @@ class ComentarioController extends Controller
         $comentario->save();
 
         if(isset($request->status)) {
-            if($request->status == 'fechar') {
-                $comentario->chamado->status = 'fechado';
+            if($request->status == 'Fechado') {
+                $comentario->chamado->status = 'Fechado';
                 $comentario->chamado->fechado_em = Carbon::now();
             }
-            elseif($request->status == 'abrir') {
-                $comentario->chamado->status = 'aberto';
+            elseif($request->status == 'Triagem') {
+                $comentario->chamado->status = 'Triagem';
                 $comentario->chamado->fechado_em = null;
             }
             $comentario->chamado->save();
         }
 
-        Mail::send(new ComentarioMail($comentario,$user));
+        //Mail::send(new ComentarioMail($comentario,$user));
 
         $request->session()->flash('alert-info', 'Comentário enviado com sucesso');
-        return redirect("/chamados/$chamado->site_id/$chamado->id");
+        return redirect("/chamados/$chamado->id");
     }
 
     /**

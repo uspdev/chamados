@@ -7,6 +7,12 @@
         "laravel"
     ],
     "license": "MIT",
+    "repositories": {
+        "replicado": {
+            "type": "git",
+            "url": "https://github.com/uspdev/replicado.git"
+        }
+	},
     "require": {
         "php": "^7.2",
         "fideloper/proxy": "^4.0",

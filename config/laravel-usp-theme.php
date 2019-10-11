@@ -10,10 +10,12 @@ return [
         [
             'text' => 'Novo Chamado',
             'url'  => '/chamados/create',
+            'can'  => 'chamados.create',
         ],
         [
             'text' => 'Meus Chamados',
             'url'  => '/chamados',
+            'can'  => 'chamados.create',
         ],
         [
             'text' => 'Triagem',
@@ -23,7 +25,7 @@ return [
         [
             'text' => 'Atender',
             'url'  => '/atender',
-            'can'  => '',
+            'can'  => 'atendente',
         ],
         [
             'text' => 'Categorias',
