@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Chamado;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Support\Facades\Gate;
 
 class ChamadoPolicy
 {
@@ -18,7 +19,7 @@ class ChamadoPolicy
      */
     public function viewAny(User $user)
     {
-        //
+        return true;
     }
 
     /**
@@ -28,9 +29,19 @@ class ChamadoPolicy
      * @param  \App\Chamado  $chamado
      * @return mixed
      */
-    public function view(User $user)
+    public function view(User $user, Chamado $chamado)
     {
-        return true;
+        // Quem pode ver: o autor, atendentes ou admin
+        if($user->codpes == $chamado->user->codpes){
+            return true;               
+        }
+        if(Gate::allows('admin')){
+            return true;
+        }
+        if($user->codpes == $chamado->atribuido_para){
+            return true;               
+        }
+        return false;
     }
 
     /**

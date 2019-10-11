@@ -38,6 +38,7 @@
         @if(!is_null($chamado->fechado_em))
         <div><b>Fechado em</b>: {{ Carbon\Carbon::parse($chamado->fechado_em)->format('d/m/Y H:i') }}</div>
         @endif
+        <a href="/chamados/{{$chamado->id}}/edit" class="btn btn-success">Editar Chamado </a>
       </div>
     </div>
 

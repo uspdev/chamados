@@ -45,7 +45,7 @@ class ComentarioController extends Controller
      */
     public function store(Request $request, Chamado $chamado)
     {
-        //$this->authorize('chamado.view',$chamado->site);
+        $this->authorize('chamados.view',$chamado);
 
         $request->validate([
           'comentario'  => ['required'],
@@ -65,6 +65,7 @@ class ComentarioController extends Controller
             }
             elseif($request->status == 'Triagem') {
                 $comentario->chamado->status = 'Triagem';
+                $comentario->atribuido_para = null;
                 $comentario->chamado->fechado_em = null;
             }
             $comentario->chamado->save();

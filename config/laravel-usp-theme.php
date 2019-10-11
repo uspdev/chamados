@@ -28,6 +28,11 @@ return [
             'can'  => 'atendente',
         ],
         [
+            'text' => 'Todos Chamados',
+            'url'  => '/todos',
+            'can'  => 'admin',
+        ],
+        [
             'text' => 'Categorias',
             'url'  => '/categorias',
             'can'  => 'admin',

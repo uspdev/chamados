@@ -49,18 +49,25 @@ class ChamadoController extends Controller
     public function index()
     {
         /* Chamados de quem está logado */
-        $this->authorize('chamados.view');
+        $this->authorize('chamados.viewAny');
 
         $user = \Auth::user();
         $chamados = Chamado::where('user_id','=',$user->id)->paginate(10);
         return view('chamados/index',compact('chamados')); 
+    }
 
+    public function todos()
+    {
+        /* Chamados de quem está logado */
+        $this->authorize('admin');
+        $chamados = Chamado::paginate(10);
+        return view('chamados/index',compact('chamados')); 
     }
 
     public function triagem()
     {
         /* Chamados de quem está logado */
-        $this->authorize('chamados.view');
+        $this->authorize('chamados.viewAny');
 
         $user = \Auth::user();
         $chamados = Chamado::where('status','=','Triagem')->paginate(10);
@@ -70,7 +77,7 @@ class ChamadoController extends Controller
     public function atender()
     {
         /* Chamados de quem está logado */
-        $this->authorize('chamados.view');
+        $this->authorize('chamados.viewAny');
 
         $user = \Auth::user();
         $chamados = Chamado::where('status','=','Atríbuido')->
