@@ -37,6 +37,7 @@ class ChamadoController extends Controller
             [2807855,'Gilberto Vargas'],
             [7098274,'Paulo Henrique de Araújo'],
             [4988966,'Lenin Oliveira de Araújo'],
+            [2431867,'Marco Antonio Rocha']
             [2989060,'Normando Peres Silva Moura'],
             [4780673,'Wellington da Silva Moura'],
             [9827360,'Ana Claudia Oze Ferraz']
