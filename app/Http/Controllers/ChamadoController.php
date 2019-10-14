@@ -220,7 +220,7 @@ class ChamadoController extends Controller
             if(!empty($request->atribuido_para)) {
                 $chamado->complexidade = $request->complexidade;
                 $chamado->atribuido_para = $request->atribuido_para;
-                $chamado->triagem_por = $user->codpes;
+                $chamado->triagem_por = \Auth::user()->codpes;
                 $chamado->atribuido_em = Carbon::now();
                 $chamado->status = 'Atribuído';
             }
