@@ -930,16 +930,16 @@
         },
         {
             "name": "league/flysystem",
-            "version": "1.0.55",
+            "version": "1.0.56",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "33c91155537c6dc899eacdc54a13ac6303f156e6"
+                "reference": "90e3f83cb10ef6b058d70f95267030e7a6236518"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/33c91155537c6dc899eacdc54a13ac6303f156e6",
-                "reference": "33c91155537c6dc899eacdc54a13ac6303f156e6",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/90e3f83cb10ef6b058d70f95267030e7a6236518",
+                "reference": "90e3f83cb10ef6b058d70f95267030e7a6236518",
                 "shasum": ""
             },
             "require": {
@@ -1010,7 +1010,7 @@
                 "sftp",
                 "storage"
             ],
-            "time": "2019-08-24T11:17:19+00:00"
+            "time": "2019-10-12T13:05:59+00:00"
         },
         {
             "name": "league/oauth1-client",
@@ -3342,7 +3342,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/uspdev/replicado.git",
-                "reference": "9488099c4626a7933f4371e27ce20edfdc56c8fb"
+                "reference": "467898aab3271010e31c01660158dc7520dace7a"
             },
             "require": {
                 "ext-pdo_dblib": "*",
@@ -3367,7 +3367,7 @@
             ],
             "description": "Classes PHP que consome dados do Replicado USP",
             "homepage": "https://github.com/uspdev/replicado",
-            "time": "2019-10-11T13:25:26+00:00"
+            "time": "2019-10-14T14:37:57+00:00"
         },
         {
             "name": "uspdev/senhaunica-socialite",
@@ -3580,16 +3580,16 @@
         },
         {
             "name": "facade/ignition",
-            "version": "1.11.1",
+            "version": "1.11.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/facade/ignition.git",
-                "reference": "dc56111b19e160236084dc6ab460e9c08912ecac"
+                "reference": "862cbc2dfffa1fa28b47822a116e5b2e03b421db"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/facade/ignition/zipball/dc56111b19e160236084dc6ab460e9c08912ecac",
-                "reference": "dc56111b19e160236084dc6ab460e9c08912ecac",
+                "url": "https://api.github.com/repos/facade/ignition/zipball/862cbc2dfffa1fa28b47822a116e5b2e03b421db",
+                "reference": "862cbc2dfffa1fa28b47822a116e5b2e03b421db",
                 "shasum": ""
             },
             "require": {
@@ -3647,7 +3647,7 @@
                 "laravel",
                 "page"
             ],
-            "time": "2019-10-08T07:36:31+00:00"
+            "time": "2019-10-13T10:42:06+00:00"
         },
         {
             "name": "facade/ignition-contracts",

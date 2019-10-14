@@ -1,7 +1,7 @@
 @can('admin')
 <div class="row">
     <div class="col-sm form-group">
-        <label for="atribuido_para">Atribuir para: </label>
+        <label for="atribuido_para"><b>Atribuir para:</b></label>
         <select name="atribuido_para" class="form-control">
             <option value="" selected="">Escolher</option>
             @foreach($atendentes as $atendente)
@@ -19,10 +19,29 @@
     </div>
 
     <div class="col-sm form-group">
+        <label for="complexidade"><b>Complexidade:</b></label>
+        <select name="complexidade" class="form-control">
+            <option value="" selected="">Escolher</option>
+            @foreach($complexidades as $complexidade)
+                @if(old('complexidade') == '' and isset($chamado->complexidade))
+                    <option value="{{ $complexidade }}" {{ ( $chamado->complexidade == $complexidade) ? 'selected' : ''}}>
+                        {{ $complexidade }}
+                    </option>                
+                @else
+                    <option value="{{ $complexidade }}" {{ (old('complexidade') == $complexidade) ? 'selected' : ''}}>
+                        {{ $complexidade }}
+                    </option>   
+                @endif
+            @endforeach
+        </select>
+    </div>
+
+    <div class="col-sm form-group">
         <label for="nome">Número USP do(a) requisitante:</label>
         <input class="form-control" id="codpes" name="codpes" value="{{ $chamado->user->codpes ?? old('codpes') }}">
         <small id="codpesHelp" class="form-text text-muted">Exemplo: 123456</small>
     </div>
+
 </div>
 @endcan
 
@@ -73,16 +92,17 @@
                         {{ $categoria->nome }}
                     </option>   
                 @endif
-
             @endforeach()
         </select>
     </div>
+</div>
 
-    <div class="col-sm form-group">
+<div class="form-group">
         <label for="nome">Patrimônio do computador:</label>
         <input class="form-control" id="patrimonio" name="patrimonio" value="{{ $chamado->patrimonio ?? old('patrimonio') }}">
-         <small id="patrimonioHelp" class="form-text text-muted">Exemplo: 008.047977</small>
-    </div>
+         <small id="patrimonioHelp" class="form-text text-muted">Exemplo: <b>008.047977</b> <br>
+         User vírgula, caso o procedimento de atendimento seja idêntico em múltiplos computadores: <b>008.047977,008.048593</b>
+         </small>
 </div>
 
 <div class="form-group">

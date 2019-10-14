@@ -17,27 +17,9 @@
 
       <div class="card-header">{{ \Uspdev\Replicado\Pessoa::dump($chamado->user->codpes)['nompes'] }} - {{ Carbon\Carbon::parse($chamado->created_at)->format('d/m/Y H:i') }}</div>
       <div class="card-body">
-        <b>id</b>: #{{ $chamado->id }}<br>
-        <b>status</b>: {{ $chamado->status }}<br>
-
-        @if($chamado->status == 'Atribuído' or $chamado->status == 'Fechado')
-            <b>triagem por</b>: {{ \Uspdev\Replicado\Pessoa::dump($chamado->triagem_por)['nompes'] }}<br>
-            <b>atribuído para</b>: {{ \Uspdev\Replicado\Pessoa::dump($chamado->atribuido_para)['nompes'] }}<br>
-        @endif
-
-        <b>prédio</b>: {{ $chamado->predio }}<br>
-        <b>sala</b>: {{ $chamado->sala }}<br>
-        <b>total de comentários</b>: {{ $chamado->comentarios->count() }}<br>
-
-        <b>categoria</b>: 
-            @if($chamado->categoria)
-                {{ $chamado->categoria->nome  }}
-            @endif
-        <br>
+        @include('chamados/partials/chamado')
+        
         <p class="card-text">{!! $chamado->chamado !!}</p>
-        @if(!is_null($chamado->fechado_em))
-        <div><b>Fechado em</b>: {{ Carbon\Carbon::parse($chamado->fechado_em)->format('d/m/Y H:i') }}</div>
-        @endif
         <a href="/chamados/{{$chamado->id}}/edit" class="btn btn-success">Editar Chamado </a>
       </div>
     </div>
@@ -54,7 +36,6 @@
 @empty
     Não há comentários
 @endforelse
-
 
   <form method="POST" role="form" action="/comentarios/{{$chamado->id}}">
       @csrf

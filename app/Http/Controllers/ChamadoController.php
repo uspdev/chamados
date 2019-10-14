@@ -11,6 +11,7 @@ use Mail;
 use Illuminate\Support\Facades\Gate;
 use App\Rules\Numeros_USP;
 use Carbon\Carbon;
+use App\Rules\PatrimonioRule;
 
 class ChamadoController extends Controller
 {
@@ -18,10 +19,12 @@ class ChamadoController extends Controller
     /* Variáveis globais temporárias */
     private $predios;
     private $atendentes;
+    private $complexidades;
 
     public function __construct()
     {
         $this->middleware('auth');
+        $this->complexidades = ['baixa', 'média','alta'];
         $this->predios = collect(['Administração', 'Letras','Filosofia e Ciências Sociais',
                          'História e Geografia','Casa de Cultura Japonesa','Favos','Outro']);
 
@@ -97,7 +100,8 @@ class ChamadoController extends Controller
         $categorias = Categoria::all();
         $predios = $this->predios;
         $atendentes = $this->atendentes;
-        return view('chamados/create',compact('categorias','predios','atendentes'));
+        $complexidades = $this->complexidades;
+        return view('chamados/create',compact('categorias','predios','atendentes','complexidades'));
     }
 
     /**
@@ -143,7 +147,8 @@ class ChamadoController extends Controller
         $categorias = Categoria::all();
         $predios = $this->predios;
         $atendentes = $this->atendentes;
-        return view('chamados/edit',compact('chamado','categorias','predios','atendentes'));
+        $complexidades = $this->complexidades;
+        return view('chamados/edit',compact('chamado','categorias','predios','atendentes','complexidades'));
     }
 
     /**
@@ -185,35 +190,41 @@ class ChamadoController extends Controller
           'predio'          => ['required'],
           'chamado'         => ['required'],
           'categoria_id'    => ['required', 'Integer'],
+          'patrimonio'      => ['nullable',new PatrimonioRule],
         ]);
 
         $chamado->chamado = $request->chamado;
+        $chamado->patrimonio = $request->patrimonio;
         $chamado->sala = $request->sala;
         $chamado->predio = $request->predio;
         
         $chamado->categoria_id = $request->categoria_id;
         $chamado->status = 'triagem';
 
-        /* Administradores podem alterar quem fez o chamado */
-        if(!empty($request->codpes) && Gate::allows('admin')) {
-            $request->validate([
-              'codpes'         => ['Integer',new Numeros_USP($request->codpes)],
-            ]);
-            $user = User::where('codpes',$request->codpes)->first();
-            if (is_null($user)) {
-                $user = new User;
-                $user->codpes = $request->codpes;
+        /* Administradores */
+        if(Gate::allows('admin')) {
+            /* trocar requisitante */
+            if(!empty($request->codpes)) {
+                $request->validate([
+                  'codpes' => ['Integer',new Numeros_USP($request->codpes)],
+                ]);
+                $user = User::where('codpes',$request->codpes)->first();
+                if (is_null($user)) {
+                    $user = new User;
+                    $user->codpes = $request->codpes;
+                }
+            } 
+
+            /* Atribuir */
+            if(!empty($request->atribuido_para)) {
+                $chamado->complexidade = $request->complexidade;
+                $chamado->atribuido_para = $request->atribuido_para;
+                $chamado->triagem_por = $user->codpes;
+                $chamado->atribuido_em = Carbon::now();
+                $chamado->status = 'Atribuído';
             }
         } else {
             $user = \Auth::user(); 
-        }
-
-        /* Administradores podem atribuir */
-        if(!empty($request->atribuido_para) && Gate::allows('admin')) {
-            $chamado->atribuido_para = $request->atribuido_para;
-            $chamado->triagem_por = $user->codpes;
-            $chamado->atribuido_em = Carbon::now();
-            $chamado->status = 'Atribuído';
         }
 
         /* Atualiza telefone da pessoa */

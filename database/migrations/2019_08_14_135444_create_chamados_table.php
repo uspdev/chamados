@@ -44,6 +44,7 @@ class CreateChamadosTable extends Migration
             $table->unsignedBigInteger('categoria_id')->nullable();
             $table->foreign('categoria_id')->references('id')->on('categorias')->onDelete('set null');
         });
+        \DB::statement('ALTER TABLE chamados AUTO_INCREMENT = 1000;');
     }
 
     /**
