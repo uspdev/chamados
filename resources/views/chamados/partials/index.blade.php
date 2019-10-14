@@ -1,10 +1,20 @@
+@section('styles')
+@parent
+<style>
+    table {
+        table-layout: fixed;
+        word-wrap: break-word;
+    }
+</style>
+@stop
+
 <div class="table-responsive">
   {{ $chamados->links() }}
   <table class="table table-striped">
     <thead>
       <tr>
-        <th class="col-sm-6">Detalhes</th>
-        <th class="col-sm-6">Chamado</th>
+        <th style="width: 50%">Detalhes</th>
+        <th style="width: 50%">Chamado</th>
       </tr>
     </thead>
 
@@ -12,9 +22,9 @@
 
 @forelse ($chamados->sortByDesc('created_at') as $chamado)
       <tr>
-       <td class="col-sm-6">
+       <td>
         @include('chamados/partials/chamado')
-      </td class="col-sm-6">
+      </td>
         <td>{!! $chamado->chamado !!}</td>
       </tr>
 @empty
