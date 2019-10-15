@@ -5,6 +5,16 @@
 @section('content_header')
 @stop
 
+@section('styles')
+@parent
+<style>
+    table {
+        table-layout: fixed;
+        word-wrap: break-word;
+    }
+</style>
+@stop
+
 @section('content')
 @parent
 
@@ -12,8 +22,8 @@
   <table class="table table-striped">
     <thead>
       <tr>
-        <th>Site</th>
-        <th>Chamado</th>
+        <th style="width: 50%">Site</th>
+        <th style="width: 50%">Chamado</th>
       </tr>
     </thead>
 
