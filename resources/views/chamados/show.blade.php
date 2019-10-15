@@ -18,9 +18,8 @@
       <div class="card-header">{{ \Uspdev\Replicado\Pessoa::dump($chamado->user->codpes)['nompes'] }} - {{ Carbon\Carbon::parse($chamado->created_at)->format('d/m/Y H:i') }}</div>
       <div class="card-body">
         @include('chamados/partials/chamado')
-        
+
         <p class="card-text">{!! $chamado->chamado !!}</p>
-        <a href="/chamados/{{$chamado->id}}/edit" class="btn btn-success">Editar Chamado </a>
       </div>
     </div>
 
