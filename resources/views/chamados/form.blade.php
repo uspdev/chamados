@@ -101,7 +101,7 @@
         <label for="nome">Patrimônio do computador:</label>
         <input class="form-control" id="patrimonio" name="patrimonio" value="{{ $chamado->patrimonio ?? old('patrimonio') }}">
          <small id="patrimonioHelp" class="form-text text-muted">Exemplo: <b>008.047977</b> <br>
-         User vírgula, caso o procedimento de atendimento seja idêntico em múltiplos computadores: <b>008.047977,008.048593</b>
+         Use vírgula, caso o procedimento de atendimento seja idêntico para múltiplos computadores. Exemplo: <b>008.047977,008.048593</b>
          </small>
 </div>
 
