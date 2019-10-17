@@ -33,14 +33,14 @@ class PatrimonioRule implements Rule
         }
                     
         $values = explode(',',$value);
-        if(config('atendimento.usar_replicado') == true) {
+        #if(config('atendimento.usar_replicado') == true) {
             foreach($values as $v) { 
                 if(!Bempatrimoniado::verifica($v)) {
                     $this->wrong = $v;
                     return false;
                 }
             }
-        }
+        #}
         return true;
     }
 
