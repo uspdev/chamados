@@ -47,7 +47,7 @@ class ComentarioMail extends Mailable
         $emails = array_unique($emails);
 
         // Monta título do email
-        $subject = "Novo comentário no chamado #{$this->comentario->id}";
+        $subject = "Novo comentário no chamado #{$this->comentario->chamado->id}";
 
         return $this->view('emails.comentario')
                     ->from(config('mail.username'))
