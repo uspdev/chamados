@@ -2,6 +2,7 @@
 <b>Autor(a):</b> <br>
 Número USP: {{ $user->codpes }} <br>
 Nome: {{ $user->name }}
+Chamado: #{{ $comentario->chamado->id }}
 </div>
 
 <br>
