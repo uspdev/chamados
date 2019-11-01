@@ -15,7 +15,11 @@
 
     <div class="card bg-light mb-3">
 
-      <div class="card-header">{{ \Uspdev\Replicado\Pessoa::dump($chamado->user->codpes)['nompes'] }} - {{ Carbon\Carbon::parse($chamado->created_at)->format('d/m/Y H:i') }}</div>
+      <div class="card-header">
+        @if(config('chamados.usar_replicado') == 'true')
+            {{ \Uspdev\Replicado\Pessoa::dump($chamado->user->codpes)['nompes'] }}]     
+        @endif
+        {{ Carbon\Carbon::parse($chamado->created_at)->format('d/m/Y H:i') }}</div>
       <div class="card-body">
         @include('chamados/partials/chamado')
 

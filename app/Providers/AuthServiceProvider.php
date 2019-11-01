@@ -27,13 +27,13 @@ class AuthServiceProvider extends ServiceProvider
 
         # admin 
         Gate::define('admin', function ($user) {
-            $admins_id = explode(',', config('atendimento.admins'));
+            $admins_id = explode(',', config('chamados.admins'));
             return in_array($user->codpes, $admins_id);
         });
 
         # atendente 
         Gate::define('atendente', function ($user) {
-            $atendentes = explode(',', config('atendimento.atendentes'));
+            $atendentes = explode(',', config('chamados.atendentes'));
             return in_array($user->codpes, $atendentes);
         });
 
