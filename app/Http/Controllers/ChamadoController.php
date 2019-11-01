@@ -56,16 +56,16 @@ class ChamadoController extends Controller
         $this->authorize('chamados.viewAny');
 
         $user = \Auth::user();
-        $chamados = Chamado::where('user_id','=',$user->id)->paginate(10);
-        return view('chamados/index',compact('chamados')); 
+        $chamados = Chamado::where('user_id','=',$user->id)->orderBy('created_at', 'desc')->paginate(10);
+        return view('chamados/index',compact('chamados'));
     }
 
     public function todos()
     {
         /* Chamados de quem está logado */
         $this->authorize('atendente');
-        $chamados = Chamado::paginate(10);
-        return view('chamados/index',compact('chamados')); 
+        $chamados = Chamado::orderBy('created_at', 'desc')->paginate(10);
+        return view('chamados/index',compact('chamados'));
     }
 
     public function triagem()
@@ -74,8 +74,8 @@ class ChamadoController extends Controller
         $this->authorize('chamados.viewAny');
 
         $user = \Auth::user();
-        $chamados = Chamado::where('status','=','Triagem')->paginate(10);
-        return view('chamados/index',compact('chamados')); 
+        $chamados = Chamado::where('status','=','Triagem')->orderBy('created_at', 'desc')->paginate(10);
+        return view('chamados/index',compact('chamados'));
     }
 
     public function atender()
@@ -85,9 +85,10 @@ class ChamadoController extends Controller
 
         $user = \Auth::user();
         $chamados = Chamado::where('status','=','Atríbuido')->
-                             where('atribuido_para','=',$user->codpes)->paginate(10);
+                             where('atribuido_para','=',$user->codpes)
+                            ->orderBy('created_at', 'desc')->paginate(10);
 
-        return view('chamados/index',compact('chamados')); 
+        return view('chamados/index',compact('chamados'));
     }
 
     /**
@@ -181,7 +182,6 @@ class ChamadoController extends Controller
         //
     }
 
-
     /* Evita duplicarmos código */
     private function grava(Chamado $chamado, Request $request)
     {
@@ -198,14 +198,14 @@ class ChamadoController extends Controller
         $chamado->patrimonio = $request->patrimonio;
         $chamado->sala = $request->sala;
         $chamado->predio = $request->predio;
-        
+
         $chamado->categoria_id = $request->categoria_id;
         $chamado->status = 'triagem';
 
         /* Administradores */
         if(Gate::allows('admin')) {
             /* trocar requisitante */
-            if(!empty($request->codpes)) {
+            if(!is_null($request->codpes)) {
                 $request->validate([
                   'codpes' => ['Integer',new Numeros_USP($request->codpes)],
                 ]);
@@ -214,7 +214,7 @@ class ChamadoController extends Controller
                     $user = new User;
                     $user->codpes = $request->codpes;
                 }
-            } 
+            }
 
             /* Atribuir */
             if(!empty($request->atribuido_para)) {
@@ -225,7 +225,7 @@ class ChamadoController extends Controller
                 $chamado->status = 'Atribuído';
             }
         } else {
-            $user = \Auth::user(); 
+            $user = \Auth::user();
         }
 
         /* Atualiza telefone da pessoa */
@@ -236,4 +236,26 @@ class ChamadoController extends Controller
         $chamado->save();
         return $chamado;
     }
+
+    public function triagemForm(Request $request, Chamado $chamado)
+    {
+        $this->authorize('admin');
+        $atendentes = $this->atendentes;
+        $complexidades = $this->complexidades;
+        return view('chamados/triagem',compact('chamado'));
+
+    }
+
+    public function triagemStore(Request $request, Chamado $chamado)
+    {
+        $this->authorize('admin');
+        $chamado->complexidade = $request->complexidade;
+        $chamado->atribuido_para = $request->atribuido_para;
+        $chamado->triagem_por = \Auth::user()->codpes;
+        $chamado->atribuido_em = Carbon::now();
+        $chamado->status = 'Atribuído';
+        $request->session()->flash('alert-info', 'Triagem realizada com sucesso');
+        return redirect()->route('chamados.show',$chamado->id);
+    }
+
 }

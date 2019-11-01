@@ -12,6 +12,8 @@ Chamado: #{{ $comentario->chamado->id }}
 </div>
 
 Sistema de chamados da Seção Técnica de Informática
-da FFLCH: https://sisinfo.fflch.usp.br/
+da FFLCH, para comentar/responder acesse:
+
+https://sisinfo.fflch.usp.br/
 
 
