@@ -63,7 +63,7 @@ class ChamadoController extends Controller
     public function todos()
     {
         /* Chamados de quem está logado */
-        $this->authorize('admin');
+        $this->authorize('atendente');
         $chamados = Chamado::paginate(10);
         return view('chamados/index',compact('chamados')); 
     }

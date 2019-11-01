@@ -8,7 +8,9 @@
         </li>
 
         <li>
+            @can('view',$chamado)
             <b>Editar chamado</b> <a href="/chamados/{{$chamado->id}}/edit"> <i class="fas fa-edit"></i> </a>
+            @endcan
         </li>
         @if($chamado->status == 'Triagem')
             <li>

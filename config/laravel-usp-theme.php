@@ -30,7 +30,7 @@ return [
         [
             'text' => 'Todos Chamados',
             'url'  => '/todos',
-            'can'  => 'admin',
+            'can'  => 'atendente',
         ],
         [
             'text' => 'Categorias',
