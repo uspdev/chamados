@@ -46,7 +46,7 @@
     </div>
 
         <div class="input-group">
-            <input type="text" class="form-control" placeholder="Buscar por número do chamado ou descrição" name="search">
+            <input type="text" class="form-control" placeholder="Buscar ..." name="search">
             <span class="input-group-btn">
                 <button type="submit" class="btn btn-success"> Buscar </button>
             </span>
