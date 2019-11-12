@@ -41,7 +41,9 @@ class ChamadoPolicy
         if($user->codpes == $chamado->atribuido_para){
             return true;               
         }
-        return false;
+
+        $atendentes = explode(',', config('chamados.atendentes'));
+        return in_array($user->codpes, $atendentes);
     }
 
     /**
@@ -64,7 +66,17 @@ class ChamadoPolicy
      */
     public function update(User $user, Chamado $chamado)
     {
-        //
+        // Quem pode ver: o autor, atendentes ou admin
+        if($user->codpes == $chamado->user->codpes){
+            return true;               
+        }
+        if(Gate::allows('admin')){
+            return true;
+        }
+        if($user->codpes == $chamado->atribuido_para){
+            return true;               
+        }
+        return false;
     }
 
     /**

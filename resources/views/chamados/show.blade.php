@@ -40,6 +40,7 @@
     Não há comentários
 @endforelse
 
+@can('update',$chamado)
   <form method="POST" role="form" action="/comentarios/{{$chamado->id}}">
       @csrf
 
@@ -62,6 +63,7 @@
       </div>
       @endif
   </form>
+@endcan
 
 @stop
 

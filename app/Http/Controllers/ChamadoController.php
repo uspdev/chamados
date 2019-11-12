@@ -61,12 +61,35 @@ class ChamadoController extends Controller
         return view('chamados/index',compact('chamados'));
     }
 
-    public function todos()
+    public function todos(Request $request)
     {
-        /* Chamados de quem está logado */
         $this->authorize('atendente');
-        $chamados = Chamado::orderBy('created_at', 'desc')->paginate(10);
-        return view('chamados/index',compact('chamados'));
+
+        $chamados = Chamado::orderBy('created_at', 'desc');
+
+        // search terms
+        if (isset($request->status)) {
+            $chamados->where('status', '=', $request->status);
+        }
+
+        if (isset($request->predio)) {
+            $chamados->where('predio', '=', $request->predio);
+        }
+
+        if (isset($request->atendente)) {
+            $chamados->where('atribuido_para', '=', $request->atendente);
+        }
+
+        if (isset($request->search)) {
+            $chamados->where('chamado', 'LIKE', "%".$request->search."%");
+        }
+
+        $atendentes = $this->atendentes;
+        $predios = $this->predios;
+        $chamados = $chamados->paginate(10);
+
+
+        return view('chamados/todos',compact('chamados','atendentes','predios'));
     }
 
     public function triagem()
@@ -163,7 +186,7 @@ class ChamadoController extends Controller
      */
     public function update(Request $request, Chamado $chamado)
     {
-        $this->authorize('chamados.view',$chamado);
+        $this->authorize('chamados.show',$chamado);
         $chamado = $this->grava($chamado, $request);
 
         //Mail::send(new ChamadoMail($chamado,$user));
@@ -215,6 +238,9 @@ class ChamadoController extends Controller
                     $user = new User;
                     $user->codpes = $request->codpes;
                 }
+            }
+            else {
+                $user = \Auth::user();
             }
 
             /* Atribuir */
