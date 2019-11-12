@@ -76,7 +76,9 @@ class ChamadoPolicy
         if($user->codpes == $chamado->atribuido_para){
             return true;               
         }
-        return false;
+
+        $atendentes = explode(',', config('chamados.atendentes'));
+        return in_array($user->codpes, $atendentes);
     }
 
     /**

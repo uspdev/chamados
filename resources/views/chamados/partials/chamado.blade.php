@@ -15,7 +15,7 @@
         @if($chamado->status == 'Triagem')
             <li>
             @can('admin')
-            <b>Fazer triagem</b> <a href="/triagem/{{$chamado->id}}"> <i class="fas fa-plus"></i> </a>
+            <b>Fazer triagem</b> <a href="/chamados/{{$chamado->id}}/edit"> <i class="fas fa-plus"></i> </a>
             @endcan
             </li>
         @endif

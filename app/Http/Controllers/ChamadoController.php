@@ -186,7 +186,7 @@ class ChamadoController extends Controller
      */
     public function update(Request $request, Chamado $chamado)
     {
-        $this->authorize('chamados.show',$chamado);
+        $this->authorize('chamados.view',$chamado);
         $chamado = $this->grava($chamado, $request);
 
         //Mail::send(new ChamadoMail($chamado,$user));
@@ -264,6 +264,7 @@ class ChamadoController extends Controller
         return $chamado;
     }
 
+    /* Ainda não implementado */
     public function triagemForm(Request $request, Chamado $chamado)
     {
         $this->authorize('admin');
