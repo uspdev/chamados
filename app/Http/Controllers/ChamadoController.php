@@ -140,9 +140,10 @@ class ChamadoController extends Controller
         $this->authorize('chamados.create');
         $chamado = new Chamado;
         $chamado = $this->grava($chamado, $request);
-    
+        /*
         if(config('app.env') == 'production')
           Mail::send(new ChamadoMail($chamado,$user));
+        */
 
         $request->session()->flash('alert-info', 'Chamado enviado com sucesso');
         return redirect()->route('chamados.show',$chamado->id);
@@ -189,8 +190,10 @@ class ChamadoController extends Controller
         $this->authorize('chamados.view',$chamado);
         $chamado = $this->grava($chamado, $request);
 
+        /*
         if(config('app.env') == 'production')
           Mail::send(new ChamadoMail($chamado,$user));
+        */
 
         $request->session()->flash('alert-info', 'Chamado enviado com sucesso');
         return redirect()->route('chamados.show',$chamado->id);
