@@ -35,5 +35,5 @@
 </tbody>
 </table>
 
-{{ $chamados->links() }}
+{{ $chamados->appends(request()->query())->links() }}
 </div>
