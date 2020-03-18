@@ -24,7 +24,7 @@
         <li><b>total de comentários</b>: {{ $chamado->comentarios->count() }}</li>
 
         @if(config('chamados.usar_replicado') == 'true')
-        <li><b>por: 
+        <li><b>por:
             </b>{{ \Uspdev\Replicado\Pessoa::dump($chamado->user->codpes)['nompes'] }}</li>
         @endif
 
@@ -43,13 +43,17 @@
         @endif
         <li><b>prédio</b>: {{ $chamado->predio }}</li>
         <li><b>sala</b>: {{ $chamado->sala }}</li>
-        
-        <li><b>Categoria: </b>{{ $chamado->categoria->nome }}</li>
+
+        </li>
+
+        @isset($chamado->categoria->nome)
+            <li><b>Categoria: </b>{{ $chamado->categoria->nome }}</li>
+        @endisset
 
         @if (!empty($chamado->patrimonio))
         <b>patrimônio(s)</b>:
         <ul class="list-group">
-              @foreach(explode(',', $chamado->patrimonio) as $patrimonio) 
+              @foreach(explode(',', $chamado->patrimonio) as $patrimonio)
                 <li class="list-group-item">
                     {{trim($patrimonio)}}
                     @if(config('chamados.usar_replicado') == 'true')
@@ -57,7 +61,7 @@
                     {{ \Uspdev\Replicado\Bempatrimoniado::dump(trim($patrimonio))['modpat'] }}
                     @endif
                 </li>
-              @endforeach        
+              @endforeach
         </ul>
         @endif
 </ul>
