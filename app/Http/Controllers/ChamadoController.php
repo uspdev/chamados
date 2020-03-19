@@ -187,6 +187,11 @@ class ChamadoController extends Controller
      */
     public function update(Request $request, Chamado $chamado)
     {
+        if(Gate::allows('admin') and isset($request->atribuido_para)) {
+            $request->validate([
+              'categoria_id' => ['required', 'Integer'],
+            ]);
+        }
         $this->authorize('chamados.view',$chamado);
         $chamado = $this->grava($chamado, $request);
 
@@ -218,7 +223,6 @@ class ChamadoController extends Controller
           'sala'            => ['required'],
           'predio'          => ['required'],
           'chamado'         => ['required'],
-          'categoria_id'    => ['required', 'Integer'],
           'patrimonio'      => ['nullable',new PatrimonioRule],
         ]);
 
