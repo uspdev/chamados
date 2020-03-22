@@ -33,6 +33,11 @@ return [
             'can'  => 'atendente',
         ],
         [
+            'text' => 'Por Id',
+            'url'  => '/buscaid',
+            'can'  => 'atendente',
+        ],
+        [
             'text' => 'Categorias',
             'url'  => '/categorias',
             'can'  => 'admin',

@@ -91,6 +91,17 @@ class ChamadoController extends Controller
         return view('chamados/todos',compact('chamados','atendentes','predios'));
     }
 
+    public function buscaid(Request $request)
+    {
+        $this->authorize('atendente');
+        $chamado = isset($request->id) ? Chamado::find($request->id) : null;
+        $mensagem = null;
+        if(isset($request->id) and is_null($chamado)) {
+            $mensagem = 'Não há chamado com este Id.';
+        }
+        return view('chamados/buscaid',compact('chamado','mensagem'));
+    }
+
     public function triagem()
     {
         /* Chamados de quem está logado */
