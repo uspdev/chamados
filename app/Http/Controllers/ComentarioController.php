@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Mail\ComentarioMail;
 use Mail;
+use Illuminate\Support\Facades\Gate;
 
 class ComentarioController extends Controller
 {
@@ -62,6 +63,9 @@ class ComentarioController extends Controller
             if($request->status == 'Fechado') {
                 $comentario->chamado->status = 'Fechado';
                 $comentario->chamado->fechado_em = Carbon::now();
+                if(Gate::allows('admin') and is_null($chamado->atribuido_para)){
+                    $comentario->chamado->atribuido_para = $user->codpes ?? null;
+                }
             }
             elseif($request->status == 'Triagem') {
                 $comentario->chamado->status = 'Triagem';
@@ -70,7 +74,7 @@ class ComentarioController extends Controller
             }
             $comentario->chamado->save();
         }
-        
+
         if(config('app.env') == 'production')
           Mail::send(new ComentarioMail($comentario,$user));
 
