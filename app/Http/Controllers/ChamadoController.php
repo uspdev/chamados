@@ -229,56 +229,68 @@ class ChamadoController extends Controller
     /* Evita duplicarmos código */
     private function grava(Chamado $chamado, Request $request)
     {
-        $request->validate([
-          'telefone'        => ['required'],
-          'sala'            => ['required'],
-          'predio'          => ['required'],
-          'chamado'         => ['required'],
-          'patrimonio'      => ['nullable',new PatrimonioRule],
-        ]);
+        if($request->status == 'devolver') {
+            $chamado->status = 'Triagem';
+            $chamado->atribuido_para = null;
+            $chamado->categoria_id = null;
+            $chamado->triagem_por = null;
+            $chamado->atribuido_em = null;
+            $chamado->complexidade = null;
+            $user = \Auth::user();
+            $chamado->user_id = $user->id;
+        }
+        else {
+            $request->validate([
+              'telefone'        => ['required'],
+              'sala'            => ['required'],
+              'predio'          => ['required'],
+              'chamado'         => ['required'],
+              'patrimonio'      => ['nullable',new PatrimonioRule],
+            ]);
 
-        $chamado->chamado = $request->chamado;
-        $chamado->patrimonio = $request->patrimonio;
-        $chamado->sala = $request->sala;
-        $chamado->predio = $request->predio;
+            $chamado->chamado = $request->chamado;
+            $chamado->patrimonio = $request->patrimonio;
+            $chamado->sala = $request->sala;
+            $chamado->predio = $request->predio;
 
-        $chamado->categoria_id = $request->categoria_id;
-        $chamado->status = 'triagem';
+            $chamado->categoria_id = $request->categoria_id;
+            $chamado->status = 'triagem';
 
-        /* Administradores */
-        if(Gate::allows('admin')) {
-            /* trocar requisitante */
-            if(!is_null($request->codpes)) {
-                $request->validate([
-                  'codpes' => ['Integer',new Numeros_USP($request->codpes)],
-                ]);
-                $user = User::where('codpes',$request->codpes)->first();
-                if (is_null($user)) {
-                    $user = new User;
-                    $user->codpes = $request->codpes;
+            /* Administradores */
+            if(Gate::allows('admin')) {
+                /* trocar requisitante */
+                if(!is_null($request->codpes)) {
+                    $request->validate([
+                      'codpes' => ['Integer',new Numeros_USP($request->codpes)],
+                    ]);
+                    $user = User::where('codpes',$request->codpes)->first();
+                    if (is_null($user)) {
+                        $user = new User;
+                        $user->codpes = $request->codpes;
+                    }
                 }
-            }
-            else {
+                else {
+                    $user = \Auth::user();
+                }
+
+                /* Atribuir */
+                if(!empty($request->atribuido_para)) {
+                    $chamado->complexidade = $request->complexidade;
+                    $chamado->atribuido_para = $request->atribuido_para;
+                    $chamado->triagem_por = \Auth::user()->codpes;
+                    $chamado->atribuido_em = Carbon::now();
+                    $chamado->status = 'Atribuído';
+                }
+            } else {
                 $user = \Auth::user();
             }
 
-            /* Atribuir */
-            if(!empty($request->atribuido_para)) {
-                $chamado->complexidade = $request->complexidade;
-                $chamado->atribuido_para = $request->atribuido_para;
-                $chamado->triagem_por = \Auth::user()->codpes;
-                $chamado->atribuido_em = Carbon::now();
-                $chamado->status = 'Atribuído';
-            }
-        } else {
-            $user = \Auth::user();
+            /* Atualiza telefone da pessoa */
+            $user->telefone = $request->telefone;
+            $user->save();
+
+            $chamado->user_id = $user->id;
         }
-
-        /* Atualiza telefone da pessoa */
-        $user->telefone = $request->telefone;
-        $user->save();
-
-        $chamado->user_id = $user->id;
         $chamado->save();
         return $chamado;
     }
@@ -305,4 +317,9 @@ class ChamadoController extends Controller
         return redirect()->route('chamados.show',$chamado->id);
     }
 
+    public function devolver(Chamado $chamado)
+    {
+        $this->authorize('atendente');
+        return view('chamados/devolver',compact('chamado'));
+    }
 }

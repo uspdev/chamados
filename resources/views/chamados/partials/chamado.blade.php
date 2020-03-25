@@ -20,6 +20,13 @@
             </li>
         @endif
 
+        @if($chamado->status == 'Atribuído')
+            <li>
+            @can('admin')
+            <b>Devolver para triagem</b> <a href="/chamados/{{$chamado->id}}/devolver"> <i class="fas fa-plus"></i> </a>
+            @endcan
+            </li>
+        @endif
 
         <li><b>total de comentários</b>: {{ $chamado->comentarios->count() }}</li>
 
