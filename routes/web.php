@@ -9,6 +9,7 @@ Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 /**/
 Route::resource('categorias', 'CategoriaController');
 Route::resource('chamados', 'ChamadoController');
+Route::resource('users', 'UserController');
 Route::resource('comentarios/{chamado}/', 'ComentarioController');
 
 Route::get('atender', 'ChamadoController@atender');
