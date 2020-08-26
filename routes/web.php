@@ -15,6 +15,7 @@ Route::get('atender', 'ChamadoController@atender');
 Route::get('triagem', 'ChamadoController@triagem');
 Route::get('todos', 'ChamadoController@todos');
 Route::get('buscaid', 'ChamadoController@buscaid');
+Route::get('chamados/{chamado}/devolver', 'ChamadoController@devolver');
 
 Route::get('triagem/{chamado}', 'ChamadoController@triagemForm');
 Route::post('triagem/{chamado}', 'ChamadoController@triagemStore');
