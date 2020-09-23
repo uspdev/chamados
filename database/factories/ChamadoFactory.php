@@ -1,24 +1,40 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
-
-use App\Chamado;
-use Faker\Generator as Faker;
-use App\User;
-use App\Categoria;
+namespace Database\Factories;
 
 
-$factory->define(Chamado::class, function (Faker $faker) {
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-    $complexidades = Chamado::complexidades();
-    $predios = Chamado::predios();
-        return [
-            'user_id'  =>  factory(User::class)->create()->id,
-            'complexidade'   =>  $complexidades[array_rand($complexidades)],  
-            'categoria_id'   =>  factory(Categoria::class)->create()->id,
-            'predio'         =>  $predios[array_rand($predios)],
-            'sala'           =>  $faker->randomDigit,
-            'patrimonio'     =>  $faker->unique()->numberBetween(10000, 999999),
-            'chamado'        =>  $faker->sentence,
-        ];
-});
+use App\Models\Chamado;
+use App\Models\User;
+use App\Models\Categoria;
+
+class ChamadoFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Chamado::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        $complexidades = Chamado::complexidades();
+        $predios = Chamado::predios();
+            return [
+                'user_id'        =>   User::factory()->create()->id,
+                'complexidade'   =>  $complexidades[array_rand($complexidades)],  
+                'categoria_id'   =>  Categoria::factory()->create()->id,
+                'predio'         =>  $predios[array_rand($predios)],
+                'sala'           =>  $this->faker->randomDigit,
+                'patrimonio'     =>  $this->faker->unique()->numberBetween(10000, 999999),
+                'chamado'        =>  $this->faker->sentence,
+            ];
+    }
+}

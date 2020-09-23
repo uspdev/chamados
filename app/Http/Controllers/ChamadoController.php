@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Chamado;
-use App\Categoria;
-use App\User;
+use App\Models\Chamado;
+use App\Models\Categoria;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Mail\ChamadoMail;
 use Mail;

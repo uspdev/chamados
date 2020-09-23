@@ -1,7 +1,5 @@
 @extends('master')
 
-@section('title', 'SolicitaSite')
-
 @section('content_header')
     <h1>Sites</h1>
 @stop

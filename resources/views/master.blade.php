@@ -16,7 +16,3 @@
     @include('messages.flash')
     @include('messages.errors')
 @stop
-
-@section('footer')
-FFLCH
-@stop

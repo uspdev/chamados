@@ -1,7 +1,9 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
-use App\Categoria;
+use App\Models\Categoria;
 
 class CategoriaSeeder extends Seeder
 {
@@ -21,6 +23,6 @@ class CategoriaSeeder extends Seeder
         Categoria::create($categoria1);
         Categoria::create($categoria2);
 
-        factory(Categoria::class, 10)->create();
+        Categoria::factory(10)->create();
     }
 }

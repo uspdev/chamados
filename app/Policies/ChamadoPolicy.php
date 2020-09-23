@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Chamado;
-use App\User;
+use App\Models\Chamado;
+use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Support\Facades\Gate;
 

@@ -1,7 +1,9 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
-use App\User;
+use App\Models\User;
 
 class UserSeeder extends Seeder
 {
@@ -19,6 +21,6 @@ class UserSeeder extends Seeder
               
         ];
         User::create($requisitante);
-        factory(App\User::class, 10)->create();
+        User::factory(10)->create();
     }
 }

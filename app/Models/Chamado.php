@@ -1,22 +1,27 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\User;
+use App\Models\Comentario;
+use App\Models\Categoria;
 
 class Chamado extends Model
 {
+    use HasFactory;
     public function user(){
-        return $this->belongsTo('App\User');
+        return $this->belongsTo(User::class);
     }
 
     public function comentarios()
     {
-        return $this->hasMany('App\Comentario');
+        return $this->hasMany(Comentario::class);
     }
 
     public function categoria(){
-        return $this->belongsTo('App\Categoria');
+        return $this->belongsTo(Categoria::class);
     }
 
     public static function atendentes(){

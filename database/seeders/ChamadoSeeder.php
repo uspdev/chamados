@@ -1,7 +1,8 @@
 <?php
 
+namespace Database\Seeders;
 use Illuminate\Database\Seeder;
-use App\Chamado;
+use App\Models\Chamado;
 
 class ChamadoSeeder extends Seeder
 {
@@ -25,7 +26,7 @@ class ChamadoSeeder extends Seeder
         ];
 
         Chamado::create($chamado);
-        factory(Chamado::class, 10)->create();
+        Chamado::factory(10)->create();
      
     }
 }

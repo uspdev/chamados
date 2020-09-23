@@ -2,8 +2,8 @@
 
 namespace App\Mail;
 
-use App\User;
-use App\Comentario;
+use App\Models\User;
+use App\Models\Comentario;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;

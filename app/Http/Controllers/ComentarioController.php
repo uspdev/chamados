@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Comentario;
-use App\Chamado;
+use App\Models\Comentario;
+use App\Models\Chamado;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Mail\ComentarioMail;
