@@ -4,7 +4,7 @@ use App\Http\Controllers\IndexController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ChamadoController;
-
+use App\Http\Controllers\UserController;
 
 Route::get('/', [IndexController::class, 'index'])->name('home');
 

@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use App\Mail\ChamadoMail;
 use Mail;
 use Illuminate\Support\Facades\Gate;
-use App\Rules\Numeros_USP;
 use Carbon\Carbon;
 use App\Rules\PatrimonioRule;
 
@@ -244,7 +243,7 @@ class ChamadoController extends Controller
                 /* trocar requisitante */
                 if(!is_null($request->codpes)) {
                     $request->validate([
-                      'codpes' => ['Integer',new Numeros_USP($request->codpes)],
+                      'codpes' => 'integer',
                     ]);
                     $user = User::where('codpes',$request->codpes)->first();
                     if (is_null($user)) {

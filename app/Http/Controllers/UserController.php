@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Rules\Numeros_USP;
 use Uspdev\Replicado\Pessoa;
 
 class UserController extends Controller
@@ -39,10 +38,6 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $user = new User;
-
-        $request->validate([
-            'numero_usp' => ['required', new Numeros_USP($request->numero_usp)],
-        ]);
         $user->codpes = $request->numero_usp;
         $user->email = Pessoa::email($request->numero_usp);
         $user->name = Pessoa::dump($request->numero_usp)['nompesttd'];
