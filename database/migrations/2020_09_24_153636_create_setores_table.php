@@ -15,8 +15,8 @@ class CreateSetoresTable extends Migration
     {
         Schema::create('setores', function (Blueprint $table) {
             $table->id();
-            $table->text('sigla');
-            $table->text('nome');
+            $table->string('sigla', 15);
+            $table->string('nome', 255);
             $table->foreignId('setores_id')->nullable()->constrained('setores');
             $table->timestamps();
         });

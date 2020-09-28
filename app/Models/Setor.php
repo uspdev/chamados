@@ -13,6 +13,28 @@ class Setor extends Model
     protected $fillable = [
         'sigla',
         'nome',
-        'setor_id',
+        'setores_id',
+    ];
+
+    const rules = array(
+        'sigla' => ['required','max:15'],
+        'nome' => ['required', 'max:255'],
+        'setores_id' => 'required|numeric',
+    );
+
+    const fields = [
+        [
+            'name' => 'sigla',
+            'label' => 'Sigla',
+        ],
+        [
+            'name' => 'nome',
+            'label' => 'Nome',
+        ],
+        [
+            'name' => 'setores_id',
+            'label' => 'Pai',
+            'type' => 'number',
+        ],
     ];
 }

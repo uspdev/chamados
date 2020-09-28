@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 class SetorController extends Controller
 {
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -20,29 +21,12 @@ class SetorController extends Controller
     public function index()
     {
         $this->authorize('admin');
-
-        $setores = Setor::all();
-
-        #return $setores;
         $data = [
             'title' => 'Setores',
-            'rows' => $setores,
+            'url' => 'setores', // caminho da rota do resource
+            'rows' => Setor::orderBy('setores_id', 'asc')->get(),
             'showId' => true,
-            'fields' => [
-                [
-                    'name' => 'sigla',
-                    'label' => 'Sigla',
-                ],
-                [
-                    'name' => 'nome',
-                    'label' => 'Nome',
-                ],
-                [
-                    'name' => 'setores_id',
-                    'label' => 'Pai',
-                    'type' => 'number',
-                ],
-            ],
+            'fields' => Setor::fields,
         ];
         return view('setores.index')->with('data', (object) $data);
     }
@@ -54,7 +38,7 @@ class SetorController extends Controller
      */
     public function create()
     {
-        return view('users.create');
+        //return view('users.create');
     }
 
     /**
@@ -65,17 +49,13 @@ class SetorController extends Controller
      */
     public function store(Request $request)
     {
-        $user = new User;
+        $this->authorize('admin');
+        $request->validate(Setor::rules);
 
-        $request->validate([
-            'numero_usp' => ['required', new Numeros_USP($request->numero_usp)],
-        ]);
-        $user->codpes = $request->numero_usp;
-        $user->email = Pessoa::email($request->numero_usp);
-        $user->name = Pessoa::dump($request->numero_usp)['nompesttd'];
-        $user->save();
-        $request->session()->flash('alert-info', 'Atendente adicionado com sucesso');
-        return redirect('/users');
+        Setor::create($request->all());
+
+        $request->session()->flash('alert-info', 'Setor adicionado com sucesso');
+        return redirect('/setores');
     }
 
     /**
@@ -86,7 +66,7 @@ class SetorController extends Controller
      */
     public function show($id)
     {
-        //
+        $this->authorize('admin');
         return Setor::find($id);
     }
 
@@ -110,7 +90,15 @@ class SetorController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->authorize('admin');
+        $request->validate(Setor::rules);
+
+        $setor = Setor::find($id);
+        $setor->fill($request->all());
+        $setor->save();
+
+        $request->session()->flash('alert-info', 'Setor editado com sucesso');
+        return redirect('/setores');
     }
 
     /**
