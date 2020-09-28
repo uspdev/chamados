@@ -1,6 +1,18 @@
+
+{{-- 
+Copiar esse botão de adicionar para onde quiser
+<button type="button" class="btn btn-sm btn-success" onclick="add_form()">
+    <i class="fas fa-plus"></i> Novo
+</button> 
+--}}
+
 @if (!$data)
 É necessário enviar a variável $data para que este componente funcione.
 @else
+
+{{-- incluindo o modal com form  --}}
+@include('common.list-table-modal')
+
 <table class="table table-striped table-sm datatable">
     <thead>
         <tr>
@@ -50,5 +62,47 @@
             @endforeach
     </tbody>
 </table>
+
+@section('javascripts_bottom')
+@parent
+<script>
+    $(document).ready(function() {
+
+        $('#modalForm').on('shown.bs.modal', function() {
+            $(this).find(':input[type=text]').filter(':visible:first').focus();
+        })
+
+        add_form = function() {
+            // limpando os inputs
+            var inputs = $("#modalForm :input").not(":input[type=button], :input[type=submit], :input[type=reset], input[name^='_']");
+            inputs.each(function() {
+                $(this).val('');
+            });
+
+            $("#modalForm").modal();
+        }
+
+        edit_form = function(id) {
+            $.get('{{ $data->url }}/' + id, function(row) {
+                console.log(row);
+                // mudando para PUT
+                $('#modalForm :input').filter("input[name='_method']").val('PUT');
+
+                // preenchendo o form com os valores a serem editados
+                var inputs = $("#modalForm :input").not(":input[type=button], :input[type=submit], :input[type=reset], input[name^='_']");
+                inputs.each(function() {
+                    $(this).val(row[this.name]);
+                });
+            });
+
+            var action = $("#modalForm").find('form').attr('action');
+            $("#modalForm").find('form').attr('action', action + '/' + id);
+            $("#modalForm").modal();
+        }
+
+    })
+
+</script>
+@endsection
 
 @endif
