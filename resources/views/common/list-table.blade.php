@@ -13,7 +13,7 @@ Copiar esse botão de adicionar para onde quiser
 {{-- incluindo o modal com form  --}}
 @include('common.list-table-modal')
 
-<table class="table table-striped table-sm datatable">
+<table class="table table-striped table-sm datatable-nopagination">
     <thead>
         <tr>
             @if ($data->showId)
@@ -67,6 +67,8 @@ Copiar esse botão de adicionar para onde quiser
 @parent
 <script>
     $(document).ready(function() {
+
+        $('.datatable-nopagination').DataTable({dom: 'ti'});
 
         $('#modalForm').on('shown.bs.modal', function() {
             $(this).find(':input[type=text]').filter(':visible:first').focus();
