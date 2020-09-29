@@ -2,18 +2,35 @@
 
 Sistema que gerencia o fluxo de chamados técnicos de informática.
 
+Está sendo modificado para poder atender chamados de qualquer setor da unidade.
+
+
+## Requisitos
+
+* Git
+* Composer
+
 Bibliotecas necessárias do php:
-    apt install php7.3-sybase php7.3-mysql php7.3-xml php7.3-intl php7.3-mbstring php7.3-gd php7.3-curl
+
+    apt install php-sybase php-mysql php-xml php-intl php-mbstring php-gd php-curl
+
+## Instalação
+
+Depois de instalar os requisitos, faça um clone do projeto 
+
+	git clone git@github.com/uspdev/chamados
 
 Criar user e banco de dados:
+
 	grant all privileges on chamados.* to chamados@'%' identified by 'chamados';
 
-Instruções para a instalação do projeto:
+## Configuração
+
 é necessário a instalação do composer para prosseguir
+
     composer install
 	cp .env.example .env
 	php artisan key:generate
-	php artisan vendor:publish --provider="Uspdev\UspTheme\ServiceProvider" --tag=assets --force
     php artisan migrate
 	php artisan serve
 
