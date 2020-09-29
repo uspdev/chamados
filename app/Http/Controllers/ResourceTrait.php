@@ -17,7 +17,7 @@ trait ResourceTrait
 
         $this->data['fields'] = $this->model::getFields();
         $this->data['rows'] = $this->model::orderBy('setores_id', 'asc')->get();
-        return view('setores.index')->with('data', (object) $this->data);
+        return view($this->data['url'].'.index')->with('data', (object) $this->data);
     }
 
     /**
