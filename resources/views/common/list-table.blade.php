@@ -10,6 +10,8 @@ Copiar esse botão de adicionar para onde quiser
 É necessário enviar a variável $data para que este componente funcione.
 @else
 
+<?php #dd($data); ?>
+
 {{-- incluindo o modal com form  --}}
 @include('common.list-table-modal')
 
@@ -35,7 +37,7 @@ Copiar esse botão de adicionar para onde quiser
             @endif
 
             @foreach ($data->fields as $col)
-            <td>{{ $row->{$col['name']} }}</td>
+            <td>@include('common/list-table-col-name')</td>
             @endforeach
 
             <td style="width: 80px;">
@@ -80,12 +82,11 @@ Copiar esse botão de adicionar para onde quiser
             inputs.each(function() {
                 $(this).val('');
             });
-
             $("#modalForm").modal();
         }
 
         edit_form = function(id) {
-            $.get('{{ $data->url }}/' + id, function(row) {
+            $.get('{{ $data->url }}/' + id +'?parent=1', function(row) {
                 console.log(row);
                 // mudando para PUT
                 $('#modalForm :input').filter("input[name='_method']").val('PUT');
@@ -95,6 +96,7 @@ Copiar esse botão de adicionar para onde quiser
                 inputs.each(function() {
                     $(this).val(row[this.name]);
                 });
+                console.log('inputs', inputs);
             });
 
             var action = $("#modalForm").find('form').attr('action');

@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class SetorController extends Controller
+class FilaController extends Controller
 {
-    protected $model = 'App\Models\Setor';
+    protected $model = 'App\Models\Fila';
 
     protected $data = [
-        'title' => 'Setores',
-        'url' => 'setores', // caminho da rota do resource
+        'title' => 'Filas',
+        'url' => 'filas', // caminho da rota do resource
         'showId' => true,
     ];
 
@@ -20,4 +20,5 @@ class SetorController extends Controller
     }
 
     use ResourceTrait;
+    
 }

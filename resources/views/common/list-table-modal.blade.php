@@ -5,7 +5,7 @@
         @method('POST')
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalPortariaLabel">Portaria</h5>
+                <h5 class="modal-title" id="modalPortariaLabel">{{ $data->title }}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -14,12 +14,13 @@
                 {{ Form::hidden('id') }}
 
                 @foreach ($data->fields as $col)
-                <div class="form-group row">
-                    {{ Form::label($col['name'], $col['label'] ?? $col['name'], ['class' => 'col-form-label col-sm-2']) }}
-                    <div class="col-sm-10">
-                        {{ Form::text($col['name'],null,['class'=>'form-control']) }}
-                    </div>
-                </div>
+                @if (empty($col['type']))
+                    @include('common/list-table-modal-text')
+
+                @elseif ($col['type'] == 'select')
+                    @include('common/list-table-modal-select')
+
+                @endif
                 @endforeach
 
             </div>

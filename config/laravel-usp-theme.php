@@ -58,7 +58,11 @@ return [
                     'url' => '/setores',
                     'can' => 'admin',
                 ],
-
+                [
+                    'text' => 'Filas',
+                    'url' => '/filas',
+                    'can' => 'admin',
+                ],
             ],
 
         ],

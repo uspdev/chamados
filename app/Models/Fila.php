@@ -5,38 +5,39 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Setor extends Model
+class Fila extends Model
 {
     use HasFactory;
-    protected $table = 'setores';
 
     protected $fillable = [
-        'sigla',
         'nome',
+        'descricao',
+        'template',
         'setores_id',
     ];
 
     const rules = array(
-        'sigla' => ['required', 'max:15'],
-        'nome' => ['required', 'max:255'],
-        'setores_id' => '',
+        'nome' => ['required','max:90'],
+        'descricao' => ['max:255'],
+        'template' => [],
+        'setores_id' => 'required|numeric',
     );
 
     const fields = [
-        [
-            'name' => 'sigla',
-            'label' => 'Sigla',
-        ],
         [
             'name' => 'nome',
             'label' => 'Nome',
         ],
         [
+            'name' => 'descricao',
+            'label' => 'Descricao',
+        ],
+        [
             'name' => 'setores_id',
-            'label' => 'Pai',
-            'type' => 'select',
             'model' => 'Setor',
-            'data' => []
+            'label' => 'Setor',
+            'type' => 'select',
+            'data' => [],
         ],
     ];
 
@@ -50,16 +51,6 @@ class Setor extends Model
             }
         }
         return $fields;
-    }
-    
-    public static function allToSelect()
-    {
-        $rows = SELF::select('id', 'sigla')->get()->toArray();
-        $ret = [];
-        foreach ($rows as $row) {
-            $ret[$row['id']] = $row['sigla'];
-        }
-        return $ret;
     }
 
     public function setores()

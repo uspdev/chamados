@@ -6,6 +6,7 @@ use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ChamadoController;
 use App\Http\Controllers\ComentarioController;
 use App\Http\Controllers\SetorController;
+use App\Http\Controllers\FilaController;
 use App\Http\Controllers\UserController;
 
 
@@ -22,6 +23,7 @@ Route::resource('chamados', ChamadoController::class);
 Route::resource('users', UserController::class);
 Route::resource('comentarios/{chamado}/', ComentarioController::class);
 Route::resource('setores', SetorController::class);
+Route::resource('filas', FilaController::class);
 
 Route::get('atender', [ChamadoController::class, 'atender']);
 Route::get('triagem', [ChamadoController::class,'triagem']);
