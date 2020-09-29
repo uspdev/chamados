@@ -1,10 +1,23 @@
+<div class="row">
+    <div class="col-md-12 form-inline">
 
-{{-- 
-Copiar esse botão de adicionar para onde quiser
-<button type="button" class="btn btn-sm btn-success" onclick="add_form()">
-    <i class="fas fa-plus"></i> Novo
-</button> 
---}}
+        <span class="h4 mt-2">{{ $data->title }}</span>
+
+        <div class="input-group col-2">
+            <input class="form-control form-control-sm" type="text" id="dt-search" placeholder="Filtrar ..">
+            <div class="input-group-append">
+                <button class="btn btn-sm btn-outline-secondary" id="dt-search-clear">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+
+        <button type="button" class="btn btn-sm btn-success" onclick="add_form()">
+            <i class="fas fa-plus"></i> Novo
+        </button>
+
+    </div>
+</div>
 
 @if (!$data)
 É necessário enviar a variável $data para que este componente funcione.
@@ -15,7 +28,7 @@ Copiar esse botão de adicionar para onde quiser
 {{-- incluindo o modal com form  --}}
 @include('common.list-table-modal')
 
-<table class="table table-striped table-sm datatable-nopagination">
+<table class="table table-striped table-sm table-hover datatable-nopagination">
     <thead>
         <tr>
             @if ($data->showId)
@@ -70,7 +83,9 @@ Copiar esse botão de adicionar para onde quiser
 <script>
     $(document).ready(function() {
 
-        $('.datatable-nopagination').DataTable({dom: 'ti'});
+        oTable = $('.datatable-nopagination').DataTable({
+            dom: 'ti'
+        });
 
         $('#modalForm').on('shown.bs.modal', function() {
             $(this).find(':input[type=text]').filter(':visible:first').focus();
@@ -86,7 +101,7 @@ Copiar esse botão de adicionar para onde quiser
         }
 
         edit_form = function(id) {
-            $.get('{{ $data->url }}/' + id +'?parent=1', function(row) {
+            $.get('{{ $data->url }}/' + id + '?parent=1', function(row) {
                 console.log(row);
                 // mudando para PUT
                 $('#modalForm :input').filter("input[name='_method']").val('PUT');
@@ -103,6 +118,17 @@ Copiar esse botão de adicionar para onde quiser
             $("#modalForm").find('form').attr('action', action + '/' + id);
             $("#modalForm").modal();
         }
+
+        $('#dt-search').focus();
+
+        $('#dt-search').keyup(function() {
+            oTable.search($(this).val()).draw();
+        })
+
+        $('#dt-search-clear').on('click', function() {
+            $('#dt-search').val('').trigger('keyup');
+            $('#dt-search').focus();
+        })
 
     })
 
