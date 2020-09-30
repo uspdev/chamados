@@ -15,7 +15,6 @@ class CreateChamadosTable extends Migration
     {
         Schema::create('chamados', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->timestamps();
 
             /* Campos obrigatórios*/
             $table->text('chamado');
@@ -43,6 +42,8 @@ class CreateChamadosTable extends Migration
             // relacionamento com categorias
             $table->unsignedBigInteger('categoria_id')->nullable();
             $table->foreign('categoria_id')->references('id')->on('categorias')->onDelete('set null');
+
+            $table->timestamps();
         });
     }
 
