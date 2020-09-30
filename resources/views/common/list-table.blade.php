@@ -101,7 +101,7 @@
         }
 
         edit_form = function(id) {
-            $.get('{{ $data->url }}/' + id + '?parent=1', function(row) {
+            $.get('{{ $data->url }}/' + id, function(row) {
                 console.log(row);
                 // mudando para PUT
                 $('#modalForm :input').filter("input[name='_method']").val('PUT');

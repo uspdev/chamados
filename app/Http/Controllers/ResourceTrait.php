@@ -17,7 +17,7 @@ trait ResourceTrait
 
         $this->data['fields'] = $this->model::getFields();
         $this->data['rows'] = $this->model::get();
-        return view($this->data['url'].'.index')->with('data', (object) $this->data);
+        return view($this->data['url'] . '.index')->with('data', (object) $this->data);
     }
 
     /**
@@ -53,16 +53,10 @@ trait ResourceTrait
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $id)
+    public function show($id)
     {
         $this->authorize('admin');
-
-        if ($request->parent) {
-            // aqui tem de alguma forma descobrir os relacionamentos
-            return $this->model::with('setor')->find($id);
-        } else {
-            return $this->model::find($id);
-        }
+        return $this->model::find($id);
     }
 
     /**
