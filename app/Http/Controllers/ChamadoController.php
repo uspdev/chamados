@@ -236,7 +236,7 @@ class ChamadoController extends Controller
             $chamado->predio = $request->predio;
 
             $chamado->categoria_id = $request->categoria_id;
-            $chamado->status = 'triagem';
+            $chamado->status = 'Triagem';
 
             /* Administradores */
             if(Gate::allows('admin')) {
