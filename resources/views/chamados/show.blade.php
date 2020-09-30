@@ -41,7 +41,7 @@
 @endforelse
 
 @can('update',$chamado)
-  <form method="POST" role="form" action="/comentarios/{{$chamado->id}}">
+  <form method="POST" role="form" action="comentarios/{{$chamado->id}}">
       @csrf
 
       <div class="form-group">

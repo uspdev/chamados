@@ -25,7 +25,7 @@
        <td>
         @include('chamados/partials/chamado')
       </td>
-      <td> <a href="/chamados/{{$chamado->id}}"> {!! $chamado->chamado !!} </a></td>
+      <td> <a href="chamados/{{$chamado->id}}"> {!! $chamado->chamado !!} </a></td>
       </tr>
 @empty
     <tr>

@@ -79,7 +79,7 @@ class ComentarioController extends Controller
           Mail::send(new ComentarioMail($comentario,$user));
 
         $request->session()->flash('alert-info', 'Comentário enviado com sucesso');
-        return redirect("/chamados/$chamado->id");
+        return redirect("chamados/$chamado->id");
     }
 
     /**

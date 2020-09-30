@@ -4,18 +4,18 @@
         </li>
 
         <li>
-            <b>Ver chamado</b> <a href="/chamados/{{$chamado->id}}"> <i class="fas fa-eye"></i> </a>
+            <b>Ver chamado</b> <a href="chamados/{{$chamado->id}}"> <i class="fas fa-eye"></i> </a>
         </li>
 
         <li>
             @can('view',$chamado)
-            <b>Editar chamado</b> <a href="/chamados/{{$chamado->id}}/edit"> <i class="fas fa-edit"></i> </a>
+            <b>Editar chamado</b> <a href="chamados/{{$chamado->id}}/edit"> <i class="fas fa-edit"></i> </a>
             @endcan
         </li>
         @if($chamado->status == 'Triagem')
             <li>
             @can('admin')
-            <b>Fazer triagem</b> <a href="/chamados/{{$chamado->id}}/edit"> <i class="fas fa-plus"></i> </a>
+            <b>Fazer triagem</b> <a href="chamados/{{$chamado->id}}/edit"> <i class="fas fa-plus"></i> </a>
             @endcan
             </li>
         @endif
@@ -23,7 +23,7 @@
         @if($chamado->status == 'Atribuído')
             <li>
             @can('admin')
-            <b>Devolver para triagem</b> <a href="/chamados/{{$chamado->id}}/devolver"> <i class="fas fa-plus"></i> </a>
+            <b>Devolver para triagem</b> <a href="chamados/{{$chamado->id}}/devolver"> <i class="fas fa-plus"></i> </a>
             @endcan
             </li>
         @endif

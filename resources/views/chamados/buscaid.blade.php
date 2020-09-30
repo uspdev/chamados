@@ -12,7 +12,7 @@
 
 <div class="panel panel-default">
   <div class="panel-body">
-    <form method="get" action="/buscaid">
+    <form method="get" action="buscaid">
         <div class="form-row">
             <div class="col-2">
               <input type="text" class="form-control" placeholder="Id ..." name="id">
@@ -53,7 +53,7 @@
          <td>
           @include('chamados/partials/chamado')
         </td>
-        <td> <a href="/chamados/{{$chamado->id}}"> {!! $chamado->chamado !!} </a></td>
+        <td> <a href="chamados/{{$chamado->id}}"> {!! $chamado->chamado !!} </a></td>
   </table>
 
   </div>

@@ -5,7 +5,7 @@
     @include('messages.errors')
 
 
-<form method="POST" class="form-inline" action="/users">
+<form method="POST" class="form-inline" action="users">
 @csrf
     <div class="form-group">
         <label> Número USP do novo atendente: </label>

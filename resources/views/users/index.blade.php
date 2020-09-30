@@ -28,7 +28,7 @@
                     <td>{{ $user->codpes }}</td>
                     <td>{{ $user->name }}</td>
                     <td>
-                        <form method="POST" action="/users/{{$user->id}}">
+                        <form method="POST" action="users/{{$user->id}}">
                         @csrf
                         @method('delete')
                         <button onclick ="return confirm('Tem certeza que deseja deletar?');" type="submit" style="background-color: transparent;border: none;"><i class="far fa-trash-alt" color="#007bff"></i></button>

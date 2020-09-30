@@ -22,8 +22,8 @@
     <tr>
       <td>{{ $categoria->nome }}</td>
       <td>
-        <a href="/categorias/{{ $categoria->id }}/edit"><i class="fas fa-edit"></i></a>
-        <form method="POST" action="/categorias/{{ $categoria->id }}" style="display:inline">
+        <a href="categorias/{{ $categoria->id }}/edit"><i class="fas fa-edit"></i></a>
+        <form method="POST" action="categorias/{{ $categoria->id }}" style="display:inline">
             {{csrf_field()}} {{ method_field('delete') }}
             <button type="submit" class="delete-item btn"><i class="fas fa-trash-alt"></i></button>
         </form>

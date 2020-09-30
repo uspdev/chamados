@@ -13,7 +13,7 @@
 <div class="panel panel-default">
 
   <div class="panel-body">
-    <form method="get" action="/todos">
+    <form method="get" action="todos">
 
     <div class="row">
         <div class="col-sm form-group">

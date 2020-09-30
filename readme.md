@@ -35,3 +35,8 @@ Criar user e banco de dados:
 	php artisan serve
 
 
+## Problemas e soluções
+
+Ao rodar pela primeira vez com apache, as variáveis de ambiente relacionadas ao replicado não ficam disponíveis. Nesse caso é necessário restartar o apache.
+
+https://www.php.net/manual/pt_BR/function.getenv.php#117301
