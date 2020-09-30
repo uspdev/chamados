@@ -7,10 +7,10 @@
 @section('content')
     @parent
         @auth
-            <script>window.location = "/chamados/create";</script>
+            <script>window.location = "chamados";</script>
         @else
             Sistema para gerenciamento de assessorias técnicas em manutenção de hardware e 
             softwares em equipamentos patrimoniados. <br/>
-            Você ainda não fez seu login com a senha única USP <a href="/login"> Faça seu Login! </a>
+            Você ainda não fez seu login com a senha única USP <a href="login"> Faça seu Login! </a>
         @endauth
 @stop
