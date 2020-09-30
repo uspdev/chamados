@@ -18,7 +18,7 @@ Bibliotecas necessárias do php:
 
 Depois de instalar os requisitos, faça um clone do projeto 
 
-	git clone git@github.com/uspdev/chamados
+	git clone git@github.com:uspdev/chamados
 
 Criar user e banco de dados:
 
