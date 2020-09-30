@@ -13,13 +13,13 @@ class Setor extends Model
     protected $fillable = [
         'sigla',
         'nome',
-        'setores_id',
+        'setor_id',
     ];
 
     const rules = array(
         'sigla' => ['required', 'max:15'],
         'nome' => ['required', 'max:255'],
-        'setores_id' => '',
+        'setor_id' => '',
     );
 
     const fields = [
@@ -32,7 +32,7 @@ class Setor extends Model
             'label' => 'Nome',
         ],
         [
-            'name' => 'setores_id',
+            'name' => 'setor_id',
             'label' => 'Pai',
             'type' => 'select',
             'model' => 'Setor',
@@ -62,8 +62,13 @@ class Setor extends Model
         return $ret;
     }
 
-    public function setores()
+    public function setor()
     {
         return $this->belongsTo('App\Models\Setor');
+    }
+
+    public static function getDefaultColumn()
+    {
+        return 'sigla';
     }
 }

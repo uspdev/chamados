@@ -17,7 +17,7 @@ class FilaSeeder extends Seeder
             [
                 'nome' => 'Informatica',
                 'descricao' => 'Atendimento geral',
-                'setores_id' => null
+                'setor_id' => null
             ],
         ];
         foreach ($filas as $fila) {

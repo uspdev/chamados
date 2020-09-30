@@ -9,7 +9,7 @@
     $table->string('name', 50)->nullable()->change();
     $table->string('email')->unique();
     $table->timestamp('added_on', 0);
-    $table->foreignId('setores_id')->nullable()->constrained('setores');
+    $table->foreignId('setor_id')->nullable()->constrained('setores');
     $table->integer('votes');
 
 * Criando model

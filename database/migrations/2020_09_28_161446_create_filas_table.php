@@ -18,7 +18,7 @@ class CreateFilasTable extends Migration
             $table->string('nome', 90);
             $table->string('descricao', 255)->nullable();
             $table->json('template')->nullable();
-            $table->foreignId('setores_id')->nullable()->constrained('setores');
+            $table->foreignId('setor_id')->nullable()->constrained('setores');
             $table->timestamps();
         });
     }

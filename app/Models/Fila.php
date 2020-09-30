@@ -13,14 +13,14 @@ class Fila extends Model
         'nome',
         'descricao',
         'template',
-        'setores_id',
+        'setor_id',
     ];
 
     const rules = array(
         'nome' => ['required','max:90'],
         'descricao' => ['max:255'],
         'template' => [],
-        'setores_id' => 'required|numeric',
+        'setor_id' => 'required|numeric',
     );
 
     const fields = [
@@ -33,7 +33,7 @@ class Fila extends Model
             'label' => 'Descricao',
         ],
         [
-            'name' => 'setores_id',
+            'name' => 'setor_id',
             'model' => 'Setor',
             'label' => 'Setor',
             'type' => 'select',
@@ -53,8 +53,13 @@ class Fila extends Model
         return $fields;
     }
 
-    public function setores()
+    public function setor()
     {
         return $this->belongsTo('App\Models\Setor');
+    }
+
+    public static function getDefaultColumn()
+    {
+        return 'nome';
     }
 }

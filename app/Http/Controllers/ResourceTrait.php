@@ -16,7 +16,7 @@ trait ResourceTrait
         $this->authorize('admin');
 
         $this->data['fields'] = $this->model::getFields();
-        $this->data['rows'] = $this->model::orderBy('setores_id', 'asc')->get();
+        $this->data['rows'] = $this->model::get();
         return view($this->data['url'].'.index')->with('data', (object) $this->data);
     }
 
@@ -58,7 +58,8 @@ trait ResourceTrait
         $this->authorize('admin');
 
         if ($request->parent) {
-            return $this->model::with('setores')->find($id);
+            // aqui tem de alguma forma descobrir os relacionamentos
+            return $this->model::with('setor')->find($id);
         } else {
             return $this->model::find($id);
         }

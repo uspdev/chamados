@@ -14,7 +14,7 @@ class UpdateCategoriasTable extends Migration
     public function up()
     {
         Schema::table('categorias', function (Blueprint $table) {
-            $table->foreignId('setores_id')->nullable()->constrained('setores');
+            $table->foreignId('setor_id')->nullable()->constrained('setores');
         });
     }
 
@@ -26,7 +26,7 @@ class UpdateCategoriasTable extends Migration
     public function down()
     {
         Schema::table('categorias', function (Blueprint $table) {
-            $table->dropForeign(['setores_id']);
+            $table->dropForeign(['setor_id']);
         });
     }
 }

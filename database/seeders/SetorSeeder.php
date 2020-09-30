@@ -18,27 +18,27 @@ class SetorSeeder extends Seeder
             [
                 'sigla' => 'UND',
                 'nome' => 'Nome da unidade',
-                'setores_id' => null
+                'setor_id' => null
             ],
             [
                 'sigla' => 'ATFN',
                 'nome' => 'Assistência Financeira',
-                'setores_id' => 1
+                'setor_id' => 1
             ],
             [
                 'sigla' => 'ATAC',
                 'nome' => 'Assistência Acadêmica',
-                'setores_id' => 1
+                'setor_id' => 1
             ],
             [
                 'sigla' => 'ATAD',
                 'nome' => 'Assistência Administrativa',
-                'setores_id' => 1
+                'setor_id' => 1
             ],
             [
                 'sigla' => 'SVMANOB',
-                'nome' => 'Swerviço de manutenção e obras',
-                'setores_id' => 4
+                'nome' => 'Serviço de manutenção e obras',
+                'setor_id' => 4
             ],
         ];
         foreach ($setores as $setor) {
