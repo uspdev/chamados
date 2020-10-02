@@ -18,7 +18,6 @@ Route::get('callback', [LoginController::class,'handleProviderCallback']);
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
 /**/
-Route::resource('categorias', CategoriaController::class);
 Route::resource('chamados', ChamadoController::class);
 Route::resource('users', UserController::class);
 Route::resource('comentarios/{chamado}/', ComentarioController::class);
