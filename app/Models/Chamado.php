@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\User;
 use App\Models\Comentario;
-use App\Models\Categoria;
+use App\Models\Fila;
 
 class Chamado extends Model
 {
@@ -20,8 +20,8 @@ class Chamado extends Model
         return $this->hasMany(Comentario::class);
     }
 
-    public function categoria(){
-        return $this->belongsTo(Categoria::class);
+    public function fila(){
+        return $this->belongsTo(Fila::class);
     }
 
     public static function atendentes(){

@@ -45,17 +45,17 @@
 </div>
 <div class="row">
     <div class="col-9 form-group">
-      <label for="categoria_id"><b>Categoria:</b></label>
-        <select name="categoria_id" class="form-control">
-            <option value="" selected="">Escolha uma categoria</option>
-            @foreach($categorias->sortBy('nome') as $categoria)
-                @if(old('categoria_id')=='' and isset($chamado->categoria_id))
-                    <option value="{{ $categoria->id }}" {{ ( $chamado->categoria_id == $categoria->id) ? 'selected' : ''}}>
-                        {{ $categoria->nome }}
+      <label for="fila_id"><b>Fila:</b></label>
+        <select name="fila_id" class="form-control">
+            <option value="" selected="">Escolha uma fila</option>
+            @foreach($filas->sortBy('nome') as $fila)
+                @if(old('fila_id')=='' and isset($chamado->fila_id))
+                    <option value="{{ $fila->id }}" {{ ( $chamado->fila_id == $fila->id) ? 'selected' : ''}}>
+                        {{ $fila->nome }}
                     </option>
                 @else
-                    <option value="{{ $categoria->id }}" {{ (old('categoria_id') == $categoria->id) ? 'selected' : ''}}>
-                        {{ $categoria->nome }}
+                    <option value="{{ $fila->id }}" {{ (old('fila_id') == $fila->id) ? 'selected' : ''}}>
+                        {{ $fila->nome }}
                     </option>
                 @endif
             @endforeach()

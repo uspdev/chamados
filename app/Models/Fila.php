@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Chamado;
 
 class Fila extends Model
 {
@@ -61,5 +62,10 @@ class Fila extends Model
     public static function getDefaultColumn()
     {
         return 'nome';
+    }
+
+    public function chamados()
+    {
+        return $this->hasMany(Chamados::class);
     }
 }

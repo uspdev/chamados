@@ -53,8 +53,8 @@
 
         </li>
 
-        @isset($chamado->categoria->nome)
-            <li><b>Categoria: </b>{{ $chamado->categoria->nome }}</li>
+        @isset($chamado->fila->nome)
+            <li><b>Fila: </b>{{ $chamado->fila->nome }}</li>
         @endisset
 
         @if (!empty($chamado->patrimonio))

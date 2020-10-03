@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Chamado;
-use App\Models\Categoria;
+use App\Models\Fila;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Mail\ChamadoMail;
@@ -115,11 +115,11 @@ class ChamadoController extends Controller
     public function create()
     {
         $this->authorize('chamados.create');
-        $categorias = Categoria::all();
+        $filas = Fila::all();
         $predios = $this->predios;
         $atendentes = $this->atendentes;
         $complexidades = $this->complexidades;
-        return view('chamados/create',compact('categorias','predios','atendentes','complexidades'));
+        return view('chamados/create',compact('filas','predios','atendentes','complexidades'));
     }
 
     /**
@@ -164,11 +164,11 @@ class ChamadoController extends Controller
     public function edit(Chamado $chamado)
     {
         $this->authorize('chamados.view',$chamado);
-        $categorias = Categoria::all();
+        $filas = Fila::all();
         $predios = $this->predios;
         $atendentes = $this->atendentes;
         $complexidades = $this->complexidades;
-        return view('chamados/edit',compact('chamado','categorias','predios','atendentes','complexidades'));
+        return view('chamados/edit',compact('chamado','filas','predios','atendentes','complexidades'));
     }
 
     /**
@@ -182,7 +182,7 @@ class ChamadoController extends Controller
     {
         if(Gate::allows('admin') and isset($request->atribuido_para)) {
             $request->validate([
-              'categoria_id' => ['required', 'Integer'],
+              'fila_id' => ['required', 'Integer'],
             ]);
         }
         $this->authorize('chamados.view',$chamado);
@@ -214,7 +214,7 @@ class ChamadoController extends Controller
         if($request->status == 'devolver') {
             $chamado->status = 'Triagem';
             $chamado->atribuido_para = null;
-            $chamado->categoria_id = null;
+            $chamado->fila_id = null;
             $chamado->triagem_por = null;
             $chamado->atribuido_em = null;
             $chamado->complexidade = null;
@@ -235,7 +235,7 @@ class ChamadoController extends Controller
             $chamado->sala = $request->sala;
             $chamado->predio = $request->predio;
 
-            $chamado->categoria_id = $request->categoria_id;
+            $chamado->fila_id = $request->fila_id;
             $chamado->status = 'Triagem';
 
             /* Administradores */

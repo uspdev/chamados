@@ -38,11 +38,6 @@ return [
             'can' => 'atendente',
         ],
         [
-            'text' => 'Categorias',
-            'url'  => 'categorias',
-            'can'  => 'admin',
-        ],
-        [
             'text' => 'Usuários',
             'url' => 'users',
             'can' => 'admin',
