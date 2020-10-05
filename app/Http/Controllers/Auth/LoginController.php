@@ -59,6 +59,7 @@ class LoginController extends Controller
         $user->codpes = $userSenhaUnica->codpes;
         $user->email = $userSenhaUnica->email;
         $user->name = $userSenhaUnica->nompes;
+        $user->last_login_at = now();
         $user->save();
         Auth::login($user, true);
         return redirect('/');

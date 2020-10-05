@@ -36,6 +36,11 @@ class SetorSeeder extends Seeder
                 'setor_id' => 1
             ],
             [
+                'sigla' => 'STI',
+                'nome' => 'Seção técnica de informática',
+                'setor_id' => 1
+            ],
+            [
                 'sigla' => 'SVMANOB',
                 'nome' => 'Serviço de manutenção e obras',
                 'setor_id' => 4

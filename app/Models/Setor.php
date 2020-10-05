@@ -16,13 +16,13 @@ class Setor extends Model
         'setor_id',
     ];
 
-    const rules = array(
+    public const rules = [
         'sigla' => ['required', 'max:15'],
         'nome' => ['required', 'max:255'],
         'setor_id' => '',
-    );
+    ];
 
-    const fields = [
+    protected const fields = [
         [
             'name' => 'sigla',
             'label' => 'Sigla',
@@ -36,22 +36,23 @@ class Setor extends Model
             'label' => 'Pai',
             'type' => 'select',
             'model' => 'Setor',
-            'data' => []
+            'data' => [],
         ],
     ];
 
-    public static function getFields() {
+    public static function getFields()
+    {
         $fields = SELF::fields;
         //return $fields;
         foreach ($fields as &$field) {
-            if (substr($field['name'],-3) == '_id') {
-                $class= '\\App\\Models\\'.$field['model'];
+            if (substr($field['name'], -3) == '_id') {
+                $class = '\\App\\Models\\' . $field['model'];
                 $field['data'] = $class::allToSelect();
             }
         }
         return $fields;
     }
-    
+
     public static function allToSelect()
     {
         $rows = SELF::select('id', 'sigla')->get()->toArray();
@@ -62,13 +63,26 @@ class Setor extends Model
         return $ret;
     }
 
+    public static function getDefaultColumn()
+    {
+        return 'sigla';
+    }
+
+    /**
+     * Auto relacionamento
+     */
     public function setor()
     {
         return $this->belongsTo('App\Models\Setor');
     }
 
-    public static function getDefaultColumn()
+    /**
+     * Setor possui filas
+     * não sei se é necessário aqui
+     */
+    public function fila()
     {
-        return 'sigla';
+        return $this->hasMany('App\Models\Fila');
     }
+
 }
