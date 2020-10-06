@@ -37,11 +37,6 @@ return [
             'url' => 'buscaid',
             'can' => 'atendente',
         ],
-        [
-            'text' => 'Categorias',
-            'url' => 'categorias',
-            'can' => 'admin',
-        ],
     ],
     'right_menu' => [
         [

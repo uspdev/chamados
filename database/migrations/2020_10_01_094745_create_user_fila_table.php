@@ -15,8 +15,8 @@ class CreateUserFilaTable extends Migration
     {
         Schema::create('user_fila', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('fila_id')->constrained('filas');
+            $table->foreignId('user_id')->nullable()->constrained('users');
+            $table->foreignId('fila_id')->constrained('filas')->onDelete('cascade');;
 
             $funcoes = ['Gerente','Atendente'];
             $table->enum('funcao', $funcoes);

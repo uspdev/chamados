@@ -1,5 +1,5 @@
 {{-- o botao vai aqui em cima para poder incluir no form --}}
-@section('modal-dismiss-btn')
+@section('form-dismiss-btn')
 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
 @endsection
 

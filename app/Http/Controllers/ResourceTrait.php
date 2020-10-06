@@ -28,7 +28,6 @@ trait ResourceTrait
      */
     public function create()
     {
-        //return 'ok';
         $this->data['fields'] = $this->model::getFields();
 
         return view($this->data['url'] . '.create')

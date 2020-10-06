@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Chamado;
 
 class Fila extends Model
 {
@@ -26,6 +25,13 @@ class Fila extends Model
 
     protected const fields = [
         [
+            'name' => 'setor_id',
+            'label' => 'Setor',
+            'type' => 'select',
+            'model' => 'Setor',
+            'data' => [],
+        ], 
+        [
             'name' => 'nome',
             'label' => 'Nome',
         ],
@@ -33,13 +39,7 @@ class Fila extends Model
             'name' => 'descricao',
             'label' => 'Descricao',
         ],
-        [
-            'name' => 'setor_id',
-            'label' => 'Setor',
-            'type' => 'select',
-            'model' => 'Setor',
-            'data' => [],
-        ],
+
     ];
 
     public static function getFields()
@@ -73,7 +73,7 @@ class Fila extends Model
      */
     public function user()
     {
-        return $this->belongsToMany('App\Models\User')
+        return $this->belongsToMany('App\Models\User', 'user_fila')
             ->withPivot('funcao')
             ->withTimestamps();
     }

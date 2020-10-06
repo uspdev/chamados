@@ -14,7 +14,7 @@
      @endforeach
      <div class="text-right">
          {{-- vamos adicionar o botão do modal quando for o caso --}}
-         @yield('modal-dismiss-btn')
+         @yield('form-dismiss-btn')
 
          <button type="submit" class="btn btn-primary">Salvar</button>
      </div>
