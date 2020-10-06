@@ -44,6 +44,5 @@ class SetorSeeder extends Seeder
         foreach ($setores as $setor) {
             Setor::create($setor);
         }
-
     }
 }

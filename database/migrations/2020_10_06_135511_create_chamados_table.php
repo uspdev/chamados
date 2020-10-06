@@ -18,14 +18,18 @@ class CreateChamadosTable extends Migration
 
             /* Campos obrigatórios*/
             $table->text('chamado');
-            $predios = ['Administração', 'Letras','Filosofia e Ciências Sociais',
-                         'História e Geografia','Casa de Cultura Japonesa','Favos','Outro'];
+            $predios = [
+                'Administração', 'Letras',
+                'Filosofia e Ciências Sociais',
+                'História e Geografia',
+                'Casa de Cultura Japonesa',
+                'Favos', 'Outro'
+            ];
             $table->enum('predio', $predios);
             $table->text('sala');
 
             /* Campos opcionais do chamado */
             $table->text('patrimonio')->nullable();
-            
             $table->enum('status', ['Triagem', 'Atribuído','Fechado']);
             $table->dateTime('atribuido_em')->nullable();
             $table->dateTime('fechado_em')->nullable();
@@ -35,13 +39,9 @@ class CreateChamadosTable extends Migration
             $table->integer('triagem_por')->unsigned()->nullable(); // codpes
             $table->integer('atribuido_para')->unsigned()->nullable(); // codpes
 
-            // relacionamento com user
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
-            
-            // relacionamento com categorias
-            $table->unsignedBigInteger('categoria_id')->nullable();
-            $table->foreign('categoria_id')->references('id')->on('categorias')->onDelete('set null');
+            /* Relacionamentos */
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('fila_id')->nullable()->constrained('filas')->onDelete('set null');
 
             $table->timestamps();
         });

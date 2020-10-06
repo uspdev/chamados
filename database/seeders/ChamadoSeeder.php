@@ -14,15 +14,15 @@ class ChamadoSeeder extends Seeder
     public function run()
     {
         $chamado = [
-            'atribuido_para' =>  5385361,
-            'complexidade'   => 'alta',
-            'user_id'        =>  1,
-            'categoria_id'   =>  1,
+            'chamado'        => 'Computador não liga',
             'predio'         => 'Administração',
             'sala'           => 'Sala 02',
             'patrimonio'     => '008.047977',
-            'chamado'        => 'Computador não liga',
-          
+            'status'         => 'Triagem',
+            'complexidade'   => 'alta',
+            'atribuido_para' =>  5385361,
+            'user_id'        =>  1,
+            'fila_id'        =>  1
         ];
 
         Chamado::create($chamado);
