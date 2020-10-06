@@ -2,12 +2,11 @@
 
 namespace Database\Factories;
 
-
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 use App\Models\Chamado;
+use App\Models\Fila;
 use App\Models\User;
-use App\Models\Categoria;
 
 class ChamadoFactory extends Factory
 {
@@ -27,14 +26,16 @@ class ChamadoFactory extends Factory
     {
         $complexidades = Chamado::complexidades();
         $predios = Chamado::predios();
+        $status = Chamado::status();
             return [
-                'user_id'        =>   User::factory()->create()->id,
-                'complexidade'   =>  $complexidades[array_rand($complexidades)],  
-                'categoria_id'   =>  Categoria::factory()->create()->id,
+                'chamado'        =>  $this->faker->sentence,
                 'predio'         =>  $predios[array_rand($predios)],
                 'sala'           =>  $this->faker->randomDigit,
                 'patrimonio'     =>  $this->faker->unique()->numberBetween(10000, 999999),
-                'chamado'        =>  $this->faker->sentence,
+                'status'         =>  $status[array_rand($status)],
+                'complexidade'   =>  $complexidades[array_rand($complexidades)],
+                'user_id'        =>  User::factory()->create()->id,
+                'fila_id'        =>  Fila::factory()->create()->id
             ];
     }
 }

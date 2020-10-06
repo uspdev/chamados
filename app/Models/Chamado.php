@@ -42,7 +42,7 @@ class Chamado extends Model
         ];
     }
 
-    public static function predios(){
+    public static function predios() {
         return [
             'Administração', 
             'Letras',
@@ -54,8 +54,12 @@ class Chamado extends Model
         ];
     }
 
-    public static function complexidades(){
-        return ['baixa', 'média','alta'];
+    public static function complexidades() {
+        return ['baixa', 'média', 'alta'];
+    }
+
+    public static function status() {
+        return ['Triagem', 'Atribuído', 'Fechado'];
     }
 }
 

@@ -16,9 +16,8 @@ class UserSeeder extends Seeder
     {
         $requisitante = [
             'name'     => 'Marisa',
-            'codpes'   =>  9848815,
+            'codpes'   =>  rand(),
             'email'    => 'marisa@gmail.com',
-              
         ];
         User::create($requisitante);
         User::factory(10)->create();
