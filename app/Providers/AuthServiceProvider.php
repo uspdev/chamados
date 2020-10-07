@@ -25,18 +25,23 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        # admin 
+        # admin
         Gate::define('admin', function ($user) {
-            $admins_id = explode(',', config('chamados.admins'));
-            return in_array($user->codpes, $admins_id);
+
+            if ($user->is_admin) {
+                return true;
+            } else {
+                $admins_id = explode(',', config('chamados.admins'));
+                return in_array($user->codpes, $admins_id);
+            }
+
         });
 
-        # atendente 
+        # atendente
         Gate::define('atendente', function ($user) {
             $atendentes = explode(',', config('chamados.atendentes'));
             return in_array($user->codpes, $atendentes);
         });
-
 
         # policies
         Gate::resource('chamados', 'App\Policies\ChamadoPolicy');
