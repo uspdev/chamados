@@ -2,22 +2,39 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Uspdev\Replicado\Pessoa;
 
 class UserController extends Controller
 {
+    use ResourceTrait;
+    
+    protected $model = 'App\Models\User';
+
+    protected $data = [
+        'title' => 'Usuários',
+        'url' => 'users', // caminho da rota do resource
+        'showId' => true, // default true
+        'editBtn' => false, // default true
+        'modal' => false, // default false
+    ];
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        $users = User::all();
-        return view('users.index')->with('users',$users);
-    }
+    // public function index()
+    // {
+    //     $users = User::all();
+    //     return view('users.index')->with('users', $users);
+    // }
 
     /**
      * Show the form for creating a new resource.
@@ -41,8 +58,8 @@ class UserController extends Controller
         $user->codpes = $request->numero_usp;
         $user->email = Pessoa::email($request->numero_usp);
         $user->name = Pessoa::dump($request->numero_usp)['nompesttd'];
-        $user->save ();
-        $request->session()->flash('alert-info','Atendente adicionado com sucesso');
+        $user->save();
+        $request->session()->flash('alert-info', 'Atendente adicionado com sucesso');
         return redirect('/users');
     }
 
@@ -52,10 +69,10 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
-    }
+    // public function show($id)
+    // {
+    //     //
+    // }
 
     /**
      * Show the form for editing the specified resource.
@@ -63,10 +80,10 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        //
-    }
+    // public function edit($id)
+    // {
+    //     //
+    // }
 
     /**
      * Update the specified resource in storage.
@@ -75,10 +92,10 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+    // public function update(Request $request, $id)
+    // {
+    //     //
+    // }
 
     /**
      * Remove the specified resource from storage.
@@ -86,9 +103,11 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function destroy(Request $request, $id)
     {
-        $user->delete();       
-        return redirect('/users');
+        $user = $this->model::find($id);
+        $user->delete();
+        $request->session()->flash('alert-success', 'Dados removidos com sucesso!');
+        return redirect('/' . $this->data['url']);
     }
 }
