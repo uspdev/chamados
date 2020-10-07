@@ -27,14 +27,7 @@ class AuthServiceProvider extends ServiceProvider
 
         # admin
         Gate::define('admin', function ($user) {
-
-            if ($user->is_admin) {
-                return true;
-            } else {
-                $admins_id = explode(',', config('chamados.admins'));
-                return in_array($user->codpes, $admins_id);
-            }
-
+            return $user->is_admin;
         });
 
         # atendente

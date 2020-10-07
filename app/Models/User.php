@@ -66,6 +66,11 @@ class User extends Authenticatable
             'label' => 'Ultimo login',
             'format' => 'timestamp',
         ],
+        [
+            'name' => 'is_admin',
+            'label' => 'Admin',
+            'format' => 'boolean',
+        ],
     ];
 
     public static function getFields()

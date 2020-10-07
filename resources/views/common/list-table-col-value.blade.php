@@ -12,7 +12,14 @@ elseif (isset($col['format']) && $col['format'] == 'timestamp' && !empty($row->{
     // se for timestamp
     echo date('d/m/Y H:i', strtotime($row->{$col['name']}));
 }
-else {
+elseif (isset($col['format']) && $col['format'] == 'boolean') {
+    // sefor boolean
+    if (!empty($row->{$col['name']})) {
+        echo 'Sim';
+    } else {
+        //echo 'não';
+    }
+}else {
     // coluna normal
     echo $row->{$col['name']};
 }

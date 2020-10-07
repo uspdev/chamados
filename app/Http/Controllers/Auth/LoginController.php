@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Socialite;
 use App\Models\User;
 use Auth;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Socialite;
 
 class LoginController extends Controller
 {
@@ -20,7 +20,7 @@ class LoginController extends Controller
     | redirecting them to your home screen. The controller uses a trait
     | to conveniently provide its functionality to your applications.
     |
-    */
+     */
 
     use AuthenticatesUsers;
 
@@ -49,23 +49,30 @@ class LoginController extends Controller
     public function handleProviderCallback()
     {
         $userSenhaUnica = Socialite::driver('senhaunica')->user();
-        $user = User::where('codpes',$userSenhaUnica->codpes)->first();
+        $user = User::where('codpes', $userSenhaUnica->codpes)->first();
         if (is_null($user)) {
             $user = new User;
             $user->telefone = $userSenhaUnica->telefone;
         }
-                
+
+        $admins_id = explode(',', config('chamados.admins'));
+        if (in_array($userSenhaUnica->codpes, $admins_id)) {
+            $user->is_admin = true;
+        }
+
         // bind do dados retornados
         $user->codpes = $userSenhaUnica->codpes;
         $user->email = $userSenhaUnica->email;
         $user->name = $userSenhaUnica->nompes;
         $user->last_login_at = now();
+
         $user->save();
         Auth::login($user, true);
         return redirect('/');
     }
 
-    public function logout(Request $request) {
+    public function logout(Request $request)
+    {
         Auth::logout();
         return redirect('/');
     }
