@@ -22,7 +22,9 @@ class FilaFactory extends Factory
     public function definition()
     {
         return [
-            'nome' => $this->faker->sentence
+            'nome' => $this->faker->word,
+            'descricao' => $this->faker->sentence,
+            'setor_id' => $this->faker->numberBetween(2,6),
         ];
     }
 }
