@@ -31,7 +31,7 @@ Criar user e banco de dados:
     composer install
 	cp .env.example .env
 	php artisan key:generate
-    php artisan migrate
+    php artisan migrate --seed
 	php artisan serve
 
 
@@ -41,6 +41,10 @@ Ao rodar pela primeira vez com apache, as variáveis de ambiente relacionadas ao
 
 https://www.php.net/manual/pt_BR/function.getenv.php#117301
 
+
+Fresh start
+
+	php artisan migrate:fresh --seed
 
 ## Roadmap
 
