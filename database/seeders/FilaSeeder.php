@@ -26,6 +26,11 @@ class FilaSeeder extends Seeder
                 'descricao' => 'Atendimento geral',
                 'setor_id' => 6,
             ],
+            [
+                'nome' => 'Informática',
+                'descricao' => 'Atendimento geral',
+                'setor_id' => 7,
+            ],
         ];
         foreach ($filas as $fila) {
             $fila = Fila::create($fila);
