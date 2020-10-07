@@ -7,7 +7,7 @@
     }
 </style>
 @stop
-
+<?php #dd($chamados); ?>
 <div class="table-responsive">
   {{ $chamados->links() }}
   <table class="table table-striped">

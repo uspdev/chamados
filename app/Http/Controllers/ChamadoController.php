@@ -5,12 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Chamado;
 use App\Models\Fila;
 use App\Models\User;
-use Illuminate\Http\Request;
-use App\Mail\ChamadoMail;
-use Mail;
-use Illuminate\Support\Facades\Gate;
-use Carbon\Carbon;
 use App\Rules\PatrimonioRule;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class ChamadoController extends Controller
 {
@@ -39,8 +37,14 @@ class ChamadoController extends Controller
         $this->authorize('chamados.viewAny');
 
         $user = \Auth::user();
-        $chamados = Chamado::where('user_id','=',$user->id)->orderBy('created_at', 'desc')->paginate(10);
-        return view('chamados/index',compact('chamados'));
+
+        if ($user->is_admin) {
+            $chamados = Chamado::paginate(10);
+        } else {
+            $chamados = Chamado::where('user_id', '=', $user->id)->orderBy('created_at', 'desc')->paginate(10);
+        }
+
+        return view('chamados/index', compact('chamados'));
     }
 
     public function todos(Request $request)
@@ -63,14 +67,14 @@ class ChamadoController extends Controller
         }
 
         if (isset($request->search)) {
-            $chamados->where('chamado', 'LIKE', "%".$request->search."%");
+            $chamados->where('chamado', 'LIKE', "%" . $request->search . "%");
         }
 
         $atendentes = $this->atendentes;
         $predios = $this->predios;
         $chamados = $chamados->paginate(10);
 
-        return view('chamados/todos',compact('chamados','atendentes','predios'));
+        return view('chamados/todos', compact('chamados', 'atendentes', 'predios'));
     }
 
     public function buscaid(Request $request)
@@ -78,10 +82,10 @@ class ChamadoController extends Controller
         $this->authorize('atendente');
         $chamado = isset($request->id) ? Chamado::find($request->id) : null;
         $mensagem = null;
-        if(isset($request->id) and is_null($chamado)) {
+        if (isset($request->id) and is_null($chamado)) {
             $mensagem = 'Não há chamado com este Id.';
         }
-        return view('chamados/buscaid',compact('chamado','mensagem'));
+        return view('chamados/buscaid', compact('chamado', 'mensagem'));
     }
 
     public function triagem()
@@ -90,8 +94,8 @@ class ChamadoController extends Controller
         $this->authorize('chamados.viewAny');
 
         $user = \Auth::user();
-        $chamados = Chamado::where('status','=','Triagem')->orderBy('created_at', 'desc')->paginate(10);
-        return view('chamados/index',compact('chamados'));
+        $chamados = Chamado::where('status', '=', 'Triagem')->orderBy('created_at', 'desc')->paginate(10);
+        return view('chamados/index', compact('chamados'));
     }
 
     public function atender()
@@ -100,11 +104,11 @@ class ChamadoController extends Controller
         $this->authorize('chamados.viewAny');
 
         $user = \Auth::user();
-        $chamados = Chamado::where('status','=','Atríbuido')->
-                             where('atribuido_para','=',$user->codpes)
-                            ->orderBy('created_at', 'desc')->paginate(10);
+        $chamados = Chamado::where('status', '=', 'Atríbuido')->
+            where('atribuido_para', '=', $user->codpes)
+            ->orderBy('created_at', 'desc')->paginate(10);
 
-        return view('chamados/index',compact('chamados'));
+        return view('chamados/index', compact('chamados'));
     }
 
     /**
@@ -119,7 +123,7 @@ class ChamadoController extends Controller
         $predios = $this->predios;
         $atendentes = $this->atendentes;
         $complexidades = $this->complexidades;
-        return view('chamados/create',compact('filas','predios','atendentes','complexidades'));
+        return view('chamados/create', compact('filas', 'predios', 'atendentes', 'complexidades'));
     }
 
     /**
@@ -135,11 +139,11 @@ class ChamadoController extends Controller
         $chamado = $this->grava($chamado, $request);
         /*
         if(config('app.env') == 'production')
-          Mail::send(new ChamadoMail($chamado,$user));
-        */
+        Mail::send(new ChamadoMail($chamado,$user));
+         */
 
         $request->session()->flash('alert-info', 'Chamado enviado com sucesso');
-        return redirect()->route('chamados.show',$chamado->id);
+        return redirect()->route('chamados.show', $chamado->id);
 
     }
 
@@ -151,8 +155,8 @@ class ChamadoController extends Controller
      */
     public function show(Chamado $chamado)
     {
-        $this->authorize('chamados.view',$chamado);
-        return view('chamados/show',compact('chamado'));
+        $this->authorize('chamados.view', $chamado);
+        return view('chamados/show', compact('chamado'));
     }
 
     /**
@@ -163,12 +167,12 @@ class ChamadoController extends Controller
      */
     public function edit(Chamado $chamado)
     {
-        $this->authorize('chamados.view',$chamado);
+        $this->authorize('chamados.view', $chamado);
         $filas = Fila::all();
         $predios = $this->predios;
         $atendentes = $this->atendentes;
         $complexidades = $this->complexidades;
-        return view('chamados/edit',compact('chamado','filas','predios','atendentes','complexidades'));
+        return view('chamados/edit', compact('chamado', 'filas', 'predios', 'atendentes', 'complexidades'));
     }
 
     /**
@@ -180,21 +184,21 @@ class ChamadoController extends Controller
      */
     public function update(Request $request, Chamado $chamado)
     {
-        if(Gate::allows('admin') and isset($request->atribuido_para)) {
+        if (Gate::allows('admin') and isset($request->atribuido_para)) {
             $request->validate([
-              'fila_id' => ['required', 'Integer'],
+                'fila_id' => ['required', 'Integer'],
             ]);
         }
-        $this->authorize('chamados.view',$chamado);
+        $this->authorize('chamados.view', $chamado);
         $chamado = $this->grava($chamado, $request);
 
         /*
         if(config('app.env') == 'production')
-          Mail::send(new ChamadoMail($chamado,$user));
-        */
+        Mail::send(new ChamadoMail($chamado,$user));
+         */
 
         $request->session()->flash('alert-info', 'Chamado enviado com sucesso');
-        return redirect()->route('chamados.show',$chamado->id);
+        return redirect()->route('chamados.show', $chamado->id);
     }
 
     /**
@@ -211,7 +215,7 @@ class ChamadoController extends Controller
     /* Evita duplicarmos código */
     private function grava(Chamado $chamado, Request $request)
     {
-        if($request->status == 'devolver') {
+        if ($request->status == 'devolver') {
             $chamado->status = 'Triagem';
             $chamado->atribuido_para = null;
             $chamado->fila_id = null;
@@ -220,14 +224,13 @@ class ChamadoController extends Controller
             $chamado->complexidade = null;
             $user = \Auth::user();
             $chamado->user_id = $user->id;
-        }
-        else {
+        } else {
             $request->validate([
-              'telefone'        => ['required'],
-              'sala'            => ['required'],
-              'predio'          => ['required'],
-              'chamado'         => ['required'],
-              'patrimonio'      => ['nullable',new PatrimonioRule],
+                'telefone' => ['required'],
+                'sala' => ['required'],
+                'predio' => ['required'],
+                'chamado' => ['required'],
+                'patrimonio' => ['nullable', new PatrimonioRule],
             ]);
 
             $chamado->chamado = $request->chamado;
@@ -239,24 +242,23 @@ class ChamadoController extends Controller
             $chamado->status = 'Triagem';
 
             /* Administradores */
-            if(Gate::allows('admin')) {
+            if (Gate::allows('admin')) {
                 /* trocar requisitante */
-                if(!is_null($request->codpes)) {
+                if (!is_null($request->codpes)) {
                     $request->validate([
-                      'codpes' => 'integer',
+                        'codpes' => 'integer',
                     ]);
-                    $user = User::where('codpes',$request->codpes)->first();
+                    $user = User::where('codpes', $request->codpes)->first();
                     if (is_null($user)) {
                         $user = new User;
                         $user->codpes = $request->codpes;
                     }
-                }
-                else {
+                } else {
                     $user = \Auth::user();
                 }
 
                 /* Atribuir */
-                if(!empty($request->atribuido_para)) {
+                if (!empty($request->atribuido_para)) {
                     $chamado->complexidade = $request->complexidade;
                     $chamado->atribuido_para = $request->atribuido_para;
                     $chamado->triagem_por = \Auth::user()->codpes;
@@ -283,7 +285,7 @@ class ChamadoController extends Controller
         $this->authorize('admin');
         $atendentes = $this->atendentes;
         $complexidades = $this->complexidades;
-        return view('chamados/triagem',compact('chamado'));
+        return view('chamados/triagem', compact('chamado'));
 
     }
 
@@ -296,12 +298,12 @@ class ChamadoController extends Controller
         $chamado->atribuido_em = Carbon::now();
         $chamado->status = 'Atribuído';
         $request->session()->flash('alert-info', 'Triagem realizada com sucesso');
-        return redirect()->route('chamados.show',$chamado->id);
+        return redirect()->route('chamados.show', $chamado->id);
     }
 
     public function devolver(Chamado $chamado)
     {
         $this->authorize('atendente');
-        return view('chamados/devolver',compact('chamado'));
+        return view('chamados/devolver', compact('chamado'));
     }
 }
