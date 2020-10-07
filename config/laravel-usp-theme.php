@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'title'=> env('APP_NAME'),
+    'title' => env('APP_NAME'),
     'dashboard_url' => config('app.url'),
     'logout_method' => 'POST',
     'logout_url' => 'logout',
@@ -37,11 +37,6 @@ return [
             'url' => 'buscaid',
             'can' => 'atendente',
         ],
-        [
-            'text' => 'Usuários',
-            'url' => 'users',
-            'can' => 'admin',
-        ],
     ],
     'right_menu' => [
         [
@@ -50,13 +45,18 @@ return [
             'can' => 'admin',
             'submenu' => [
                 [
-                    'text' => 'Setores',
+                    'text' => '<i class="fas fa-sitemap"></i> Setores',
                     'url' => 'setores',
                     'can' => 'admin',
                 ],
                 [
-                    'text' => 'Filas',
+                    'text' => '<i class="fas fa-tasks"></i> Filas',
                     'url' => 'filas',
+                    'can' => 'admin',
+                ], 
+                [
+                    'text' => '<i class="fas fa-users"></i> Usuários',
+                    'url' => 'users',
                     'can' => 'admin',
                 ],
             ],

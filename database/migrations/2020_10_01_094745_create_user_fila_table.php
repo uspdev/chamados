@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFilasTable extends Migration
+class CreateUserFilaTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,14 @@ class CreateFilasTable extends Migration
      */
     public function up()
     {
-        Schema::create('filas', function (Blueprint $table) {
+        Schema::create('user_fila', function (Blueprint $table) {
             $table->id();
-            $table->string('nome', 90);
-            $table->string('descricao', 255)->nullable();
-            $table->json('template')->nullable();
-            $table->foreignId('setor_id')->constrained('setores');
+            $table->foreignId('user_id')->nullable()->constrained('users');
+            $table->foreignId('fila_id')->constrained('filas')->onDelete('cascade');;
+
+            $funcoes = ['Gerente','Atendente'];
+            $table->enum('funcao', $funcoes);
+
             $table->timestamps();
         });
     }
@@ -30,6 +32,6 @@ class CreateFilasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('filas');
+        Schema::dropIfExists('user_fila');
     }
 }
