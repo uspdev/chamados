@@ -34,8 +34,8 @@ class ChamadoFactory extends Factory
                 'patrimonio'     =>  $this->faker->unique()->numberBetween(10000, 999999),
                 'status'         =>  $status[array_rand($status)],
                 'complexidade'   =>  $complexidades[array_rand($complexidades)],
-                'user_id'        =>  User::factory()->create()->id,
-                'fila_id'        =>  Fila::factory()->create()->id
+                'user_id'        =>  User::inRandomOrder()->first()->id,
+                'fila_id'        =>  Fila::inRandomOrder()->first()->id
             ];
     }
 }
