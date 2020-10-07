@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Fila;
+use App\Models\Setor;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class FilaFactory extends Factory
@@ -24,7 +25,7 @@ class FilaFactory extends Factory
         return [
             'nome' => $this->faker->word,
             'descricao' => $this->faker->sentence,
-            'setor_id' => $this->faker->numberBetween(2,6),
+            'setor_id' => Setor::inRandomOrder()->first()->id,
         ];
     }
 }

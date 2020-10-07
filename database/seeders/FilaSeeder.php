@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use \App\Models\Fila;
+use \App\Models\User;
 
 class FilaSeeder extends Seeder
 {
@@ -17,16 +19,20 @@ class FilaSeeder extends Seeder
             [
                 'nome' => 'Informatica',
                 'descricao' => 'Atendimento geral',
-                'setor_id' => 5
+                'setor_id' => 5,
             ],
             [
                 'nome' => 'Zeladoria',
                 'descricao' => 'Atendimento geral',
-                'setor_id' => 6
+                'setor_id' => 6,
             ],
         ];
         foreach ($filas as $fila) {
-            \App\Models\Fila::create($fila);
+            $fila = Fila::create($fila);
+            $fila->user()->attach(User::inRandomOrder()->first()->id, ['funcao'=>'Gerente']);
         }
+        Fila::factory(10)->create()->each(function($fila) {
+            $fila->user()->attach(User::inRandomOrder()->first()->id, ['funcao'=>'Gerente']);
+        });
     }
 }
