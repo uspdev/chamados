@@ -46,6 +46,25 @@ Fresh start
 
 	php artisan migrate:fresh --seed
 
+## Filas customizáveis
+Podemos configurar as filas com campos específicos a elas. Por ora, isso deve ser feito no `php artisan tinker` e adicionar o JSON direto lá.
+
+Exemplo de JSON:
+``` json
+{
+    "dia": {
+        "label" : "Dia do atendimento",
+        "type"  : "date",
+        "admin" : "false"
+    },
+    "obs": {
+        "label" : "Observações",
+        "type"  : "textarea",
+        "admin" : "true"
+    }
+}
+```
+
 ## Roadmap
 
 O sistema de chamados foi transferido da FFLCH para o USPDev. 

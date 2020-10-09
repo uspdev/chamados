@@ -106,6 +106,12 @@
 </div>
 
 <div class="form-group">
+  @foreach($form as $element)
+    {{ $element }}
+  @endforeach
+</div>
+
+<div class="form-group">
   <label for="chamado"><b>Chamado:</b></label>
     <textarea class="form-control" id="chamado" name="chamado" rows="4">{{ $chamado->chamado ?? old('chamado') }}</textarea>
 </div>
