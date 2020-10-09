@@ -20,7 +20,17 @@ class FilaSeeder extends Seeder
                 'nome' => 'Informatica',
                 'descricao' => 'Atendimento geral',
                 'setor_id' => 5,
-                'template' => '{"dia":{"label":"Dia do atendimento","type":"date"}}'
+                'template' => '{
+                    "dia": {
+                        "label":"Dia do atendimento",
+                        "type":"date"
+                    },
+                    "obs": {
+                        "label":"Observações",
+                        "type":"text",
+                        "can":"admin"
+                    }
+                }'
             ],
             [
                 'nome' => 'Zeladoria',
