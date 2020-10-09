@@ -23,7 +23,10 @@ Route::resource('filas', FilaController::class);
 Route::resource('users', UserController::class);
 
 /**/
-Route::resource('chamados', ChamadoController::class);
+Route::get('chamados/create', [ChamadoController::class, 'listaFilas']);
+Route::get('chamados/create/{fila}/', [ChamadoController::class, 'create'])->name('chamados.create');
+Route::post('chamados/create/{fila}/', [ChamadoController::class, 'store'])->name('chamados.store');
+Route::resource('chamados', ChamadoController::class)->except(['create', 'store']);
 Route::resource('comentarios/{chamado}/', ComentarioController::class);
 
 Route::get('atender', [ChamadoController::class, 'atender']);

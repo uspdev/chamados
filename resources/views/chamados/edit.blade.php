@@ -12,7 +12,7 @@
 
 @section('content')
   @parent
-
+  <h2> {{ $fila->setor->nome }} - {{ $fila->nome }} </h2>
   <form method="POST" role="form" action="{{ route('chamados.update', $chamado ) }}">
     @csrf
     {{ method_field('patch') }}
