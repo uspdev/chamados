@@ -38,6 +38,7 @@ class CreateChamadosTable extends Migration
             $table->enum('complexidade', ['baixa', 'média','alta'])->nullable();
             $table->integer('triagem_por')->unsigned()->nullable(); // codpes
             $table->integer('atribuido_para')->unsigned()->nullable(); // codpes
+            $table->json('extras')->nullable();
 
             /* Relacionamentos */
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');

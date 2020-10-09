@@ -6,6 +6,7 @@ use App\Models\Chamado;
 use App\Models\Fila;
 use App\Models\User;
 use App\Rules\PatrimonioRule;
+use App\Utils\JSONForms;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -120,10 +121,13 @@ class ChamadoController extends Controller
     {
         $this->authorize('chamados.create');
         $filas = Fila::all();
+        /* isso precisará mudar */
+        $fila = $filas->first();
         $predios = $this->predios;
         $atendentes = $this->atendentes;
         $complexidades = $this->complexidades;
-        return view('chamados/create', compact('filas', 'predios', 'atendentes', 'complexidades'));
+        $form = JSONForms::generateForm($fila);
+        return view('chamados/create', compact('filas', 'predios', 'atendentes', 'complexidades', 'form'));
     }
 
     /**
@@ -169,10 +173,12 @@ class ChamadoController extends Controller
     {
         $this->authorize('chamados.view', $chamado);
         $filas = Fila::all();
+        $fila = $filas->first();
         $predios = $this->predios;
         $atendentes = $this->atendentes;
         $complexidades = $this->complexidades;
-        return view('chamados/edit', compact('chamado', 'filas', 'predios', 'atendentes', 'complexidades'));
+        $form = JSONForms::generateForm($fila, $chamado);
+        return view('chamados/edit', compact('chamado', 'filas', 'predios', 'atendentes', 'complexidades', 'form'));
     }
 
     /**
@@ -237,6 +243,7 @@ class ChamadoController extends Controller
             $chamado->patrimonio = $request->patrimonio;
             $chamado->sala = $request->sala;
             $chamado->predio = $request->predio;
+            $chamado->extras = json_encode($request->extras);
 
             $chamado->fila_id = $request->fila_id;
             $chamado->status = 'Triagem';
