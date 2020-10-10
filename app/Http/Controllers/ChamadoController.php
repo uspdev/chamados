@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Chamado;
 use App\Models\Fila;
+use App\Models\Setor;
 use App\Models\User;
 use App\Rules\PatrimonioRule;
 use App\Utils\JSONForms;
@@ -129,8 +130,8 @@ class ChamadoController extends Controller
 
     public function listaFilas()
     {
-        $filas = Fila::all();
-        return view('chamados.listafilas', compact('filas'));
+        $setores = Setor::orderBy('sigla')->get();
+        return view('chamados.listafilas', compact('setores'));
     }
 
     /**
