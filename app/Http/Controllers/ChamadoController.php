@@ -117,17 +117,20 @@ class ChamadoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Fila $fila)
     {
         $this->authorize('chamados.create');
-        $filas = Fila::all();
-        /* isso precisará mudar */
-        $fila = $filas->first();
         $predios = $this->predios;
         $atendentes = $this->atendentes;
         $complexidades = $this->complexidades;
         $form = JSONForms::generateForm($fila);
-        return view('chamados/create', compact('filas', 'predios', 'atendentes', 'complexidades', 'form'));
+        return view('chamados/create', compact('fila', 'predios', 'atendentes', 'complexidades', 'form'));
+    }
+
+    public function listaFilas()
+    {
+        $filas = Fila::all();
+        return view('chamados.listafilas', compact('filas'));
     }
 
     /**
@@ -136,10 +139,11 @@ class ChamadoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Fila $fila)
     {
         $this->authorize('chamados.create');
         $chamado = new Chamado;
+        $chamado->fila_id = $fila->id;
         $chamado = $this->grava($chamado, $request);
         /*
         if(config('app.env') == 'production')
@@ -172,13 +176,12 @@ class ChamadoController extends Controller
     public function edit(Chamado $chamado)
     {
         $this->authorize('chamados.view', $chamado);
-        $filas = Fila::all();
-        $fila = $filas->first();
+        $fila = $chamado->fila;
         $predios = $this->predios;
         $atendentes = $this->atendentes;
         $complexidades = $this->complexidades;
         $form = JSONForms::generateForm($fila, $chamado);
-        return view('chamados/edit', compact('chamado', 'filas', 'predios', 'atendentes', 'complexidades', 'form'));
+        return view('chamados/edit', compact('fila', 'chamado', 'predios', 'atendentes', 'complexidades', 'form'));
     }
 
     /**
@@ -224,7 +227,6 @@ class ChamadoController extends Controller
         if ($request->status == 'devolver') {
             $chamado->status = 'Triagem';
             $chamado->atribuido_para = null;
-            $chamado->fila_id = null;
             $chamado->triagem_por = null;
             $chamado->atribuido_em = null;
             $chamado->complexidade = null;
@@ -244,8 +246,6 @@ class ChamadoController extends Controller
             $chamado->sala = $request->sala;
             $chamado->predio = $request->predio;
             $chamado->extras = json_encode($request->extras);
-
-            $chamado->fila_id = $request->fila_id;
             $chamado->status = 'Triagem';
 
             /* Administradores */

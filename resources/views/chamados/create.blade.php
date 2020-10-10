@@ -12,7 +12,8 @@
 
 @section('content')
   @parent
-  <form method="POST" role="form" action="{{ route('chamados.store') }}">
+  <h2> {{ $fila->setor->nome }} - {{ $fila->nome }} </h2>
+  <form method="POST" role="form" action="{{ route('chamados.store', $fila->id) }}">
     @csrf
     @include('chamados/form')
   </form>

@@ -49,18 +49,19 @@ Fresh start
 ## Filas customizáveis
 Podemos configurar as filas com campos específicos a elas. Por ora, isso deve ser feito no `php artisan tinker` e adicionar o JSON direto lá.
 
+`can` é um campo opcional que versa sobre a autorização de mexer num dado atributo.
+
 Exemplo de JSON:
 ``` json
 {
     "dia": {
         "label" : "Dia do atendimento",
-        "type"  : "date",
-        "admin" : "false"
+        "type"  : "date"
     },
     "obs": {
         "label" : "Observações",
         "type"  : "textarea",
-        "admin" : "true"
+        "can"   : "admin"
     }
 }
 ```
