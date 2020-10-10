@@ -1,25 +1,37 @@
 @extends('master')
 
-<?php #dd($data) ?>
+<?php 
+#dd($data->row->user);
+$data->model = 'App\Models\Fila';
+?>
 
 @section('content')
 @parent
-
+@include('common.list-table-modal')
 <div class="row">
     <div class="col-md-12">
-        <span class="h4 mt-2">Detalhes da fila</span><br>
 
-        Setor: {{ $data->row['setor']->sigla }}<br>
-        Nome: {{ $data->row['nome'] }}<br>
-        Descrição: {{ $data->row['descricao'] }}<br>
-        <br>
-        Pessoas:<br>
-        @foreach($data->row['user'] as $user)
-        {{ $user->name }} - {{ $user->pivot->funcao }}<br>
-        @endforeach
+        <div class="card card-outline card-primary">
+            <div class="card-header">
+                <div class="card-title h5 form-inline my-0">
+                    Detalhes da fila |
+                    @include('common.list-table-btn-edit', ['row'=>$data->row]) |
+                    @include('common.list-table-btn-delete', ['row'=>$data->row])
+                </div>
+            </div>
 
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-7">
+                        @include('filas.partials.principal')
+                    </div>
+                    <div class="col-md-5">
+                        @include('filas.partials.pessoas')
+                    </div>
+                </div>
 
-        <?php #print_r($data->row->getAttributes()); ?>
+            </div>
+        </div>
 
     </div>
 </div>

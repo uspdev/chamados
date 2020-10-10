@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Uspdev\Replicado\Pessoa;
 
 class User extends Authenticatable
 {
@@ -84,6 +85,15 @@ class User extends Authenticatable
         //     }
         // }
         // return $fields;
+    }
+
+    public static function storeByCodpes($codpes) {
+        $user = new User;
+        $user->codpes = $codpes;
+        $user->email = Pessoa::email($codpes);
+        $user->name = Pessoa::dump($codpes)['nompesttd'];
+        $user->save();
+        return $user;
     }
 
 

@@ -19,7 +19,13 @@ Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
 // Admin resources
 Route::resource('setores', SetorController::class);
+
 Route::resource('filas', FilaController::class);
+Route::post('filas/{fila}/pessoas', [FilaController::class,'storePessoa']);
+Route::delete('filas/{fila}/pessoas/{id}', [FilaController::class,'destroyPessoa']);
+
+Route::get('search/partenome', [UserController::class,'partenome']);
+
 Route::resource('users', UserController::class);
 
 /**/
