@@ -9,7 +9,27 @@ class JSONForms
 {
     public static function generateForm($fila, $chamado = null)
     {
-        $template = json_decode($fila->template);
+        $template_default = [
+            'descricao' => [
+                'label' => 'Descrição',
+                'type' => 'textarea',
+            ],
+            'notes' => [
+                'label' => 'Anotações do atendente (oculto para o usuário)',
+                'type' => 'textarea',
+                'can' => 'admin',
+            ],
+        ];
+        if ($fila->template) {
+            $template = json_decode(json_encode(
+                array_merge(json_decode($fila->template, true), $template_default)
+            ));
+        } else {
+            $template = json_decode(json_encode(
+                $template_default
+            ));
+        }
+
         $form = [];
         $data = null;
         if ($template) {
@@ -29,9 +49,9 @@ class JSONForms
                 if (isset($data->$key)) {
                     $value = $data->$key;
                 }
-                $form[] = Form::$type("extras[$key]", $value, ['class' => 'form-control']);
+                $form[] = Form::$type("extras[$key]", $value, ['class' => 'form-control', 'rows' => '3']);
             }
-        } 
+        }
         return $form;
     }
 }

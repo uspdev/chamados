@@ -21,14 +21,13 @@ class FilaSeeder extends Seeder
                 'descricao' => 'Atendimento geral',
                 'setor_id' => 5,
                 'template' => '{
+                    "numpat": {
+                        "label":"Patrimônio do computador",
+                        "type":"text"
+                    },
                     "dia": {
                         "label":"Dia do atendimento",
                         "type":"date"
-                    },
-                    "obs": {
-                        "label":"Observações",
-                        "type":"text",
-                        "can":"admin"
                     }
                 }'
             ],

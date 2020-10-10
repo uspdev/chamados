@@ -17,6 +17,7 @@ class FilaController extends Controller
         'showId' => false,
         'viewBtn' => true,
         'editBtn' => false,
+        'model' => 'App\Models\Fila',
     ];
 
     public function __construct()
