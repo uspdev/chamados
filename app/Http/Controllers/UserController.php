@@ -4,12 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Uspdev\Replicado\Pessoa;
 
 class UserController extends Controller
 {
     use ResourceTrait;
-    
+
     protected $model = 'App\Models\User';
 
     protected $data = [
@@ -54,11 +53,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $user = new User;
-        $user->codpes = $request->numero_usp;
-        $user->email = Pessoa::email($request->numero_usp);
-        $user->name = Pessoa::dump($request->numero_usp)['nompesttd'];
-        $user->save();
+        User::storeByCodpes($request->numero_usp);
         $request->session()->flash('alert-info', 'Atendente adicionado com sucesso');
         return redirect('/users');
     }
@@ -109,5 +104,27 @@ class UserController extends Controller
         $user->delete();
         $request->session()->flash('alert-success', 'Dados removidos com sucesso!');
         return redirect('/' . $this->data['url']);
+    }
+
+    public function partenome(Request $request)
+    {
+        $this->authorize('admin');
+        if ($request->term) {
+            $pessoas = \Uspdev\Replicado\Pessoa::nomeFonetico($request->term);
+            $pessoas = array_slice($pessoas, 0, 50);
+
+            // formatando para select2
+            $results = [];
+            foreach ($pessoas as $pessoa) {
+                $results[] = [
+                    'text' => $pessoa['codpes'] . ' ' . $pessoa['nompesttd'],
+                    'id' => $pessoa['codpes'],
+                ];
+            }
+            $out['results'] = $results;
+            // limitando a resposta em 50 elementos
+            return response($out);
+        }
+
     }
 }

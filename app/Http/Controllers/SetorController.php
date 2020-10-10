@@ -15,6 +15,7 @@ class SetorController extends Controller
         'url' => 'setores', // caminho da rota do resource
         'modal' =>true,
         'showId' => true,
+        'model' => 'App\Models\Setor'
     ];
 
     public function __construct()

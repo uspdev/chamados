@@ -30,7 +30,7 @@ class Fila extends Model
             'type' => 'select',
             'model' => 'Setor',
             'data' => [],
-        ], 
+        ],
         [
             'name' => 'nome',
             'label' => 'Nome',
@@ -60,6 +60,22 @@ class Fila extends Model
         return 'nome';
     }
 
+    public static function getPessoaModel() {
+        return [
+            [
+                'name' => 'nome',
+                'label' => 'Nome',
+            ],
+            [
+                'name' => 'funcao',
+                'label' => 'Função',
+                'type' => 'select',
+                'options' => ['Gerente','Atendente'],
+                'data' => [],
+            ],
+        ];
+    }
+
     /**
      * Relacionamento: fila pertence a setor
      */
@@ -74,10 +90,13 @@ class Fila extends Model
     public function user()
     {
         return $this->belongsToMany('App\Models\User', 'user_fila')
-            ->withPivot('funcao')
+            ->withPivot('funcao')->orderBy('user_fila.funcao')->orderBy('users.name')
             ->withTimestamps();
     }
 
+    /**
+     * Relacionamento: chamado pertence a fila
+     */
     public function chamados()
     {
         return $this->hasMany(Chamados::class);

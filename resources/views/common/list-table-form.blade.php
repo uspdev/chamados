@@ -3,7 +3,7 @@
      @method('POST')
      {{ Form::hidden('id') }}
 
-     @foreach ($data->fields as $col)
+     @foreach ($data->model::getFields() as $col)
      @if (empty($col['type']))
      @include('common.list-table-modal-text')
 
