@@ -196,7 +196,7 @@ class ChamadoController extends Controller
     {
         if (Gate::allows('admin') and isset($request->atribuido_para)) {
             $request->validate([
-                'fila_id' => ['required', 'Integer'],
+                'fila_id' => ['required|numeric'],
             ]);
         }
         $this->authorize('chamados.view', $chamado);
@@ -246,8 +246,14 @@ class ChamadoController extends Controller
             $chamado->patrimonio = $request->patrimonio;
             $chamado->sala = $request->sala;
             $chamado->predio = $request->predio;
-            $chamado->extras = json_encode($request->extras);
             $chamado->status = 'Triagem';
+            $extras = $request->extras;
+            if ($extras['numpat']) {
+                $request->validate([
+                    'extras.numpat' => ['nullable', new PatrimonioRule],
+                ]);
+            }
+            $chamado->extras = json_encode($request->extras);
 
             /* Administradores */
             if (Gate::allows('admin')) {

@@ -21,6 +21,14 @@ class FilaSeeder extends Seeder
                 'descricao' => 'Atendimento geral',
                 'setor_id' => 5,
                 'template' => '{
+                    "predio": {
+                        "label":"Prédio",
+                        "type":"text"
+                    },
+                    "sala": {
+                        "label":"Sala",
+                        "type":"text"
+                    },
                     "numpat": {
                         "label":"Patrimônio do computador",
                         "type":"text"
