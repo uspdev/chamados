@@ -14,8 +14,8 @@ $data->model = 'App\Models\Fila';
         <div class="card card-outline card-primary">
             <div class="card-header">
                 <div class="card-title h5 form-inline my-0">
-                    Detalhes da fila |
-                    @include('common.list-table-btn-edit', ['row'=>$data->row]) |
+                    <a href="filas">Filas</a> <i class="fas fa-angle-right mx-2"></i> Detalhes da fila |&nbsp;
+                    @include('common.list-table-btn-edit', ['row'=>$data->row]) &nbsp;|&nbsp;
                     @include('common.list-table-btn-delete', ['row'=>$data->row])
                 </div>
             </div>

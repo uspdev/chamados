@@ -4,7 +4,14 @@
 <br>
 <span class="text-muted">Público alvo:</span> Todos (alunos GR, alunos PG/PD, servidores, docentes)<br>
 <span class="text-muted">Visibilidade:</span> Todos os setores<br>
-<span class="text-muted">Campos de formulário para o usuário</span>
+
+<span class="text-muted">Formulário personalizado</span>
 <div class="ml-2">
-    Descrição<br>
+    @if(!empty($data->row['template']))
+    @foreach(json_decode($data->row['template']) as $field=>$value)
+    {{ $value->label }}<br>
+    @endforeach
+    @else
+    Sem formulário personalizado
+    @endif
 </div>
