@@ -12,10 +12,11 @@
         @include('partials.datatable-filter-box', ['otable'=>'oTable'])
     </div>
 </div>
+
 <table class="table table-sm table-hover novo-chamado">
-    <thead class="d-none">
+    <thead>
         <tr>
-            <td>Filas</td>
+            <td><span class="d-none">Filas</span></td>
         </tr>
     </thead>
     <tbody>
@@ -26,8 +27,7 @@
                 {{$setor->sigla}}
                 @foreach ($setor->fila as $fila)
                 <div class="ml-3">
-                    <a href="chamados/create/{{$fila['id']}}">{{$fila->nome}}</a>
-                    - {{$fila->descricao}}
+                    <a href="chamados/create/{{$fila['id']}}">{{$fila->nome}}</a> - {{$fila->descricao}}
                 </div>
                 @endforeach
                 <br>
@@ -37,8 +37,7 @@
         @endforeach
     </tbody>
 </table>
-</div>
-</div>
+
 
 @endsection
 
@@ -50,8 +49,10 @@
         oTable = $('.novo-chamado').DataTable({
             dom: 't'
             , "paging": false
+            , "sort": false
         });
 
     })
+
 </script>
 @endsection
