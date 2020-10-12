@@ -25,7 +25,6 @@ class ChamadoController extends Controller
         $this->middleware('auth');
         $this->complexidades = Chamado::complexidades();
         $this->predios = collect(Chamado::predios());
-        $this->atendentes = Chamado::atendentes();
     }
 
     /**
@@ -72,11 +71,10 @@ class ChamadoController extends Controller
             $chamados->where('chamado', 'LIKE', "%" . $request->search . "%");
         }
 
-        $atendentes = $this->atendentes;
         $predios = $this->predios;
         $chamados = $chamados->paginate(10);
 
-        return view('chamados/todos', compact('chamados', 'atendentes', 'predios'));
+        return view('chamados/todos', compact('chamados', 'predios'));
     }
 
     public function buscaid(Request $request)
@@ -165,7 +163,15 @@ class ChamadoController extends Controller
     public function show(Chamado $chamado)
     {
         $this->authorize('chamados.view', $chamado);
-        return view('chamados/show', compact('chamado'));
+
+        # Aqui ainda precisa ajustar, talvez renderizar previamente
+        $template = json_decode($chamado->fila->template);
+        if (empty($template)) {
+            $template = [];
+        }
+        #dd($template);
+
+        return view('chamados/show', compact('chamado', 'template'));
     }
 
     /**
@@ -248,7 +254,7 @@ class ChamadoController extends Controller
             $chamado->predio = $request->predio;
             $chamado->status = 'Triagem';
             $extras = $request->extras;
-            if ($extras['numpat']) {
+            if (!empty($extras['numpat'])) {
                 $request->validate([
                     'extras.numpat' => ['nullable', new PatrimonioRule],
                 ]);

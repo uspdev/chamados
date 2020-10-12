@@ -96,6 +96,10 @@ class User extends Authenticatable
         return $user;
     }
 
+    public static function getByCodpes($codpes) {
+        return User::where('codpes',$codpes)->first();
+    }
+
 
     /**
      * Relacionamento n:n com fila, atributo funcao: Gerente, Atendente
