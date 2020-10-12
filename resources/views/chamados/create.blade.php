@@ -7,7 +7,6 @@
 
 @section('javascripts_bottom')
     @parent
-    <script>CKEDITOR.replace( 'chamado' );</script>
 @stop
 
 @section('content')
