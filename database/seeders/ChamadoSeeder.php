@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Chamado;
+use App\Models\User;
 
 class ChamadoSeeder extends Seeder
 {
@@ -17,10 +18,9 @@ class ChamadoSeeder extends Seeder
             'chamado'        => 'Computador não liga',
             'predio'         => 'Administração',
             'sala'           => 'Sala 02',
-            'patrimonio'     => '008.047977',
             'status'         => 'Triagem',
-            'complexidade'   => 'alta',
-            'atribuido_para' =>  5385361,
+            'complexidade'   =>  null,
+            'atribuido_para' =>  User::inRandomOrder()->first()->id,
             'user_id'        =>  1,
             'fila_id'        =>  1
         ];
