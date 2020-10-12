@@ -87,7 +87,7 @@ class Fila extends Model
     /**
      * Relacionamento n:n com user, atributo funcao: Gerente, Atendente
      */
-    public function user()
+    public function users()
     {
         return $this->belongsToMany('App\Models\User', 'user_fila')
             ->withPivot('funcao')->orderBy('user_fila.funcao')->orderBy('users.name')

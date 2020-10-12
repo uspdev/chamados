@@ -48,8 +48,8 @@ class FilaController extends Controller
         if (empty($user)) {
             $user = User::storeByCodpes($request->codpes);
         }
-        $fila->user()->detach($user->id);
-        $fila->user()->attach($user->id, ['funcao' => $request->funcao]);
+        $fila->users()->detach($user->id);
+        $fila->users()->attach($user->id, ['funcao' => $request->funcao]);
 
         $request->session()->flash('alert-info', 'Pessoa adicionada com sucesso');
         return back();
@@ -62,7 +62,7 @@ class FilaController extends Controller
         $request->session()->flash('alert-warning', 'Não é possível remover a si mesmo.');
             return back();
         }
-        $fila->user()->detach($id);
+        $fila->users()->detach($id);
         $request->session()->flash('alert-info', 'Pessoa removida com sucesso');
         return back();
     }
