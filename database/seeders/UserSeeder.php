@@ -14,12 +14,12 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $requisitante = [
+        $user = [
             'name'     => 'Marisa',
             'codpes'   =>  rand(),
             'email'    => 'marisa@gmail.com',
         ];
-        User::create($requisitante);
+        User::create($user);
         User::factory(10)->create();
     }
 }
