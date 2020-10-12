@@ -11,7 +11,7 @@
 #dd($data->row->user);
 ?>
 <ul class="list-unstyled ml-2">
-    @foreach($data->row->user as $user)
+    @foreach($data->row->users as $user)
     <li class="form-inline">
         {{ $user->name }} - {{ $user->pivot->funcao }}
         @include('common.btn-delete-sm', ['action'=>'filas/'.$data->row['id'].'/pessoas/'.$user->id])
