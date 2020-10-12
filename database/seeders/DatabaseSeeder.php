@@ -17,7 +17,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             SetorSeeder::class,
             FilaSeeder::class,
-            ChamadoSeeder::class
+            ChamadoSeeder::class,
+            ComentarioSeeder::class
         ]);
     }
 }
