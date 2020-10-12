@@ -32,7 +32,7 @@
 
                 <br>
                 @foreach($template as $field => $val)
-                {{ $val->label }}<br>
+                <span class="text-muted">{{ $val->label }}:</span><br>
                 @endforeach
 
                 <span class="text-muted">Descrição:</span> {{ $chamado->descricao ?? '' }}<br>
