@@ -120,10 +120,11 @@ class ChamadoController extends Controller
     {
         $this->authorize('chamados.create');
         $predios = $this->predios;
-        $atendentes = $this->atendentes;
+        $chamado = new Chamado;
+        $chamado->fila = $fila;
         $complexidades = $this->complexidades;
         $form = JSONForms::generateForm($fila);
-        return view('chamados/create', compact('fila', 'predios', 'atendentes', 'complexidades', 'form'));
+        return view('chamados/create', compact('fila', 'predios', 'chamado', 'complexidades', 'form'));
     }
 
     public function listaFilas()
