@@ -8,7 +8,8 @@
 @section('javascripts_bottom')
 @parent
 <script>
-    CKEDITOR.replace('comentario');
+    //CKEDITOR.replace('comentario');
+
 </script>
 @stop
 
@@ -17,29 +18,93 @@
 
 <div class="card bg-light mb-3">
 
-    <div class="card-header">
-        {{ $chamado->user->name }}
-        {{ Carbon\Carbon::parse($chamado->created_at)->format('d/m/Y H:i') }}</div>
-    <div class="card-body">
-        @include('chamados/partials/chamado')
+    <div class="card-header h5">
 
-        <p class="card-text">{!! $chamado->chamado !!}</p>
+        <span class="text-muted">Chamado no.</span>
+        {{ $chamado->id }}/{{ Carbon\Carbon::parse($chamado->created_at)->format('Y') }}
+        <span class="text-muted">para</span> ({{ $chamado->fila->setor->sigla }}) {{ $chamado->fila->nome }}
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-8">
+
+                <span class="text-muted">Assunto:</span> {{ $chamado->chamado }}<br>
+
+                <br>
+                @foreach($template as $field => $val)
+                {{ $val->label }}<br>
+                @endforeach
+
+                <span class="text-muted">Descrição:</span> {{ $chamado->descricao ?? '' }}<br>
+
+
+            </div>
+            <div class="col-md-4">
+
+                <span class="text-muted">Criado por:</span> {{ $chamado->user->name}}<br>
+                <span class="text-muted">Criado em:</span> {{ Carbon\Carbon::parse($chamado->created_at)->format('d/m/Y H:i') }}<br>
+
+                @if(!is_null($chamado->fechado_em))
+                <b>fechado em</b>: {{ Carbon\Carbon::parse($chamado->fechado_em)->format('d/m/Y H:i') }}<br>
+                @endif
+
+                <span class="text-muted">Estado:</span> <span style="color:red;"> {{ $chamado->status }} </span>
+
+                |
+
+                @can('admin')
+                <a class="btn btn-sm btn-light text-primary" href="chamados/{{$chamado->id}}/edit"> <i class="fas fa-edit"></i> Editar</a>
+                @endcan
+
+                <br>
+                <div class="ml-2">
+
+                    @if($chamado->status == 'Atribuído')
+                    <span class="text-muted">Atribuído para</span>:
+                    {{ App\Models\User::getByCodpes($chamado->atribuido_para)['name'] }}<br>
+                    
+                    <span class="text-muted">Complexidade</span>: {{ $chamado->complexidade }}<br>
+
+                    <span class="text-muted">Por</span>: 
+                    {{ App\Models\User::getByCodpes($chamado->triagem_por)['name'] }}
+                    <span class="text-muted">em</span> {{ Carbon\Carbon::parse($chamado->atribuido_em)->format('d/m/Y H:i') }}<br>
+                    @endif
+                    @if($chamado->status == 'Triagem')
+                    Não atribuído
+                    @endif
+                </div>
+
+            </div>
+        </div>
+
     </div>
 </div>
-
-@forelse ($chamado->comentarios->sortBy('created_at') as $comentario)
 
 <div class="card bg-light mb-3">
-    <div class="card-header">{{ $comentario->user->name }} - {{ Carbon\Carbon::parse($comentario->created_at)->format('d/m/Y H:i') }}</div>
+    <div class="card-header h5">
+        Comentários
+        <span class="badge badge-pill badge-primary">{{ $chamado->comentarios->count() }}</span>
+        <a class="btn btn-outline-primary btn-sm" href="chamados/{{$chamado->id}}/edit"> <i class="fas fa-plus"></i> Adicionar</a>
+
+    </div>
     <div class="card-body">
-        <p class="card-text">{!! $comentario->comentario !!}</p>
+
+        @forelse ($chamado->comentarios->sortByDesc('created_at') as $comentario)
+
+        <div class="">
+            {{ $comentario->user->name }} - {{ Carbon\Carbon::parse($comentario->created_at)->format('d/m/Y H:i') }}
+        </div>
+        <div class="ml-2">
+            <p class="card-text">{!! $comentario->comentario !!}</p>
+        </div>
+        <hr />
+
+        @empty
+        Não há comentários
+        @endforelse
+
     </div>
 </div>
-
-@empty
-Não há comentários
-@endforelse
-
 @can('update',$chamado)
 <form method="POST" role="form" action="comentarios/{{$chamado->id}}">
     @csrf
