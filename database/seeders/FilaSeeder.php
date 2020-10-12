@@ -30,14 +30,14 @@ class FilaSeeder extends Seeder
                         "type":"text"
                     },
                     "numpat": {
-                        "label":"Patrimônio do computador",
+                        "label":"Patrimônios",
                         "type":"text"
                     },
                     "dia": {
                         "label":"Dia do atendimento",
                         "type":"date"
                     }
-                }'
+                }',
             ],
             [
                 'nome' => 'Zeladoria',
@@ -52,10 +52,13 @@ class FilaSeeder extends Seeder
         ];
         foreach ($filas as $fila) {
             $fila = Fila::create($fila);
-            $fila->user()->attach(User::inRandomOrder()->first()->id, ['funcao'=>'Gerente']);
+            $fila->users()->attach(User::inRandomOrder()->first()->id, ['funcao' => 'Gerente']);
+            for ($i = 0; $i < rand(3, 5); $i++) {
+                $fila->users()->attach(User::inRandomOrder()->first()->id, ['funcao' => 'Atendente']);
+            }
         }
-        Fila::factory(10)->create()->each(function($fila) {
-            $fila->user()->attach(User::inRandomOrder()->first()->id, ['funcao'=>'Gerente']);
+        Fila::factory(10)->create()->each(function ($fila) {
+            $fila->users()->attach(User::inRandomOrder()->first()->id, ['funcao' => 'Gerente']);
         });
     }
 }
