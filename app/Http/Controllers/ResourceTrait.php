@@ -100,7 +100,7 @@ trait ResourceTrait
         $setor->fill($request->all());
         $setor->save();
 
-        $request->session()->flash('alert-info', 'Dados editads com sucesso');
+        $request->session()->flash('alert-info', 'Dados editados com sucesso');
         return back();
         //return redirect('/' . $this->data['url']);
     }
