@@ -32,7 +32,8 @@
                 <span class="text-muted">Assunto:</span> {{ $chamado->chamado }}<br>
                 <br>
                 @foreach($template as $field => $val)
-                <span class="text-muted">{{ $val->label }}:</span><br>
+                <span class="text-muted">{{ $val->label }}:</span>
+                <span>{{ $extras->$field ?? '' }}<br>
                 @endforeach
                 <span class="text-muted">Descrição:</span> {{ $chamado->descricao ?? '' }}<br>
 
