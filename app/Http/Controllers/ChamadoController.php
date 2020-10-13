@@ -171,8 +171,9 @@ class ChamadoController extends Controller
             $template = [];
         }
         #dd($template);
+        $complexidades = $this->complexidades;
 
-        return view('chamados/show', compact('chamado', 'template'));
+        return view('chamados/show', compact('chamado', 'template', 'complexidades'));
     }
 
     /**
@@ -318,6 +319,7 @@ class ChamadoController extends Controller
         $chamado->triagem_por = \Auth::user()->codpes;
         $chamado->atribuido_em = Carbon::now();
         $chamado->status = 'Atribuído';
+        $chamado->save();
         $request->session()->flash('alert-info', 'Triagem realizada com sucesso');
         return redirect()->route('chamados.show', $chamado->id);
     }

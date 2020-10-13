@@ -26,21 +26,21 @@
     </div>
     <div class="card-body">
         <div class="row">
+
+            {{-- Informações principais --}}
             <div class="col-md-8">
 
                 <span class="text-muted">Assunto:</span> {{ $chamado->chamado }}<br>
-
                 <br>
                 @foreach($template as $field => $val)
                 <span class="text-muted">{{ $val->label }}:</span><br>
                 @endforeach
-
                 <span class="text-muted">Descrição:</span> {{ $chamado->descricao ?? '' }}<br>
-
 
             </div>
             <div class="col-md-4">
 
+                {{-- Painel direito --}}
                 <span class="text-muted">Criado por:</span> {{ $chamado->user->name}}<br>
                 <span class="text-muted">Criado em:</span> {{ Carbon\Carbon::parse($chamado->created_at)->format('d/m/Y H:i') }}<br>
 
@@ -49,11 +49,9 @@
                 @endif
 
                 <span class="text-muted">Estado:</span> <span style="color:red;"> {{ $chamado->status }} </span>
-
                 |
-
                 @can('admin')
-                <a class="btn btn-sm btn-light text-primary" href="chamados/{{$chamado->id}}/edit"> <i class="fas fa-edit"></i> Editar</a>
+                @include('chamados.partials.show-triagem-modal', ['modalTitle'=>'Triagem', 'url'=>'ok'])
                 @endcan
 
                 <br>
@@ -62,10 +60,10 @@
                     @if($chamado->status == 'Atribuído')
                     <span class="text-muted">Atribuído para</span>:
                     {{ App\Models\User::getByCodpes($chamado->atribuido_para)['name'] }}<br>
-                    
+
                     <span class="text-muted">Complexidade</span>: {{ $chamado->complexidade }}<br>
 
-                    <span class="text-muted">Por</span>: 
+                    <span class="text-muted">Por</span>:
                     {{ App\Models\User::getByCodpes($chamado->triagem_por)['name'] }}
                     <span class="text-muted">em</span> {{ Carbon\Carbon::parse($chamado->atribuido_em)->format('d/m/Y H:i') }}<br>
                     @endif
