@@ -19,7 +19,7 @@
 
     @forelse ($chamados->sortByDesc('created_at') as $chamado)
     <tr>
-      <td> #{{ $chamado->id }} </td>
+      <td> {{ $chamado->id }} </td>
       <td> ({{ $chamado->fila->setor->sigla }}) {{ $chamado->fila->nome }}</td>
       <td> <a href="chamados/{{$chamado->id}}"> {!! $chamado->chamado !!} </a></td>
       <td> <span style="color:red;"> {{ $chamado->status }} </span> </td>
