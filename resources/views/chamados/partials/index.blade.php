@@ -1,10 +1,10 @@
 @section('styles')
 @parent
 <style>
-    table {
-        table-layout: fixed;
-        word-wrap: break-word;
-    }
+  table {
+    table-layout: fixed;
+    word-wrap: break-word;
+  }
 </style>
 @stop
 <?php #dd($chamados); ?>
@@ -13,27 +13,29 @@
   <table class="table table-striped">
     <thead>
       <tr>
-        <th style="width: 50%">Detalhes</th>
-        <th style="width: 50%">Chamado</th>
+        <th>Id</th>
+        <th>Fila</th>
+        <th>Status</th>
+        <th>Aberto em</th>
+        <th>Chamado</th>
+        <!-- <th>Prédio</th>
+        <th>Sala</th> -->
+        <th>Ações</th>
       </tr>
     </thead>
-
     <tbody>
 
-@forelse ($chamados->sortByDesc('created_at') as $chamado)
+    @forelse ($chamados->sortByDesc('created_at') as $chamado)
       <tr>
-       <td>
         @include('chamados/partials/chamado')
-      </td>
-      <td> <a href="chamados/{{$chamado->id}}"> {!! $chamado->chamado !!} </a></td>
       </tr>
-@empty
-    <tr>
+    @empty
+      <tr>
         <td colspan="6">Não há chamados</td>
-    </tr>
-@endforelse
-</tbody>
-</table>
-
-{{ $chamados->appends(request()->query())->links() }}
+      </tr>
+    @endforelse
+    
+    </tbody>
+  </table>
+  {{ $chamados->appends(request()->query())->links() }}
 </div>

@@ -1,42 +1,19 @@
+<td> #{{ $chamado->id }} </a></td>
+<td>@isset($chamado->fila->nome)
+        {{ $chamado->fila->nome }}</li>
+    @endisset
+</td>
+<td> <span style="color:red;"> {{ $chamado->status }} </span> </a></td>
+<td> {{ Carbon\Carbon::parse($chamado->created_at)->format('d/m/Y H:i') }} </a></td>
+<td> <a href="chamados/{{$chamado->id}}" title="Ver Chamado" class="pr-2"> <i class="fas fa-eye" style="font-size:24px"></i> {!! $chamado->chamado !!} </a> </a></td>
+<!-- <td> {{ $chamado->predio }} </a></td>
+<td> {{ $chamado->sala }} </a></td> -->
+<td>
+</td>
+
 <ul style="list-style-type: none;">
-
-    <li><b>id: </b>#{{ $chamado->id }}
-    </li>
-
-    <li>
-        <b>Ver chamado</b> <a href="chamados/{{$chamado->id}}"> <i class="fas fa-eye"></i> </a>
-    </li>
-
-    <li>
-        @can('view',$chamado)
-        <b>Editar chamado</b> <a href="chamados/{{$chamado->id}}/edit"> <i class="fas fa-edit"></i> </a>
-        @endcan
-    </li>
-    @if($chamado->status == 'Triagem')
-    <li>
-        @can('admin')
-        <b>Fazer triagem</b> <a href="chamados/{{$chamado->id}}/edit"> <i class="fas fa-plus"></i> </a>
-        @endcan
-    </li>
-    @endif
-
-    @if($chamado->status == 'Atribuído')
-    <li>
-        @can('admin')
-        <b>Devolver para triagem</b> <a href="chamados/{{$chamado->id}}/devolver"> <i class="fas fa-plus"></i> </a>
-        @endcan
-    </li>
-    @endif
-
-    <li><b>total de comentários</b>: {{ $chamado->comentarios->count() }}</li>
-
-    <li><b>por:</b> {{ $chamado->user->name}}</li>
-
-    <li><b>aberto em: </b>{{ Carbon\Carbon::parse($chamado->created_at)->format('d/m/Y H:i') }}</li>
-
-    @if(!is_null($chamado->fechado_em))
-        <li><b>fechado em</b>: {{ Carbon\Carbon::parse($chamado->fechado_em)->format('d/m/Y H:i') }}</li>
-    @endif
+       
+        
 
     <li><b>status: </b> <span style="color:red;"> {{ $chamado->status }} </span> </li>
     @if($chamado->status == 'Atribuído')
@@ -49,29 +26,15 @@
             @endisset
         @endif
 
-        <li><b>complexidade</b>: {{ $chamado->complexidade }}</li>
-    @endif
-    <li><b>prédio</b>: {{ $chamado->predio }}</li>
-    <li><b>sala</b>: {{ $chamado->sala }}</li>
+        @if(!is_null($chamado->fechado_em))
+            <li><b>fechado em</b>: {{ Carbon\Carbon::parse($chamado->fechado_em)->format('d/m/Y H:i') }}</li>
+        @endif
 
-    </li>
-
-    @isset($chamado->fila->nome)
-        <li><b>Fila: </b>{{ $chamado->fila->nome }}</li>
-    @endisset
-
-    @if (!empty($chamado->patrimonio))
-    <b>patrimônio(s)</b>:
-    <ul class="list-group">
-        @foreach(explode(',', $chamado->patrimonio) as $patrimonio)
-        <li class="list-group-item">
-            {{trim($patrimonio)}}
+        @if($chamado->status == 'Atribuído')
             @if(config('chamados.usar_replicado') == 'true')
             {{ \Uspdev\Replicado\Bempatrimoniado::dump(trim($patrimonio))['epfmarpat'] ?? 'não encontrado'}}
             {{ \Uspdev\Replicado\Bempatrimoniado::dump(trim($patrimonio))['modpat'] ?? ''}}
             @endif
-        </li>
-        @endforeach
-    </ul>
-    @endif
+            <li><b>complexidade</b>: {{ $chamado->complexidade }}</li>
+        @endif
 </ul>
