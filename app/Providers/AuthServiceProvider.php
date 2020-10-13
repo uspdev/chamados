@@ -27,6 +27,14 @@ class AuthServiceProvider extends ServiceProvider
 
         # admin
         Gate::define('admin', function ($user) {
+                if (!session('is_admin')) {
+                return false;
+            } else {
+                return $user->is_admin;
+            }
+        });
+
+        Gate::define('trocarPerfil', function($user) {
             return $user->is_admin;
         });
 

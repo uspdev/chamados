@@ -40,6 +40,26 @@ return [
     ],
     'right_menu' => [
         [
+            'text' => '<i class="fas fa-id-badge"></i> Trocar perfil',
+            'can' => 'trocarPerfil',
+            'submenu' => [
+                [
+                    'text' => 'Admin',
+                    'url' => 'users/perfil/admin',
+                    'can' => 'trocarPerfil',
+                ],
+                [
+                    'text' => 'Atendente',
+                    'url' => 'users/perfil/atendente',
+                    'can' => 'trocarPerfil',
+                ], 
+                [
+                    'text' => 'Usuário',
+                    'url' => 'users/perfil/usuario',
+                ],
+            ],
+        ],
+        [
             'text' => '<i class="fas fa-cog"></i> Configurações',
             'title' => 'Configurações',
             'can' => 'admin',
@@ -60,7 +80,6 @@ return [
                     'can' => 'admin',
                 ],
             ],
-
         ],
     ],
 ];

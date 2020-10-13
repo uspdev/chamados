@@ -7,7 +7,5 @@
 
 @section('content')
 @parent
-
 @include('chamados/partials/index')
-
 @stop

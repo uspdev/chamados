@@ -125,6 +125,23 @@ class UserController extends Controller
             // limitando a resposta em 50 elementos
             return response($out);
         }
+    }
+
+    public function trocarPerfil(Request $request, $perfil)
+    {
+        $this->authorize('trocarPerfil');
+        switch ($perfil) {
+            case 'usuario':
+                session(['is_admin' => 0]);
+                $request->session()->flash('alert-info', 'Perfil mudado para Usuário com sucesso.');
+                break;
+            case 'admin':
+                session(['is_admin' => 1]);
+                $request->session()->flash('alert-info', 'Perfil mudado para Admin com sucesso.');
+                break;
+        }
+        return back();
+        echo $perfil;
 
     }
 }

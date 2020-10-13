@@ -26,10 +26,9 @@
     </div>
     <div class="card-body">
         <div class="row">
-
-            {{-- Informações principais --}}
             <div class="col-md-8">
 
+                {{-- Informações principais --}}
                 <span class="text-muted">Assunto:</span> {{ $chamado->chamado }}<br>
                 <br>
                 @foreach($template as $field => $val)
@@ -49,11 +48,11 @@
                 @endif
 
                 <span class="text-muted">Estado:</span> <span style="color:red;"> {{ $chamado->status }} </span>
-                |
+
                 @can('admin')
+                |
                 @include('chamados.partials.show-triagem-modal', ['modalTitle'=>'Triagem', 'url'=>'ok'])
                 @endcan
-
                 <br>
                 <div class="ml-2">
 
@@ -70,11 +69,10 @@
                     @if($chamado->status == 'Triagem')
                     Não atribuído
                     @endif
-                </div>
 
+                </div>
             </div>
         </div>
-
     </div>
 </div>
 

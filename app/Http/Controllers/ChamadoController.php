@@ -37,12 +37,11 @@ class ChamadoController extends Controller
         /* Chamados de quem está logado */
         $this->authorize('chamados.viewAny');
 
-        $user = \Auth::user();
-
-        if ($user->is_admin) {
+        if (Gate::allows('admin')) {
             $chamados = Chamado::all();
         } else {
-            $chamados = Chamado::where('user_id', '=', $user->id)->orderBy('created_at', 'desc')->get(10);
+            $user = \Auth::user();
+            $chamados = Chamado::where('user_id', '=', $user->id)->orderBy('created_at', 'desc')->get();
         }
 
         return view('chamados/index', compact('chamados'));

@@ -27,6 +27,7 @@ Route::delete('filas/{fila}/pessoas/{id}', [FilaController::class,'destroyPessoa
 Route::get('search/partenome', [UserController::class,'partenome']);
 
 Route::resource('users', UserController::class);
+Route::get('users/perfil/{perfil}', [UserController::class, 'trocarPerfil']);
 
 /**/
 Route::get('chamados/create', [ChamadoController::class, 'listaFilas']);
