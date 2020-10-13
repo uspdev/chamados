@@ -36,7 +36,7 @@ class FilaController extends Controller
 
         $row = $this->model::create($request->all());
         $user = \Auth::user();
-        $row->user()->attach($user->id, ['funcao' => 'Gerente']);
+        $row->users()->attach($user->id, ['funcao' => 'Gerente']);
 
         $request->session()->flash('alert-info', 'Dados adicionados com sucesso');
         return redirect('/' . $this->data['url'] . '/' . $row->id);
