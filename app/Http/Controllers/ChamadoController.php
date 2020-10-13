@@ -40,9 +40,9 @@ class ChamadoController extends Controller
         $user = \Auth::user();
 
         if ($user->is_admin) {
-            $chamados = Chamado::paginate(10);
+            $chamados = Chamado::all();
         } else {
-            $chamados = Chamado::where('user_id', '=', $user->id)->orderBy('created_at', 'desc')->paginate(10);
+            $chamados = Chamado::where('user_id', '=', $user->id)->orderBy('created_at', 'desc')->get(10);
         }
 
         return view('chamados/index', compact('chamados'));
@@ -50,7 +50,7 @@ class ChamadoController extends Controller
 
     public function todos(Request $request)
     {
-        $this->authorize('atendente');
+        $this->authorize('admin');
 
         $chamados = Chamado::orderBy('created_at', 'desc');
 
@@ -94,7 +94,7 @@ class ChamadoController extends Controller
         $this->authorize('chamados.viewAny');
 
         $user = \Auth::user();
-        $chamados = Chamado::where('status', '=', 'Triagem')->orderBy('created_at', 'desc')->paginate(10);
+        $chamados = Chamado::where('status', 'Triagem')->orderBy('created_at', 'desc')->get();
         return view('chamados/index', compact('chamados'));
     }
 
