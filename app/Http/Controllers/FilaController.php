@@ -29,6 +29,16 @@ class FilaController extends Controller
         store as protected traitStore;
     }
 
+    public function index()
+    {
+        $this->authorize('admin');
+
+        $this->data['fields'] = $this->model::getFields();
+        $this->data['rows'] = $this->model::get();
+        #return view($this->data['url'] . '.index')->with('data', (object) $this->data);
+        return view('filas.index')->with('data', (object) $this->data);
+    }
+
     public function store(Request $request)
     {
         $this->authorize('admin');
