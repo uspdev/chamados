@@ -1,4 +1,0 @@
-php artisan migrate:refresh
-php artisan db:seed --class SetorSeeder
-php artisan db:seed --class FilaSeeder
-php artisan db:seed --class UserSeeder
