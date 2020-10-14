@@ -72,8 +72,9 @@ class ChamadoController extends Controller
 
         $predios = $this->predios;
         $chamados = $chamados->paginate(10);
+        $atendentes = [];
 
-        return view('chamados/todos', compact('chamados', 'predios'));
+        return view('chamados/todos', compact('atendentes', 'chamados', 'predios'));
     }
 
     public function buscaid(Request $request)
@@ -164,15 +165,15 @@ class ChamadoController extends Controller
     {
         $this->authorize('chamados.view', $chamado);
 
-        # Aqui ainda precisa ajustar, talvez renderizar previamente
         $template = json_decode($chamado->fila->template);
+        $extras = json_decode($chamado->extras);
         if (empty($template)) {
             $template = [];
         }
         #dd($template);
         $complexidades = $this->complexidades;
 
-        return view('chamados/show', compact('chamado', 'template', 'complexidades'));
+        return view('chamados/show', compact('chamado', 'extras', 'template', 'complexidades'));
     }
 
     /**
