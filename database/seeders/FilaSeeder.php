@@ -22,20 +22,27 @@ class FilaSeeder extends Seeder
                 'setor_id' => 5,
                 'template' => '{
                     "predio": {
-                        "label":"Prédio",
-                        "type":"text"
+                        "label": "Prédio",
+                        "type" : "text"
                     },
                     "sala": {
-                        "label":"Sala",
-                        "type":"text"
+                        "label": "Sala",
+                        "type" : "text"
                     },
                     "numpat": {
-                        "label":"Patrimônios",
-                        "type":"text"
+                        "label": "Patrimônios",
+                        "type" : "text",
+                        "help" : "Exemplo: <strong>008.047977</strong>"
                     },
                     "dia": {
-                        "label":"Dia do atendimento",
-                        "type":"date"
+                        "label": "Dia do atendimento",
+                        "type" : "date"
+                    },
+                    "obs": {
+                        "label": "Observações",
+                        "type" : "text",
+                        "can"  : "admin",
+                        "help" : "Observações técnicas"
                     }
                 }',
             ],

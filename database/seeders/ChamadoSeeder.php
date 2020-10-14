@@ -21,6 +21,13 @@ class ChamadoSeeder extends Seeder
             'status'         => 'Triagem',
             'complexidade'   =>  null,
             'atribuido_para' =>  User::inRandomOrder()->first()->id,
+            'extras'         => '{
+                "predio" : "Administração",
+                "sala"   : "Sala 02",
+                "numpat" : "314.159265",
+                "dia"    : "1951-07-22",
+                "obs"    : "Fonte queimada. Precisa trocar."
+            }',
             'user_id'        =>  1,
             'fila_id'        =>  1
         ];

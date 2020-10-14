@@ -4,33 +4,19 @@ namespace App\Utils;
 
 use Form;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\HtmlString;
 
 class JSONForms
 {
     public static function generateForm($fila, $chamado = null)
     {
-        // $template_default = [
-        //     'descricao' => [
-        //         'label' => 'Descrição',
-        //         'type' => 'textarea',
-        //     ],
-        //     'notes' => [
-        //         'label' => 'Anotações do atendente (oculto para o usuário)',
-        //         'type' => 'textarea',
-        //         'can' => 'admin',
-        //     ],
-        // ];
-        // if ($fila->template) {
-        //     $template = json_decode(json_encode(
-        //         array_merge(json_decode($fila->template, true), $template_default)
-        //     ));
-        // } else {
-        //     $template = json_decode(json_encode(
-        //         $template_default
-        //     ));
-        // }
-        $template = json_decode($fila->template);
+        Form::macro('help', function($text)
+        {
+            $help = new HtmlString('<small class="form-text text-muted">'.$text.'</small>');
+            return $help;
+        });
 
+        $template = json_decode($fila->template);
         $form = [];
         $data = null;
         if ($template) {
@@ -38,6 +24,7 @@ class JSONForms
                 $data = json_decode($chamado->extras);
             }
             foreach ($template as $key => $json) {
+                $input = [];
                 $type = $json->type;
                 # se o template tem autorização
                 if (isset($json->can)) {
@@ -46,11 +33,15 @@ class JSONForms
                     }
                 }
                 $value = null;
-                $form[] = Form::label("extras[$key]", $template->$key->label, ['class' => 'control-label']);
+                $input[] = Form::label("extras[$key]", $template->$key->label, ['class' => 'control-label']);
                 if (isset($data->$key)) {
                     $value = $data->$key;
                 }
-                $form[] = Form::$type("extras[$key]", $value, ['class' => 'form-control', 'rows' => '3']);
+                $input[] = Form::$type("extras[$key]", $value, ['class' => 'form-control', 'rows' => '3']);
+                if (isset($json->help)) {
+                    $input[] = Form::help($json->help);
+                }
+                $form[] = $input;
             }
         }
         return $form;
