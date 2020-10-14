@@ -6,7 +6,7 @@
 </style>
 
 <div class="font-weight-bold">
-    Pessoas
+    <i class="fas fa-users"></i> Pessoas
     @include('filas.partials.pessoas-btn-add-modal')
 </div>
 

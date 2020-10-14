@@ -11,7 +11,7 @@
     <input type="radio" name="triagem" value="nao"> não<br>
 </div>
 <br>
-<span class="font-weight-bold">Visibilidade</span>
+<span class="font-weight-bold"><i class="far fa-eye"></i> Visibilidade</span>
 
 <div class="ml-2">
     <span class="text-muted">por usuários:</span>
@@ -25,7 +25,7 @@
 </div>
 
 <br>
-<span class="font-weight-bold">Formulário</span> <a class="btn btn-light btn-sm text-primary"><i class="fas fa-edit"></i> Editar</a>
+<span class="font-weight-bold"><i class="fab fa-wpforms"></i> Formulário</span> <a class="btn btn-light btn-sm text-primary"><i class="fas fa-edit"></i> Editar</a>
 <div class="ml-2">
     @if(!empty($data->row['template']))
     @foreach(json_decode($data->row['template']) as $field=>$value)
