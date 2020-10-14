@@ -1,5 +1,5 @@
 <button type="button" class="btn btn-sm btn-light text-primary" onclick="add_modal_form()">
-    <i class="fas fa-plus"></i>
+    <i class="fas fa-plus"></i> Adicionar
 </button>
 
 <!-- Modal -->
@@ -7,7 +7,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalPortariaLabel">{{ $modalTitle }}</h5>
+                <h5 class="modal-title" id="modalPortariaLabel">Adicionar pessoas</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -15,7 +15,7 @@
             <div class="modal-body">
 
                 <div class="list_table_div_form">
-                    {!! Form::open( ['url'=>$url]) !!}
+                    {!! Form::open( ['url'=>$data->url.'/'.$data->row->id.'/pessoas']) !!}
                     @method('POST')
                     @csrf
 

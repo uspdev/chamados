@@ -36,7 +36,5 @@
         })
 
     });
-
 </script>
-
 @endsection

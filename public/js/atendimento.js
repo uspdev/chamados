@@ -4,6 +4,7 @@ $(function () {
     });
 
     $('[data-toggle="tooltip"]').tooltip({
-        container: 'body'
+        container: 'body',
+        html: true
     });
 });

@@ -2,8 +2,8 @@
 <span class="text-muted">Nome:</span> {{ $data->row['nome'] }}<br>
 <span class="text-muted">Descrição:</span> {{ $data->row['descricao'] }}<br>
 <br>
-<span class="text-muted">Habilitar triagem </span>
-<span data-toggle="tooltip" title="O gerente da fila fará a distribuição dos chamados entre os atendentes/Os atendentes farão auto atribuições por conta própria.">
+<span class="font-weight-bold">Habilitar triagem </span>
+<span data-toggle="tooltip" data-html="true" title="O gerente da fila fará a distribuição dos chamados entre os atendentes/Os atendentes farão auto atribuições por conta própria.">
     <i class="fas fa-question-circle text-primary"></i>
 </span><br>
 <div class="ml-2">
@@ -25,7 +25,7 @@
 </div>
 
 <br>
-<span class="font-weight-bold">Formulário</span> | <a class="btn btn-light btn-sm text-primary"><i class="fas fa-edit"></i> Editar</a>
+<span class="font-weight-bold">Formulário</span> <a class="btn btn-light btn-sm text-primary"><i class="fas fa-edit"></i> Editar</a>
 <div class="ml-2">
     @if(!empty($data->row['template']))
     @foreach(json_decode($data->row['template']) as $field=>$value)

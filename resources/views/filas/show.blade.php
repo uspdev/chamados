@@ -16,7 +16,7 @@ $data->model = 'App\Models\Fila';
                 <div class="card-title h5 form-inline my-0">
                     <a href="filas">Filas</a> <i class="fas fa-angle-right mx-2"></i> Detalhes da fila |&nbsp;
                     @include('common.list-table-btn-edit', ['row'=>$data->row]) &nbsp;|&nbsp;
-                    @include('common.list-table-btn-delete', ['row'=>$data->row]) &nbsp;|&nbsp;
+                    @include('common.btn-delete-sm', ['action'=> $data->url.'/'.$data->row->id]) &nbsp;|&nbsp;
 
                     @include('filas.partials.enable-disable-btn')
 
