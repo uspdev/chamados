@@ -48,7 +48,7 @@
                 <b>fechado em</b>: {{ Carbon\Carbon::parse($chamado->fechado_em)->format('d/m/Y H:i') }}<br>
                 @endif
 
-                <span class="text-muted">Estado:</span> <span style="color:red;"> {{ $chamado->status }} </span>
+                <span class="text-muted">Estado:</span> @include('chamados.partials.status')
 
                 @can('admin')
                 |
