@@ -41,7 +41,7 @@
             <div class="col-md-4">
 
                 {{-- Painel direito --}}
-                <span class="text-muted">Criado por:</span> {{ $chamado->user->name}}<br>
+                <span class="text-muted">Criado por:</span> {{ $chamado->user->name}} @include('chamados.partials.user-detail', ['user'=>$chamado->user])<br>
                 <span class="text-muted">Criado em:</span> {{ Carbon\Carbon::parse($chamado->created_at)->format('d/m/Y H:i') }}<br>
 
                 @if(!is_null($chamado->fechado_em))
