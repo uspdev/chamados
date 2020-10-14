@@ -61,7 +61,8 @@ Exemplo de JSON:
     "obs": {
         "label" : "Observações",
         "type"  : "textarea",
-        "can"   : "admin"
+        "can"   : "admin",
+        "help"  : "Observações técnicas"
     }
 }
 ```

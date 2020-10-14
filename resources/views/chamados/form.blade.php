@@ -89,8 +89,11 @@
 </div>
 
 <div class="form-group">
-    @foreach($form as $element)
-    {{ $element }}<br>
+    @foreach($form as $input)
+        @foreach($input as $element)
+            {{ $element }}
+        @endforeach
+        <br>
     @endforeach
 </div>
 
