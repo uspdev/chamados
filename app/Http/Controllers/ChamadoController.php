@@ -39,12 +39,10 @@ class ChamadoController extends Controller
 
         if (Gate::allows('admin')) {
             $chamados = Chamado::all();
-        } else {
-            /* precisa melhorar isto */
-            $chamados = Chamado::whereHas('users', function ($pivot) {
-                $user = \Auth::user();
-                $pivot->where('user_id', $user->id);
-            })->orderBy('created_at', 'desc')->get();
+        }
+        else {
+            $user = \Auth::user();
+            $chamados = $user->chamados;
         }
 
         return view('chamados/index', compact('chamados'));
@@ -59,10 +57,6 @@ class ChamadoController extends Controller
         // search terms
         if (isset($request->status)) {
             $chamados->where('status', '=', $request->status);
-        }
-
-        if (isset($request->atendente)) {
-            $chamados->where('atribuido_para', '=', $request->atendente);
         }
 
         if (isset($request->search)) {
@@ -103,9 +97,13 @@ class ChamadoController extends Controller
         $this->authorize('chamados.viewAny');
 
         $user = \Auth::user();
-        $chamados = Chamado::where('status', '=', 'Atríbuido')->
-            where('atribuido_para', '=', $user->codpes)
-            ->orderBy('created_at', 'desc')->paginate(10);
+        $chamados = Chamado::whereHas('users', function($pivot) {
+            $user = \Auth::user();
+            $pivot->where([
+                ['user_id', $user->id],
+                ['funcao', 'Atendente']
+            ]);
+        })->orderBy('created_at', 'desc')->paginate(10);
 
         return view('chamados/index', compact('chamados'));
     }
@@ -169,10 +167,12 @@ class ChamadoController extends Controller
         if (empty($template)) {
             $template = [];
         }
+        $atendente = $chamado->users()->wherePivot('funcao', 'Atendente')->first();
+        $atribuidor = $chamado->users()->wherePivot('funcao', 'Atribuidor')->first();
         $autor = $chamado->users()->wherePivot('funcao', 'Autor')->first();
         $complexidades = $this->complexidades;
 
-        return view('chamados/show', compact('autor', 'chamado', 'extras', 'template', 'complexidades'));
+        return view('chamados/show', compact('atendente', 'atribuidor', 'autor', 'chamado', 'extras', 'template', 'complexidades'));
     }
 
     /**
@@ -235,24 +235,16 @@ class ChamadoController extends Controller
     {
         if ($request->status == 'devolver') {
             $chamado->status = 'Triagem';
-            $chamado->atribuido_para = null;
-            $chamado->triagem_por = null;
-            $chamado->atribuido_em = null;
             $chamado->complexidade = null;
             $user = \Auth::user();
         } else {
             $request->validate([
                 'telefone' => ['required'],
-                'sala' => ['required'],
-                'predio' => ['required'],
-                'chamado' => ['required'],
+                'assunto' => ['required'],
                 'patrimonio' => ['nullable', new PatrimonioRule],
             ]);
 
             $chamado->assunto = $request->assunto;
-            $chamado->patrimonio = $request->patrimonio;
-            $chamado->sala = $request->sala;
-            $chamado->predio = $request->predio;
             $chamado->status = 'Triagem';
             $extras = $request->extras;
             if (!empty($extras['numpat'])) {
@@ -281,9 +273,10 @@ class ChamadoController extends Controller
                 /* Atribuir */
                 if (!empty($request->atribuido_para)) {
                     $chamado->complexidade = $request->complexidade;
-                    $chamado->atribuido_para = $request->atribuido_para;
-                    $chamado->triagem_por = \Auth::user()->codpes;
-                    $chamado->atribuido_em = Carbon::now();
+                    /* acho que o user deveria vir direto pelo form */
+                    $atendente = User::where('codpes', $request->atribuido_para)->first();
+                    $chamado->users()->attach($atendente->id, ['funcao' => 'Atendente']);
+                    $chamado->users()->attach(\Auth::user()->id, ['funcao' => 'Atribuidor']);
                     $chamado->status = 'Atribuído';
                 }
             } else {
@@ -291,6 +284,7 @@ class ChamadoController extends Controller
             }
 
             /* Atualiza telefone da pessoa */
+            /* para funcionar, precisa mexer no LoginController */
             $user->telefone = $request->telefone;
             $user->save();
         }
@@ -313,9 +307,10 @@ class ChamadoController extends Controller
     {
         $this->authorize('admin');
         $chamado->complexidade = $request->complexidade;
-        $chamado->atribuido_para = $request->atribuido_para;
-        $chamado->triagem_por = \Auth::user()->codpes;
-        $chamado->atribuido_em = Carbon::now();
+        $atendente = User::where('codpes', $request->atribuido_para)->first();
+        /* TODO precisa dar dettach do atendente e do atribuidor anterior */
+        $chamado->users()->attach($atendente->id, ['funcao' => 'Atendente']);
+        $chamado->users()->attach(\Auth::user()->id, ['funcao'=> 'Atribuidor']);
         $chamado->status = 'Atribuído';
         $chamado->save();
         $request->session()->flash('alert-info', 'Triagem realizada com sucesso');

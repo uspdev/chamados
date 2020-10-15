@@ -20,14 +20,10 @@ class CreateChamadosTable extends Migration
             $table->text('assunto');
 
             /* Campos opcionais do chamado */
+            $table->text('descricao');
             $table->enum('status', ['Triagem', 'Atribuído','Fechado']);
-            $table->dateTime('atribuido_em')->nullable();
             $table->dateTime('fechado_em')->nullable();
-
-            /* Campos da triagem */
             $table->enum('complexidade', ['baixa', 'média','alta'])->nullable();
-            $table->integer('triagem_por')->unsigned()->nullable(); // codpes
-            $table->integer('atribuido_para')->unsigned()->nullable(); // codpes
             $table->json('extras')->nullable();
 
             /* Relacionamentos */

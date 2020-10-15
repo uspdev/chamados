@@ -16,9 +16,9 @@ class ChamadoSeeder extends Seeder
     {
         $chamado = [
             'assunto'        => 'Computador não liga',
+            'descricao'      => 'Saiu fumaça da parte de trás.',
             'status'         => 'Triagem',
             'complexidade'   =>  null,
-            'atribuido_para' =>  User::inRandomOrder()->first()->id,
             'extras'         => '{
                 "predio" : "Administração",
                 "sala"   : "Sala 02",
@@ -31,8 +31,13 @@ class ChamadoSeeder extends Seeder
 
         $cht = Chamado::create($chamado);
         $cht->users()->attach(User::first()->id, ['funcao' => 'Autor']);
+        $cht->users()->attach(User::inRandomOrder()->first()->id, ['funcao' => 'Atribuidor']);
+        $cht->users()->attach(User::inRandomOrder()->first()->id, ['funcao' => 'Atendente']);
         Chamado::factory(10)->create()->each(function ($chamado) {
             $chamado->users()->attach(User::inRandomOrder()->first()->id, ['funcao' => 'Autor']);
         });
+        $cht = Chamado::inRandomOrder()->first();
+        $cht->users()->attach(User::inRandomOrder()->first()->id, ['funcao' => 'Atribuidor']);
+        $cht->users()->attach(User::inRandomOrder()->first()->id, ['funcao' => 'Atendente']);
     }
 }

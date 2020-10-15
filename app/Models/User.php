@@ -117,7 +117,7 @@ class User extends Authenticatable
      */
     public function chamados()
     {
-        return $this->belongsToMany('App\Models\Chamado')
+        return $this->belongsToMany('App\Models\Chamado', 'user_chamado')
             ->withPivot('funcao')
             ->withTimestamps();
     }
