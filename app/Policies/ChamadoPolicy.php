@@ -32,8 +32,10 @@ class ChamadoPolicy
     public function view(User $user, Chamado $chamado)
     {
         // Quem pode ver: o autor, atendentes ou admin
-        if($user->codpes == $chamado->user->codpes){
-            return true;               
+        foreach ($chamado->users as $u) {
+            if ($user->codpes == $u->codpes) {
+                return true;
+            }
         }
         if(Gate::allows('admin')){
             return true;
@@ -67,8 +69,10 @@ class ChamadoPolicy
     public function update(User $user, Chamado $chamado)
     {
         // Quem pode ver: o autor, atendentes ou admin
-        if($user->codpes == $chamado->user->codpes){
-            return true;               
+        foreach ($chamado->users as $u) {
+            if ($user->codpes == $u->codpes) {
+                return true;
+            }
         }
         if(Gate::allows('admin')){
             return true;

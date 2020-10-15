@@ -12,8 +12,10 @@ class Chamado extends Model
 {
     use HasFactory;
     
-    public function user(){
-        return $this->belongsTo(User::class);
+    public function users()
+    {
+        return $this->belongsToMany('App\Models\User', 'user_chamado')
+            ->withPivot('funcao')->withTimestamps();
     }
 
     public function comentarios()
