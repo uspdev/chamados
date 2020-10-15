@@ -31,19 +31,18 @@ class ChamadoPolicy
      */
     public function view(User $user, Chamado $chamado)
     {
-        // Quem pode ver: o autor, atendentes ou admin
+        /* autor e atendentes */
         foreach ($chamado->users as $u) {
             if ($user->codpes == $u->codpes) {
                 return true;
             }
         }
+        /* admin */
         if(Gate::allows('admin')){
             return true;
         }
-        if($user->codpes == $chamado->atribuido_para){
-            return true;               
-        }
 
+        /* isso aqui tem cara de que pode ser eliminado */
         $atendentes = explode(',', config('chamados.atendentes'));
         return in_array($user->codpes, $atendentes);
     }
@@ -68,7 +67,6 @@ class ChamadoPolicy
      */
     public function update(User $user, Chamado $chamado)
     {
-        // Quem pode ver: o autor, atendentes ou admin
         foreach ($chamado->users as $u) {
             if ($user->codpes == $u->codpes) {
                 return true;
@@ -76,9 +74,6 @@ class ChamadoPolicy
         }
         if(Gate::allows('admin')){
             return true;
-        }
-        if($user->codpes == $chamado->atribuido_para){
-            return true;               
         }
 
         $atendentes = explode(',', config('chamados.atendentes'));

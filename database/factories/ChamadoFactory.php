@@ -28,25 +28,18 @@ class ChamadoFactory extends Factory
         $predios = Chamado::predios();
         $statuses = Chamado::status();
         $status = $statuses[array_rand($statuses)];
-        $atribuido_em = $atribuido_para = $triagem_por = $fechado_em = null;
-        if ($status == 'Atribuído') {
-            $atribuido_em = $this->faker->dateTime($max = 'now', $timezone = null);
-            $atribuido_para = User::inRandomOrder()->first()->codpes;
-            $triagem_por = User::inRandomOrder()->first()->codpes;
-        } 
+        $fechado_em = null;
 
         if ($status == 'Fechado') {
             $fechado_em = $this->faker->dateTime($max = 'now', $timezone = null);
         }
             return [
                 'assunto'        =>  $this->faker->sentence,
+                'descricao'      =>  $this->faker->sentence,
                 'status'         =>  $status,
                 'complexidade'   =>  $complexidades[array_rand($complexidades)],
                 'fila_id'        =>  Fila::inRandomOrder()->first()->id,
-                'fechado_em'     =>  $fechado_em,
-                'atribuido_em'   =>  $atribuido_em,
-                'atribuido_para' =>  $atribuido_para,
-                'triagem_por'    =>  $triagem_por,
+                'fechado_em'     =>  $fechado_em
             ];
     }
 }

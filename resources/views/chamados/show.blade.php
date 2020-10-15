@@ -41,7 +41,7 @@
             <div class="col-md-4">
 
                 {{-- Painel direito --}}
-                <span class="text-muted">Criado por:</span> {{ $chamado->user->name}} @include('chamados.partials.user-detail', ['user'=>$chamado->user])<br>
+                <span class="text-muted">Criado por:</span> {{ $autor->name}} @include('chamados.partials.user-detail', ['user'=>$autor])<br>
                 <span class="text-muted">Criado em:</span> {{ Carbon\Carbon::parse($chamado->created_at)->format('d/m/Y H:i') }}<br>
 
                 @if(!is_null($chamado->fechado_em))
@@ -59,13 +59,13 @@
 
                     @if($chamado->status == 'Atribuído')
                     <span class="text-muted">Atribuído para</span>:
-                    {{ App\Models\User::getByCodpes($chamado->atribuido_para)['name'] }}<br>
+                    {{ $atendente->name }}<br>
 
                     <span class="text-muted">Complexidade</span>: {{ $chamado->complexidade }}<br>
 
                     <span class="text-muted">Por</span>:
-                    {{ App\Models\User::getByCodpes($chamado->triagem_por)['name'] }}
-                    <span class="text-muted">em</span> {{ Carbon\Carbon::parse($chamado->atribuido_em)->format('d/m/Y H:i') }}<br>
+                    {{ $atribuidor->name }}
+                    <span class="text-muted">em</span> <pre>PEGAR DATA DO USER_CHAMADO</pre><br>
                     @endif
                     @if($chamado->status == 'Triagem')
                     Não atribuído
