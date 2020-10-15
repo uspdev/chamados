@@ -21,7 +21,7 @@
     <tr>
       <td> {{ $chamado->id }} </td>
       <td> ({{ $chamado->fila->setor->sigla }}) {{ $chamado->fila->nome }}</td>
-      <td> <a href="chamados/{{$chamado->id}}"> {!! $chamado->chamado !!} </a></td>
+      <td> <a href="chamados/{{$chamado->id}}"> {!! $chamado->assunto !!} </a></td>
       <td> <span style="color:red;"> {{ $chamado->status }} </span> </td>
       <td> {{ Carbon\Carbon::parse($chamado->created_at)->format('d/m/Y H:i') }}</td>
     </tr>

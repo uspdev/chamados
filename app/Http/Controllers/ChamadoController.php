@@ -61,10 +61,6 @@ class ChamadoController extends Controller
             $chamados->where('status', '=', $request->status);
         }
 
-        if (isset($request->predio)) {
-            $chamados->where('predio', '=', $request->predio);
-        }
-
         if (isset($request->atendente)) {
             $chamados->where('atribuido_para', '=', $request->atendente);
         }
@@ -73,7 +69,7 @@ class ChamadoController extends Controller
             $chamados->where('chamado', 'LIKE', "%" . $request->search . "%");
         }
 
-        $predios = $this->predios;
+        $predios = [];
         $chamados = $chamados->paginate(10);
         $atendentes = [];
 
@@ -253,7 +249,7 @@ class ChamadoController extends Controller
                 'patrimonio' => ['nullable', new PatrimonioRule],
             ]);
 
-            $chamado->chamado = $request->chamado;
+            $chamado->assunto = $request->assunto;
             $chamado->patrimonio = $request->patrimonio;
             $chamado->sala = $request->sala;
             $chamado->predio = $request->predio;

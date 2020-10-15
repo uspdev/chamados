@@ -15,9 +15,7 @@ class ChamadoSeeder extends Seeder
     public function run()
     {
         $chamado = [
-            'chamado'        => 'Computador não liga',
-            'predio'         => 'Administração',
-            'sala'           => 'Sala 02',
+            'assunto'        => 'Computador não liga',
             'status'         => 'Triagem',
             'complexidade'   =>  null,
             'atribuido_para' =>  User::inRandomOrder()->first()->id,
