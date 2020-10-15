@@ -27,12 +27,13 @@ class FilaSeeder extends Seeder
                     },
                     "sala": {
                         "label": "Sala",
-                        "type" : "text"
+                        "type" : "text",
+                        "help" : "Exemplo: sala 02"
                     },
                     "numpat": {
                         "label": "Patrimônios",
                         "type" : "text",
-                        "help" : "Exemplo: <strong>008.047977</strong>"
+                        "help" : "Exemplo: <strong>008.047977</strong><br>Use vírgula caso o procedimento de atendimento seja idêntico para múltiplos computadores. Exemplo: <strong>008.047977,008.048593</strong>"
                     },
                     "dia": {
                         "label": "Dia do atendimento",

@@ -18,7 +18,7 @@
       <div class="card-body">
         @include('chamados/partials/chamado')
 
-        <p class="card-text">{!! $chamado->chamado !!}</p>
+        <p class="card-text">{!! $chamado->assunto !!}</p>
       </div>
     </div>
 

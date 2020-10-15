@@ -29,7 +29,7 @@
             <div class="col-md-8">
 
                 {{-- Informações principais --}}
-                <span class="text-muted">Assunto:</span> {{ $chamado->chamado }}<br>
+                <span class="text-muted">Assunto:</span> {{ $chamado->assunto }}<br>
                 <br>
                 @foreach($template as $field => $val)
                 <span class="text-muted">{{ $val->label }}:</span>

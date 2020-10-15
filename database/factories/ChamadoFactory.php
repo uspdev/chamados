@@ -39,17 +39,14 @@ class ChamadoFactory extends Factory
             $fechado_em = $this->faker->dateTime($max = 'now', $timezone = null);
         }
             return [
-                'chamado'        =>  $this->faker->sentence,
-                'predio'         =>  $predios[array_rand($predios)],
-                'sala'           =>  $this->faker->randomDigit,
-                'patrimonio'     =>  $this->faker->unique()->numberBetween(10000, 999999),
+                'assunto'        =>  $this->faker->sentence,
                 'status'         =>  $status,
                 'complexidade'   =>  $complexidades[array_rand($complexidades)],
                 'fila_id'        =>  Fila::inRandomOrder()->first()->id,
                 'fechado_em'     =>  $fechado_em,
-                'atribuido_em'     =>  $atribuido_em,
-                'atribuido_para'     =>  $atribuido_para,
-                'triagem_por'     =>  $triagem_por,
+                'atribuido_em'   =>  $atribuido_em,
+                'atribuido_para' =>  $atribuido_para,
+                'triagem_por'    =>  $triagem_por,
             ];
     }
 }
