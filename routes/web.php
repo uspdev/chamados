@@ -27,6 +27,7 @@ Route::get('search/partenome', [UserController::class,'partenome']);
 
 Route::resource('users', UserController::class);
 Route::get('users/perfil/{perfil}', [UserController::class, 'trocarPerfil']);
+Route::get('users/{user}/assumir', [UserController::class, 'assumir']);
 
 /**/
 Route::get('chamados/create', [ChamadoController::class, 'listaFilas']);
