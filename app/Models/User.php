@@ -121,4 +121,15 @@ class User extends Authenticatable
             ->withPivot('funcao')
             ->withTimestamps();
     }
+
+    /**
+     * Relacionamento n:n com setor, atributo funcao:
+        - Gerente, Usuario
+     */
+    public function setores()
+    {
+        return $this->belongsToMany('App\Models\Setor', 'user_setor')
+            ->withPivot('funcao')
+            ->withTimestamps();
+    }
 }

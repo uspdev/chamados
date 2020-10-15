@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Setor;
+use App\Models\User;
 
 class SetorSeeder extends Seeder
 {
@@ -68,7 +69,8 @@ class SetorSeeder extends Seeder
 
         ];
         foreach ($setores as $setor) {
-            Setor::create($setor);
+            $s = Setor::create($setor);
+            $s->users()->attach(User::inRandomOrder()->first()->id, ['funcao' => 'Gerente']);
         }
     }
 }

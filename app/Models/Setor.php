@@ -85,4 +85,9 @@ class Setor extends Model
         return $this->hasMany('App\Models\Fila');
     }
 
+    public function users()
+    {
+        return $this->belongsToMany('App\Models\User', 'user_setor')
+            ->withPivot('funcao')->withTimestamps();
+    }
 }
