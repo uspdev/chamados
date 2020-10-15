@@ -28,12 +28,13 @@ class ChamadoSeeder extends Seeder
                 "dia"    : "1951-07-22",
                 "obs"    : "Fonte queimada. Precisa trocar."
             }',
-            'user_id'        =>  1,
             'fila_id'        =>  1
         ];
 
-        Chamado::create($chamado);
-        Chamado::factory(10)->create();
-     
+        $cht = Chamado::create($chamado);
+        $cht->users()->attach(User::first()->id, ['funcao' => 'Autor']);
+        Chamado::factory(10)->create()->each(function ($chamado) {
+            $chamado->users()->attach(User::inRandomOrder()->first()->id, ['funcao' => 'Autor']);
+        });
     }
 }

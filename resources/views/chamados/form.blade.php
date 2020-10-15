@@ -40,7 +40,7 @@
 
     <div class="col-sm form-group">
         <label for="nome"><b>Número USP do(a) requisitante:</b></label>
-        <input class="form-control" id="codpes" name="codpes" value="{{ $chamado->user->codpes ?? old('codpes') }}">
+        <input class="form-control" id="codpes" name="codpes" value="{{ $autor->codpes ?? old('codpes') }}">
         <small id="codpesHelp" class="form-text text-muted">Exemplo: 123456</small>
     </div>
 
