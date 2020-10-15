@@ -41,7 +41,6 @@ class CreateChamadosTable extends Migration
             $table->json('extras')->nullable();
 
             /* Relacionamentos */
-            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
             $table->foreignId('fila_id')->constrained('filas');
 
             $table->timestamps();

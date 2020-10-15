@@ -40,8 +40,11 @@ class ChamadoController extends Controller
         if (Gate::allows('admin')) {
             $chamados = Chamado::all();
         } else {
-            $user = \Auth::user();
-            $chamados = Chamado::where('user_id', '=', $user->id)->orderBy('created_at', 'desc')->get();
+            /* precisa melhorar isto */
+            $chamados = Chamado::whereHas('users', function ($pivot) {
+                $user = \Auth::user();
+                $pivot->where('user_id', $user->id);
+            })->orderBy('created_at', 'desc')->get();
         }
 
         return view('chamados/index', compact('chamados'));
@@ -170,10 +173,10 @@ class ChamadoController extends Controller
         if (empty($template)) {
             $template = [];
         }
-        #dd($template);
+        $autor = $chamado->users()->wherePivot('funcao', 'Autor')->first();
         $complexidades = $this->complexidades;
 
-        return view('chamados/show', compact('chamado', 'extras', 'template', 'complexidades'));
+        return view('chamados/show', compact('autor', 'chamado', 'extras', 'template', 'complexidades'));
     }
 
     /**
@@ -189,8 +192,9 @@ class ChamadoController extends Controller
         $predios = $this->predios;
         $atendentes = $this->atendentes;
         $complexidades = $this->complexidades;
+        $autor = $chamado->users()->wherePivot('funcao', 'Autor')->first();
         $form = JSONForms::generateForm($fila, $chamado);
-        return view('chamados/edit', compact('fila', 'chamado', 'predios', 'atendentes', 'complexidades', 'form'));
+        return view('chamados/edit', compact('autor', 'fila', 'chamado', 'predios', 'atendentes', 'complexidades', 'form'));
     }
 
     /**
@@ -240,7 +244,6 @@ class ChamadoController extends Controller
             $chamado->atribuido_em = null;
             $chamado->complexidade = null;
             $user = \Auth::user();
-            $chamado->user_id = $user->id;
         } else {
             $request->validate([
                 'telefone' => ['required'],
@@ -294,10 +297,9 @@ class ChamadoController extends Controller
             /* Atualiza telefone da pessoa */
             $user->telefone = $request->telefone;
             $user->save();
-
-            $chamado->user_id = $user->id;
         }
         $chamado->save();
+        $chamado->users()->attach($user->id, ['funcao' => 'Autor']);
         return $chamado;
     }
 

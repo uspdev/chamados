@@ -100,13 +100,24 @@ class User extends Authenticatable
         return User::where('codpes',$codpes)->first();
     }
 
-
     /**
      * Relacionamento n:n com fila, atributo funcao: Gerente, Atendente
+     * TODO: não deveria ser filas?
      */
     public function fila()
     {
         return $this->belongsToMany('App\Models\Fila')
+            ->withPivot('funcao')
+            ->withTimestamps();
+    }
+
+    /**
+     * Relacionamento n:n com chamado, atributo funcao:
+        - Atendente, Atribuidor, Autor, Observador
+     */
+    public function chamados()
+    {
+        return $this->belongsToMany('App\Models\Chamado')
             ->withPivot('funcao')
             ->withTimestamps();
     }

@@ -21,12 +21,20 @@ class ChamadoSeeder extends Seeder
             'status'         => 'Triagem',
             'complexidade'   =>  null,
             'atribuido_para' =>  User::inRandomOrder()->first()->id,
-            'user_id'        =>  1,
+            'extras'         => '{
+                "predio" : "Administração",
+                "sala"   : "Sala 02",
+                "numpat" : "314.159265",
+                "dia"    : "1951-07-22",
+                "obs"    : "Fonte queimada. Precisa trocar."
+            }',
             'fila_id'        =>  1
         ];
 
-        Chamado::create($chamado);
-        Chamado::factory(10)->create();
-     
+        $cht = Chamado::create($chamado);
+        $cht->users()->attach(User::first()->id, ['funcao' => 'Autor']);
+        Chamado::factory(10)->create()->each(function ($chamado) {
+            $chamado->users()->attach(User::inRandomOrder()->first()->id, ['funcao' => 'Autor']);
+        });
     }
 }
