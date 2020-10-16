@@ -29,9 +29,9 @@
           <label class="" for="">Prédio</label>
           <select class="form-control" id="" name="predio">
             <option value="" selected>Qualquer</option>
-            @foreach($predios as $predio)
+            {{-- @foreach($xxpredios as $predio)
             <option value="{{$predio}}">{{$predio}}</option>
-            @endforeach
+            @endforeach --}}
           </select>
         </div>
         <div class="col-sm form-group">

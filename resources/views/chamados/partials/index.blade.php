@@ -8,7 +8,7 @@
 <table class="table table-striped meus-chamados">
   <thead>
     <tr>
-      <th>Id</th>
+      <th>Nro</th>
       <th>Fila</th>
       <th>Chamado</th>
       <th>Status</th>
@@ -19,7 +19,7 @@
 
     @forelse ($chamados->sortByDesc('created_at') as $chamado)
     <tr>
-      <td> {{ $chamado->id }} </td>
+      <td> {{ $chamado->nro }}/{{ Carbon\Carbon::parse($chamado->creted_at)->format('Y') }} </td>
       <td> ({{ $chamado->fila->setor->sigla }}) {{ $chamado->fila->nome }}</td>
       <td> <a href="chamados/{{$chamado->id}}"> {!! $chamado->assunto !!} </a></td>
       <td> @include('chamados.partials.status') </td>

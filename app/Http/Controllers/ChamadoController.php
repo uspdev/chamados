@@ -8,7 +8,6 @@ use App\Models\Setor;
 use App\Models\User;
 use App\Rules\PatrimonioRule;
 use App\Utils\JSONForms;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -16,15 +15,12 @@ class ChamadoController extends Controller
 {
 
     /* Variáveis globais temporárias */
-    private $predios;
-    private $atendentes;
     private $complexidades;
 
     public function __construct()
     {
         $this->middleware('auth');
         $this->complexidades = Chamado::complexidades();
-        $this->predios = collect(Chamado::predios());
     }
 
     /**
@@ -39,8 +35,7 @@ class ChamadoController extends Controller
 
         if (Gate::allows('admin')) {
             $chamados = Chamado::all();
-        }
-        else {
+        } else {
             $user = \Auth::user();
             $chamados = $user->chamados;
         }
@@ -50,6 +45,7 @@ class ChamadoController extends Controller
 
     public function todos(Request $request)
     {
+        return "desativado";
         $this->authorize('admin');
 
         $chamados = Chamado::orderBy('created_at', 'desc');
@@ -63,15 +59,15 @@ class ChamadoController extends Controller
             $chamados->where('chamado', 'LIKE', "%" . $request->search . "%");
         }
 
-        $predios = [];
         $chamados = $chamados->paginate(10);
-        $atendentes = [];
 
-        return view('chamados/todos', compact('atendentes', 'chamados', 'predios'));
+        return view('chamados/todos', compact('chamados'));
     }
 
     public function buscaid(Request $request)
     {
+        return 'desativado';
+
         $this->authorize('atendente');
         $chamado = isset($request->id) ? Chamado::find($request->id) : null;
         $mensagem = null;
@@ -97,11 +93,11 @@ class ChamadoController extends Controller
         $this->authorize('chamados.viewAny');
 
         $user = \Auth::user();
-        $chamados = Chamado::whereHas('users', function($pivot) {
+        $chamados = Chamado::whereHas('users', function ($pivot) {
             $user = \Auth::user();
             $pivot->where([
                 ['user_id', $user->id],
-                ['funcao', 'Atendente']
+                ['funcao', 'Atendente'],
             ]);
         })->orderBy('created_at', 'desc')->paginate(10);
 
@@ -116,12 +112,11 @@ class ChamadoController extends Controller
     public function create(Fila $fila)
     {
         $this->authorize('chamados.create');
-        $predios = $this->predios;
         $chamado = new Chamado;
         $chamado->fila = $fila;
         $complexidades = $this->complexidades;
         $form = JSONForms::generateForm($fila);
-        return view('chamados/create', compact('fila', 'predios', 'chamado', 'complexidades', 'form'));
+        return view('chamados/create', compact('fila', 'chamado', 'complexidades', 'form'));
     }
 
     public function listaFilas()
@@ -170,9 +165,13 @@ class ChamadoController extends Controller
         $atendente = $chamado->users()->wherePivot('funcao', 'Atendente')->first();
         $atribuidor = $chamado->users()->wherePivot('funcao', 'Atribuidor')->first();
         $autor = $chamado->users()->wherePivot('funcao', 'Autor')->first();
+
+        # estamos carregando os vinculados diretos. 
+        # Seria interessante vincular recursivos? Acho que não mas ...
+        $vinculados = $chamado->vinculados;
         $complexidades = $this->complexidades;
 
-        return view('chamados/show', compact('atendente', 'atribuidor', 'autor', 'chamado', 'extras', 'template', 'complexidades'));
+        return view('chamados/show', compact('atendente', 'atribuidor', 'autor', 'chamado', 'extras', 'template', 'vinculados', 'complexidades'));
     }
 
     /**
@@ -185,12 +184,11 @@ class ChamadoController extends Controller
     {
         $this->authorize('chamados.view', $chamado);
         $fila = $chamado->fila;
-        $predios = $this->predios;
-        $atendentes = $this->atendentes;
+        $atendentes = [];
         $complexidades = $this->complexidades;
         $autor = $chamado->users()->wherePivot('funcao', 'Autor')->first();
         $form = JSONForms::generateForm($fila, $chamado);
-        return view('chamados/edit', compact('autor', 'fila', 'chamado', 'predios', 'atendentes', 'complexidades', 'form'));
+        return view('chamados/edit', compact('autor', 'fila', 'chamado', 'atendentes', 'complexidades', 'form'));
     }
 
     /**
@@ -310,7 +308,7 @@ class ChamadoController extends Controller
         $atendente = User::where('codpes', $request->atribuido_para)->first();
         /* TODO precisa dar dettach do atendente e do atribuidor anterior */
         $chamado->users()->attach($atendente->id, ['funcao' => 'Atendente']);
-        $chamado->users()->attach(\Auth::user()->id, ['funcao'=> 'Atribuidor']);
+        $chamado->users()->attach(\Auth::user()->id, ['funcao' => 'Atribuidor']);
         $chamado->status = 'Atribuído';
         $chamado->save();
         $request->session()->flash('alert-info', 'Triagem realizada com sucesso');

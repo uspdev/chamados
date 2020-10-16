@@ -15,10 +15,9 @@ class CreateUserSetorTable extends Migration
     {
         Schema::create('user_setor', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable()->constrained('users');
-            $table->foreignId('setor_id')->nullable()->constrained('setores');
-            $funcoes = ['Gerente', 'Usuario'];
-            $table->enum('funcao', $funcoes);
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('setor_id')->constrained('setores')->onDelete('cascade');
+            $table->enum('funcao', ['Gerente', 'Colaborador']);
 
             $table->timestamps();
         });

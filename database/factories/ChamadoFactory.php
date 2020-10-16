@@ -25,15 +25,16 @@ class ChamadoFactory extends Factory
     public function definition()
     {
         $complexidades = Chamado::complexidades();
-        $predios = Chamado::predios();
         $statuses = Chamado::status();
         $status = $statuses[array_rand($statuses)];
         $fechado_em = null;
+        $nro = Chamado::obterProximoNumero();
 
         if ($status == 'Fechado') {
             $fechado_em = $this->faker->dateTime($max = 'now', $timezone = null);
         }
             return [
+                'nro'            =>  $nro,
                 'assunto'        =>  $this->faker->sentence,
                 'descricao'      =>  $this->faker->sentence,
                 'status'         =>  $status,

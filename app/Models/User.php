@@ -101,10 +101,10 @@ class User extends Authenticatable
     }
 
     /**
-     * Relacionamento n:n com fila, atributo funcao: Gerente, Atendente
-     * TODO: não deveria ser filas?
+     * Relacionamento n:n com fila, atributo funcao: 
+     *  - Gerente, Atendente
      */
-    public function fila()
+    public function filas()
     {
         return $this->belongsToMany('App\Models\Fila')
             ->withPivot('funcao')
@@ -113,7 +113,7 @@ class User extends Authenticatable
 
     /**
      * Relacionamento n:n com chamado, atributo funcao:
-        - Atendente, Atribuidor, Autor, Observador
+     * - Atendente, Atribuidor, Autor, Observador
      */
     public function chamados()
     {
@@ -124,7 +124,7 @@ class User extends Authenticatable
 
     /**
      * Relacionamento n:n com setor, atributo funcao:
-        - Gerente, Usuario
+     *  - Gerente, Usuario
      */
     public function setores()
     {

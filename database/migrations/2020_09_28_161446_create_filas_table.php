@@ -16,6 +16,7 @@ class CreateFilasTable extends Migration
         Schema::create('filas', function (Blueprint $table) {
             $table->id();
             $table->string('nome', 90);
+            $table->enum('estado', ['Em elaboração', 'Em produção', 'Desativada']);
             $table->string('descricao', 255)->nullable();
             $table->json('template')->nullable();
             $table->foreignId('setor_id')->constrained('setores');
