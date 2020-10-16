@@ -17,11 +17,15 @@ class CreateChamadosTable extends Migration
             $table->bigIncrements('id');
 
             /* Campos obrigatórios*/
-            $table->text('assunto');
+
+            // por enquanto está nullable mas depois de implementar a lógica
+            // de autoincrement por ano aí pode ser obrigatório
+            $table->integer('nro')->nullable();
+            $table->string('assunto', 255);
+            $table->enum('status', ['Triagem', 'Atribuído','Fechado']);
 
             /* Campos opcionais do chamado */
-            $table->text('descricao');
-            $table->enum('status', ['Triagem', 'Atribuído','Fechado']);
+            $table->text('descricao')->nullable();
             $table->dateTime('fechado_em')->nullable();
             $table->enum('complexidade', ['baixa', 'média','alta'])->nullable();
             $table->json('extras')->nullable();

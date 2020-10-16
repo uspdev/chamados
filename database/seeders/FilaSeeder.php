@@ -19,6 +19,7 @@ class FilaSeeder extends Seeder
             [
                 'nome' => 'Informatica',
                 'descricao' => 'Atendimento geral',
+                'estado' => 'Em produção',
                 'setor_id' => 5,
                 'template' => '{
                     "predio": {
@@ -50,11 +51,13 @@ class FilaSeeder extends Seeder
             [
                 'nome' => 'Zeladoria',
                 'descricao' => 'Atendimento geral',
+                'estado' => 'Em produção',
                 'setor_id' => 6,
             ],
             [
                 'nome' => 'Informática',
                 'descricao' => 'Atendimento geral',
+                'estado' => 'Em produção',
                 'setor_id' => 7,
             ],
         ];

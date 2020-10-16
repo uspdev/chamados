@@ -80,7 +80,7 @@ class Setor extends Model
      * Setor possui filas
      * não sei se é necessário aqui
      */
-    public function fila()
+    public function filas()
     {
         return $this->hasMany('App\Models\Fila');
     }

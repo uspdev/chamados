@@ -22,9 +22,11 @@ class FilaFactory extends Factory
      */
     public function definition()
     {
+        $estados = Fila::estados();
         return [
             'nome' => $this->faker->word,
             'descricao' => $this->faker->sentence,
+            'estado' => $estados[array_rand($estados)],
             'setor_id' => Setor::inRandomOrder()->first()->id,
         ];
     }

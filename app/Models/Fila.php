@@ -76,6 +76,10 @@ class Fila extends Model
         ];
     }
 
+    public static function estados() {
+        return ['Em elaboração', 'Em produção', 'Desativada'];
+    }
+
     /**
      * Relacionamento: fila pertence a setor
      */
