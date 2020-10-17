@@ -21,11 +21,11 @@
     </thead>
     <tbody>
         @foreach ($setores as $setor)
-        @if($setor->fila->count())
+        @if($setor->filas->count())
         <tr>
             <td>
                 {{$setor->sigla}}
-                @foreach ($setor->fila as $fila)
+                @foreach ($setor->filas as $fila)
                 <div class="ml-3">
                     <a href="chamados/create/{{$fila['id']}}">{{$fila->nome}}</a> - {{$fila->descricao}}
                 </div>
