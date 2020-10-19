@@ -1,8 +1,10 @@
 <div class="">
     <span class="font-weight-bold">Atendente</span>
     @can('admin')
+    @if ($chamado->status != 'Fechado')
     |
     @include('chamados.partials.show-triagem-modal', ['modalTitle'=>'Triagem', 'url'=>'ok'])
+    @endif
     @endcan<br>
 
     <div class="ml-2">
