@@ -10,6 +10,9 @@ use App\Models\Chamado;
 class Comentario extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['user_id', 'chamado_id', 'comentario'];
+
     public function user(){
         return $this->belongsTo(User::class);
     }

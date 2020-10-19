@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Chamado;
+use App\Models\Comentario;
 use App\Models\Fila;
 use App\Models\Setor;
 use App\Models\User;
@@ -162,16 +163,16 @@ class ChamadoController extends Controller
         if (empty($template)) {
             $template = [];
         }
-        $atendente = $chamado->users()->wherePivot('funcao', 'Atendente')->first();
+        $atendentes = $chamado->users()->wherePivot('funcao', 'Atendente')->get();
         $atribuidor = $chamado->users()->wherePivot('funcao', 'Atribuidor')->first();
         $autor = $chamado->users()->wherePivot('funcao', 'Autor')->first();
 
-        # estamos carregando os vinculados diretos. 
+        # estamos carregando os vinculados diretos.
         # Seria interessante vincular recursivos? Acho que não mas ...
         $vinculados = $chamado->vinculados;
         $complexidades = $this->complexidades;
 
-        return view('chamados/show', compact('atendente', 'atribuidor', 'autor', 'chamado', 'extras', 'template', 'vinculados', 'complexidades'));
+        return view('chamados/show', compact('atendentes', 'atribuidor', 'autor', 'chamado', 'extras', 'template', 'vinculados', 'complexidades'));
     }
 
     /**
@@ -294,6 +295,7 @@ class ChamadoController extends Controller
     /* Ainda não implementado */
     public function triagemForm(Request $request, Chamado $chamado)
     {
+        return 'disable';
         $this->authorize('admin');
         $atendentes = $this->atendentes;
         $complexidades = $this->complexidades;
@@ -301,6 +303,9 @@ class ChamadoController extends Controller
 
     }
 
+    /**
+     * adiciona atendentes. Pode ser mais de um
+     */
     public function triagemStore(Request $request, Chamado $chamado)
     {
         $this->authorize('admin');
@@ -311,6 +316,13 @@ class ChamadoController extends Controller
         $chamado->users()->attach(\Auth::user()->id, ['funcao' => 'Atribuidor']);
         $chamado->status = 'Atribuído';
         $chamado->save();
+
+        Comentario::create([
+            'user_id' => \Auth::user()->id,
+            'chamado_id' => $chamado->id,
+            'comentario' => 'O chamado foi atribuído para o(a) atendente ' . $atendente->name,
+        ]);
+
         $request->session()->flash('alert-info', 'Triagem realizada com sucesso');
         return redirect()->route('chamados.show', $chamado->id);
     }
