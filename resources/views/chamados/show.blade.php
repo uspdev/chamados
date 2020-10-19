@@ -23,70 +23,77 @@
         <span class="text-muted">Chamado no.</span>
         {{ $chamado->id }}/{{ Carbon\Carbon::parse($chamado->created_at)->format('Y') }}
         <span class="text-muted">para</span> ({{ $chamado->fila->setor->sigla }}) {{ $chamado->fila->nome }}
+        @include('chamados.partials.status')
     </div>
     <div class="card-body">
         <div class="row">
-            <div class="col-md-8">
-
-                {{-- Informações principais --}}
-                <span class="text-muted">Assunto:</span> {{ $chamado->assunto }}<br>
-                <br>
-                @foreach($template as $field => $val)
-                <span class="text-muted">{{ $val->label }}:</span>
-                <span>{{ $extras->$field ?? '' }}<br>
-                    @endforeach
-                    <span class="text-muted">Descrição:</span> {{ $chamado->descricao ?? '' }}<br>
-
-            </div>
             <div class="col-md-4">
 
-                {{-- Painel direito --}}
+                {{-- Informações principais --}}
                 <span class="text-muted">Criado por:</span> {{ $autor->name}} @include('chamados.partials.user-detail', ['user'=>$autor])<br>
                 <span class="text-muted">Criado em:</span> {{ Carbon\Carbon::parse($chamado->created_at)->format('d/m/Y H:i') }}<br>
 
                 @if(!is_null($chamado->fechado_em))
-                <b>fechado em</b>: {{ Carbon\Carbon::parse($chamado->fechado_em)->format('d/m/Y H:i') }}<br>
+                <span class="text-muted">Fechado em</span>: {{ Carbon\Carbon::parse($chamado->fechado_em)->format('d/m/Y H:i') }}<br>
                 @endif
 
-                <span class="text-muted">Estado:</span> @include('chamados.partials.status')
+                <span class="text-muted">Assunto:</span> {{ $chamado->assunto }}<br>
+                <span class="text-muted">Descrição:</span><br>
+                <span class="ml-2">{{ $chamado->descricao ?? '' }}</span><br>
 
-                @can('admin')
-                |
-                @include('chamados.partials.show-triagem-modal', ['modalTitle'=>'Triagem', 'url'=>'ok'])
-                @endcan
-                <br>
-                <div class="ml-2">
+            </div>
+            <div class="col-md-4">
+                {{-- Painel meio --}}
 
-                    @if($chamado->status == 'Atribuído')
-                    <span class="text-muted">Atribuído para</span>:
-                    {{ $atendente->name }}<br>
+                <span class="font-weight-bold">Formulário</span><br>
+                @foreach($template as $field => $val)
+                <span class="text-muted">{{ $val->label }}:</span>
+                <span>{{ $extras->$field ?? '' }}</span><br>
+                @endforeach
+            </div>
 
-                    <span class="text-muted">Complexidade</span>: {{ $chamado->complexidade }}<br>
+            <div class="col-md-4">
 
-                    <span class="text-muted">Por</span>:
-                    {{ $atribuidor->name }}
-                    <span class="text-muted">em</span> {{ $atribuidor->created_at }}
-                    <pre>PEGAR DATA DO USER_CHAMADO</pre><br>
-                    @endif
-                    @if($chamado->status == 'Triagem')
-                    Não atribuído
-                    @endif
+                {{-- Painel direito --}}
 
+
+                <div class="">
+                    <span class="font-weight-bold">Atendente</span>
+                    @can('admin')
+                    |
+                    @include('chamados.partials.show-triagem-modal', ['modalTitle'=>'Triagem', 'url'=>'ok'])
+                    @endcan<br>
+
+                    <div class="ml-2">
+                        @if($atendentes->count())
+                            @foreach($atendentes as $atendente)
+                            {{ $atendente->name }} @include('chamados.partials.atribuido-detail', ['user'=>$atendente])<br>
+                            @endforeach
+                            <span class="text-muted">Complexidade</span>: {{ $chamado->complexidade }}<br>
+                        @else
+                            Não atribuído
+                        @endif
+                    </div>
                 </div>
 
-                @include('chamados.partials.show-vinculados')
-
+                <div>
+                    <br>
+                    <b>Observação</b> (visível somente para o técnico)<br>
+                    <textarea class="form-control">{{ $chamado->observacao_tecnica }}</textarea>
+                </div>
 
             </div>
         </div>
     </div>
 </div>
 <div class="row">
-    <div class="col-md-6">
-        @include('chamados.partials.comentarios')
+    <div class="col-md-8">
+        @include('chamados.partials.comentarios-card')
     </div>
-    <div class="col-md-6">
-        @include('chamados.partials.file-upload')
+    <div class="col-md-4">
+        @include('chamados.partials.show-vinculados')
+        @include('chamados.partials.file-upload-card')
+
     </div>
 </div>
 

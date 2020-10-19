@@ -1,5 +1,5 @@
 <button type="button" class="btn btn-sm btn-light text-primary" onclick="add_modal_form()">
-    <i class="fas fa-edit"></i> Editar
+    <i class="fas fa-plus"></i> Adicionar
 </button>
 <!-- Modal -->
 <div class="modal fade" id="common-modal-form" data-backdrop="static" tabindex="-1" aria-labelledby="modalPortariaLabel" aria-hidden="true">
