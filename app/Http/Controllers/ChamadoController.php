@@ -78,8 +78,10 @@ class ChamadoController extends Controller
         return view('chamados/buscaid', compact('chamado', 'mensagem'));
     }
 
+    # acho que nao vai mais usar
     public function triagem()
     {
+        return 'disable';
         /* Chamados de quem está logado */
         $this->authorize('chamados.viewAny');
 
@@ -90,6 +92,7 @@ class ChamadoController extends Controller
 
     public function atender()
     {
+        return 'disable';
         /* Chamados de quem está logado */
         $this->authorize('chamados.viewAny');
 
@@ -310,10 +313,17 @@ class ChamadoController extends Controller
     {
         $this->authorize('admin');
         $chamado->complexidade = $request->complexidade;
-        $atendente = User::where('codpes', $request->atribuido_para)->first();
-        /* TODO precisa dar dettach do atendente e do atribuidor anterior */
+        $atendente = User::where('codpes', $request->codpes)->first();
+
+        # Se atendente já existe não vamos adicionar novamente
+        if ($chamado->users()->where(['user_id'=> $atendente->id, 'funcao'=>'Atendente'])->exists()){
+            $request->session()->flash('alert-info', 'Atendente já existe');
+            return back();
+        }
+
         $chamado->users()->attach($atendente->id, ['funcao' => 'Atendente']);
-        $chamado->users()->attach(\Auth::user()->id, ['funcao' => 'Atribuidor']);
+        # Colocando no comentário a atribuição precisamos do papel de atribuidor??
+        #$chamado->users()->attach(\Auth::user()->id, ['funcao' => 'Atribuidor']);
         $chamado->status = 'Atribuído';
         $chamado->save();
 
@@ -323,8 +333,8 @@ class ChamadoController extends Controller
             'comentario' => 'O chamado foi atribuído para o(a) atendente ' . $atendente->name,
         ]);
 
-        $request->session()->flash('alert-info', 'Triagem realizada com sucesso');
-        return redirect()->route('chamados.show', $chamado->id);
+        $request->session()->flash('alert-info', 'Atendente adicionado com sucesso');
+        return back();
     }
 
     public function devolver(Chamado $chamado)
