@@ -24,8 +24,9 @@ class ChamadoRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'telefone'       => 'required',
+            #'telefone'       => 'required',
             'assunto'        => 'required',
+            'descricao'      => 'required',
             'patrimonio'     => 'nullable',
             'extras'         => 'nullable',
             'codpes'         => 'nullable|codpes',
@@ -42,7 +43,8 @@ class ChamadoRequest extends FormRequest
     public function messages()
     {
         return [
-            'telefone.required' => 'Telefone requerido',
+            #'telefone.required' => 'Telefone requerido',
+            'descricao.required' => 'Preencher o campo descrição'
         ];
     }
 }
