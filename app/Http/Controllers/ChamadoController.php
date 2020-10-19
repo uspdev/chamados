@@ -68,14 +68,17 @@ class ChamadoController extends Controller
     public function store(ChamadoRequest $request, Fila $fila)
     {
         $this->authorize('chamados.create');
-        $chamado = new Chamado;
-        $chamado->fila_id = $fila->id;
-        $chamado = $this->grava($chamado, $request);
 
+        $chamado = \DB::transaction(function () use ($request, $fila) {
+            $chamado = new Chamado;
+            $chamado->nro = Chamado::obterProximoNumero();
+            $chamado->fila_id = $fila->id;
+            $chamado = $this->grava($chamado, $request);
+            return $chamado;
+        });
 
         $request->session()->flash('alert-info', 'Chamado enviado com sucesso');
         return redirect()->route('chamados.show', $chamado->id);
-
     }
 
     /**
@@ -169,6 +172,8 @@ class ChamadoController extends Controller
         } else {
 
             $chamado->status = 'Triagem';
+            $chamado->assunto = $request->assunto;
+            $chamado->descricao = $request->descricao;
 
             $chamado->extras = json_encode($request->extras);
 
