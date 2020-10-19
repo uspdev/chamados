@@ -58,23 +58,23 @@ class ChamadoSeeder extends Seeder
             });
             # preenchendo relacionamento com users
             $cht->users()->attach(User::first()->id, ['funcao' => 'Autor']);
-            $cht->users()->attach(User::inRandomOrder()->first()->id, ['funcao' => 'Atribuidor']);
-            $cht->users()->attach(User::inRandomOrder()->first()->id, ['funcao' => 'Atendente']);
+            #$cht->users()->attach(User::inRandomOrder()->first()->id, ['funcao' => 'Atribuidor']);
+            #$cht->users()->attach(User::inRandomOrder()->first()->id, ['funcao' => 'Atendente']);
         }
 
         # relacionando dois chamados
-        $cht->vinculadosIda()->attach(1,['acesso'=>'leitura']); 
+        $cht->vinculadosIda()->attach(1, ['acesso' => 'leitura']);
 
         for ($i = 0; $i < 10; $i++) {
             // o FOR aqui é para que o proximo numero do chamado seja
             // pego corretamente.
             Chamado::factory(1)->create()->each(function ($chamado) {
                 $chamado->users()->attach(User::inRandomOrder()->first()->id, ['funcao' => 'Autor']);
+                if ($chamado->status != 'Triagem') {
+                    $chamado->users()->attach(User::inRandomOrder()->first()->id, ['funcao' => 'Atribuidor']);
+                    $chamado->users()->attach(User::inRandomOrder()->first()->id, ['funcao' => 'Atendente']);
+                }
             });
-            $cht = Chamado::inRandomOrder()->first();
-            $cht->users()->attach(User::inRandomOrder()->first()->id, ['funcao' => 'Atribuidor']);
-            $cht->users()->attach(User::inRandomOrder()->first()->id, ['funcao' => 'Atendente']);
-
         }
     }
 }
