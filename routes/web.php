@@ -36,11 +36,7 @@ Route::post('chamados/create/{fila}/', [ChamadoController::class, 'store'])->nam
 Route::resource('chamados', ChamadoController::class)->except(['create', 'store']);
 Route::resource('comentarios/{chamado}/', ComentarioController::class);
 
-Route::get('atender', [ChamadoController::class, 'atender']);
-Route::get('todos', [ChamadoController::class,'todos']);
-Route::get('buscaid', [ChamadoController::class,'buscaid']);
 Route::get('chamados/{chamado}/devolver', [ChamadoController::class,'devolver']);
 
-Route::get('triagem', [ChamadoController::class,'triagem']);
 Route::get('triagem/{chamado}', [ChamadoController::class,'triagemForm']);
 Route::post('triagem/{chamado}', [ChamadoController::class,'triagemStore']);

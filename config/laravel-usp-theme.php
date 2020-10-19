@@ -16,27 +16,7 @@ return [
             'text' => 'Meus Chamados',
             'url' => 'chamados',
             'can' => 'chamados.create',
-        ],
-        [
-            'text' => 'Triagem',
-            'url' => 'triagem',
-            'can' => 'admin',
-        ],
-        [
-            'text' => 'Atender',
-            'url' => 'atender',
-            'can' => 'atendente',
-        ],
-        [
-            'text' => 'Todos Chamados',
-            'url' => 'todos',
-            'can' => 'atendente',
-        ],
-        [
-            'text' => 'Por Id',
-            'url' => 'buscaid',
-            'can' => 'atendente',
-        ],
+        ]
     ],
     'right_menu' => [
         [
