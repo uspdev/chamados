@@ -38,5 +38,4 @@ Route::resource('comentarios/{chamado}/', ComentarioController::class);
 
 Route::get('chamados/{chamado}/devolver', [ChamadoController::class,'devolver']);
 
-Route::get('triagem/{chamado}', [ChamadoController::class,'triagemForm']);
 Route::post('triagem/{chamado}', [ChamadoController::class,'triagemStore']);

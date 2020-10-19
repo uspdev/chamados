@@ -212,17 +212,6 @@ class ChamadoController extends Controller
         return $chamado;
     }
 
-    /* Ainda não implementado */
-    public function triagemForm(Request $request, Chamado $chamado)
-    {
-        return 'disable';
-        $this->authorize('admin');
-        $atendentes = $this->atendentes;
-        $complexidades = $this->complexidades;
-        return view('chamados/triagem', compact('chamado'));
-
-    }
-
     /**
      * adiciona atendentes. Pode ser mais de um
      */
