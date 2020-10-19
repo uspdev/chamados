@@ -7,10 +7,10 @@ use App\Models\Comentario;
 use App\Models\Fila;
 use App\Models\Setor;
 use App\Models\User;
-use App\Rules\PatrimonioRule;
 use App\Utils\JSONForms;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use App\Http\Requests\ChamadoRequest;
 
 class ChamadoController extends Controller
 {
@@ -71,16 +71,13 @@ class ChamadoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Fila $fila)
+    public function store(ChamadoRequest $request, Fila $fila)
     {
         $this->authorize('chamados.create');
         $chamado = new Chamado;
         $chamado->fila_id = $fila->id;
         $chamado = $this->grava($chamado, $request);
-        /*
-        if(config('app.env') == 'production')
-        Mail::send(new ChamadoMail($chamado,$user));
-         */
+
 
         $request->session()->flash('alert-info', 'Chamado enviado com sucesso');
         return redirect()->route('chamados.show', $chamado->id);
@@ -168,7 +165,7 @@ class ChamadoController extends Controller
         //
     }
 
-    /* Evita duplicarmos código */
+    /* Evita duplicarmos código  */
     private function grava(Chamado $chamado, Request $request)
     {
         if ($request->status == 'devolver') {
@@ -176,29 +173,15 @@ class ChamadoController extends Controller
             $chamado->complexidade = null;
             $user = \Auth::user();
         } else {
-            $request->validate([
-                'telefone' => ['required'],
-                'assunto' => ['required'],
-                'patrimonio' => ['nullable', new PatrimonioRule],
-            ]);
 
-            $chamado->assunto = $request->assunto;
             $chamado->status = 'Triagem';
-            $extras = $request->extras;
-            if (!empty($extras['numpat'])) {
-                $request->validate([
-                    'extras.numpat' => ['nullable', new PatrimonioRule],
-                ]);
-            }
+
             $chamado->extras = json_encode($request->extras);
 
             /* Administradores */
             if (Gate::allows('admin')) {
                 /* trocar requisitante */
                 if (!is_null($request->codpes)) {
-                    $request->validate([
-                        'codpes' => 'integer',
-                    ]);
                     $user = User::where('codpes', $request->codpes)->first();
                     if (is_null($user)) {
                         $user = new User;
@@ -210,7 +193,6 @@ class ChamadoController extends Controller
 
                 /* Atribuir */
                 if (!empty($request->atribuido_para)) {
-                    $chamado->complexidade = $request->complexidade;
                     /* acho que o user deveria vir direto pelo form */
                     $atendente = User::where('codpes', $request->atribuido_para)->first();
                     $chamado->users()->attach($atendente->id, ['funcao' => 'Atendente']);
