@@ -17,7 +17,7 @@ class FilaSeeder extends Seeder
     {
         $filas = [
             [
-                'nome' => 'Informatica',
+                'nome' => 'Informática',
                 'descricao' => 'Atendimento geral',
                 'estado' => 'Em produção',
                 'setor_id' => 5,
