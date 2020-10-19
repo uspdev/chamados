@@ -2,7 +2,7 @@
 $user_detail_id = 'iser-detail-'.Str::random(5);
 ?>
 
-<a class="btn btn-sm btn-light text-primary" data-toggle="collapse" href="#{{ $user_detail_id }}" role="button" aria-expanded="false" aria-controls="collapseExample">
+<a class="btn btn-sm btn-light text-primary py-0" data-toggle="collapse" href="#{{ $user_detail_id }}" role="button" aria-expanded="false" aria-controls="collapseExample">
     <i class="fas fa-user"></i>
 </a>
 
