@@ -16,13 +16,6 @@ class Fila extends Model
         'setor_id',
     ];
 
-    public const rules = [
-        'nome' => ['required', 'max:90'],
-        'descricao' => ['max:255'],
-        'template' => [],
-        'setor_id' => 'required|numeric',
-    ];
-
     protected const fields = [
         [
             'name' => 'setor_id',
