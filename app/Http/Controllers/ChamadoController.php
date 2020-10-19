@@ -31,80 +31,8 @@ class ChamadoController extends Controller
      */
     public function index()
     {
-        /* Chamados de quem está logado */
         $this->authorize('chamados.viewAny');
-
-        if (Gate::allows('admin')) {
-            $chamados = Chamado::all();
-        } else {
-            $user = \Auth::user();
-            $chamados = $user->chamados;
-        }
-
-        return view('chamados/index', compact('chamados'));
-    }
-
-    public function todos(Request $request)
-    {
-        return "desativado";
-        $this->authorize('admin');
-
-        $chamados = Chamado::orderBy('created_at', 'desc');
-
-        // search terms
-        if (isset($request->status)) {
-            $chamados->where('status', '=', $request->status);
-        }
-
-        if (isset($request->search)) {
-            $chamados->where('chamado', 'LIKE', "%" . $request->search . "%");
-        }
-
-        $chamados = $chamados->paginate(10);
-
-        return view('chamados/todos', compact('chamados'));
-    }
-
-    public function buscaid(Request $request)
-    {
-        return 'desativado';
-
-        $this->authorize('atendente');
-        $chamado = isset($request->id) ? Chamado::find($request->id) : null;
-        $mensagem = null;
-        if (isset($request->id) and is_null($chamado)) {
-            $mensagem = 'Não há chamado com este Id.';
-        }
-        return view('chamados/buscaid', compact('chamado', 'mensagem'));
-    }
-
-    # acho que nao vai mais usar
-    public function triagem()
-    {
-        return 'disable';
-        /* Chamados de quem está logado */
-        $this->authorize('chamados.viewAny');
-
-        $user = \Auth::user();
-        $chamados = Chamado::where('status', 'Triagem')->orderBy('created_at', 'desc')->get();
-        return view('chamados/index', compact('chamados'));
-    }
-
-    public function atender()
-    {
-        return 'disable';
-        /* Chamados de quem está logado */
-        $this->authorize('chamados.viewAny');
-
-        $user = \Auth::user();
-        $chamados = Chamado::whereHas('users', function ($pivot) {
-            $user = \Auth::user();
-            $pivot->where([
-                ['user_id', $user->id],
-                ['funcao', 'Atendente'],
-            ]);
-        })->orderBy('created_at', 'desc')->paginate(10);
-
+        $chamados = (Gate::allows('admin')) ? Chamado::all() : \Auth::user()->chamados;
         return view('chamados/index', compact('chamados'));
     }
 
@@ -125,7 +53,9 @@ class ChamadoController extends Controller
 
     public function listaFilas()
     {
-        $setores = Setor::orderBy('sigla')->get();
+        $setores = Setor::with(['filas' => function($query) {
+            $query->where('estado', 'Em produção');
+        }])->orderBy('sigla')->get();
         return view('chamados.listafilas', compact('setores'));
     }
 
@@ -316,7 +246,7 @@ class ChamadoController extends Controller
         $atendente = User::where('codpes', $request->codpes)->first();
 
         # Se atendente já existe não vamos adicionar novamente
-        if ($chamado->users()->where(['user_id'=> $atendente->id, 'funcao'=>'Atendente'])->exists()){
+        if ($chamado->users()->where(['user_id' => $atendente->id, 'funcao' => 'Atendente'])->exists()) {
             $request->session()->flash('alert-info', 'Atendente já existe');
             return back();
         }
@@ -341,5 +271,62 @@ class ChamadoController extends Controller
     {
         $this->authorize('atendente');
         return view('chamados/devolver', compact('chamado'));
+    }
+
+    public function todos(Request $request)
+    {
+        return "desativado";
+        $this->authorize('admin');
+        $chamados = Chamado::orderBy('created_at', 'desc');
+        // search terms
+        if (isset($request->status)) {
+            $chamados->where('status', '=', $request->status);
+        }
+        if (isset($request->search)) {
+            $chamados->where('chamado', 'LIKE', "%" . $request->search . "%");
+        }
+        $chamados = $chamados->paginate(10);
+        return view('chamados/todos', compact('chamados'));
+    }
+
+    public function buscaid(Request $request)
+    {
+        return 'desativado';
+        $this->authorize('atendente');
+        $chamado = isset($request->id) ? Chamado::find($request->id) : null;
+        $mensagem = null;
+        if (isset($request->id) and is_null($chamado)) {
+            $mensagem = 'Não há chamado com este Id.';
+        }
+        return view('chamados/buscaid', compact('chamado', 'mensagem'));
+    }
+
+    # acho que nao vai mais usar
+    public function triagem()
+    {
+        return 'disable';
+        /* Chamados de quem está logado */
+        $this->authorize('chamados.viewAny');
+        $user = \Auth::user();
+        $chamados = Chamado::where('status', 'Triagem')->orderBy('created_at', 'desc')->get();
+        return view('chamados/index', compact('chamados'));
+    }
+
+    public function atender()
+    {
+        return 'disable';
+        /* Chamados de quem está logado */
+        $this->authorize('chamados.viewAny');
+
+        $user = \Auth::user();
+        $chamados = Chamado::whereHas('users', function ($pivot) {
+            $user = \Auth::user();
+            $pivot->where([
+                ['user_id', $user->id],
+                ['funcao', 'Atendente'],
+            ]);
+        })->orderBy('created_at', 'desc')->paginate(10);
+
+        return view('chamados/index', compact('chamados'));
     }
 }
