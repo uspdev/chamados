@@ -1,9 +1,12 @@
 <div class="btn-group enable-disable-btn">
-    <button class="btn btn-sm btn-secondary disabled" name="disable">
+    <button class="btn btn-sm btn-secondary disabled" name="new">
         Em elaboração
     </button>
     <button class="btn btn-sm btn-success active" name="enable">
         Em produção
+    </button> 
+    <button class="btn btn-sm btn-secondary disabled" name="disable">
+        Desativada
     </button>
 </div>
 
@@ -21,7 +24,6 @@
                 $(this).removeClass('disabled').removeClass('btn-secondary').addClass('btn-danger').addClass('active').blur();
                 $(this).parent().find('[name=enable]').removeClass('active').removeClass('btn-success').addClass('btn-secondary').addClass('disabled')
             }
-
         })
 
         $('.enable-disable-btn').find('[name=enable]').click(function() {
@@ -36,5 +38,6 @@
         })
 
     });
+
 </script>
 @endsection

@@ -59,6 +59,7 @@ Model:
             <td>Setor</td>
             <td>Nome</td>
             <td>Descrição</td>
+            <td>Estado</td>
         </tr>
     </thead>
     <tbody>
@@ -67,6 +68,7 @@ Model:
             <td>{{ $row->setor->sigla }}</td>
             <td><a href="filas/{{ $row->id }}">{{ $row->nome }}</a></td>
             <td>{{ $row->descricao }}</td>
+            <td>{{ $row->estado }}</td>
 
         </tr>
         @endforeach
