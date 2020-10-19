@@ -16,16 +16,6 @@ return [
             'text' => 'Meus Chamados',
             'url' => 'chamados',
             'can' => 'chamados.create',
-        ],
-        [
-            'text' => 'Triagem',
-            'url' => 'triagem',
-            'can' => 'admin',
-        ],
-        [
-            'text' => 'Atender',
-            'url' => 'atender',
-            'can' => 'atendente',
         ]
     ],
     'right_menu' => [
