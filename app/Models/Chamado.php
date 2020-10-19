@@ -28,7 +28,7 @@ class Chamado extends Model
      * outro para a volta e um assessor para juntar os dois
      * tem solução melhor????
      */
-    protected function vinculadosIda()
+    public function vinculadosIda()
     {
         return $this->belongsToMany('App\Models\Chamado', 'chamados_vinculados', 'chamado_id', 'vinculado_id')
             ->withPivot('acesso')
@@ -46,7 +46,6 @@ class Chamado extends Model
     {
         return $this->vinculadosIda->merge($this->vinculadosVolta);
     }
-
 
     /**
      * relacionamento com comentarios
