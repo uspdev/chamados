@@ -2,11 +2,11 @@
     <i class="fas fa-plus"></i> Adicionar
 </button>
 <!-- Modal -->
-<div class="modal fade" id="common-modal-form" data-backdrop="static" tabindex="-1" aria-labelledby="modalPortariaLabel" aria-hidden="true">
+<div class="modal fade" id="common-modal-form" data-backdrop="static" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalPortariaLabel">{{ $modalTitle }}</h5>
+                <h5 class="modal-title">{{ $modalTitle }}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
