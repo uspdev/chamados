@@ -26,17 +26,7 @@ return [
             'text' => 'Atender',
             'url' => 'atender',
             'can' => 'atendente',
-        ],
-        [
-            'text' => 'Todos Chamados',
-            'url' => 'todos',
-            'can' => 'atendente',
-        ],
-        [
-            'text' => 'Por Id',
-            'url' => 'buscaid',
-            'can' => 'atendente',
-        ],
+        ]
     ],
     'right_menu' => [
         [

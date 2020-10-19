@@ -44,40 +44,6 @@ class ChamadoController extends Controller
         return view('chamados/index', compact('chamados'));
     }
 
-    public function todos(Request $request)
-    {
-        return "desativado";
-        $this->authorize('admin');
-
-        $chamados = Chamado::orderBy('created_at', 'desc');
-
-        // search terms
-        if (isset($request->status)) {
-            $chamados->where('status', '=', $request->status);
-        }
-
-        if (isset($request->search)) {
-            $chamados->where('chamado', 'LIKE', "%" . $request->search . "%");
-        }
-
-        $chamados = $chamados->paginate(10);
-
-        return view('chamados/todos', compact('chamados'));
-    }
-
-    public function buscaid(Request $request)
-    {
-        return 'desativado';
-
-        $this->authorize('atendente');
-        $chamado = isset($request->id) ? Chamado::find($request->id) : null;
-        $mensagem = null;
-        if (isset($request->id) and is_null($chamado)) {
-            $mensagem = 'Não há chamado com este Id.';
-        }
-        return view('chamados/buscaid', compact('chamado', 'mensagem'));
-    }
-
     public function triagem()
     {
         /* Chamados de quem está logado */
