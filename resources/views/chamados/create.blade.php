@@ -22,12 +22,18 @@
             @csrf
             <div class="row">
                 <div class="col-md-6">
-                    Por: <input class="form-control" type="text" name="autor" value="{{\Auth::user()->name}}" disabled>
-                    Assunto: <input class="form-control" type="text" name="assunto">
-                    Descrição: <textarea class="form-control" name="descricao"></textarea>
+                    <div class="form-group">
+                        <label for="autor" class="control-label">Por</label>
+                        <input class="form-control" type="text" name="autor" value="{{\Auth::user()->name}}" disabled>
+                        <br>
+                        <label for="assunto" class="control-label">Assunto</label>
+                        <input class="form-control" type="text" name="assunto">
+                        <br>
+                        <label for="descricao" class="control-label">Descrição</label>
+                        <textarea class="form-control" name="descricao"></textarea>
+                    </div>
                 </div>
                 <div class="col-md-6">
-                    <span class="font-weight-bold">Formulário</span>
                     <div class="form-group">
                         @foreach($form as $input)
                         @foreach($input as $element)

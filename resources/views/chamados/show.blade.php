@@ -17,9 +17,7 @@
 @parent
 
 <div class="card bg-light mb-3">
-
     <div class="card-header h5">
-
         <span class="text-muted">Chamado no.</span>
         {{ $chamado->id }}/{{ Carbon\Carbon::parse($chamado->created_at)->format('Y') }}
         <span class="text-muted">para</span> ({{ $chamado->fila->setor->sigla }}) {{ $chamado->fila->nome }}
@@ -35,7 +33,6 @@
                 {{-- Painel do meio --}}
                 @include('chamados.show.dados-formulario')
             </div>
-
             <div class="col-md-4">
                 {{-- Painel direito --}}
                 @include('chamados.show.atendente')
@@ -51,9 +48,7 @@
     <div class="col-md-4">
         @include('chamados.show.vinculados')
         @include('chamados.show.file-upload-card')
-
     </div>
 </div>
-
 
 @stop
