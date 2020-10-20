@@ -1,0 +1,40 @@
+.nome-arquivo{
+    font-weight: 400;
+    font-size: 14px;
+    display:none;
+}
+.nome-arquivo p{
+    margin-bottom: 4px;
+    margin-top: 7px;
+    width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.arquivos-lista{
+    margin-top: 16px;
+}
+.arquivos-lista ul li{
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+}
+.arquivos-lista ul li a {
+    color: #212529;
+    font-size: 14px;
+    
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    margin-bottom: -2px;
+    margin-left: 8px;
+}
+.arquivos-lista ul  li a:hover, .arquivos-lista ul a:hover {
+    color:#007bff;
+    text-decoration: none;
+}
+.arquivos-lista .btn-deletar-documento{
+    font-size: 13px;
+    padding: 0px 5px;
+}

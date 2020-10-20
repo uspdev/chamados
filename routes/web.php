@@ -8,6 +8,7 @@ use App\Http\Controllers\ComentarioController;
 use App\Http\Controllers\SetorController;
 use App\Http\Controllers\FilaController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ArquivoController;
 
 Route::get('/', [IndexController::class, 'index'])->name('home');
 
@@ -44,3 +45,5 @@ Route::get('chamados/{chamado}/devolver', [ChamadoController::class,'devolver'])
 Route::get('triagem', [ChamadoController::class,'triagem']);
 Route::get('triagem/{chamado}', [ChamadoController::class,'triagemForm']);
 Route::post('triagem/{chamado}', [ChamadoController::class,'triagemStore']);
+
+Route::resource('arquivos', ArquivoController::class);
