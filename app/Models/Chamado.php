@@ -81,4 +81,8 @@ class Chamado extends Model
         $ano = date('Y');
         return $nro+1;
     }
+
+    public function arquivos(){
+        return $this->hasMany('App\Models\Arquivo');
+    }
 }
