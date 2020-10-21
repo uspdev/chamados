@@ -2,11 +2,11 @@
     <i class="fas fa-plus"></i> Adicionar
 </button>
 <!-- Modal -->
-<div class="modal fade" id="common-modal-form" data-backdrop="static" tabindex="-1" aria-labelledby="modalPortariaLabel" aria-hidden="true">
+<div class="modal fade" id="common-modal-form" data-backdrop="static" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalPortariaLabel">{{ $modalTitle }}</h5>
+                <h5 class="modal-title">{{ $modalTitle }}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -20,20 +20,14 @@
                     @csrf
 
                     <div class="col-sm form-group">
-                        <label for="atribuido_para"><b>Atribuir para:</b></label>
-                        <select name="atribuido_para" class="form-control">
+                        <label for="codpes"><b>Atribuir para:</b></label>
+                        <select name="codpes" class="form-control">
                             <option value="" selected="">Escolher</option>
 
                             @foreach($chamado->fila->users as $atendente)
-                            @if(old('atribuido_para') == '' and isset($chamado->atribuido_para))
-                            <option value="{{ $atendente->codpes }}" {{ ( $chamado->atribuido_para == $atendente->codpes) ? 'selected' : ''}}>
+                            <option value="{{ $atendente->codpes }}">
                                 {{ $atendente->name }}
                             </option>
-                            @else
-                            <option value="{{ $atendente->codpes }}" {{ (old('atribuido_para') == $atendente->codpes) ? 'selected' : ''}}>
-                                {{ $atendente->name }}
-                            </option>
-                            @endif
                             @endforeach
                         </select>
                     </div>
@@ -80,17 +74,7 @@
             pessoasForm.modal();
         }
 
-        pessoasForm.find(':input[name=codpes]').select2({
-            ajax: {
-                url: 'search/partenome'
-                , dataType: 'json'
-            }
-            , dropdownParent: pessoasForm
-            , minimumInputLength: 4
-            , theme: 'bootstrap4'
-            , wdth: 'resolve'
-            , language: 'pt_br'
-        })
+
 
     })
 

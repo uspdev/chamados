@@ -1,5 +1,31 @@
 <?php
 
+$filas = [
+    [
+        'text' => 'Filas',
+        'url' => 'filas',
+        'can' => 'admin',
+    ],
+    [
+        'text' => 'Nova Fila',
+        'url' => 'filas/create',
+        'can' => 'admin',
+    ]
+];
+
+$chamados = [
+    [
+        'text' => 'Novo Chamado',
+        'url' => 'chamados/create',
+        'can' => 'chamados.create',
+    ],
+    [
+        'text' => 'Meus Chamados',
+        'url' => 'chamados',
+        'can' => 'chamados.create',
+    ]
+];
+
 return [
     'title' => env('APP_NAME'),
     'dashboard_url' => config('app.url'),
@@ -8,35 +34,17 @@ return [
     'login_url' => 'login',
     'menu' => [
         [
-            'text' => 'Novo Chamado',
-            'url' => 'chamados/create',
+            'text' => 'Chamados',
+            'url' => '',
             'can' => 'chamados.create',
+            'submenu' => $chamados
         ],
         [
-            'text' => 'Meus Chamados',
-            'url' => 'chamados',
-            'can' => 'chamados.create',
-        ],
-        [
-            'text' => 'Triagem',
-            'url' => 'triagem',
+            'text' => 'Filas',
+            'url' => '',
             'can' => 'admin',
-        ],
-        [
-            'text' => 'Atender',
-            'url' => 'atender',
-            'can' => 'atendente',
-        ],
-        [
-            'text' => 'Todos Chamados',
-            'url' => 'todos',
-            'can' => 'atendente',
-        ],
-        [
-            'text' => 'Por Id',
-            'url' => 'buscaid',
-            'can' => 'atendente',
-        ],
+            'submenu' => $filas
+        ]
     ],
     'right_menu' => [
         [

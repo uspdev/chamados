@@ -1,7 +1,7 @@
 <div class="card bg-light mb-3">
     <div class="card-header h5">
         Chamados Vinculados
-        <a class="btn btn-outline-primary btn-sm" href="chamados/{{$chamado->id}}/edit"> <i class="fas fa-plus"></i> Adicionar</a>
+        <a class="btn btn-sm btn-light text-primary" href="chamados/{{$chamado->id}}/edit"> <i class="fas fa-plus"></i> Adicionar</a>
     </div>
     <div class="card-body">
 

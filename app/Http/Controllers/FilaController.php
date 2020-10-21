@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Fila;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Requests\FilaRequest;
 
 class FilaController extends Controller
 {
@@ -39,10 +40,9 @@ class FilaController extends Controller
         return view('filas.index')->with('data', (object) $this->data);
     }
 
-    public function store(Request $request)
+    public function store(FilaRequest $request)
     {
         $this->authorize('admin');
-        $request->validate($this->model::rules);
 
         $row = $this->model::create($request->all());
         $user = \Auth::user();

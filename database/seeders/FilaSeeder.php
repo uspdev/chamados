@@ -17,7 +17,7 @@ class FilaSeeder extends Seeder
     {
         $filas = [
             [
-                'nome' => 'Informatica',
+                'nome' => 'Informática',
                 'descricao' => 'Atendimento geral',
                 'estado' => 'Em produção',
                 'setor_id' => 5,
@@ -27,9 +27,10 @@ class FilaSeeder extends Seeder
                         "type" : "text"
                     },
                     "sala": {
-                        "label": "Sala",
-                        "type" : "text",
-                        "help" : "Exemplo: sala 02"
+                        "label" : "Sala",
+                        "type"  : "text",
+                        "help"  : "Exemplo: sala 02",
+                        "value" : "Sala 2"
                     },
                     "numpat": {
                         "label": "Patrimônios",
@@ -39,6 +40,18 @@ class FilaSeeder extends Seeder
                     "dia": {
                         "label": "Dia do atendimento",
                         "type" : "date"
+                    },
+                    "tipo": {
+                        "label"   : "Tipo de problema",
+                        "type"    : "select",
+                        "value" : {
+                            "telefonia" : "Problemas com telefone",
+                            "impressora": "Problemas com impressora",
+                            "software"  : "Instalação de software",
+                            "virus"     : "Computador com vírus",
+                            "site"      : "Não consigo atualizar o site do meu setor",
+                            "outro"     : "Não sei classificar meu problema"
+                        }
                     }
                 }',
             ],

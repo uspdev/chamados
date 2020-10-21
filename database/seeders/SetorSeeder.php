@@ -70,7 +70,8 @@ class SetorSeeder extends Seeder
         ];
         foreach ($setores as $setor) {
             $s = Setor::create($setor);
-            $s->users()->attach(User::inRandomOrder()->first()->id, ['funcao' => 'Gerente']);
+            # Vamos colocar gerente em alguns setores apenas
+            if (rand(0,2)) $s->users()->attach(User::inRandomOrder()->first()->id, ['funcao' => 'Gerente']);
         }
     }
 }
