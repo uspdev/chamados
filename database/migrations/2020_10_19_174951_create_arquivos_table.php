@@ -15,13 +15,12 @@ class CreateArquivosTable extends Migration
     {
         Schema::create('arquivos', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
             $table->string('nome_original');
             $table->string('caminho');
             $table->string('mimeType');
-            $table->unsignedBigInteger('chamado_id')->nullable();
-            $table->foreign('chamado_id')->references('id')->on('chamados')->onDelete('cascade');
-
+            $table->foreignId('chamado_id')->constrained('chamados')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 

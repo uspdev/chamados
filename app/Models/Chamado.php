@@ -82,7 +82,7 @@ class Chamado extends Model
         return $nro+1;
     }
 
-    public function arquivos(){
+    public function arquivos() {
         return $this->hasMany('App\Models\Arquivo');
     }
 }

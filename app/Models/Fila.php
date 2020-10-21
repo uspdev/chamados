@@ -9,6 +9,10 @@ class Fila extends Model
 {
     use HasFactory;
 
+    protected $attributes = [
+        'estado' => 'Em elaboração'
+    ];
+
     protected $fillable = [
         'nome',
         'descricao',
