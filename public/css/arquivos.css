@@ -15,10 +15,12 @@
     margin-top: 16px;
 }
 .arquivos-lista ul li{
-    margin-bottom: 6px;
+    margin-bottom: 4px;
     display: flex;
     justify-content: left;
     align-items: center;
+    height: 24px;
+    overflow:hidden;
 }
 .arquivos-lista ul li a {
     color: #212529;
@@ -28,16 +30,63 @@
     overflow: hidden;
     white-space: nowrap;
     margin-bottom: -2px;
-    margin-left: 8px;
+   
 }
 .arquivos-lista ul  li a:hover, .arquivos-lista ul a:hover {
     color:#007bff;
     text-decoration: none;
 }
-.arquivos-lista .btn-deletar-documento{
+.arquivo-acoes{
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    transition: all .5s;
+    display: flex;
+}
+.arquivos-lista ul li.modo-visualizacao:hover .arquivo-acoes{
+    width: 73px;
+    height: auto;
+}
+
+.arquivos-lista .btn-arquivo-acao{
     font-size: 13px;
     padding: 0px 5px;
+    margin-right: 4px;
 }
+.arquivos-lista .btn-arquivo-acao.btn-editar{
+    padding-right: 3px;
+}
+
 .arquivo-img{
     max-height: 35px;
 }
+.editar-nome-arquivo-form .input-wrapper{
+    overflow: hidden;
+    border-bottom: 1px solid #8e8a8a;
+    height: 24px;
+}
+.editar-nome-arquivo-form .input-wrapper .input-nome-arquivo{ 
+    height: 28px;
+    background: transparent;
+    outline: none;
+    box-shadow: none;
+    position: relative;
+    top: -2px;
+    left: -2px;
+    width: calc(100% + 4px);
+    font-size: 14px;
+}
+.editar-nome-arquivo-form{
+    height: 24px;
+    display: none;
+}
+.arquivos-lista ul li.modo-edicao .nome-arquivo-display{
+    display: none;
+}
+.arquivos-lista ul li.modo-edicao .editar-nome-arquivo-form{
+    display: flex;
+}
+.editar-nome-arquivo-form .btns-wrapper button{
+    width: 24px;
+}
+
