@@ -42,6 +42,7 @@ class ArquivoController extends Controller
         ]);
         $arquivo = new Arquivo;
         $arquivo->chamado_id = $request->chamado_id;
+        $arquivo->user_id = \Auth::user()->id;
         $arquivo->nome_original = $request->file('arquivo')->getClientOriginalName();;
         $arquivo->caminho = $request->file('arquivo')->store('./arquivos');
         $arquivo->mimeType = $request->file('arquivo')->getClientMimeType();
