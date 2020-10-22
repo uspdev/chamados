@@ -146,7 +146,16 @@ class ChamadoController extends Controller
         if ($request->slct_chamados != $chamado->nro) {
             $chamado->vinculadosIda()->detach($request->slct_chamados);
             $chamado->vinculadosIda()->attach($request->slct_chamados, ['acesso' => $request->tipo]);
+
+            $vinculado = Chamado::find($request->slct_chamados);
+            Comentario::create([
+                'user_id' => \Auth::user()->id,
+                'chamado_id' => $chamado->id,                                       // pegar o ano do chamado passado e não do principal
+                'comentario' => 'O chamado no. '. $vinculado->nro .'/' .$vinculado->created_at->year. ' foi vinculado à esse chamado',
+            ]);
+
             $request->session()->flash('alert-info', 'Chamado vinculado com sucesso');
+
         }else {
             $request->session()->flash('alert-warning', 'Não é possível vincular o chamado à ele mesmo');
         }
@@ -160,6 +169,14 @@ class ChamadoController extends Controller
     {   
         $chamado->vinculadosIda()->detach($id);
         $chamado->vinculadosVolta()->detach($id);
+
+        $vinculado = Chamado::find($id);
+        Comentario::create([
+            'user_id' => \Auth::user()->id,
+            'chamado_id' => $chamado->id,
+            'comentario' => 'O chamado no. '. $vinculado->nro .'/' .$vinculado->created_at->year. ' foi desvinculado desse chamado',
+        ]);
+
         $request->session()->flash('alert-info', 'Chamado desvinculado com sucesso');
         return back();
     }
