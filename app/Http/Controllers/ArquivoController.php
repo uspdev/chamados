@@ -37,6 +37,7 @@ class ArquivoController extends Controller
      */
     public function store(Request $request)
     {
+
         $request->validate([
             'arquivo'    => 'required|file|mimes:jpeg,jpg,png,pdf|max:2048',
             'chamado_id' => 'required|integer|exists:chamados,id'
@@ -98,6 +99,9 @@ class ArquivoController extends Controller
         ]);
         $nome_antigo = $arquivo->nome_original;
         $arquivo->nome_original = $request->nome_arquivo;
+        if(substr($arquivo->nome_original, -4) != '.pdf'){
+            $arquivo->nome_original .= '.pdf';
+        }
         $arquivo->update();
         Comentario::create([
             'user_id' => \Auth::user()->id,
