@@ -41,13 +41,16 @@ class JSONForms
                 if (isset($data->$key)) {
                     $value = $data->$key;
                 }
-
-                # select precisa da lista além do valor preenchido
-                if ($type == "select") {
-                    $input[] = Form::$type("extras[$key]", $json->value, $value, ['class' => 'form-control', 'rows' => '3']);
-                }
-                else {
-                    $input[] = Form::$type("extras[$key]", $value, ['class' => 'form-control', 'rows' => '3']);
+                
+                switch ($type) {
+                    //caso seja um select passa o valor padrao
+                    case 'select':
+                        $input[] = Form::$type("extras[$key]", $json->value, $value, ['class' => 'form-control']);
+                        break;
+                        
+                    default:
+                        $input[] = Form::$type("extras[$key]", $value, ['class' => 'form-control', 'rows' => '3']);
+                        break;
                 }
 
                 if (isset($json->help)) {
