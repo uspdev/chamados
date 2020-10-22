@@ -35,7 +35,7 @@ class Chamado extends Model
             ->withTimestamps();
     }
 
-    protected function vinculadosVolta()
+    public function vinculadosVolta()
     {
         return $this->belongsToMany('App\Models\Chamado', 'chamados_vinculados', 'vinculado_id', 'chamado_id')
             ->withPivot('acesso')
