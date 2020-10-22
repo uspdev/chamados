@@ -45,7 +45,7 @@ class JSONForms
                 switch ($type) {
                     //caso seja um select passa o valor padrao
                     case 'select':
-                        $input[] = Form::$type("extras[$key]", $json->value, $value, ['class' => 'form-control']);
+                        $input[] = Form::$type("extras[$key]", $json->value, $value, ['class' => 'form-control', 'placeholder' => 'Selecione...']);
                         break;
                         
                     default:
