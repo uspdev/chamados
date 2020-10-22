@@ -9,7 +9,10 @@ $user_detail_id = 'iser-detail-'.Str::random(5);
 <div class="collapse" id="{{ $user_detail_id }}">
     <div class="card card-body">
         <div>
-            <i class="fas fa-envelope-square mr-2"></i> <a href="{{ $user->email }}">{{ $user->email }}</a>
+            {{ $user->codpes }} - {{ $user->name }}
+        </div>
+        <div>
+            <i class="fas fa-envelope-square mr-2"></i> <a href="mailto:{{ $user->email }}">{{ $user->email }}</a>
         </div>
         <div>
             <i class="fas fa-phone mr-2"></i> {{ $user->telefone ?? 'não disponível' }}

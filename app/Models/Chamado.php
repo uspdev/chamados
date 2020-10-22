@@ -35,7 +35,7 @@ class Chamado extends Model
             ->withTimestamps();
     }
 
-    protected function vinculadosVolta()
+    public function vinculadosVolta()
     {
         return $this->belongsToMany('App\Models\Chamado', 'chamados_vinculados', 'vinculado_id', 'chamado_id')
             ->withPivot('acesso')
@@ -82,7 +82,7 @@ class Chamado extends Model
         return $nro+1;
     }
 
-    public function arquivos(){
+    public function arquivos() {
         return $this->hasMany('App\Models\Arquivo');
     }
 }

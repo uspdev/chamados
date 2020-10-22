@@ -21,7 +21,7 @@ class CreateChamadosVinculadosTable extends Migration
             # talvez o acesso deveria ser somente leitura se não vai bugar
             # para descobrir se o usuario tem acesso ou não a determinado chamado
             # teria de verificar em todos os relacionados
-            $table->enum('acesso', ['leitura','completo']);
+            $table->string('acesso', 15);
             $table->timestamps();
         });
     }

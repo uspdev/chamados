@@ -26,7 +26,7 @@ class JSONForms
             foreach ($template as $key => $json) {
                 $input = [];
                 $type = $json->type;
-                
+
                 # se o template tem autorização
                 if (isset($json->can)) {
                     if (!Gate::allows($json->can)) {
@@ -34,9 +34,10 @@ class JSONForms
                     }
                 }
 
-                if(!isset($json->value)) $json->value = null;
-
                 $input[] = Form::label("extras[$key]", $template->$key->label, ['class' => 'control-label']);
+
+                # valores preenchidos
+                $value = null;
                 if (isset($data->$key)) {
                     $value = $data->$key;
                 }
@@ -44,14 +45,14 @@ class JSONForms
                 switch ($type) {
                     //caso seja um select passa o valor padrao
                     case 'select':
-                        $input[] = Form::$type("extras[$key]", $json->value, null, ['class' => 'form-control']);
+                        $input[] = Form::$type("extras[$key]", $json->value, $value, ['class' => 'form-control']);
                         break;
                         
                     default:
-                        $input[] = Form::$type("extras[$key]", $json->value, ['class' => 'form-control', 'rows' => '3']);
+                        $input[] = Form::$type("extras[$key]", $value, ['class' => 'form-control', 'rows' => '3']);
                         break;
                 }
-                
+
                 if (isset($json->help)) {
                     $input[] = Form::help($json->help);
                 }
