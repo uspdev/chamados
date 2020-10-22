@@ -1,22 +1,42 @@
 <div class="card bg-light mb-3">
     <div class="card-header h5">
         Chamados Vinculados
-        <a class="btn btn-sm btn-light text-primary" href="chamados/{{$chamado->id}}/edit"> <i class="fas fa-plus"></i> Adicionar</a>
+        @can('update',$chamado)
+        @include('chamados.show.vinculados-add-modal')
+        @endcan
     </div>
     <div class="card-body">
 
-        <ul class="ml-3 list-unstyled">
+        <ul class="ml-2 list-unstyled lista-vinculados">
             @forelse($vinculados as $vinculado)
-            <li>
+            <li class="form-inline">
                 <a href="chamados/{{$vinculado->id}}">
                     {{ $vinculado->nro }}/{{ Carbon\Carbon::parse($vinculado->created_at)->format('Y') }}
-                    {{ Illuminate\Support\Str::limit($vinculado->assunto, 30, ' ..') }}
+                    {{ Illuminate\Support\Str::limit($vinculado->assunto, 30, '...') }}
                 </a>
+                <span class="hidden-btn d-none">
+                    @include('common.btn-delete-sm', ['action'=>'chamados/'.$chamado->nro.'/vinculado/'.$vinculado->nro])
+                </span>
             </li>
             @empty
             nenhum
             @endforelse
         </ul>
-
     </div>
 </div>
+
+@section('javascripts_bottom')
+@parent
+<script>
+    $(function() {
+        $('.lista-vinculados li').hover(
+            function() {
+                $(this).find('.hidden-btn').removeClass('d-none');
+            },
+            function() {
+                $(this).find('.hidden-btn').addClass('d-none');
+            }
+        )
+    });
+</script>
+@endsection

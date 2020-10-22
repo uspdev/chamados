@@ -109,6 +109,79 @@ class ChamadoController extends Controller
     }
 
     /**
+     * Retornando os chamados para criar vinculo entre eles
+     * @param Request $request - assunto ou número do chamado
+     * @return json 
+     */
+    public function listarChamadosAjax(Request $request)
+    {
+        if ($request->term) {
+            //se buscar pelo numero do chamado (nro) independente do ano
+            if (is_numeric($request->term)) {
+                $chamados = (Gate::allows('admin')) ? Chamado::where('nro',$request->term)->latest()->get() : \Auth::user()->chamados()->where('nro',$request->term)->latest()->get();
+            }else{
+                //se buscar por assunto pegamos os ultimos 30 chamados com esse assunto
+                $request->term = str_replace(" ", "%", $request->term);
+                $chamados = (Gate::allows('admin')) ? Chamado::where('assunto', 'LIKE', '%' . $request->term . '%')->latest()->take(30)->get() : \Auth::user()->chamados()->where('assunto', 'LIKE', '%' . $request->term . '%')->latest()->take(30)->get();
+            }            
+
+            $results = [];
+            foreach ($chamados as $chamado) {
+                $results[] = [
+                    'text' => $chamado['nro'] . '/' . $chamado['created_at']->year . ' - ' . $chamado['assunto'],
+                    'id' => $chamado['nro'],
+                ];
+            }
+            return response(compact('results'));
+        }
+    }
+
+    /**
+     * Vincula chamados
+     * @param $request->slct_chamados - nrp do chamado a ser vinculado
+     * @param $request->tipo - tipo de acesso (leitura??)
+     */
+    public function storeChamadoVinculado(Request $request, Chamado $chamado)
+    {
+        if ($request->slct_chamados != $chamado->nro) {
+            $chamado->vinculadosIda()->detach($request->slct_chamados);
+            $chamado->vinculadosIda()->attach($request->slct_chamados, ['acesso' => $request->tipo]);
+
+            $vinculado = Chamado::find($request->slct_chamados);
+            Comentario::create([
+                'user_id' => \Auth::user()->id,
+                'chamado_id' => $chamado->id,                                       // pegar o ano do chamado passado e não do principal
+                'comentario' => 'O chamado no. '. $vinculado->nro .'/' .$vinculado->created_at->year. ' foi vinculado à esse chamado',
+            ]);
+
+            $request->session()->flash('alert-info', 'Chamado vinculado com sucesso');
+
+        }else {
+            $request->session()->flash('alert-warning', 'Não é possível vincular o chamado à ele mesmo');
+        }
+        return back();
+    }
+
+    /**
+     * Desvincula chamados
+     */
+    public function deleteChamadoVinculado(Request $request, Chamado $chamado, $id)
+    {   
+        $chamado->vinculadosIda()->detach($id);
+        $chamado->vinculadosVolta()->detach($id);
+
+        $vinculado = Chamado::find($id);
+        Comentario::create([
+            'user_id' => \Auth::user()->id,
+            'chamado_id' => $chamado->id,
+            'comentario' => 'O chamado no. '. $vinculado->nro .'/' .$vinculado->created_at->year. ' foi desvinculado desse chamado',
+        ]);
+
+        $request->session()->flash('alert-info', 'Chamado desvinculado com sucesso');
+        return back();
+    }
+
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Chamado  $chamado
