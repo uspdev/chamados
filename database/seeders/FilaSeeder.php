@@ -39,7 +39,8 @@ class FilaSeeder extends Seeder
                     },
                     "dia": {
                         "label": "Dia do atendimento",
-                        "type" : "date"
+                        "type" : "date",
+                        "validate" : "required"
                     },
                     "tipo": {
                         "label"   : "Tipo de problema",

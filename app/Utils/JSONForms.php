@@ -8,6 +8,21 @@ use Illuminate\Support\HtmlString;
 
 class JSONForms
 {
+    public static function buildRules($request, $fila)
+    {
+        $template = json_decode($fila->template);
+        if ($template) {
+            $validate = [];
+            foreach ($template as $key => $json) {
+                if (isset($json->validate)) {
+                    $field = "extras.".$key;
+                    $validate[$field] = $json->validate;
+                }
+            }
+        }
+        return $validate;
+    }
+
     public static function generateForm($fila, $chamado = null)
     {
         Form::macro('help', function($text)

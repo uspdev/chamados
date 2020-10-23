@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Utils\JSONForms;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Tests\TestCase;
 
@@ -136,5 +137,16 @@ class JSONFormsTest extends TestCase
         $form = JSONForms::generateForm($fila);
         # $form terá 3 elementos
         $this->assertStringContainsString("Local de atendimento", $form[0][2]->toHtml());
+    }
+
+    public function testBuildRules()
+    {
+        $tmp = $this->template;
+        $tmp["predio"]["validate"] = "required";
+        $template = json_encode($tmp);
+        $fila = Fila::factory()->make(['template' => $template]);
+        $request = new Request([], ["extras" => ["predio" => "required"]]);
+        $validate = JSONForms::buildRules($request, $fila);
+        $this->assertEquals($validate, ["extras.predio" => "required"]);
     }
 }
