@@ -26,10 +26,10 @@
                         <input class="form-control" type="text" name="autor" value="{{\Auth::user()->name}}" disabled>
                         <br>
                         <label for="assunto" class="control-label">Assunto</label>
-                        <input class="form-control" type="text" name="assunto">
+                        <input class="form-control" type="text" name="assunto"  value="{{ old('assunto') }}">
                         <br>
                         <label for="descricao" class="control-label">Descrição</label>
-                        <textarea class="form-control" name="descricao"></textarea>
+                        <textarea class="form-control" name="descricao">{{ old('descricao') }}</textarea>
                     </div>
                 </div>
                 <div class="col-md-6">
