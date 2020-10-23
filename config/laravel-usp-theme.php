@@ -13,17 +13,27 @@ $filas = [
     ]
 ];
 
-$chamados = [
+$configuracoes = [
     [
-        'text' => 'Novo Chamado',
-        'url' => 'chamados/create',
-        'can' => 'chamados.create',
+        'text' => '<i class="fas fa-sitemap"></i> Setores',
+        'url' => 'setores',
+        'can' => 'admin',
     ],
     [
-        'text' => 'Meus Chamados',
-        'url' => 'chamados',
-        'can' => 'chamados.create',
-    ]
+        'text' => '<i class="fas fa-tasks"></i> Filas',
+        'url' => 'filas',
+        'can' => 'admin',
+    ], 
+    [
+        'text' => '<i class="fas fa-users"></i> Usuários',
+        'url' => 'users',
+        'can' => 'admin',
+    ],
+];
+
+$ano = date('Y');
+$anos = [
+    ['text'=>'2019', 'url'=>'anos/2019']
 ];
 
 return [
@@ -34,10 +44,14 @@ return [
     'login_url' => 'login',
     'menu' => [
         [
-            'text' => 'Chamados',
-            'url' => '',
+            'text' => 'Novo Chamado',
+            'url' => 'chamados/create',
             'can' => 'chamados.create',
-            'submenu' => $chamados
+        ],
+        [
+            'text' => 'Meus Chamados',
+            'url' => 'chamados',
+            'can' => 'chamados.create',
         ],
         [
             'text' => 'Filas',
@@ -47,6 +61,11 @@ return [
         ]
     ],
     'right_menu' => [
+        [
+            'text'=>'<i class="fas fa-calendar-alt"></i> '.$ano,
+            'title'=>'Trocar o ano de referência',
+            'submenu' => $anos
+            ],
         [
             'text' => '<i class="fas fa-id-badge"></i> Trocar perfil',
             'can' => 'trocarPerfil',
@@ -70,24 +89,7 @@ return [
         [
             'text' => '<i class="fas fa-cog"></i> Configurações',
             'title' => 'Configurações',
-            'can' => 'admin',
-            'submenu' => [
-                [
-                    'text' => '<i class="fas fa-sitemap"></i> Setores',
-                    'url' => 'setores',
-                    'can' => 'admin',
-                ],
-                [
-                    'text' => '<i class="fas fa-tasks"></i> Filas',
-                    'url' => 'filas',
-                    'can' => 'admin',
-                ], 
-                [
-                    'text' => '<i class="fas fa-users"></i> Usuários',
-                    'url' => 'users',
-                    'can' => 'admin',
-                ],
-            ],
+            'submenu' => $configuracoes,
         ],
     ],
 ];
