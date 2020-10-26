@@ -10,7 +10,7 @@ $filas = [
         'text' => 'Nova Fila',
         'url' => 'filas/create',
         'can' => 'admin',
-    ]
+    ],
 ];
 
 $configuracoes = [
@@ -23,17 +23,38 @@ $configuracoes = [
         'text' => '<i class="fas fa-tasks"></i> Filas',
         'url' => 'filas',
         'can' => 'admin',
-    ], 
+    ],
     [
-        'text' => '<i class="fas fa-users"></i> Usuários',
+        'text' => '<i class="fas fa-users"></i> Pessoas',
         'url' => 'users',
         'can' => 'admin',
+    ],
+    [
+        'type' => 'divider',
+    ],
+    [
+        'type' => 'header',
+        'text' => '<b><i class="fas fa-id-badge"></i>  Trocar perfil</b>',
+    ],
+    [
+        'text' => 'Admin',
+        'url' => 'users/perfil/admin',
+        'can' => 'trocarPerfil',
+    ],
+    [
+        'text' => 'Atendente',
+        'url' => 'users/perfil/atendente',
+        'can' => 'trocarPerfil',
+    ],
+    [
+        'text' => 'Usuário',
+        'url' => 'users/perfil/usuario',
     ],
 ];
 
 $ano = date('Y');
 $anos = [
-    ['text'=>'2019', 'url'=>'anos/2019']
+    ['text' => '2019', 'url' => 'anos/2019'],
 ];
 
 return [
@@ -57,39 +78,20 @@ return [
             'text' => 'Filas',
             'url' => '',
             'can' => 'admin',
-            'submenu' => $filas
-        ]
+            'submenu' => $filas,
+        ],
     ],
     'right_menu' => [
         [
-            'text'=>'<i class="fas fa-calendar-alt"></i> '.$ano,
-            'title'=>'Trocar o ano de referência',
-            'submenu' => $anos
-            ],
-        [
-            'text' => '<i class="fas fa-id-badge"></i> Trocar perfil',
-            'can' => 'trocarPerfil',
-            'submenu' => [
-                [
-                    'text' => 'Admin',
-                    'url' => 'users/perfil/admin',
-                    'can' => 'trocarPerfil',
-                ],
-                [
-                    'text' => 'Atendente',
-                    'url' => 'users/perfil/atendente',
-                    'can' => 'trocarPerfil',
-                ], 
-                [
-                    'text' => 'Usuário',
-                    'url' => 'users/perfil/usuario',
-                ],
-            ],
+            'text' => '<i class="fas fa-calendar-alt"></i> ' . $ano,
+            'title' => 'Trocar o ano de referência',
+            'submenu' => $anos,
         ],
         [
-            'text' => '<i class="fas fa-cog"></i> Configurações',
+            'text' => '<i class="fas fa-cog"></i>',
             'title' => 'Configurações',
             'submenu' => $configuracoes,
+            'align' => 'right',
         ],
     ],
 ];

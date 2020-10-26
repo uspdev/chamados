@@ -33,6 +33,7 @@ class ChamadoController extends Controller
     {
         $this->authorize('chamados.viewAny');
         $chamados = (Gate::allows('admin')) ? Chamado::all() : \Auth::user()->chamados;
+        $ano = '2019';
         return view('chamados/index', compact('chamados'));
     }
 
