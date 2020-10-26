@@ -68,7 +68,7 @@ class ChamadoController extends Controller
     public function store(ChamadoRequest $request, Fila $fila)
     {
         $this->authorize('chamados.create');
-
+        $request->validate(JSONForms::buildRules($request, $fila));
         $chamado = \DB::transaction(function () use ($request, $fila) {
             $chamado = new Chamado;
             $chamado->nro = Chamado::obterProximoNumero();
@@ -227,6 +227,7 @@ class ChamadoController extends Controller
                 'fila_id' => ['required|numeric'],
             ]);
         }
+        $request->validate(JSONForms::buildRules($request, $fila));
         $this->authorize('chamados.view', $chamado);
         $chamado = $this->grava($chamado, $request);
 
