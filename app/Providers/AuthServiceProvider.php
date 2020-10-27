@@ -25,8 +25,22 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        # admin
         Gate::define('admin', function ($user) {
+            return $user->is_admin;
+        });
+
+        Gate::define('atendente', function ($user) {
+            return $user->filas()->count() || $user->is_admin;
+        });
+
+        Gate::define('usuario', function ($user) {
+            return $user;
+        });
+
+        # perfis
+        # o perfil é o modo como o usuário se apresenta
+        # ideal para mostrar os menus e a lista de chamados
+        Gate::define('perfilAdmin', function ($user) {
             if (session('perfil') != 'admin') {
                 return false;
             } else {
@@ -34,7 +48,7 @@ class AuthServiceProvider extends ServiceProvider
             }
         });
 
-        Gate::define('atendente', function ($user) {
+        Gate::define('perfilAtendente', function ($user) {
             if (session('perfil') == 'atendente') {
                 return true;
             } else {
@@ -42,7 +56,7 @@ class AuthServiceProvider extends ServiceProvider
             }
         });
 
-        Gate::define('usuario', function ($user) {
+        Gate::define('perfilUsuario', function ($user) {
             if (session('perfil') == 'usuario' || empty(session('perfil'))) {
                 return true;
             } else {
@@ -50,12 +64,15 @@ class AuthServiceProvider extends ServiceProvider
             }
         });
 
-        Gate::define('trocarPerfil', function($user) {
-            return $user->is_admin ?? (session('perfil') == 'atendente');
+        Gate::define('trocarPerfil', function ($user) {
+            if (Gate::allows('admin') || Gate::allows('atendente')) {
+                return true;
+            } else {
+                return false;
+            }
         });
 
         # policies
         Gate::resource('chamados', 'App\Policies\ChamadoPolicy');
-        //Gate::resource('comentarios', 'App\Policies\ComentarioPolicy');
     }
 }

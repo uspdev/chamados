@@ -106,7 +106,7 @@ class User extends Authenticatable
      */
     public function filas()
     {
-        return $this->belongsToMany('App\Models\Fila')
+        return $this->belongsToMany('App\Models\Fila', 'user_fila')
             ->withPivot('funcao')
             ->withTimestamps();
     }

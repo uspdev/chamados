@@ -15,17 +15,22 @@ $filas = [
 
 $admin = [
     [
-        'text' => '<i class="fas fa-sitemap"></i> Setores',
+        'type' => 'header',
+        'text' => '<b><i class="fas fa-cogs"></i>  Configurações</b>',
+        'can' => 'admin',
+    ],
+    [
+        'text' => '<i class="fas fa-sitemap ml-2"></i> Setores',
         'url' => 'setores',
         'can' => 'admin',
     ],
     [
-        'text' => '<i class="fas fa-tasks"></i> Filas',
+        'text' => '<i class="fas fa-tasks ml-2"></i> Filas',
         'url' => 'filas',
         'can' => 'admin',
     ],
     [
-        'text' => '<i class="fas fa-users"></i> Pessoas',
+        'text' => '<i class="fas fa-users ml-2"></i> Pessoas',
         'url' => 'users',
         'can' => 'admin',
     ],
@@ -42,22 +47,22 @@ $trocarPerfil = [
         'can' => 'trocarPerfil',
     ],
     [
-        'text' => 'Admin',
+        'text' => '&nbsp; Admin',
         'url' => 'users/perfil/admin',
-        'can' => 'trocarPerfil',
+        'can' => 'admin',
     ],
     [
-        'text' => 'Atendente',
+        'text' => '&nbsp; Atendente',
         'url' => 'users/perfil/atendente',
-        'can' => 'trocarPerfil',
+        'can' => 'atendente',
     ],
     [
-        'text' => 'Usuário',
+        'text' => '&nbsp; Usuário',
         'url' => 'users/perfil/usuario',
         'can' => 'trocarPerfil',
     ],
 ];
-$configuracoes = array_merge($admin,$trocarPerfil);
+$configuracoes = array_merge($admin, $trocarPerfil);
 
 $ano = date('Y');
 $anos = [
@@ -92,12 +97,12 @@ return [
         [
             'text' => '<span class="badge badge-danger">Admin</span>',
             'url' => '',
-            'can' => 'admin',
+            'can' => 'perfilAdmin',
         ],
         [
             'text' => '<span class="badge badge-warning">Atendente</span>',
             'url' => '',
-            'can' => 'atendente',
+            'can' => 'perfilAtendente',
         ],
         [
             'text' => '<i class="fas fa-calendar-alt"></i> ' . $ano,
@@ -110,7 +115,7 @@ return [
             'title' => 'Configurações',
             'submenu' => $configuracoes,
             'align' => 'right',
-            'can' => 'chamados.create',
+            'can' => 'atendente',
         ],
     ],
 ];

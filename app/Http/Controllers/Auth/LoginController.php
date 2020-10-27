@@ -68,6 +68,7 @@ class LoginController extends Controller
 
         $user->save();
         Auth::login($user, true);
+        session(['perfil' => 'usuario']);
         return redirect('/');
     }
 

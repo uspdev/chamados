@@ -133,11 +133,13 @@ class UserController extends Controller
                 break;
 
             case 'atendente':
+                $this->authorize('atendente');
                 session(['perfil' => 'atendente']);
                 $request->session()->flash('alert-info', 'Perfil mudado para Atendente com sucesso.');
                 break;
 
             case 'admin':
+                $this->authorize('admin');
                 session(['perfil' => 'admin']);
                 $request->session()->flash('alert-info', 'Perfil mudado para Admin com sucesso.');
                 break;
@@ -153,6 +155,7 @@ class UserController extends Controller
         $this->authorize('admin');
 
         \Auth::login($user, true);
+        session(['perfil' => 'usuario']);
         return redirect('/');
     }
 }
