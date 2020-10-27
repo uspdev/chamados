@@ -42,12 +42,14 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-4">
         @include('chamados.show.comentarios-card')
     </div>
     <div class="col-md-4">
-        @include('chamados.show.vinculados')
         @include('chamados.show.file-upload-card')
+    </div>
+        <div class="col-md-4">
+        @include('chamados.show.vinculados')
     </div>
 </div>
 
