@@ -120,20 +120,25 @@ class UserController extends Controller
         }
     }
 
+    /**
+     * Permite trocar o perfil do usuário: admin, atendente ou usuário comuum
+     */
     public function trocarPerfil(Request $request, $perfil)
     {
         $this->authorize('trocarPerfil');
         switch ($perfil) {
             case 'usuario':
-                session(['is_admin' => 0]);
+                session(['perfil' => 'usuario']);
                 $request->session()->flash('alert-info', 'Perfil mudado para Usuário com sucesso.');
                 break;
 
             case 'atendente':
+                session(['perfil' => 'atendente']);
+                $request->session()->flash('alert-info', 'Perfil mudado para Atendente com sucesso.');
                 break;
 
             case 'admin':
-                session(['is_admin' => 1]);
+                session(['perfil' => 'admin']);
                 $request->session()->flash('alert-info', 'Perfil mudado para Admin com sucesso.');
                 break;
         }

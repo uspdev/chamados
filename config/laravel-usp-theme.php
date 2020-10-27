@@ -13,7 +13,7 @@ $filas = [
     ],
 ];
 
-$configuracoes = [
+$admin = [
     [
         'text' => '<i class="fas fa-sitemap"></i> Setores',
         'url' => 'setores',
@@ -29,12 +29,17 @@ $configuracoes = [
         'url' => 'users',
         'can' => 'admin',
     ],
+];
+
+$trocarPerfil = [
     [
         'type' => 'divider',
+        'can' => 'trocarPerfil',
     ],
     [
         'type' => 'header',
         'text' => '<b><i class="fas fa-id-badge"></i>  Trocar perfil</b>',
+        'can' => 'trocarPerfil',
     ],
     [
         'text' => 'Admin',
@@ -49,8 +54,10 @@ $configuracoes = [
     [
         'text' => 'Usuário',
         'url' => 'users/perfil/usuario',
+        'can' => 'trocarPerfil',
     ],
 ];
+$configuracoes = array_merge($admin,$trocarPerfil);
 
 $ano = date('Y');
 $anos = [
@@ -83,15 +90,27 @@ return [
     ],
     'right_menu' => [
         [
+            'text' => '<span class="badge badge-danger">Admin</span>',
+            'url' => '',
+            'can' => 'admin',
+        ],
+        [
+            'text' => '<span class="badge badge-warning">Atendente</span>',
+            'url' => '',
+            'can' => 'atendente',
+        ],
+        [
             'text' => '<i class="fas fa-calendar-alt"></i> ' . $ano,
             'title' => 'Trocar o ano de referência',
             'submenu' => $anos,
+            'can' => 'chamados.create',
         ],
         [
             'text' => '<i class="fas fa-cog"></i>',
             'title' => 'Configurações',
             'submenu' => $configuracoes,
             'align' => 'right',
+            'can' => 'chamados.create',
         ],
     ],
 ];
