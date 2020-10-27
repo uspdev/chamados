@@ -52,6 +52,12 @@ class ChamadoController extends Controller
         return view('chamados/create', compact('fila', 'chamado', 'complexidades', 'form'));
     }
 
+    /**
+     * Mosta lista de filas e respectivas filas
+     * para selecionar e criar novo chamado
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function listaFilas()
     {
         $setores = Setor::with(['filas' => function($query) {
