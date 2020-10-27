@@ -31,9 +31,48 @@ $configuracoes = [
     ],
 ];
 
-$ano = date('Y');
+$trocarPerfil = [
+    [
+        'type' => 'divider',
+        'can' => 'trocarPerfil',
+    ],
+    [
+        'type' => 'header',
+        'text' => '<b><i class="fas fa-id-badge"></i>  Trocar perfil</b>',
+        'can' => 'trocarPerfil',
+    ],
+    [
+        'text' => 'Admin',
+        'url' => 'users/perfil/admin',
+        'can' => 'trocarPerfil',
+    ],
+    [
+        'text' => 'Atendente',
+        'url' => 'users/perfil/atendente',
+        'can' => 'trocarPerfil',
+    ],
+    [
+        'text' => 'Usuário',
+        'url' => 'users/perfil/usuario',
+        'can' => 'trocarPerfil',
+    ],
+];
+$configuracoes = array_merge($admin,$trocarPerfil);
+
+$ano = date('Y'); //o ano corrente está fixo. falta colocar o selecionado.
 $anos = [
-    ['text'=>'2019', 'url'=>'anos/2019']
+    [
+        'text' => '2020',
+        'url' => 'chamados/anos/2020',
+    ],
+    [
+        'text' => '2019',
+        'url' => 'chamados/anos/2019',
+    ],
+    [
+        'text' => '2018',
+        'url' => 'chamados/anos/2018',
+    ],
 ];
 
 return [

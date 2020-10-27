@@ -15,7 +15,7 @@
             <div class="modal-body">
                 <div class="list_table_div_form">
 
-                    {!! Form::open(['url'=>'chamados/'.$chamado->nro.'/vinculado']) !!}                    
+                    {!! Form::open(['url'=>'chamados/'.$chamado->id.'/vinculado']) !!}
                     @method('post')
                     @csrf
     

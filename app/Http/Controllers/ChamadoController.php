@@ -29,10 +29,19 @@ class ChamadoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        if (session('ano') == null) {
+            session(['ano' => $this->ano]);
+        }
+
         $this->authorize('chamados.viewAny');
-        $chamados = (Gate::allows('admin')) ? Chamado::all() : \Auth::user()->chamados;
+
+        if (Gate::allows('admin')) {
+            $chamados = Chamado::whereYear('created_at', session('ano'))->get();
+        }else{
+            $chamados = \Auth::user()->chamados()->whereYear('chamados.created_at', session('ano'))->get();
+        }
         return view('chamados/index', compact('chamados'));
     }
 
@@ -129,7 +138,7 @@ class ChamadoController extends Controller
             foreach ($chamados as $chamado) {
                 $results[] = [
                     'text' => $chamado['nro'] . '/' . $chamado['created_at']->year . ' - ' . $chamado['assunto'],
-                    'id' => $chamado['nro'],
+                    'id' => $chamado['id'],
                 ];
             }
             return response(compact('results'));
@@ -143,7 +152,7 @@ class ChamadoController extends Controller
      */
     public function storeChamadoVinculado(Request $request, Chamado $chamado)
     {
-        if ($request->slct_chamados != $chamado->nro) {
+        if ($request->slct_chamados != $chamado->id) {
             $chamado->vinculadosIda()->detach($request->slct_chamados);
             $chamado->vinculadosIda()->attach($request->slct_chamados, ['acesso' => $request->tipo]);
 
@@ -393,5 +402,16 @@ class ChamadoController extends Controller
         })->orderBy('created_at', 'desc')->paginate(10);
 
         return view('chamados/index', compact('chamados'));
+    }
+
+    /**
+     * Salva o ano na sessão usada no index
+     */
+    public function mudaAno(Request $request, $ano)
+    {
+        if ($ano != null || $ano != '') {
+            session(['ano' => $ano]);
+        }
+        return back();
     }
 }

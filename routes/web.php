@@ -34,6 +34,7 @@ Route::get('users/{user}/assumir', [UserController::class, 'assumir']);
 Route::get('chamados/listarChamadosAjax', [ChamadoController::class,'listarChamadosAjax']);
 Route::post('chamados/{chamado}/vinculado', [ChamadoController::class,'storeChamadoVinculado']);
 Route::delete('chamados/{chamado}/vinculado/{id}', [ChamadoController::class,'deleteChamadoVinculado']);
+Route::get('chamados/anos/{ano}', [ChamadoController::class,'mudaAno']);
 Route::get('chamados/create', [ChamadoController::class, 'listaFilas']);
 Route::get('chamados/create/{fila}/', [ChamadoController::class, 'create'])->name('chamados.create');
 Route::post('chamados/create/{fila}/', [ChamadoController::class, 'store'])->name('chamados.store');
