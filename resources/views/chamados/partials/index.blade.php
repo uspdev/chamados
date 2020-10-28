@@ -2,6 +2,8 @@
     <div class="col-md-12 form-inline">
         <span class="h4 mt-2">Meus Chamados</span>
         @include('partials.datatable-filter-box', ['otable'=>'oTable'])
+        @include('chamados.partials.mostra-ano')
+
     </div>
 </div>
 

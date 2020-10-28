@@ -413,8 +413,9 @@ class ChamadoController extends Controller
     /**
      * Salva o ano na sessão usada no index
      */
-    public function mudaAno(Request $request, $ano)
+    public function mudaAno(Request $request)
     {
+        $ano = $request->ano;
         if ($ano != null || $ano != '') {
             session(['ano' => $ano]);
         }

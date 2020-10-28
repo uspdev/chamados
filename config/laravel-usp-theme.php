@@ -64,22 +64,6 @@ $trocarPerfil = [
 ];
 $configuracoes = array_merge($admin,$trocarPerfil);
 
-$ano = date('Y'); //o ano corrente está fixo. falta colocar o selecionado.
-$anos = [
-    [
-        'text' => '2020',
-        'url' => 'chamados/anos/2020',
-    ],
-    [
-        'text' => '2019',
-        'url' => 'chamados/anos/2019',
-    ],
-    [
-        'text' => '2018',
-        'url' => 'chamados/anos/2018',
-    ],
-];
-
 return [
     'title' => env('APP_NAME'),
     'dashboard_url' => config('app.url'),
@@ -114,12 +98,6 @@ return [
             'text' => '<span class="badge badge-warning">Atendente</span>',
             'url' => '',
             'can' => 'perfilAtendente',
-        ],
-        [
-            'text' => '<i class="fas fa-calendar-alt"></i> ' . $ano,
-            'title' => 'Trocar o ano de referência',
-            'submenu' => $anos,
-            'can' => 'chamados.create',
         ],
         [
             'text' => '<i class="fas fa-cog"></i>',
