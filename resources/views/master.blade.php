@@ -2,6 +2,7 @@
 
 @section('styles')
 @parent
+<link rel="stylesheet" href="css/chamados.css">
 @endsection
 
 @section('javascripts_head')
