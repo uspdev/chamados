@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Setor extends Model
 {
     use HasFactory;
+
+    # setores não segue convenção do laravel para nomes de tabela
     protected $table = 'setores';
 
     protected $fillable = [
@@ -21,6 +23,8 @@ class Setor extends Model
         'nome' => ['required', 'max:255'],
         'setor_id' => '',
     ];
+
+    public const funcoes = ['Gerente', 'Colaborador'];
 
     protected const fields = [
         [
@@ -77,14 +81,24 @@ class Setor extends Model
     }
 
     /**
+     * Auto relacionamento reverso
+     */
+    public function setores()
+    {
+        return $this->hasMany('App\Models\Setor')->orderBy('sigla');
+    }
+
+    /**
      * Setor possui filas
-     * não sei se é necessário aqui
      */
     public function filas()
     {
         return $this->hasMany('App\Models\Fila');
     }
 
+    /**
+     * Setor possui pessoas
+     */
     public function users()
     {
         return $this->belongsToMany('App\Models\User', 'user_setor')

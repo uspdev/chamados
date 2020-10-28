@@ -17,7 +17,7 @@ class CreateUserSetorTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('setor_id')->constrained('setores')->onDelete('cascade');
-            $table->enum('funcao', ['Gerente', 'Colaborador']);
+            $table->string('funcao', 20);
 
             $table->timestamps();
         });
