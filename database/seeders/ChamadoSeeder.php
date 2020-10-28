@@ -18,6 +18,23 @@ class ChamadoSeeder extends Seeder
         $chamados = [
             [
                 'nro' => 0,
+                'assunto' => 'Monitor não liga 2019',
+                'descricao' => 'Não dá sinal de vida.',
+                'status' => 'Triagem',
+                'complexidade' => null,
+                'extras' => '
+                {
+                    "predio" : "Administração",
+                    "sala"   : "Sala 02",
+                    "numpat" : "314.159266",
+                    "dia"    : "1951-07-22"
+                }',
+                'fila_id' => 1,
+                'observacao_tecnica' => 'Deve estar com a fonte queimada 2019',
+                'created_at' => '2019-10-26 15:50:44'
+            ],
+            [
+                'nro' => 0,
                 'assunto' => 'Computador não liga',
                 'descricao' => 'Saiu fumaça da parte de trás.',
                 'status' => 'Triagem',
@@ -47,7 +64,7 @@ class ChamadoSeeder extends Seeder
                 }',
                 'fila_id' => 1,
                 'observacao_tecnica' => 'Deve estar com a fonte queimada',
-            ],
+            ],           
         ];
 
         foreach ($chamados as $chamado) {

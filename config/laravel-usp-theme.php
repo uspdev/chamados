@@ -62,11 +62,22 @@ $trocarPerfil = [
         'can' => 'trocarPerfil',
     ],
 ];
-$configuracoes = array_merge($admin, $trocarPerfil);
+$configuracoes = array_merge($admin,$trocarPerfil);
 
-$ano = date('Y');
+$ano = date('Y'); //o ano corrente está fixo. falta colocar o selecionado.
 $anos = [
-    ['text' => '2019', 'url' => 'anos/2019'],
+    [
+        'text' => '2020',
+        'url' => 'chamados/anos/2020',
+    ],
+    [
+        'text' => '2019',
+        'url' => 'chamados/anos/2019',
+    ],
+    [
+        'text' => '2018',
+        'url' => 'chamados/anos/2018',
+    ],
 ];
 
 return [

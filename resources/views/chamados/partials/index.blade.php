@@ -19,7 +19,7 @@
 
     @forelse ($chamados->sortByDesc('created_at') as $chamado)
     <tr>
-      <td> {{ $chamado->nro }}/{{ Carbon\Carbon::parse($chamado->creted_at)->format('Y') }} </td>
+      <td> {{ $chamado->nro }}/{{ Carbon\Carbon::parse($chamado->created_at)->format('Y') }} </td>
       <td> ({{ $chamado->fila->setor->sigla }}) {{ $chamado->fila->nome }}</td>
       <td> <a href="chamados/{{$chamado->id}}"> {!! $chamado->assunto !!} </a></td>
       <td> @include('chamados.partials.status') </td>
@@ -42,7 +42,8 @@
     oTable = $('.meus-chamados').DataTable({
       dom: 't',
       "paging": false,
-      "sort": true
+      "sort": true,
+      "order": [[4, "desc"]] 
     });
 
   })

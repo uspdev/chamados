@@ -19,7 +19,7 @@
 <div class="card bg-light mb-3">
     <div class="card-header h5">
         <span class="text-muted">Chamado no.</span>
-        {{ $chamado->id }}/{{ Carbon\Carbon::parse($chamado->created_at)->format('Y') }}
+        {{ $chamado->nro }}/{{ Carbon\Carbon::parse($chamado->created_at)->format('Y') }}
         <span class="text-muted">para</span> ({{ $chamado->fila->setor->sigla }}) {{ $chamado->fila->nome }}
         @include('chamados.partials.status')
     </div>
