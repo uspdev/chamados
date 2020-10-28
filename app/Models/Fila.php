@@ -34,15 +34,13 @@ class Fila extends Model
         ],
         [
             'name' => 'descricao',
-            'label' => 'Descricao',
+            'label' => 'Descrição',
         ],
-
     ];
 
     public static function getFields()
     {
         $fields = SELF::fields;
-        //return $fields;
         foreach ($fields as &$field) {
             if (substr($field['name'], -3) == '_id') {
                 $class = '\\App\\Models\\' . $field['model'];
@@ -57,7 +55,8 @@ class Fila extends Model
         return 'nome';
     }
 
-    public static function getPessoaModel() {
+    public static function getPessoaModel()
+    {
         return [
             [
                 'name' => 'nome',
@@ -73,7 +72,13 @@ class Fila extends Model
         ];
     }
 
-    public static function estados() {
+    public static function getTemplateFields()
+    {
+        return ['label', 'type', 'can', 'help', 'value', 'validate'];
+    }
+
+    public static function estados()
+    {
         return ['Em elaboração', 'Em produção', 'Desativada'];
     }
 
