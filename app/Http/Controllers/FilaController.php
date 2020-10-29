@@ -110,7 +110,9 @@ class FilaController extends Controller
         }
         # adiciona o campo novo
         $new = array_filter($request->new, 'strlen');
-        $template[$request->campo] = $new;
+        if (isset($request->campo)) {
+            $template[$request->campo] = $new;
+        }
         $fila->template = json_encode($template);
         $fila->save();
 
