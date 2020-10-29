@@ -34,7 +34,7 @@ class Fila extends Model
         ],
         [
             'name' => 'descricao',
-            'label' => 'Descricao',
+            'label' => 'Descrição',
         ],
 
     ];
