@@ -26,6 +26,8 @@ Route::resource('setores', SetorController::class);
 Route::resource('filas', FilaController::class);
 Route::post('filas/{fila}/pessoas', [FilaController::class,'storePessoa']);
 Route::delete('filas/{fila}/pessoas/{id}', [FilaController::class,'destroyPessoa']);
+Route::get('filas/{fila}/template', [FilaController::class, 'createTemplate'])->name('filas.createtemplate');
+Route::post('filas/{fila}/template', [FilaController::class, 'storeTemplate'])->name('filas.storetemplate');
 
 // USERS
 Route::get('search/partenome', [UserController::class,'partenome']);

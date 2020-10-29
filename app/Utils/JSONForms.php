@@ -23,7 +23,7 @@ class JSONForms
         return $validate;
     }
 
-    public static function generateForm($fila, $chamado = null)
+    public static function JSON2Form($template, $data)
     {
         Form::macro('help', function($text)
         {
@@ -31,48 +31,55 @@ class JSONForms
             return $help;
         });
 
-        $template = json_decode($fila->template);
         $form = [];
+        foreach ($template as $key => $json) {
+            $input = [];
+            $type = $json->type;
+
+            # se o template tem autorização
+            if (isset($json->can)) {
+                if (!Gate::allows($json->can)) {
+                    continue;
+                }
+            }
+
+            $input[] = Form::label("extras[$key]", $template->$key->label, ['class' => 'control-label']);
+
+            # valores preenchidos
+            $value = null;
+            if (isset($data->$key)) {
+                $value = $data->$key;
+            }
+
+            switch ($type) {
+                //caso seja um select passa o valor padrao
+                case 'select':
+                    $input[] = Form::$type("extras[$key]", $json->value, $value, ['class' => 'form-control', 'placeholder' => 'Selecione...']);
+                    break;
+
+                default:
+                    $input[] = Form::$type("extras[$key]", $value, ['class' => 'form-control', 'rows' => '3']);
+                    break;
+            }
+
+            if (isset($json->help)) {
+                $input[] = Form::help($json->help);
+            }
+            $form[] = $input;
+        }
+        return $form;
+    }
+
+    public static function generateForm($fila, $chamado = null)
+    {
+        $template = json_decode($fila->template);
         $data = null;
+        $form = [];
         if ($template) {
             if ($chamado) {
                 $data = json_decode($chamado->extras);
             }
-            foreach ($template as $key => $json) {
-                $input = [];
-                $type = $json->type;
-
-                # se o template tem autorização
-                if (isset($json->can)) {
-                    if (!Gate::allows($json->can)) {
-                        continue;
-                    }
-                }
-
-                $input[] = Form::label("extras[$key]", $template->$key->label, ['class' => 'control-label']);
-
-                # valores preenchidos
-                $value = null;
-                if (isset($data->$key)) {
-                    $value = $data->$key;
-                }
-                
-                switch ($type) {
-                    //caso seja um select passa o valor padrao
-                    case 'select':
-                        $input[] = Form::$type("extras[$key]", $json->value, $value, ['class' => 'form-control', 'placeholder' => 'Selecione...']);
-                        break;
-                        
-                    default:
-                        $input[] = Form::$type("extras[$key]", $value, ['class' => 'form-control', 'rows' => '3']);
-                        break;
-                }
-
-                if (isset($json->help)) {
-                    $input[] = Form::help($json->help);
-                }
-                $form[] = $input;
-            }
+            $form = JSONForms::JSON2Form($template, $data);
         }
         return $form;
     }
