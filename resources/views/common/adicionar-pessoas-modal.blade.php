@@ -1,4 +1,8 @@
 <!-- Modal para adicionar pessoas ao setor -->
+{{-- é necessário passar 
+    $modal['url']
+    $modal['title']
+--}}
 <div class="modal fade" id="adicionar-pessoas-modal" data-backdrop="static" tabindex="-1" aria-labelledby="modalPortariaLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -13,26 +17,21 @@
                 <div class="list_table_div_form">
                     {!! Form::open(['url'=>$modal['url']]) !!}
                     @method('POST')
-                    {{ Form::hidden('id') }}
 
-                    @foreach ($modal['fields'] as $col)
-                    @if (empty($col['type']) || $col['type'] == 'text')
-                    @include('common.list-table-modal-text')
+                    <div class="form-group row">
+                        {{ Form::label('codpes','Nome', ['class' => 'col-form-label col-sm-2']) }}
+                        <div class="col-sm-10">
+                            {{ Form::select('codpes',[], null, ['class' => 'form-control']) }}
+                        </div>
+                    </div>
 
-                    @elseif ($col['type'] == 'select')
-                    @include('common.list-table-modal-select')
-
-                    @endif
-                    @endforeach
                     <div class="text-right">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn btn-primary">Salvar</button>
                     </div>
                     {!! Form::close(); !!}
                 </div>
-
             </div>
-            {{-- <div class="modal-footer"></div> --}}
         </div>
     </div>
 </div>
@@ -59,7 +58,8 @@
 
         adicionar_pessoas = function(id) {
             pessoasForm.modal();
-            pessoasForm.find('form').attr('action', 'setores/' + id + '/pessoas')
+            var action = pessoasForm.find('form').attr('action')
+            pessoasForm.find('form').attr('action', action + '/' + id + '/pessoas')
             console.log('abriu modal pessoa')
         }
 

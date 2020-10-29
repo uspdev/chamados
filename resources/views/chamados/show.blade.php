@@ -47,8 +47,9 @@
     </div>
     <div class="col-md-4">
         @include('chamados.show.file-upload-card')
+        @include('chamados.show.pessoas')
     </div>
-        <div class="col-md-4">
+    <div class="col-md-4">
         @include('chamados.show.vinculados')
     </div>
 </div>

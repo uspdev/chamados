@@ -54,10 +54,7 @@ class FilaController extends Controller
 
     public function storePessoa(Request $request, Fila $fila)
     {
-        $user = User::where('codpes', $request->codpes)->first();
-        if (empty($user)) {
-            $user = User::storeByCodpes($request->codpes);
-        }
+        $user = User::obterOuCriarPorCodpes($request->codpes);
         $fila->users()->detach($user->id);
         $fila->users()->attach($user->id, ['funcao' => $request->funcao]);
 

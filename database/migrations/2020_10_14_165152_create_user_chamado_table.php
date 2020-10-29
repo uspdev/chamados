@@ -18,8 +18,7 @@ class CreateUserChamadoTable extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('chamado_id')->constrained('chamados')->onDelete('cascade');
 
-            $funcoes = ['Atendente', 'Atribuidor', 'Autor', 'Observador'];
-            $table->enum('funcao', $funcoes);
+            $table->string('papel', 20);
             $table->timestamps();
         });
     }

@@ -19,9 +19,6 @@ $triagem_id = 'triagem-detail-'.Str::random(5);
             <i class="fas fa-phone mr-2"></i> {{ $user->telefone ?? 'não disponível' }}
         </div>
         <div>
-        {{-- <hr> --}}
-            {{-- <span class="text-muted">Atribuído por</span> {{ $atribuidor->name }}<br> --}}
-            {{-- <span class="text-muted">Atribuído em</span> {{ Carbon\Carbon::parse($atribuidor->created_at)->format('d/m/Y H:i') }} --}}
         </div>
     </div>
 </div>

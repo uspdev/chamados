@@ -74,9 +74,7 @@ class ChamadoSeeder extends Seeder
                 return $cht;
             });
             # preenchendo relacionamento com users
-            $cht->users()->attach(User::first()->id, ['funcao' => 'Autor']);
-            #$cht->users()->attach(User::inRandomOrder()->first()->id, ['funcao' => 'Atribuidor']);
-            #$cht->users()->attach(User::inRandomOrder()->first()->id, ['funcao' => 'Atendente']);
+            $cht->users()->attach(User::first()->id, ['papel' => 'Autor']);
         }
 
         # relacionando dois chamados
@@ -86,10 +84,9 @@ class ChamadoSeeder extends Seeder
             // o FOR aqui é para que o proximo numero do chamado seja
             // pego corretamente.
             Chamado::factory(1)->create()->each(function ($chamado) {
-                $chamado->users()->attach(User::inRandomOrder()->first()->id, ['funcao' => 'Autor']);
+                $chamado->users()->attach(User::inRandomOrder()->first()->id, ['papel' => 'Autor']);
                 if ($chamado->status != 'Triagem') {
-                    $chamado->users()->attach(User::inRandomOrder()->first()->id, ['funcao' => 'Atribuidor']);
-                    $chamado->users()->attach(User::inRandomOrder()->first()->id, ['funcao' => 'Atendente']);
+                    $chamado->users()->attach(User::inRandomOrder()->first()->id, ['papel' => 'Atendente']);
                 }
             });
         }
