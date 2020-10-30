@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ChamadoRequest;
 use App\Models\Chamado;
 use App\Models\Comentario;
 use App\Models\Fila;
@@ -10,18 +11,15 @@ use App\Models\User;
 use App\Utils\JSONForms;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-use App\Http\Requests\ChamadoRequest;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\URL;
 
 class ChamadoController extends Controller
 {
 
-    /* Variáveis globais temporárias */
-    private $complexidades;
-
     public function __construct()
     {
         $this->middleware('auth');
-        $this->complexidades = Chamado::complexidades();
     }
 
     /**
@@ -39,9 +37,10 @@ class ChamadoController extends Controller
 
         if (Gate::allows('admin')) {
             $chamados = Chamado::whereYear('created_at', session('ano'))->get();
-        }else{
+        } else {
             $chamados = \Auth::user()->chamados()->whereYear('chamados.created_at', session('ano'))->get();
         }
+
         return view('chamados/index', compact('chamados'));
     }
 
@@ -55,7 +54,7 @@ class ChamadoController extends Controller
         $this->authorize('chamados.create');
         $chamado = new Chamado;
         $chamado->fila = $fila;
-        $complexidades = $this->complexidades;
+        $complexidades = Chamado::complexidades();
         $form = JSONForms::generateForm($fila);
         return view('chamados/create', compact('fila', 'chamado', 'complexidades', 'form'));
     }
@@ -68,7 +67,7 @@ class ChamadoController extends Controller
      */
     public function listaFilas()
     {
-        $setores = Setor::with(['filas' => function($query) {
+        $setores = Setor::with(['filas' => function ($query) {
             $query->where('estado', 'Em produção');
         }])->orderBy('sigla')->get();
         return view('chamados.listafilas', compact('setores'));
@@ -111,34 +110,37 @@ class ChamadoController extends Controller
         if (empty($template)) {
             $template = [];
         }
-        $atendentes = $chamado->users()->wherePivot('funcao', 'Atendente')->get();
-        $atribuidor = $chamado->users()->wherePivot('funcao', 'Atribuidor')->first();
-        $autor = $chamado->users()->wherePivot('funcao', 'Autor')->first();
+        $atendentes = $chamado->users()->wherePivot('papel', 'Atendente')->get();
+        $autor = $chamado->users()->wherePivot('papel', 'Autor')->first();
 
         # estamos carregando os vinculados diretos.
         # Seria interessante vincular recursivos? Acho que não mas ...
         $vinculados = $chamado->vinculados;
-        $complexidades = $this->complexidades;
+        $complexidades = Chamado::complexidades();
 
-        return view('chamados/show', compact('atendentes', 'atribuidor', 'autor', 'chamado', 'extras', 'template', 'vinculados', 'complexidades'));
+        # para o form de adicionar pessoas
+        $modal_pessoa['url'] = 'chamados';
+        $modal_pessoa['title'] = 'Adicionar observador';
+
+        return view('chamados/show', compact('atendentes', 'autor', 'chamado', 'extras', 'template', 'vinculados', 'complexidades', 'modal_pessoa'));
     }
 
     /**
      * Retornando os chamados para criar vinculo entre eles
      * @param Request $request - assunto ou número do chamado
-     * @return json 
+     * @return json
      */
     public function listarChamadosAjax(Request $request)
     {
         if ($request->term) {
             //se buscar pelo numero do chamado (nro) independente do ano
             if (is_numeric($request->term)) {
-                $chamados = (Gate::allows('admin')) ? Chamado::where('nro',$request->term)->latest()->get() : \Auth::user()->chamados()->where('nro',$request->term)->latest()->get();
-            }else{
+                $chamados = (Gate::allows('admin')) ? Chamado::where('nro', $request->term)->latest()->get() : \Auth::user()->chamados()->where('nro', $request->term)->latest()->get();
+            } else {
                 //se buscar por assunto pegamos os ultimos 30 chamados com esse assunto
                 $request->term = str_replace(" ", "%", $request->term);
                 $chamados = (Gate::allows('admin')) ? Chamado::where('assunto', 'LIKE', '%' . $request->term . '%')->latest()->take(30)->get() : \Auth::user()->chamados()->where('assunto', 'LIKE', '%' . $request->term . '%')->latest()->take(30)->get();
-            }            
+            }
 
             $results = [];
             foreach ($chamados as $chamado) {
@@ -167,18 +169,18 @@ class ChamadoController extends Controller
             Comentario::create([
                 'user_id' => \Auth::user()->id,
                 'chamado_id' => $chamado->id,
-                'comentario' => 'O chamado no. '. $vinculado->nro .'/' .$vinculado->created_at->year. ' foi vinculado à esse chamado',
+                'comentario' => 'O chamado no. ' . $vinculado->nro . '/' . $vinculado->created_at->year . ' foi vinculado à esse chamado',
             ]);
             // comentário no chamado vinculado
             Comentario::create([
                 'user_id' => \Auth::user()->id,
                 'chamado_id' => $vinculado->id,
-                'comentario' => 'Esse chamado foi vinculado ao chamado no. '. $chamado->nro .'/' .$chamado->created_at->year,
+                'comentario' => 'Esse chamado foi vinculado ao chamado no. ' . $chamado->nro . '/' . $chamado->created_at->year,
             ]);
 
             $request->session()->flash('alert-info', 'Chamado vinculado com sucesso');
 
-        }else {
+        } else {
             $request->session()->flash('alert-warning', 'Não é possível vincular o chamado à ele mesmo');
         }
         return back();
@@ -188,7 +190,7 @@ class ChamadoController extends Controller
      * Desvincula chamados
      */
     public function deleteChamadoVinculado(Request $request, Chamado $chamado, $id)
-    {   
+    {
         $chamado->vinculadosIda()->detach($id);
         $chamado->vinculadosVolta()->detach($id);
 
@@ -197,14 +199,14 @@ class ChamadoController extends Controller
         Comentario::create([
             'user_id' => \Auth::user()->id,
             'chamado_id' => $chamado->id,
-            'comentario' => 'O chamado no. '. $vinculado->nro .'/' .$vinculado->created_at->year. ' foi desvinculado desse chamado',
+            'comentario' => 'O chamado no. ' . $vinculado->nro . '/' . $vinculado->created_at->year . ' foi desvinculado desse chamado',
         ]);
 
         // comentário no chamado vinculado
         Comentario::create([
             'user_id' => \Auth::user()->id,
             'chamado_id' => $vinculado->id,
-            'comentario' => 'Esse chamado foi desvinculado do chamado no. '. $chamado->nro .'/' .$chamado->created_at->year,
+            'comentario' => 'Esse chamado foi desvinculado do chamado no. ' . $chamado->nro . '/' . $chamado->created_at->year,
         ]);
 
         $request->session()->flash('alert-info', 'Chamado desvinculado com sucesso');
@@ -219,11 +221,12 @@ class ChamadoController extends Controller
      */
     public function edit(Chamado $chamado)
     {
+        // reimplementar o edit ***********************
         $this->authorize('chamados.view', $chamado);
         $fila = $chamado->fila;
         $atendentes = [];
-        $complexidades = $this->complexidades;
-        $autor = $chamado->users()->wherePivot('funcao', 'Autor')->first();
+        $complexidades = Chamado::complexidades();
+        $autor = $chamado->users()->wherePivot('papel', 'Autor')->first();
         $form = JSONForms::generateForm($fila, $chamado);
         return view('chamados/edit', compact('autor', 'fila', 'chamado', 'atendentes', 'complexidades', 'form'));
     }
@@ -249,6 +252,8 @@ class ChamadoController extends Controller
         /*
         if(config('app.env') == 'production')
         Mail::send(new ChamadoMail($chamado,$user));
+
+        depois de atualizar, tem de registrar nos comentários
          */
 
         $request->session()->flash('alert-info', 'Chamado enviado com sucesso');
@@ -296,10 +301,10 @@ class ChamadoController extends Controller
 
                 /* Atribuir */
                 if (!empty($request->atribuido_para)) {
+                    die('desativado');
                     /* acho que o user deveria vir direto pelo form */
                     $atendente = User::where('codpes', $request->atribuido_para)->first();
-                    $chamado->users()->attach($atendente->id, ['funcao' => 'Atendente']);
-                    $chamado->users()->attach(\Auth::user()->id, ['funcao' => 'Atribuidor']);
+                    $chamado->users()->attach($atendente->id, ['papel' => 'Atendente']);
                     $chamado->status = 'Atribuído';
                 }
             } else {
@@ -312,7 +317,7 @@ class ChamadoController extends Controller
             $user->save();
         }
         $chamado->save();
-        $chamado->users()->attach($user->id, ['funcao' => 'Autor']);
+        $chamado->users()->attach($user->id, ['papel' => 'Autor']);
         return $chamado;
     }
 
@@ -323,17 +328,15 @@ class ChamadoController extends Controller
     {
         $this->authorize('admin');
         $chamado->complexidade = $request->complexidade;
-        $atendente = User::where('codpes', $request->codpes)->first();
+        $atendente = User::obterPorCodpes($request->codpes);
 
         # Se atendente já existe não vamos adicionar novamente
-        if ($chamado->users()->where(['user_id' => $atendente->id, 'funcao' => 'Atendente'])->exists()) {
+        if ($chamado->users()->where(['user_id' => $atendente->id, 'papel' => 'Atendente'])->exists()) {
             $request->session()->flash('alert-info', 'Atendente já existe');
             return back();
         }
 
-        $chamado->users()->attach($atendente->id, ['funcao' => 'Atendente']);
-        # Colocando no comentário a atribuição precisamos do papel de atribuidor??
-        #$chamado->users()->attach(\Auth::user()->id, ['funcao' => 'Atribuidor']);
+        $chamado->users()->attach($atendente->id, ['papel' => 'Atendente']);
         $chamado->status = 'Atribuído';
         $chamado->save();
 
@@ -347,8 +350,71 @@ class ChamadoController extends Controller
         return back();
     }
 
+    /**
+     * Salva o ano na sessão usada no index
+     */
+    public function mudaAno(Request $request)
+    {
+        $ano = $request->ano;
+        if ($ano != null || $ano != '') {
+            session(['ano' => $ano]);
+        }
+        return back();
+    }
+
+    /**
+     * Adicionar pessoas relacionadas ao chamado
+     * autorizado a qualquer um que tenha acesso ao chamado
+     * request->codpes = required, int
+     */
+    public function storePessoa(Request $request, Chamado $chamado)
+    {
+        $user = User::obterOuCriarPorCodpes($request->codpes);
+        $chamado->users()->attach($user, ['papel' => 'Observador']);
+
+        Comentario::create([
+            'user_id' => \Auth::user()->id,
+            'chamado_id' => $chamado->id,
+            'comentario' => 'O observador ' . $user->name . ' foi adicionado ao chamado.',
+        ]);
+
+        $request->session()->flash('alert-info', 'Observador adicionado com sucesso.');
+
+        return Redirect::to(URL::previous() . "#card_pessoas");
+    }
+
+    /**
+     * Remove pessoas relacionadas ao chamado
+     * Autorização: se for remover autor, ou atendente,somente para atendente ou admin
+     * se for observador, qualquer um que tenha acesso ao chamado
+     * $user = required
+     */
+    public function destroyPessoa(Request $request, Chamado $chamado, User $user)
+    {
+        $papel = $chamado->users()->where('users.id', $user->id)->first()->pivot->papel;
+        $chamado->users()->detach($user);
+
+        Comentario::create([
+            'user_id' => \Auth::user()->id,
+            'chamado_id' => $chamado->id,
+            'comentario' => 'O ' . strtolower($papel) . ' ' . $user->name . ' foi removido desse chamado.',
+        ]);
+        $request->session()->flash('alert-info', $papel . ' ' . $user->name . ' foi removido com sucesso.');
+
+        return Redirect::to(URL::previous() . "#card_pessoas");
+    }
+
+    /**
+     *
+     * desativados
+     *
+     *
+     *
+     *
+     */
     public function devolver(Chamado $chamado)
     {
+        return "desativado";
         $this->authorize('atendente');
         return view('chamados/devolver', compact('chamado'));
     }
@@ -403,22 +469,10 @@ class ChamadoController extends Controller
             $user = \Auth::user();
             $pivot->where([
                 ['user_id', $user->id],
-                ['funcao', 'Atendente'],
+                ['papel', 'Atendente'],
             ]);
         })->orderBy('created_at', 'desc')->paginate(10);
 
         return view('chamados/index', compact('chamados'));
-    }
-
-    /**
-     * Salva o ano na sessão usada no index
-     */
-    public function mudaAno(Request $request)
-    {
-        $ano = $request->ano;
-        if ($ano != null || $ano != '') {
-            session(['ano' => $ano]);
-        }
-        return back();
     }
 }

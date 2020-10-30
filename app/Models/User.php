@@ -96,8 +96,16 @@ class User extends Authenticatable
         return $user;
     }
 
-    public static function getByCodpes($codpes) {
+    public static function obterPorCodpes($codpes) {
         return User::where('codpes',$codpes)->first();
+    }
+
+    public static function obterOuCriarPorCodpes($codpes) {
+        $user = User::where('codpes', $codpes)->first();
+        if (empty($user)) {
+            $user = User::storeByCodpes($codpes);
+        }
+        return $user;
     }
 
     /**
@@ -112,13 +120,12 @@ class User extends Authenticatable
     }
 
     /**
-     * Relacionamento n:n com chamado, atributo funcao:
-     * - Atendente, Atribuidor, Autor, Observador
+     * Relacionamento n:n com chamado, atributo papel:
      */
     public function chamados()
     {
         return $this->belongsToMany('App\Models\Chamado', 'user_chamado')
-            ->withPivot('funcao')
+            ->withPivot('papel')
             ->withTimestamps();
     }
 

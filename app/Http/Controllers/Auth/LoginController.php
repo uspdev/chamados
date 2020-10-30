@@ -49,11 +49,10 @@ class LoginController extends Controller
     public function handleProviderCallback()
     {
         $userSenhaUnica = Socialite::driver('senhaunica')->user();
-        $user = User::where('codpes', $userSenhaUnica->codpes)->first();
-        if (is_null($user)) {
-            $user = new User;
-            $user->telefone = $userSenhaUnica->telefone;
-        }
+        $user = User::obterOuCriarPorCodpes($userSenhaUnica->codpes);
+        
+        // atualizar o telefone com a senha unica
+        $user->telefone = $userSenhaUnica->telefone;
 
         $admins_id = explode(',', config('chamados.admins'));
         if (in_array($userSenhaUnica->codpes, $admins_id)) {

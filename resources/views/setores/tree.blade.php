@@ -7,7 +7,7 @@
 @include('setores.partials.setor')
 @include('setores.partials.recursivo')
 
-@include('setores.partials.adicionar-pessoas-modal', ['modal' =>$modal_pessoa])
+@include('common.adicionar-pessoas-modal', ['modal' =>$modal_pessoa])
 
 @include('setores.partials.modal')
 @else
