@@ -68,7 +68,7 @@ Model:
             <td>{{ $row->setor->sigla }}</td>
             <td><a href="filas/{{ $row->id }}">{{ $row->nome }}</a></td>
             <td>{{ $row->descricao }}</td>
-            <td>{{ $row->estado }}</td>
+            <td> @include('filas.partials.status') </td>
 
         </tr>
         @endforeach
