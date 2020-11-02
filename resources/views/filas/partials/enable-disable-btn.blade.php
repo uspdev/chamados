@@ -1,4 +1,8 @@
-<input type="hidden" name="estado_fila" value="{{ $data->row->estado }}">
+{!! Form::open(['url'=>'filas/'.$row->id.'/estado', 'name' => 'form_estado']) !!}
+@method('post')
+@csrf
+
+<input type="hidden" name="estado_fila" value="{{ $row->estado }}">
 
 <div class="btn-group enable-disable-btn">
     <button class="btn btn-sm" name="elaboracao">
@@ -11,7 +15,8 @@
         Desativada
     </button>
 </div>
-
+{{ Form::hidden('novo_estado') }}
+{!! Form::close(); !!}
 @section('javascripts_bottom')
 @parent
 <script>
@@ -53,6 +58,8 @@
                 $(this).removeClass('disabled').removeClass('btn-secondary').addClass('btn-warning').addClass('active').blur();
                 $(this).parent().find('[name=desativada]').removeClass('active').removeClass('btn-danger').addClass('btn-secondary').addClass('disabled');
                 $(this).parent().find('[name=producao]').removeClass('active').removeClass('btn-success').addClass('btn-secondary').addClass('disabled');
+                $('.enable-disable-btn').parent().find('[name=novo_estado]').val('Em elaboração');
+                document.getElementById("form_estado").submit();
             }
         })
 
@@ -65,6 +72,8 @@
                 $(this).removeClass('disabled').removeClass('btn-secondary').addClass('btn-success').addClass('active').blur();
                 $(this).parent().find('[name=desativada]').removeClass('active').removeClass('btn-danger').addClass('btn-secondary').addClass('disabled');
                 $(this).parent().find('[name=elaboracao]').removeClass('active').removeClass('btn-warning').addClass('btn-secondary').addClass('disabled');
+                $('.enable-disable-btn').parent().find('[name=novo_estado]').val('Em produção');
+                document.getElementById("form_estado").submit();
             }
         })
 
@@ -77,6 +86,8 @@
                 $(this).removeClass('disabled').removeClass('btn-secondary').addClass('btn-danger').addClass('active').blur();
                 $(this).parent().find('[name=producao]').removeClass('active').removeClass('btn-success').addClass('btn-secondary').addClass('disabled');
                 $(this).parent().find('[name=elaboracao]').removeClass('active').removeClass('btn-warning').addClass('btn-secondary').addClass('disabled');
+                $('.enable-disable-btn').parent().find('[name=novo_estado]').val('Desativada');
+                document.getElementById("form_estado").submit();
             }
         })
 
