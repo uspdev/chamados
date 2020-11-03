@@ -18,6 +18,7 @@ class Fila extends Model
         'descricao',
         'template',
         'setor_id',
+        'estado'
     ];
 
     protected const fields = [

@@ -24,6 +24,7 @@ Route::resource('setores', SetorController::class);
 
 // FILAS
 Route::resource('filas', FilaController::class);
+Route::post('filas/{fila}/estado', [FilaController::class,'updateStatus']);
 Route::post('filas/{fila}/pessoas', [FilaController::class,'storePessoa']);
 Route::delete('filas/{fila}/pessoas/{id}', [FilaController::class,'destroyPessoa']);
 Route::get('filas/{fila}/template', [FilaController::class, 'createTemplate'])->name('filas.createtemplate');

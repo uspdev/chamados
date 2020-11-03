@@ -74,6 +74,14 @@ class FilaController extends Controller
         return back();
     }
 
+    public function updateStatus(Request $request, Fila $fila)
+    {
+        $fila->estado = $request->novo_estado;
+        $fila->save();
+        $request->session()->flash('alert-info', 'Fila atualizada com sucesso');
+        return back();
+    }
+
     public function createTemplate(Fila $fila)
     {
         $template = json_decode($fila->template, true);

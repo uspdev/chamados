@@ -3,6 +3,7 @@
 <?php 
 #dd($data->row->user);
 $data->model = 'App\Models\Fila';
+
 ?>
 
 @section('content')
@@ -16,8 +17,8 @@ $data->model = 'App\Models\Fila';
                 <div class="card-title h5 form-inline my-0">
                     <a href="filas">Filas</a> <i class="fas fa-angle-right mx-2"></i> ({{ $data->row->setor->sigla }}) {{ $data->row->nome }} |&nbsp;
                     @include('common.list-table-btn-edit', ['row'=>$data->row]) &nbsp;|&nbsp;
-
-                    @include('filas.partials.enable-disable-btn')
+                    
+                    @include('filas.partials.enable-disable-btn', ['row'=>$data->row])
 
                 </div>
             </div>
