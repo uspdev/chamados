@@ -31,7 +31,7 @@ class ChamadoSeeder extends Seeder
                 }',
                 'fila_id' => 1,
                 'observacao_tecnica' => 'Deve estar com a fonte queimada 2019',
-                'created_at' => '2019-10-26 15:50:44'
+                'created_at' => '2019-10-26 15:50:44',
             ],
             [
                 'nro' => 0,
@@ -64,7 +64,7 @@ class ChamadoSeeder extends Seeder
                 }',
                 'fila_id' => 1,
                 'observacao_tecnica' => 'Deve estar com a fonte queimada',
-            ],           
+            ],
         ];
 
         foreach ($chamados as $chamado) {
@@ -74,9 +74,8 @@ class ChamadoSeeder extends Seeder
                 return $cht;
             });
             # preenchendo relacionamento com users
-            $cht->users()->attach(User::first()->id, ['funcao' => 'Autor']);
-            #$cht->users()->attach(User::inRandomOrder()->first()->id, ['funcao' => 'Atribuidor']);
-            #$cht->users()->attach(User::inRandomOrder()->first()->id, ['funcao' => 'Atendente']);
+            $cht->users()->attach(User::first()->id, ['papel' => 'Autor']);
+            $cht->users()->attach(User::inRandomOrder()->first()->id, ['papel' => 'Observador']);
         }
 
         # relacionando dois chamados
@@ -86,10 +85,16 @@ class ChamadoSeeder extends Seeder
             // o FOR aqui é para que o proximo numero do chamado seja
             // pego corretamente.
             Chamado::factory(1)->create()->each(function ($chamado) {
-                $chamado->users()->attach(User::inRandomOrder()->first()->id, ['funcao' => 'Autor']);
+                $chamado->users()->attach(User::inRandomOrder()->first()->id, ['papel' => 'Autor']);
+
+                # Se não estiver em triagem vamos adicionar atendente
                 if ($chamado->status != 'Triagem') {
-                    $chamado->users()->attach(User::inRandomOrder()->first()->id, ['funcao' => 'Atribuidor']);
-                    $chamado->users()->attach(User::inRandomOrder()->first()->id, ['funcao' => 'Atendente']);
+                    $atendente_ids = $chamado->fila->users->pluck('id')->all();
+                    $chamado->users()->attach($atendente_ids[array_rand($atendente_ids)], ['papel' => 'Atendente']);
+                }
+                # vamos adicionar uma quantidade aleatória de observadores
+                for ($i = 0; $i < rand(0, 2); $i++) {
+                    $chamado->users()->attach(User::inRandomOrder()->first()->id, ['papel' => 'Observador']);
                 }
             });
         }

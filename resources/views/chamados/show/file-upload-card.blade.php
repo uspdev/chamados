@@ -8,7 +8,7 @@
     <div class="card-header h5 form-inline">
         Arquivos
         <label for="input_arquivo">
-            <span class="btn btn-outline-primary btn-sm ml-2"> <i class="fas fa-plus"></i> Adicionar</span>
+            <span class="btn btn-sm btn-light text-primary"> <i class="fas fa-plus"></i> Adicionar</span>
         </label> 
         <form id="form_arquivo" action="arquivos" method="post" enctype="multipart/form-data" class="w-100 d-inline-block">
             @csrf

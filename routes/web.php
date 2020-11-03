@@ -27,6 +27,8 @@ Route::resource('filas', FilaController::class);
 Route::post('filas/{fila}/estado', [FilaController::class,'updateStatus']);
 Route::post('filas/{fila}/pessoas', [FilaController::class,'storePessoa']);
 Route::delete('filas/{fila}/pessoas/{id}', [FilaController::class,'destroyPessoa']);
+Route::get('filas/{fila}/template', [FilaController::class, 'createTemplate'])->name('filas.createtemplate');
+Route::post('filas/{fila}/template', [FilaController::class, 'storeTemplate'])->name('filas.storetemplate');
 
 // USERS
 Route::get('search/partenome', [UserController::class,'partenome']);
@@ -34,17 +36,25 @@ Route::resource('users', UserController::class);
 Route::get('users/perfil/{perfil}', [UserController::class, 'trocarPerfil']);
 Route::get('users/{user}/assumir', [UserController::class, 'assumir']);
 
-// CHAMADOS
+// CHAMADOS - VINCULADOS
 Route::get('chamados/listarChamadosAjax', [ChamadoController::class,'listarChamadosAjax']);
 Route::post('chamados/{chamado}/vinculado', [ChamadoController::class,'storeChamadoVinculado']);
 Route::delete('chamados/{chamado}/vinculado/{id}', [ChamadoController::class,'deleteChamadoVinculado']);
+
+// CHAMADOS - ANOS
 Route::get('chamados/anos/{ano}', [ChamadoController::class,'mudaAno']);
+
+// CHAMADOS - USERS
+Route::post('chamados/{chamado}/pessoas', [ChamadoController::class,'storePessoa']);
+Route::delete('chamados/{chamado}/pessoas/{user}', [ChamadoController::class,'destroyPessoa']);
+
+// CHAMADOS
 Route::get('chamados/create', [ChamadoController::class, 'listaFilas']);
 Route::get('chamados/create/{fila}/', [ChamadoController::class, 'create'])->name('chamados.create');
 Route::post('chamados/create/{fila}/', [ChamadoController::class, 'store'])->name('chamados.store');
 Route::resource('chamados', ChamadoController::class)->except(['create', 'store']);
 
-Route::get('chamados/{chamado}/devolver', [ChamadoController::class,'devolver']);
+#Route::get('chamados/{chamado}/devolver', [ChamadoController::class,'devolver']);
 
 Route::post('triagem/{chamado}', [ChamadoController::class,'triagemStore']);
 

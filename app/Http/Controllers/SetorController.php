@@ -35,17 +35,6 @@ class SetorController extends Controller
         # para o form de adicionar pessoas
         $modal_pessoa['url'] = 'setores';
         $modal_pessoa['title'] = 'Adicionar pessoa';
-        $modal_pessoa['fields'] = [
-            [
-                'name' => 'codpes',
-                'label' => 'Nome',
-                'type' => 'select',
-                'model' => 'Setor',
-                'data' => [],
-            ],
-        ];
-
-
 
         if ($request->ajax()) {
             // formatado para datatables
@@ -126,13 +115,9 @@ class SetorController extends Controller
      */
     public function storePessoa(Request $request, Setor $setor)
     {
-        #dd($request->codpes);
-        $user = User::where('codpes', $request->codpes)->first();
-        if (empty($user)) {
-            $user = User::storeByCodpes($request->codpes);
-        }
-        $setor->users()->detach($user->id);
-        $setor->users()->attach($user->id, ['funcao' => 'Gerente']);
+        $user = User::obterOuCriarPorCodpes($request->codpes);
+        $setor->users()->detach($user);
+        $setor->users()->attach($user, ['funcao' => 'Gerente']);
 
         $request->session()->flash('alert-info', 'Pessoa adicionada com sucesso');
 

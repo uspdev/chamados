@@ -54,10 +54,7 @@ class FilaController extends Controller
 
     public function storePessoa(Request $request, Fila $fila)
     {
-        $user = User::where('codpes', $request->codpes)->first();
-        if (empty($user)) {
-            $user = User::storeByCodpes($request->codpes);
-        }
+        $user = User::obterOuCriarPorCodpes($request->codpes);
         $fila->users()->detach($user->id);
         $fila->users()->attach($user->id, ['funcao' => $request->funcao]);
 
@@ -85,4 +82,45 @@ class FilaController extends Controller
         return back();
     }
 
+    public function createTemplate(Fila $fila)
+    {
+        $template = json_decode($fila->template, true);
+        return view('filas.template', compact('fila', 'template'));
+    }
+
+    public function storeTemplate(Request $request, Fila $fila)
+    {
+        $request->validate([
+            'template.*.label' => 'required',
+            'template.*.type' => 'required'
+        ]);
+        if (isset($request->campo)) {
+            $request->validate([
+                'new.label' => 'required',
+                'new.type' => 'required'
+            ]);
+        }
+        $template = [];
+        # remove null
+        if (isset($request->template)) {
+            foreach ($request->template as $campo => $atributos) {
+                $template[$campo] = array_filter($atributos, 'strlen');
+            }
+        }
+        # processa select
+        foreach ($template as $campo => $atributo) {
+            if ($atributo['type'] == 'select') {
+                $template[$campo]['value'] = json_decode($atributo['value'], true);
+            }
+        }
+        # adiciona o campo novo
+        $new = array_filter($request->new, 'strlen');
+        if (isset($request->campo)) {
+            $template[$request->campo] = $new;
+        }
+        $fila->template = json_encode($template);
+        $fila->save();
+
+        return back();
+    }
 }

@@ -15,12 +15,34 @@ class Chamado extends Model
     #protected $with = ['users', 'fila', 'setor'];
 
     /**
-     * relacionamento com users
+     * Constantes usadas no bd
      */
-    public function users()
+    public static function complexidades()
     {
-        return $this->belongsToMany('App\Models\User', 'user_chamado')
-            ->withPivot('funcao')->withTimestamps();
+        return ['baixa', 'média', 'alta'];
+    }
+
+    public static function status()
+    {
+        return ['Triagem', 'Atribuído', 'Fechado'];
+    }
+
+    # valores possiveis para pivot do relacionamento com users
+    public static function pessoaFuncoes()
+    {
+        return ['Atendente', 'Autor', 'Observador'];
+    }
+
+    /**
+     * A numeração do chamado é sequencial por ano.
+     * Para isso temos esse método que pega o próximo número disponível
+     * Para evitar inconsistência a criação do chamado deve ser dentro de
+     * uma transaction incluindo a obtenção do nro e o save no bd
+     */
+    public static function obterProximoNumero()
+    {
+        $nro = Chamado::whereYear('created_at', '=', date('Y'))->max('nro');
+        return $nro + 1;
     }
 
     /**
@@ -42,9 +64,19 @@ class Chamado extends Model
             ->withTimestamps();
     }
 
+    # Assesor que junta
     public function getVinculadosAttribute()
     {
         return $this->vinculadosIda->merge($this->vinculadosVolta);
+    }
+
+    /**
+     * relacionamento com users
+     */
+    public function users()
+    {
+        return $this->belongsToMany('App\Models\User', 'user_chamado')
+            ->withPivot('papel')->withTimestamps();
     }
 
     /**
@@ -64,25 +96,10 @@ class Chamado extends Model
     }
 
     /**
-     * Constantes usadas no bd
+     * Relacionamento com arquivos
      */
-    public static function complexidades()
+    public function arquivos()
     {
-        return ['baixa', 'média', 'alta'];
-    }
-
-    public static function status()
-    {
-        return ['Triagem', 'Atribuído', 'Fechado'];
-    }
-
-    public static function obterProximoNumero() {
-        $nro = Chamado::whereYear('created_at', '=', date('Y'))->max('nro');
-        $ano = date('Y');
-        return $nro+1;
-    }
-
-    public function arquivos() {
         return $this->hasMany('App\Models\Arquivo');
     }
 }
