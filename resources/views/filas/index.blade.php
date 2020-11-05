@@ -59,16 +59,14 @@ Model:
             <td>Setor</td>
             <td>Nome</td>
             <td>Descrição</td>
-            <td>Estado</td>
         </tr>
     </thead>
     <tbody>
         @foreach ($data->rows as $row)
         <tr>
             <td>{{ $row->setor->sigla }}</td>
-            <td><a href="filas/{{ $row->id }}">{{ $row->nome }}</a></td>
+            <td><a class="mr-2" href="filas/{{ $row->id }}">{{ $row->nome }}</a> @include('filas.partials.status')</td>
             <td>{{ $row->descricao }}</td>
-            <td> @include('filas.partials.status') </td>
 
         </tr>
         @endforeach
