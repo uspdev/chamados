@@ -8,6 +8,13 @@ $data->model = 'App\Models\Fila';
 
 @section('content')
 @parent
+<style>
+    .disable-links {
+        pointer-events: none;
+    }
+
+</style>
+
 @include('common.list-table-modal')
 <div class="row">
     <div class="col-md-12">
@@ -15,15 +22,19 @@ $data->model = 'App\Models\Fila';
         <div class="card card-outline card-primary">
             <div class="card-header">
                 <div class="card-title h5 form-inline my-0">
-                    <a href="filas">Filas</a> <i class="fas fa-angle-right mx-2"></i> ({{ $data->row->setor->sigla }}) {{ $data->row->nome }} |&nbsp;
-                    @include('common.list-table-btn-edit', ['row'=>$data->row])
+                    <a href="filas">Filas</a> <i class="fas fa-angle-right mx-2"></i> ({{ $fila->setor->sigla }}) {{ $fila->nome }} |
+
+                    <span class="ml-2 {{ $fila->estado == 'Desativada' ? 'disable-links': '' }}">
+                        @include('common.list-table-btn-edit', ['row'=>$fila])
+                    </span>
+
                     <span class="ml-auto">
-                        @include('filas.partials.enable-disable-btn', ['row'=>$data->row])
+                        @include('filas.partials.enable-disable-btn')
                     </span>
                 </div>
             </div>
 
-            <div class="card-body">
+            <div class="card-body {{ $fila->estado == 'Desativada' ? 'disable-links': '' }}">
                 <div class="row">
                     <div class="col-md-7">
                         @include('filas.partials.principal')

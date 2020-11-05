@@ -52,6 +52,24 @@ class FilaController extends Controller
         return redirect('/' . $this->data['url'] . '/' . $row->id);
     }
 
+        /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Request $request, Fila $fila)
+    {
+        $this->authorize('admin');
+
+        if ($request->ajax()) {
+            return $fila;
+        } else {
+            $this->data['row'] = $fila;
+            return view('filas.show')->with(['data' => (object) $this->data, 'fila'=>$fila]);
+        }
+    }
+
     public function storePessoa(Request $request, Fila $fila)
     {
         $user = User::obterOuCriarPorCodpes($request->codpes);
@@ -71,14 +89,6 @@ class FilaController extends Controller
         }
         $fila->users()->detach($id);
         $request->session()->flash('alert-info', 'Pessoa removida com sucesso');
-        return back();
-    }
-
-    public function updateStatus(Request $request, Fila $fila)
-    {
-        $fila->estado = $request->novo_estado;
-        $fila->save();
-        $request->session()->flash('alert-info', 'Fila atualizada com sucesso');
         return back();
     }
 
