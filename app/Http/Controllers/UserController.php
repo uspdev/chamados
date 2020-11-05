@@ -104,17 +104,29 @@ class UserController extends Controller
     {
         $this->authorize('admin');
         if ($request->term) {
-            $pessoas = \Uspdev\Replicado\Pessoa::nomeFonetico($request->term);
-            // limitando a resposta em 50 elementos
-            $pessoas = array_slice($pessoas, 0, 50);
-
-            // formatando para select2
             $results = [];
-            foreach ($pessoas as $pessoa) {
-                $results[] = [
-                    'text' => $pessoa['codpes'] . ' ' . $pessoa['nompesttd'],
-                    'id' => $pessoa['codpes'],
-                ];
+            if (config('chamados.usar_replicado')) {
+                $pessoas = \Uspdev\Replicado\Pessoa::nomeFonetico($request->term);
+                // limitando a resposta em 50 elementos
+                $pessoas = array_slice($pessoas, 0, 50);
+
+                // formatando para select2
+                foreach ($pessoas as $pessoa) {
+                    $results[] = [
+                        'text' => $pessoa['codpes'] . ' ' . $pessoa['nompesttd'],
+                        'id' => $pessoa['codpes'],
+                    ];
+                }
+            }
+            else {
+                $pessoas = User::where('name', 'like', '%'.$request->term.'%')->get()->take(1);
+
+                foreach ($pessoas as $pessoa) {
+                    $results[] = [
+                        'text' => $pessoa->codpes . ' ' . $pessoa->name,
+                        'id' => $pessoa->codpes
+                    ];
+                }
             }
             return response(compact('results'));
         }

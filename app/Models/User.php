@@ -90,8 +90,14 @@ class User extends Authenticatable
     public static function storeByCodpes($codpes) {
         $user = new User;
         $user->codpes = $codpes;
-        $user->email = Pessoa::email($codpes);
-        $user->name = Pessoa::dump($codpes)['nompesttd'];
+        if (config('chamados.usar_replicado')) {
+            $user->email = Pessoa::email($codpes);
+            $user->name = Pessoa::dump($codpes)['nompesttd'];
+        }
+        else {
+            $user->email = $codpes.'@usuarios.usp.br';
+            $user->name = $codpes;
+        }
         $user->save();
         return $user;
     }

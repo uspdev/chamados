@@ -59,10 +59,11 @@ class LoginController extends Controller
             $user->is_admin = true;
         }
 
-        // bind do dados retornados
-        $user->codpes = $userSenhaUnica->codpes;
-        $user->email = $userSenhaUnica->email;
-        $user->name = $userSenhaUnica->nompes;
+        // se fora do replicado, bind dos dados
+        if (!config('chamados.usar_replicado')) {
+            $user->email = $userSenhaUnica->email;
+            $user->name = $userSenhaUnica->nompes;
+        }
         $user->last_login_at = now();
 
         $user->save();
