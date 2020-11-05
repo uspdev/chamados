@@ -6,6 +6,7 @@ use App\Models\Comentario;
 use App\Models\Fila;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Gate;
 
 class Chamado extends Model
 {
@@ -31,6 +32,72 @@ class Chamado extends Model
     public static function pessoaFuncoes()
     {
         return ['Atendente', 'Autor', 'Observador'];
+    }
+
+    /**
+     * Se passado $ano, filtra por ele
+     * https://laravel.com/docs/8.x/eloquent#local-scopes
+     */
+    public function scopeAno($query, $ano)
+    {
+        if ($ano) {
+            return $query->whereYear('chamados.created_at', $ano);
+        } else {
+            return $query;
+        }
+    }
+
+    /**
+     * Se passado $nro, filtra por ele
+     * https://laravel.com/docs/8.x/eloquent#local-scopes
+     */
+    public function scopeNro($query, $nro)
+    {
+        if ($nro) {
+            return $query->where('nro', $nro)->latest();
+        } else {
+            return $query;
+        }
+    }
+
+    /**
+     * Se passado $assunto, faz busca tipo like e limita em 30 registros
+     * https://laravel.com/docs/8.x/eloquent#local-scopes
+     */
+    public function scopeAssunto($query, $assunto)
+    {
+        if ($assunto) {
+            $assunto = str_replace(' ', '%', $assunto);
+            return $query->where('assunto', 'LIKE', '%' . $assunto . '%')->take(30)->latest();
+        } else {
+            return $query;
+        }
+    }
+
+    /**
+     * Lista os chamados autorizados para o usuário
+     * considerando o ano e o perfil:
+     * Se perfilAdmin mostra todos os chamados
+     * Se perfilAtendente mostra todos os chamados das filas que atende
+     * Se perfilUsuario mostra os chamados que ele está cadastrado como criador ou observador
+     *
+     * Vamos considerar chamados de filas desativadas
+     */
+    public static function listarChamados($ano, $nro = null, $assunto = null)
+    {
+        if (Gate::allows('perfilAdmin')) {
+            $chamados = SELF::ano($ano)->nro($nro)->assunto($assunto)->get();
+        } elseif (Gate::allows('perfilAtendente')) {
+            $chamados = collect();
+            $filas = \Auth::user()->filas;
+            foreach ($filas as $fila) {
+                $chamados = $chamados->merge($fila->chamados()->ano($ano)->nro($nro)->assunto($assunto)->get());
+            }
+        } elseif (Gate::allows('perfilUsuario')) {
+            $chamados = \Auth::user()->chamados()->ano($ano)->nro($nro)->assunto($assunto)->get();
+        }
+
+        return $chamados;
     }
 
     /**
