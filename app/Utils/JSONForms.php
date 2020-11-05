@@ -11,8 +11,8 @@ class JSONForms
     public static function buildRules($request, $fila)
     {
         $template = json_decode($fila->template);
-        if ($template) {
             $validate = [];
+            if ($template) {
             foreach ($template as $key => $json) {
                 if (isset($json->validate)) {
                     $field = "extras.".$key;
