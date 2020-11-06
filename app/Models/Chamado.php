@@ -96,7 +96,7 @@ class Chamado extends Model
         } elseif (Gate::allows('perfilUsuario')) {
             $chamados = \Auth::user()->chamados()->ano($ano)->nro($nro)->assunto($assunto)->get();
         }
-
+        $chamados = $chamados->unique('id');
         return $chamados;
     }
 
