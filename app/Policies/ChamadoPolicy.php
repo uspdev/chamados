@@ -31,20 +31,27 @@ class ChamadoPolicy
      */
     public function view(User $user, Chamado $chamado)
     {
-        /* autor e atendentes */
+        /* autor, atendentes e observadores */
         foreach ($chamado->users as $u) {
             if ($user->codpes == $u->codpes) {
                 return true;
             }
         }
+
         /* admin */
-        if(Gate::allows('admin')){
+        if (Gate::allows('perfilAdmin')) {
             return true;
         }
 
-        /* isso aqui tem cara de que pode ser eliminado */
-        $atendentes = explode(',', config('chamados.atendentes'));
-        return in_array($user->codpes, $atendentes);
+        /* chamados vinculados -somente um nível */
+        foreach ($chamado->vinculados as $vinculado) {
+            /* autor, atendentes e observadores do vinculado */
+            foreach ($vinculado->users as $u) {
+                if ($user->codpes == $u->codpes) {
+                    return true;
+                }
+            }
+        }
     }
 
     /**
@@ -72,7 +79,7 @@ class ChamadoPolicy
                 return true;
             }
         }
-        if(Gate::allows('admin')){
+        if (Gate::allows('admin')) {
             return true;
         }
 
