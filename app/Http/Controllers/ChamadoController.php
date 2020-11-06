@@ -29,18 +29,12 @@ class ChamadoController extends Controller
      */
     public function index(Request $request)
     {
+        $this->authorize('chamados.viewAny');
+
         if (session('ano') == null) {
             session(['ano' => date('Y')]);
         }
-
-        $this->authorize('chamados.viewAny');
-
-        if (Gate::allows('admin')) {
-            $chamados = Chamado::whereYear('created_at', session('ano'))->get();
-        } else {
-            $chamados = \Auth::user()->chamados()->whereYear('chamados.created_at', session('ano'))->get();
-        }
-
+        $chamados = Chamado::listarChamados(session('ano'));
         return view('chamados/index', compact('chamados'));
     }
 
@@ -70,6 +64,7 @@ class ChamadoController extends Controller
         $setores = Setor::with(['filas' => function ($query) {
             $query->where('estado', 'Em produção');
         }])->orderBy('sigla')->get();
+
         return view('chamados.listafilas', compact('setores'));
     }
 
@@ -83,6 +78,8 @@ class ChamadoController extends Controller
     {
         $this->authorize('chamados.create');
         $request->validate(JSONForms::buildRules($request, $fila));
+
+        # transaction para não ter problema de inconsistência do DB
         $chamado = \DB::transaction(function () use ($request, $fila) {
             $chamado = new Chamado;
             $chamado->nro = Chamado::obterProximoNumero();
@@ -133,15 +130,15 @@ class ChamadoController extends Controller
     public function listarChamadosAjax(Request $request)
     {
         if ($request->term) {
-            //se buscar pelo numero do chamado (nro) independente do ano
             if (is_numeric($request->term)) {
-                $chamados = (Gate::allows('admin')) ? Chamado::where('nro', $request->term)->latest()->get() : \Auth::user()->chamados()->where('nro', $request->term)->latest()->get();
+                //busca pelo nro, independete do ano
+                $chamados = Chamado::listarChamados(null, $request->term, null);
             } else {
-                //se buscar por assunto pegamos os ultimos 30 chamados com esse assunto
-                $request->term = str_replace(" ", "%", $request->term);
-                $chamados = (Gate::allows('admin')) ? Chamado::where('assunto', 'LIKE', '%' . $request->term . '%')->latest()->take(30)->get() : \Auth::user()->chamados()->where('assunto', 'LIKE', '%' . $request->term . '%')->latest()->take(30)->get();
+                //busca pelo assunto, independete do ano
+                $chamados = Chamado::listarChamados(null, null, $request->term);
             }
 
+            # vamos formatar para datatables
             $results = [];
             foreach ($chamados as $chamado) {
                 $results[] = [
@@ -151,6 +148,7 @@ class ChamadoController extends Controller
             }
             return response(compact('results'));
         }
+        return null;
     }
 
     /**
