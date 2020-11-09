@@ -144,5 +144,6 @@ class SetorController extends Controller
         return Redirect::to(URL::previous() . "#".strtolower($setor->sigla));
 
     }
+    
 
 }
