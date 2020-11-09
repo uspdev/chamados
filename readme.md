@@ -111,3 +111,5 @@ Nesse escopo, os objetivos das mudanças em andamento são:
 
 1. Feito
 2. Foi criado a tabela filas para posteriormente migrar os dados de categorias
+
+
