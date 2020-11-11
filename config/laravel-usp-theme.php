@@ -100,6 +100,10 @@ return [
             'can' => 'perfilAtendente',
         ],
         [
+            'text' => '<i class="fas fa-question-circle"></i> Ajuda',
+            'url' => 'ajuda',
+        ],
+        [
             'text' => '<i class="fas fa-cog"></i>',
             'title' => 'Configurações',
             'submenu' => $configuracoes,
