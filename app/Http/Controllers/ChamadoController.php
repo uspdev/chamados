@@ -478,4 +478,5 @@ class ChamadoController extends Controller
 
         return view('chamados/index', compact('chamados'));
     }
+    
 }
