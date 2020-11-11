@@ -82,9 +82,9 @@ class ChamadoPolicy
         if (Gate::allows('admin')) {
             return true;
         }
-
-        $atendentes = explode(',', config('chamados.atendentes'));
-        return in_array($user->codpes, $atendentes);
+        return false;
+        #$atendentes = explode(',', config('chamados.atendentes'));
+        #return in_array($user->codpes, $atendentes);
     }
 
     /**
