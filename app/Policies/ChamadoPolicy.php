@@ -38,9 +38,13 @@ class ChamadoPolicy
             }
         }
 
-        /* admin */
-        if (Gate::allows('perfilAdmin')) {
-            return true;
+        # atendentes que estão na fila.
+        # NÃO está diferenciando gerente e atendente. Pode ser relevante em caso de triagem
+        $fila = $chamado->fila;
+        foreach ($fila->users as $u) {
+            if ($user->codpes == $u->codpes) {
+                return true;
+            }
         }
 
         /* chamados vinculados -somente um nível */
@@ -51,6 +55,11 @@ class ChamadoPolicy
                     return true;
                 }
             }
+        }
+
+        /* admin */
+        if (Gate::allows('perfilAdmin')) {
+            return true;
         }
     }
 
