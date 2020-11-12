@@ -5176,16 +5176,16 @@
         },
         {
             "name": "uspdev/replicado",
-            "version": "1.5.12",
+            "version": "1.5.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/uspdev/replicado.git",
-                "reference": "1029e5a93a7ce7362059262c2b417f55257ff265"
+                "reference": "f8a171f3a179d05caff2da5efb16134a40c9e714"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/uspdev/replicado/zipball/1029e5a93a7ce7362059262c2b417f55257ff265",
-                "reference": "1029e5a93a7ce7362059262c2b417f55257ff265",
+                "url": "https://api.github.com/repos/uspdev/replicado/zipball/f8a171f3a179d05caff2da5efb16134a40c9e714",
+                "reference": "f8a171f3a179d05caff2da5efb16134a40c9e714",
                 "shasum": ""
             },
             "require": {
@@ -5219,9 +5219,9 @@
             "homepage": "https://github.com/uspdev/replicado",
             "support": {
                 "issues": "https://github.com/uspdev/replicado/issues",
-                "source": "https://github.com/uspdev/replicado/tree/1.5.12"
+                "source": "https://github.com/uspdev/replicado/tree/1.5.13"
             },
-            "time": "2020-10-10T23:40:40+00:00"
+            "time": "2020-11-11T01:20:45+00:00"
         },
         {
             "name": "uspdev/senhaunica-socialite",
@@ -5349,16 +5349,16 @@
         },
         {
             "name": "voku/portable-ascii",
-            "version": "1.5.4",
+            "version": "1.5.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/voku/portable-ascii.git",
-                "reference": "87dc337d4200b32717dd3849fea846319e897658"
+                "reference": "80953678b19901e5165c56752d087fc11526017c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/voku/portable-ascii/zipball/87dc337d4200b32717dd3849fea846319e897658",
-                "reference": "87dc337d4200b32717dd3849fea846319e897658",
+                "url": "https://api.github.com/repos/voku/portable-ascii/zipball/80953678b19901e5165c56752d087fc11526017c",
+                "reference": "80953678b19901e5165c56752d087fc11526017c",
                 "shasum": ""
             },
             "require": {
@@ -5395,7 +5395,7 @@
             ],
             "support": {
                 "issues": "https://github.com/voku/portable-ascii/issues",
-                "source": "https://github.com/voku/portable-ascii/tree/1.5.4"
+                "source": "https://github.com/voku/portable-ascii/tree/1.5.6"
             },
             "funding": [
                 {
@@ -5419,7 +5419,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-11-08T21:15:15+00:00"
+            "time": "2020-11-12T00:07:28+00:00"
         }
     ],
     "packages-dev": [

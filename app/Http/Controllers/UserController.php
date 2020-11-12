@@ -102,11 +102,11 @@ class UserController extends Controller
 
     public function partenome(Request $request)
     {
-        $this->authorize('admin');
+        $this->authorize('usuario');
         if ($request->term) {
             $results = [];
             if (config('chamados.usar_replicado')) {
-                $pessoas = \Uspdev\Replicado\Pessoa::nomeFonetico($request->term);
+                $pessoas = \Uspdev\Replicado\Pessoa::procurarPorNome($request->term);
                 // limitando a resposta em 50 elementos
                 $pessoas = array_slice($pessoas, 0, 50);
 
