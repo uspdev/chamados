@@ -38,25 +38,30 @@ class ArquivoController extends Controller
     public function store(Request $request)
     {
 
+        
+
         $request->validate([
-            'arquivo'    => 'required|file|mimes:jpeg,jpg,png,pdf|max:2048',
+            'arquivo.*'    => 'required|mimes:jpeg,jpg,png,pdf|max:2048',
             'chamado_id' => 'required|integer|exists:chamados,id'
         ]);
+        
+        foreach ($request->arquivo as $arq) {
+            $arquivo = new Arquivo;
+            $arquivo->chamado_id = $request->chamado_id;
+            $arquivo->user_id = \Auth::user()->id;
+            $arquivo->nome_original = $arq->getClientOriginalName();
+            $arquivo->caminho = $arq->store('./arquivos/'. date("Y"));
+            $arquivo->mimeType = $arq->getClientMimeType();
+            $arquivo->save();
+            Comentario::create([
+                'user_id' => \Auth::user()->id,
+                'chamado_id' => $arquivo->chamado_id,
+                'comentario' => 'O arquivo '. $arquivo->nome_original .' foi adicionado.',
+            ]);
+        }
+        $request->session()->flash('alert-success', 'Arquivo(s) adicionado(s) com sucesso!');
 
-        $arquivo = new Arquivo;
-        $arquivo->chamado_id = $request->chamado_id;
-        $arquivo->user_id = \Auth::user()->id;
-        $arquivo->nome_original = $request->file('arquivo')->getClientOriginalName();
-        $arquivo->caminho = $request->file('arquivo')->store('./arquivos/'. date("Y"));
-        $arquivo->mimeType = $request->file('arquivo')->getClientMimeType();
-        $arquivo->save();
-
-        Comentario::create([
-            'user_id' => \Auth::user()->id,
-            'chamado_id' => $arquivo->chamado_id,
-            'comentario' => 'O arquivo '. $arquivo->nome_original .' foi adicionado.',
-        ]);
-        $request->session()->flash('alert-success', 'O arquivo '. $arquivo->nome_original .' foi adicionado com sucesso!');
+        
         return back();
     }
 
