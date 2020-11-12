@@ -124,7 +124,9 @@ class ChamadoController extends Controller
         $modal_pessoa['url'] = 'chamados';
         $modal_pessoa['title'] = 'Adicionar observador';
 
-        return view('chamados/show', compact('atendentes', 'autor', 'chamado', 'extras', 'template', 'vinculados', 'complexidades', 'modal_pessoa'));
+        $max_upload_size = ((int)env('APP_UPLOAD_MAX_FILESIZE'));
+
+        return view('chamados/show', compact('atendentes', 'autor', 'chamado', 'extras', 'template', 'vinculados', 'complexidades', 'modal_pessoa', 'max_upload_size'));
     }
 
     /**

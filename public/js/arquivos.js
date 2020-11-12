@@ -16,11 +16,11 @@ $(document).ready(function(){
                 $("#nome_arquivo ul").append(
                     '<li title="('+(files[i].size/1024).toFixed(2)+'KB)"><span id="'+i+'" class="btn text-danger btn-sm"> <i class="fas fa-times"></i></span>'+file_name+'</li>');
                 
-                if(files[i].size/1024/1024 > 2){
+                if(files[i].size/1024/1024 > parseInt($("#max_upload_size").val())){
                     $("#submit_form_arquivo").addClass('disabled');
                     $("#"+i).parent().addClass('disabled');
                     $("#"+i).parent().attr('data-toggle','tooltip'); 
-                    $("#"+i).parent().attr('title','O arquivo ultrapassa o tamanho máximo permitido de 2MB'); 
+                    $("#"+i).parent().attr('title','O arquivo ultrapassa o tamanho máximo permitido de '+$("#max_upload_size").val()+'MB'); 
                      
                 }
             }
@@ -63,7 +63,7 @@ function remove(){
     $("#submit_form_arquivo").removeClass('disabled');
     for (var i = 0; i < fileList.length; i++)
     {
-        if(files[i].size/1024/1024 > 2){
+        if(files[i].size/1024/1024 > parseInt($("#max_upload_size").val())){
             $("#submit_form_arquivo").addClass('disabled');
         }
     }

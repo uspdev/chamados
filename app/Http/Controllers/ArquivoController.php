@@ -39,9 +39,10 @@ class ArquivoController extends Controller
     {
 
         
+        $max_upload_size = ((int)env('APP_UPLOAD_MAX_FILESIZE'))*1024;
 
         $request->validate([
-            'arquivo.*'    => 'required|mimes:jpeg,jpg,png,pdf|max:2048',
+            'arquivo.*'    => "required|mimes:jpeg,jpg,png,pdf|max:$max_upload_size",
             'chamado_id' => 'required|integer|exists:chamados,id'
         ]);
         
