@@ -12,6 +12,8 @@ use App\Http\Controllers\ArquivoController;
 
 Route::get('/', [IndexController::class, 'index'])->name('home');
 Route::get('ajuda', [IndexController::class, 'ajuda']);
+Route::get('ajuda/manual_usuario', [IndexController::class, 'manual_usuario']);
+Route::get('ajuda/manual_atendente', [IndexController::class, 'manual_atendente']);
 
 /* Senha única */
 Route::get('login', [LoginController::class, 'redirectToProvider'])->name('login');

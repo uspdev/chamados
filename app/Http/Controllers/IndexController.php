@@ -1,21 +1,32 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
+use League\CommonMark\GithubFlavoredMarkdownConverter;
 
 class IndexController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->except(['index']);
+        #$this->middleware('auth')->except(['index','ajuda']);
     }
 
-    public function index(){
+    public function index()
+    {
         return view('index');
     }
 
-    public function ajuda() {
+    public function ajuda()
+    {
         return view('ajuda/index');
+    }
+
+    public function manual_usuario()
+    {
+        return view('ajuda/manual-usuario');
+    }
+
+    public function manual_atendente()
+    {
+        return view('ajuda/manual-atendente');
     }
 }
