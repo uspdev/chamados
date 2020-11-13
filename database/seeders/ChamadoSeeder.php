@@ -30,7 +30,7 @@ class ChamadoSeeder extends Seeder
                     "dia"    : "1951-07-22"
                 }',
                 'fila_id' => 1,
-                'observacao_tecnica' => 'Deve estar com a fonte queimada 2019',
+                'anotacoes' => 'Deve estar com a fonte queimada 2019',
                 'created_at' => '2019-10-26 15:50:44',
             ],
             [
@@ -47,7 +47,7 @@ class ChamadoSeeder extends Seeder
                     "dia"    : "1951-07-22"
                 }',
                 'fila_id' => 1,
-                'observacao_tecnica' => "Fonte queimada. Precisa trocar.",
+                'anotacoes' => "Fonte queimada. Precisa trocar.",
             ],
             [
                 'nro' => 0,
@@ -63,7 +63,7 @@ class ChamadoSeeder extends Seeder
                     "dia"    : "1951-07-22"
                 }',
                 'fila_id' => 1,
-                'observacao_tecnica' => 'Deve estar com a fonte queimada',
+                'anotacoes' => 'Deve estar com a fonte queimada',
             ],
         ];
 

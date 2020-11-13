@@ -243,13 +243,26 @@ class ChamadoController extends Controller
      */
     public function update(Request $request, Chamado $chamado)
     {
+        $this->authorize('chamados.update', $chamado);
+
+        # inicialmente atende a atualização do campo anotacoes via ajax
+        if ($request->ajax()) {
+            $chamado->fill($request->all());
+            $chamado->save();
+            return response()->json(['message'=>'success', 'data'=>$chamado]);
+        }
+
+        # acho que valida atendente
         if (Gate::allows('admin') and isset($request->atribuido_para)) {
             $request->validate([
                 'fila_id' => ['required|numeric'],
             ]);
         }
-        $request->validate(JSONForms::buildRules($request, $fila));
-        $this->authorize('chamados.view', $chamado);
+
+        # valida customforms
+        # está dando erro
+        $request->validate(JSONForms::buildRules($request, $chamado->fila));
+
         $chamado = $this->grava($chamado, $request);
 
         /*
@@ -261,6 +274,7 @@ class ChamadoController extends Controller
 
         $request->session()->flash('alert-info', 'Chamado enviado com sucesso');
         return redirect()->route('chamados.show', $chamado->id);
+
     }
 
     /**
@@ -478,5 +492,5 @@ class ChamadoController extends Controller
 
         return view('chamados/index', compact('chamados'));
     }
-    
+
 }
