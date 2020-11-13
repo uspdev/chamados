@@ -11,6 +11,14 @@
     white-space: nowrap;
     overflow: hidden;
 }
+.nome-arquivo .preview-files{
+    list-style-type: none;
+    padding-left: 0;
+}
+.nome-arquivo .preview-files li.disabled{
+    color: red;
+    opacity: 0.8;
+}
 .arquivos-lista{
     margin-top: 16px;
 }
@@ -89,4 +97,7 @@
 .editar-nome-arquivo-form .btns-wrapper button{
     width: 24px;
 }
-
+#submit_form_arquivo.disabled{
+    opacity: 0.6;
+    pointer-events: none;
+}
