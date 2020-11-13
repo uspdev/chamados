@@ -46,7 +46,7 @@
                         console.log($('#anotacoes_form').find('textarea').val())
                         if (data.message == 'success') {
                             $status.attr('class', 'badge badge-secondary').html('<i class="fas fa-save"></i> Salvo');
-                            # vamos ocultar depois de 5s
+                            // vamos ocultar depois de 5s
                             setTimeout(function() {
                                 $status.hide('blind', {}, 500)
                             }, 5000)
