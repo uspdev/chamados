@@ -3,15 +3,7 @@
 @section('title', 'Chamado')
 
 @section('content_header')
-@stop
-
-@section('javascripts_bottom')
-@parent
-<script>
-    //CKEDITOR.replace('comentario');
-
-</script>
-@stop
+@endsection
 
 @section('content')
 @parent
@@ -36,22 +28,22 @@
             <div class="col-md-4">
                 {{-- Painel direito --}}
                 @include('chamados.show.atendente')
-                @include('chamados.show.observacao')
             </div>
         </div>
     </div>
 </div>
 <div class="row">
     <div class="col-md-4">
-        @include('chamados.show.comentarios-card')
+        @include('chamados.show.card-comentarios')
     </div>
     <div class="col-md-4">
-        @include('chamados.show.file-upload-card')
-        @include('chamados.show.pessoas')
+        @include('chamados.show.card-file-upload')
+        @include('chamados.show.card-pessoas')
     </div>
     <div class="col-md-4">
-        @include('chamados.show.vinculados')
+        @include('chamados.show.card-vinculados')
+        @includewhen(Gate::check('perfilAtendente') || Gate::check('perfilAdmin'),'chamados.show.card-anotacoes-atendente')
     </div>
 </div>
 
-@stop
+@endsection

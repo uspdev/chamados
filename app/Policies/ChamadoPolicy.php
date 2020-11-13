@@ -83,6 +83,10 @@ class ChamadoPolicy
      */
     public function update(User $user, Chamado $chamado)
     {
+        # em principio vamos deixar igual ao view
+        # mas vinculados seria acesso leitura somente
+        return SELF::view($user, $chamado);
+
         foreach ($chamado->users as $u) {
             if ($user->codpes == $u->codpes) {
                 return true;

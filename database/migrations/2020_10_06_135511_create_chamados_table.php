@@ -30,8 +30,8 @@ class CreateChamadosTable extends Migration
             $table->enum('complexidade', ['baixa', 'média','alta'])->nullable();
             $table->json('extras')->nullable();
 
-            # este campo de observação técnica deverá ficar visível somente para atendentes.
-            $table->text('observacao_tecnica')->nullable();
+            # este campo de anotações deverá ficar visível somente para atendentes.
+            $table->text('anotacoes')->nullable();
 
             /* Relacionamentos */
             $table->foreignId('fila_id')->constrained('filas');

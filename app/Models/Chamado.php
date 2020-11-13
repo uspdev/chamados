@@ -15,6 +15,9 @@ class Chamado extends Model
     #testar eager load para minimizar db hits
     #protected $with = ['users', 'fila', 'setor'];
 
+    # para atribuição em massa
+    protected $fillable = ['assunto', 'descricao', 'anotacoes'];
+
     /**
      * Constantes usadas no bd
      */
