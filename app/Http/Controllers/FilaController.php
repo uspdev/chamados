@@ -83,7 +83,7 @@ class FilaController extends Controller
     public function destroyPessoa(Request $request, Fila $fila, $id)
     {
         $currentUser = \Auth::user();
-        if ($currentUser->id == $id) {
+        if ($currentUser->id == $id and !$currentUser->is_admin) {
         $request->session()->flash('alert-warning', 'Não é possível remover a si mesmo.');
             return back();
         }
