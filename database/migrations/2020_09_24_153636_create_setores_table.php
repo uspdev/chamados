@@ -18,6 +18,8 @@ class CreateSetoresTable extends Migration
             $table->string('sigla', 15);
             $table->string('nome', 255);
             $table->foreignId('setor_id')->nullable()->constrained('setores');
+            $table->integer('cod_set_replicado')->nullable();
+            $table->integer('cod_set_pai_replicado')->nullable();
             $table->timestamps();
         });
     }
