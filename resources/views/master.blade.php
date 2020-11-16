@@ -12,7 +12,6 @@
 @section('javascripts_bottom')
 @parent
 <script src="js/atendimento.js"></script>
-<script src="https://cdn.ckeditor.com/4.12.1/standard/ckeditor.js"></script>
 @endsection
 
 @section('content')

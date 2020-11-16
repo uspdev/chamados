@@ -90,14 +90,19 @@ class Chamado extends Model
     {
         if (Gate::allows('perfilAdmin')) {
             $chamados = SELF::ano($ano)->nro($nro)->assunto($assunto)->get();
-        } elseif (Gate::allows('perfilAtendente')) {
+        } 
+        elseif (Gate::allows('perfilAtendente')) {
             $chamados = collect();
             $filas = \Auth::user()->filas;
             foreach ($filas as $fila) {
                 $chamados = $chamados->merge($fila->chamados()->ano($ano)->nro($nro)->assunto($assunto)->get());
             }
-        } elseif (Gate::allows('perfilUsuario')) {
+        } 
+        elseif (Gate::allows('perfilUsuario')) {
             $chamados = \Auth::user()->chamados()->ano($ano)->nro($nro)->assunto($assunto)->get();
+        } 
+        else {
+            $chamados = collect();
         }
         $chamados = $chamados->unique('id');
         return $chamados;
