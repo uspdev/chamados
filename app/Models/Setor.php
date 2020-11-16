@@ -16,12 +16,16 @@ class Setor extends Model
         'sigla',
         'nome',
         'setor_id',
+        'cod_set_replicado',
+        'cod_set_pai_replicado'
     ];
 
     public const rules = [
         'sigla' => ['required', 'max:15'],
         'nome' => ['required', 'max:255'],
         'setor_id' => '',
+        'cod_set_replicado' => '',
+        'cod_set_pai_replicado' => '',
     ];
 
     public const funcoes = ['Gerente', 'Colaborador'];
