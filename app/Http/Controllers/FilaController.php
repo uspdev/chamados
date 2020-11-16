@@ -14,7 +14,7 @@ class FilaController extends Controller
     protected $data = [
         'title' => 'Filas',
         'url' => 'filas', // caminho da rota do resource
-        'modal' => false,
+        'modal' => true,
         'showId' => false,
         'viewBtn' => true,
         'editBtn' => false,

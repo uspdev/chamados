@@ -62,53 +62,53 @@ $trocarPerfil = [
         'can' => 'trocarPerfil',
     ],
 ];
-$configuracoes = array_merge($admin,$trocarPerfil);
+$configuracoes = array_merge($admin, $trocarPerfil);
+
+$menu = [
+    [
+        'text' => 'Novo Chamado',
+        'url' => 'chamados/create',
+        'can' => 'chamados.create',
+    ],
+    [
+        'text' => 'Meus Chamados',
+        'url' => 'chamados',
+        'can' => 'chamados.create',
+    ],
+];
+
+$right_menu = [
+    [
+        'text' => '<span class="badge badge-danger">Admin</span>',
+        'url' => '',
+        'can' => 'perfilAdmin',
+    ],
+    [
+        'text' => '<span class="badge badge-warning">Atendente</span>',
+        'url' => '',
+        'can' => 'perfilAtendente',
+    ],
+    [
+        'text' => '<i class="fas fa-question-circle"></i> Ajuda',
+        'url' => 'ajuda',
+    ],
+    [
+        'text' => '<i class="fas fa-cog"></i>',
+        'title' => 'Configurações',
+        'submenu' => $configuracoes,
+        'align' => 'right',
+        'can' => 'atendente',
+    ],
+];
 
 return [
-    'title' => env('APP_NAME'),
-    'dashboard_url' => config('app.url'),
+    'title' => config('app.name'),
+    #skins (requer LARAVEL-USP-THEME v2)
+    'skin' => env('USP_THEME_SKIN', 'uspdev'),
+    'app_url' => config('app.url'),
     'logout_method' => 'POST',
     'logout_url' => 'logout',
     'login_url' => 'login',
-    'menu' => [
-        [
-            'text' => 'Novo Chamado',
-            'url' => 'chamados/create',
-            'can' => 'chamados.create',
-        ],
-        [
-            'text' => 'Meus Chamados',
-            'url' => 'chamados',
-            'can' => 'chamados.create',
-        ],
-        [
-            'text' => 'Filas',
-            'url' => '',
-            'can' => 'admin',
-            'submenu' => $filas,
-        ],
-    ],
-    'right_menu' => [
-        [
-            'text' => '<span class="badge badge-danger">Admin</span>',
-            'url' => '',
-            'can' => 'perfilAdmin',
-        ],
-        [
-            'text' => '<span class="badge badge-warning">Atendente</span>',
-            'url' => '',
-            'can' => 'perfilAtendente',
-        ],
-        [
-            'text' => '<i class="fas fa-question-circle"></i> Ajuda',
-            'url' => 'ajuda',
-        ],
-        [
-            'text' => '<i class="fas fa-cog"></i>',
-            'title' => 'Configurações',
-            'submenu' => $configuracoes,
-            'align' => 'right',
-            'can' => 'atendente',
-        ],
-    ],
+    'menu' => $menu,
+    'right_menu' => $right_menu,
 ];
