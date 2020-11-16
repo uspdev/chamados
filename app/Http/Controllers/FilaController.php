@@ -66,7 +66,8 @@ class FilaController extends Controller
             return $fila;
         } else {
             $this->data['row'] = $fila;
-            return view('filas.show')->with(['data' => (object) $this->data, 'fila'=>$fila]);
+            $config = json_decode($fila->config);
+            return view('filas.show')->with(['data' => (object) $this->data, 'fila'=>$fila, 'config'=>$config]);
         }
     }
 
