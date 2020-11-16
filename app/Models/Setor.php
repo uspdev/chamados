@@ -63,10 +63,10 @@ class Setor extends Model
 
     public static function allToSelect()
     {
-        $rows = SELF::select('id', 'sigla')->get()->toArray();
+        $rows = SELF::select('id', 'sigla', 'nome')->get()->toArray();
         $ret = [];
         foreach ($rows as $row) {
-            $ret[$row['id']] = $row['sigla'];
+            $ret[$row['id']] = $row['sigla'].' - '.$row['nome'];
         }
         return $ret;
     }
