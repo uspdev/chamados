@@ -10,7 +10,7 @@ class Fila extends Model
     use HasFactory;
 
     protected $attributes = [
-        'estado' => 'Em elaboração'
+        'estado' => 'Em elaboração',
     ];
 
     protected $fillable = [
@@ -18,7 +18,7 @@ class Fila extends Model
         'descricao',
         'template',
         'setor_id',
-        'estado'
+        'estado',
     ];
 
     protected const fields = [
@@ -67,7 +67,7 @@ class Fila extends Model
                 'name' => 'funcao',
                 'label' => 'Função',
                 'type' => 'select',
-                'options' => ['Gerente','Atendente'],
+                'options' => ['Gerente', 'Atendente'],
                 'data' => [],
             ],
         ];
@@ -81,6 +81,13 @@ class Fila extends Model
     public static function estados()
     {
         return ['Em elaboração', 'Em produção', 'Desativada'];
+    }
+
+    public function getConfigAttribute($value)
+    {
+        $value = $value ? json_decode($value) : new \StdClass;
+        $value->triagem = isset($value->triagem) ? $value->triagem : true;
+        return $value;
     }
 
     /**
