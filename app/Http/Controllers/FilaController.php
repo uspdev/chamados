@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FilaRequest;
 use App\Models\Fila;
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Http\Requests\FilaRequest;
 
 class FilaController extends Controller
 {
@@ -52,7 +52,34 @@ class FilaController extends Controller
         return redirect('/' . $this->data['url'] . '/' . $row->id);
     }
 
-        /**
+       /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, Fila $fila)
+    {
+        $this->authorize('admin');
+
+        $fila->fill($request->all());
+        
+        if ($request->config) {
+            $config = $request->config;
+            $fila->config = json_encode($config);
+        }
+
+        $fila->save();
+
+        #dd($fila);
+
+        $request->session()->flash('alert-info', 'Dados editados com sucesso');
+        return back();
+        //return redirect('/' . $this->data['url']);
+    }
+
+    /**
      * Display the specified resource.
      *
      * @param  int  $id
@@ -66,8 +93,11 @@ class FilaController extends Controller
             return $fila;
         } else {
             $this->data['row'] = $fila;
-            $config = json_decode($fila->config);
-            return view('filas.show')->with(['data' => (object) $this->data, 'fila'=>$fila, 'config'=>$config]);
+
+            #$config = $fila->config ? json_decode($fila->config) : new \StdClass;
+            #$config->triagem = isset($config->triagem) ? $config->triagem : false;
+
+            return view('filas.show')->with(['data' => (object) $this->data, 'fila' => $fila]);
         }
     }
 
@@ -85,7 +115,7 @@ class FilaController extends Controller
     {
         $currentUser = \Auth::user();
         if ($currentUser->id == $id and !$currentUser->is_admin) {
-        $request->session()->flash('alert-warning', 'Não é possível remover a si mesmo.');
+            $request->session()->flash('alert-warning', 'Não é possível remover a si mesmo.');
             return back();
         }
         $fila->users()->detach($id);
@@ -103,12 +133,12 @@ class FilaController extends Controller
     {
         $request->validate([
             'template.*.label' => 'required',
-            'template.*.type' => 'required'
+            'template.*.type' => 'required',
         ]);
         if (isset($request->campo)) {
             $request->validate([
                 'new.label' => 'required',
-                'new.type' => 'required'
+                'new.type' => 'required',
             ]);
         }
         $template = [];

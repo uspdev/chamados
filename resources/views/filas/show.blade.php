@@ -3,7 +3,6 @@
 <?php 
 #dd($data->row->user);
 $data->model = 'App\Models\Fila';
-
 ?>
 
 @section('content')
