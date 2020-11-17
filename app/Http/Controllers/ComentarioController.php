@@ -63,9 +63,6 @@ class ComentarioController extends Controller
             if($request->status == 'Fechado') {
                 $comentario->chamado->status = 'Fechado';
                 $comentario->chamado->fechado_em = Carbon::now();
-                if(Gate::allows('admin') and is_null($chamado->atribuido_para)){
-                    $comentario->chamado->atribuido_para = $user->codpes ?? null;
-                }
             }
             elseif($request->status == 'Triagem') {
                 $comentario->chamado->status = 'Triagem';
