@@ -59,6 +59,7 @@ class ArquivoController extends Controller
                 'user_id' => \Auth::user()->id,
                 'chamado_id' => $arquivo->chamado_id,
                 'comentario' => 'O arquivo '. $arquivo->nome_original .' foi adicionado.',
+                'tipo' => 'system',
             ]);
         }
         $request->session()->flash('alert-success', 'Arquivo(s) adicionado(s) com sucesso!');
@@ -114,7 +115,8 @@ class ArquivoController extends Controller
             'user_id' => \Auth::user()->id,
             'chamado_id' => $arquivo->chamado_id,
             'comentario' => 'O arquivo '. $nome_antigo .' foi renomeado para '.$request->nome_arquivo.'.',
-        ]);
+            'tipo' => 'system',
+            ]);
         request()->session()->flash('alert-success','Arquivo renomeado com sucesso!');
         return back();
     }
@@ -132,7 +134,8 @@ class ArquivoController extends Controller
             'user_id' => \Auth::user()->id,
             'chamado_id' => $arquivo->chamado_id,
             'comentario' => 'O arquivo '. $arquivo->nome_original .' foi excluído.',
-        ]);
+            'tipo' => 'system',
+            ]);
         $request->session()->flash('alert-success', 'O arquivo '. $arquivo->nome_original .' foi excluído com sucesso!');
 
         return back();

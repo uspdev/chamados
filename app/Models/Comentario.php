@@ -11,7 +11,11 @@ class Comentario extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'chamado_id', 'comentario'];
+    protected $fillable = ['user_id', 'chamado_id', 'comentario', 'tipo'];
+
+    public static function tipos() {
+        return ['user', 'system'];
+    }
 
     public function user(){
         return $this->belongsTo(User::class);

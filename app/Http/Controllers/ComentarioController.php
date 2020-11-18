@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Comentario;
-use App\Models\Chamado;
-use Illuminate\Http\Request;
-use Carbon\Carbon;
 use App\Mail\ComentarioMail;
+use App\Models\Chamado;
+use App\Models\Comentario;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Mail;
-use Illuminate\Support\Facades\Gate;
 
 class ComentarioController extends Controller
 {
@@ -46,10 +45,10 @@ class ComentarioController extends Controller
      */
     public function store(Request $request, Chamado $chamado)
     {
-        $this->authorize('chamados.view',$chamado);
+        $this->authorize('chamados.view', $chamado);
 
         $request->validate([
-          'comentario'  => ['required'],
+            'comentario' => ['required'],
         ]);
         $user = \Auth::user();
 
@@ -57,16 +56,15 @@ class ComentarioController extends Controller
         $comentario->comentario = $request->comentario;
         $comentario->chamado_id = $chamado->id;
         $comentario->user_id = $user->id;
+        $comentario->tipo = 'user';
         $comentario->save();
 
-        if(isset($request->status)) {
-            if($request->status == 'Fechado') {
+        if (isset($request->status)) {
+            if ($request->status == 'Fechado') {
                 $comentario->chamado->status = 'Fechado';
                 $comentario->chamado->fechado_em = Carbon::now();
-            }
-            elseif($request->status == 'Triagem') {
+            } elseif ($request->status == 'Triagem') {
                 $comentario->chamado->status = 'Triagem';
-                $comentario->atribuido_para = null;
                 $comentario->chamado->fechado_em = null;
             }
             $comentario->chamado->save();

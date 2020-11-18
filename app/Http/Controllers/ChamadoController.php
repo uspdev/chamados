@@ -124,8 +124,7 @@ class ChamadoController extends Controller
         $modal_pessoa['url'] = 'chamados';
         $modal_pessoa['title'] = 'Adicionar observador';
 
-        $max_upload_size = env('APP_UPLOAD_MAX_FILESIZE') != null ? ((int)env('APP_UPLOAD_MAX_FILESIZE')) : 16;
-        
+        $max_upload_size = env('APP_UPLOAD_MAX_FILESIZE') != null ? ((int) env('APP_UPLOAD_MAX_FILESIZE')) : 16;
 
         return view('chamados/show', compact('atendentes', 'autor', 'chamado', 'extras', 'template', 'vinculados', 'complexidades', 'modal_pessoa', 'max_upload_size'));
     }
@@ -176,12 +175,14 @@ class ChamadoController extends Controller
                 'user_id' => \Auth::user()->id,
                 'chamado_id' => $chamado->id,
                 'comentario' => 'O chamado no. ' . $vinculado->nro . '/' . $vinculado->created_at->year . ' foi vinculado à esse chamado',
+                'tipo' => 'system',
             ]);
             // comentário no chamado vinculado
             Comentario::create([
                 'user_id' => \Auth::user()->id,
                 'chamado_id' => $vinculado->id,
                 'comentario' => 'Esse chamado foi vinculado ao chamado no. ' . $chamado->nro . '/' . $chamado->created_at->year,
+                'tipo' => 'system',
             ]);
 
             $request->session()->flash('alert-info', 'Chamado vinculado com sucesso');
@@ -206,6 +207,7 @@ class ChamadoController extends Controller
             'user_id' => \Auth::user()->id,
             'chamado_id' => $chamado->id,
             'comentario' => 'O chamado no. ' . $vinculado->nro . '/' . $vinculado->created_at->year . ' foi desvinculado desse chamado',
+            'tipo' => 'system',
         ]);
 
         // comentário no chamado vinculado
@@ -213,6 +215,7 @@ class ChamadoController extends Controller
             'user_id' => \Auth::user()->id,
             'chamado_id' => $vinculado->id,
             'comentario' => 'Esse chamado foi desvinculado do chamado no. ' . $chamado->nro . '/' . $chamado->created_at->year,
+            'tipo' => 'system',
         ]);
 
         $request->session()->flash('alert-info', 'Chamado desvinculado com sucesso');
@@ -252,7 +255,7 @@ class ChamadoController extends Controller
         if ($request->ajax()) {
             $chamado->fill($request->all());
             $chamado->save();
-            return response()->json(['message'=>'success', 'data'=>$chamado]);
+            return response()->json(['message' => 'success', 'data' => $chamado]);
         }
 
         # acho que valida atendente
@@ -364,6 +367,7 @@ class ChamadoController extends Controller
             'user_id' => \Auth::user()->id,
             'chamado_id' => $chamado->id,
             'comentario' => 'O chamado foi atribuído para o(a) atendente ' . $atendente->name,
+            'tipo' => 'system',
         ]);
 
         $request->session()->flash('alert-info', 'Atendente adicionado com sucesso');
@@ -396,6 +400,7 @@ class ChamadoController extends Controller
             'user_id' => \Auth::user()->id,
             'chamado_id' => $chamado->id,
             'comentario' => 'O observador ' . $user->name . ' foi adicionado ao chamado.',
+            'tipo' => 'system',
         ]);
 
         $request->session()->flash('alert-info', 'Observador adicionado com sucesso.');
@@ -418,6 +423,7 @@ class ChamadoController extends Controller
             'user_id' => \Auth::user()->id,
             'chamado_id' => $chamado->id,
             'comentario' => 'O ' . strtolower($papel) . ' ' . $user->name . ' foi removido desse chamado.',
+            'tipo' => 'system',
         ]);
         $request->session()->flash('alert-info', $papel . ' ' . $user->name . ' foi removido com sucesso.');
 

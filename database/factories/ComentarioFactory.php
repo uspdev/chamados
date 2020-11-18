@@ -2,9 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Chamado;
 use App\Models\Comentario;
 use App\Models\User;
-use App\Models\Chamado;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ComentarioFactory extends Factory
@@ -23,8 +23,10 @@ class ComentarioFactory extends Factory
      */
     public function definition()
     {
+        $tipos = Comentario::tipos();
         return [
             'comentario' => $this->faker->sentence,
+            'tipo' => $tipos[array_rand($tipos)],
             'user_id' => User::inRandomOrder()->first()->id,
             'chamado_id' => Chamado::inRandomOrder()->first()->id,
         ];

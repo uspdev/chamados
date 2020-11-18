@@ -34,7 +34,8 @@
 </div>
 <div class="row">
     <div class="col-md-4">
-        @include('chamados.show.card-comentarios')
+        @include('chamados.show.card-comentarios-user')
+        @include('chamados.show.card-comentarios-system')
     </div>
     <div class="col-md-4">
         @include('chamados.show.card-file-upload')

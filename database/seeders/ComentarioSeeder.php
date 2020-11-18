@@ -17,11 +17,13 @@ class ComentarioSeeder extends Seeder
         $comentarios = [
             [
                 'comentario' => 'Primeiro comentário',
+                'tipo' => 'user',
                 'user_id' => 1,
                 'chamado_id' => 1,
             ],
             [
                 'comentario' => 'Segundo comentário',
+                'tipo' => 'user',
                 'user_id' => 1,
                 'chamado_id' => 1,
             ],

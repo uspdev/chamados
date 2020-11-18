@@ -7,9 +7,9 @@
         @endcan
     </div>
     <div class="card-body">
-        @forelse ($chamado->comentarios->sortByDesc('created_at') as $comentario)
+        @forelse ($chamado->comentarios->where('tipo','user')->sortByDesc('created_at') as $comentario)
         <div class="">
-            {{ $comentario->user->name }} - {{ Carbon\Carbon::parse($comentario->created_at)->format('d/m/Y H:i') }}
+            <b>{{ $comentario->user->name }}</b> - {{ Carbon\Carbon::parse($comentario->created_at)->format('d/m/Y H:i') }}
         </div>
         <div class="ml-2">
             <p class="card-text">{!! $comentario->comentario !!}</p>
