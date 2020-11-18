@@ -41,7 +41,12 @@
 </div>
 
 <br>
-<span class="font-weight-bold"><i class="fab fa-wpforms"></i> Formulário</span> <a href="{{ route('filas.createtemplate', $data->row->id) }}" class="btn btn-light btn-sm text-primary"><i class="fas fa-edit"></i> Editar</a>
+<span class="font-weight-bold"><i class="fab fa-wpforms"></i> Formulário</span>
+<a href="{{ route('filas.createtemplate', $data->row->id) }}" class="btn btn-light btn-sm text-primary"><i class="fas fa-edit"></i> Editar</a>
+@can('perfilAdmin')
+@include('filas.partials.template-btn-show-json-modal')        
+@endcan
+
 <div class="ml-2">
     @if(!empty($data->row->template))
     @foreach(json_decode($data->row->template) as $field=>$value)
