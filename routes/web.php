@@ -30,6 +30,7 @@ Route::resource('filas', FilaController::class);
 #Route::post('filas/{fila}/estado', [FilaController::class,'updateStatus']);
 Route::post('filas/{fila}/pessoas', [FilaController::class,'storePessoa']);
 Route::delete('filas/{fila}/pessoas/{id}', [FilaController::class,'destroyPessoa']);
+Route::post('filas/{fila}/template_json', [FilaController::class,'storeTemplateJson']);
 Route::get('filas/{fila}/template', [FilaController::class, 'createTemplate'])->name('filas.createtemplate');
 Route::post('filas/{fila}/template', [FilaController::class, 'storeTemplate'])->name('filas.storetemplate');
 
