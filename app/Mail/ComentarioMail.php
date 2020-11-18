@@ -2,30 +2,30 @@
 
 namespace App\Mail;
 
-use App\Models\User;
 use App\Models\Comentario;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Uspdev\Replicado\Pessoa;
 
 class ComentarioMail extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $comentario;
-    public $user;
+    public $chamado;
+    public $autor;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Comentario $comentario, User $user)
+    public function __construct(Comentario $comentario)
     {
         $this->comentario = $comentario;
-        $this->user = $user;
+        $this->chamado = $comentário->chamado;
+        $this->autor = $this->chamado->users()->wherePivot('papel', 'Autor')->first();
     }
 
     /**
@@ -35,24 +35,21 @@ class ComentarioMail extends Mailable
      */
     public function build()
     {
-        /* email de quem abriu o chamado */
-        $codpes = $this->comentario->chamado->user->codpes;
-        $email = Pessoa::emailusp($codpes);
-        $emails = [$email];
-
-        /* pessoas envlvidas nos comentários */
-        foreach($this->comentario->chamado->comentarios as $comment){
-            $emails[] = $comment->user->email;
+        $emails = [];
+        /* pessoas envolvidas no chamado */
+        foreach ($this->chamado->users()->wherePivot('papel', '!=', 'Autor') as $user) {
+            $emails[] = $user->email;
         }
-        $emails = array_unique($emails);
 
         // Monta título do email
-        $subject = "Novo comentário no chamado #{$this->comentario->chamado->id}";
+        $app = config('app.name');
+        $chamado_ano = $this->chamado->created_at->format('Y');
+        $subject = "[{$app}] Novo comentário no chamado {$this->chamado->nro}/{$chamado_ano}";
 
         return $this->view('emails.comentario')
-                    ->from(config('mail.username'))
-                    ->to($email)
-                    ->bcc($emails)
-                    ->subject($subject);
+            ->from(config('mail.username'))
+            ->to($this->autor->email)
+            ->bcc($emails)
+            ->subject($subject);
     }
 }
