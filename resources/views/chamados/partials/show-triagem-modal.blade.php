@@ -1,4 +1,4 @@
-<button type="button" class="btn btn-sm btn-light text-primary" onclick="add_modal_form()">
+<button type="button" class="btn btn-sm btn-light text-primary" data-toggle="modal" data-target="#common-modal-form">
     <i class="fas fa-plus"></i> Adicionar
 </button>
 <!-- Modal -->
@@ -62,21 +62,3 @@
         {{-- <div class="modal-footer"></div> --}}
     </div>
 </div>
-
-@section('javascripts_bottom')
-@parent
-<script>
-    $(document).ready(function() {
-
-        var pessoasForm = $('#common-modal-form');
-
-        add_modal_form = function() {
-            pessoasForm.modal();
-        }
-
-
-
-    })
-
-</script>
-@endsection

@@ -1,7 +1,18 @@
-<div class="card bg-light mb-3">
-    <div class="card-header h5">
+@section('styles')
+@parent
+<style>
+    #card-comentarios-user {
+        border: 1px solid coral;
+        border-top: 3px solid coral;
+    }
+
+</style>
+@endsection
+
+<div class="card bg-light mb-3 comentarios-user" id="card-comentarios-user">
+    <div class="card-header">
         Comentários
-        <span class="badge badge-pill badge-primary">{{ $chamado->comentarios->count() }}</span>
+        <span class="badge badge-pill badge-primary">{{ $chamado->comentarios->where('tipo','user')->count() }}</span>
         @can('update',$chamado)
         @include('chamados.show.comentarios-add-modal')
         @endcan

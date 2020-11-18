@@ -1,5 +1,16 @@
+@section('styles')
+@parent
+<style>
+    #card-pessoas {
+        border: 1px solid brown;
+        border-top: 3px solid brown;
+    }
+
+</style>
+@endsection
+
 <a name="card_pessoas"></a>
-<div class="card bg-light mb-3">
+<div class="card bg-light mb-3" id="card-pessoas">
     <div class="card-header">
         Pessoas
         <span class="badge badge-pill badge-primary">{{ $chamado->users->count() }}</span>

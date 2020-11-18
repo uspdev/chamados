@@ -1,7 +1,7 @@
 .card-header {
     /* .25 é equivalente a py-1 */
     /* .5 é equivalente a py-2 */
-    padding-top: .25em;
-    padding-bottom: .25em;
+    padding-top: 0.25em;
+    padding-bottom: 0.25em;
     font-size: 1.25em;
 }

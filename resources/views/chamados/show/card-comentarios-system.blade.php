@@ -1,7 +1,19 @@
-<div class="card bg-light mb-3">
-    <div class="card-header h5">
+@section('styles')
+@parent
+<style>
+    #card-comentarios-system {
+        font-size: 0.95em;
+        border: 1px solid gray;
+        border-top: 3px solid gray;
+    }
+
+</style>
+@endsection
+
+<div class="card bg-light mb-3 border-black" id="card-comentarios-system">
+    <div class="card-header">
         Registros do chamado
-        <span class="badge badge-pill badge-primary">{{ $chamado->comentarios->count() }}</span>
+        <span class="badge badge-pill badge-primary">{{ $chamado->comentarios->where('tipo','system')->count() }}</span>
     </div>
     <div class="card-body">
         @forelse ($chamado->comentarios->where('tipo','system')->sortByDesc('created_at') as $comentario)

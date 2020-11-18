@@ -20,7 +20,7 @@ $data->model = 'App\Models\Fila';
 
         <div class="card card-outline card-primary">
             <div class="card-header">
-                <div class="card-title h5 form-inline my-0">
+                <div class="card-title form-inline my-0">
                     <a href="filas">Filas</a> <i class="fas fa-angle-right mx-2"></i> ({{ $fila->setor->sigla }}) {{ $fila->nome }} |
 
                     <span class="ml-2 {{ $fila->estado == 'Desativada' ? 'disable-links': '' }}">

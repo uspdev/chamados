@@ -1,5 +1,16 @@
-<div class="card bg-light mb-3">
-    <div class="card-header h5">
+@section('styles')
+@parent
+<style>
+    #card-vinculados {
+        border: 1px solid chocolate;
+        border-top: 3px solid chocolate;
+    }
+
+</style>
+@endsection
+
+<div class="card bg-light mb-3" id="card-vinculados">
+    <div class="card-header">
         Chamados Vinculados
         @can('update',$chamado)
         @include('chamados.show.vinculados-add-modal')

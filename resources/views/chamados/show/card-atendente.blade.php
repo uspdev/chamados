@@ -1,12 +1,33 @@
-<div class="card bg-light mb-3" id="anotacoes">
+<div class="card bg-light border-warning mb-3" id="card-atendente">
     <div class="card-header bg-warning">
-        Anotações
+        Atendente
         <span title="Esta região é visível somente para o atendente, para que possa fazer anotações técnicas" class="ajuda" data-toggle="tooltip"><i class="fas fa-question-circle"></i></span>
         <span class="status">
             <span class="badge badge-light"></span>
         </span>
     </div>
     <div class="card-body">
+        <div class="mb-3">
+            <span class="font-weight-bold">Atendente</span>
+            @if($chamado->fila->config->triagem)
+            @can('atendente')
+            @includeWhen($chamado->status != 'Fechado', 'chamados.partials.show-triagem-modal', ['modalTitle'=>'Triagem', 'url'=>'ok'])
+            @endcan<br>
+            @else
+            <a href="" class="btn btn-sm btn-light text-primary" ><i class="fas fa-plus"></i> Atender</a>
+            @endif
+
+            <div class="ml-2">
+                @if($atendentes->count())
+                @foreach($atendentes as $atendente)
+                {{ $atendente->name }} @include('chamados.show.user-detail', ['user'=>$atendente])<br>
+                @endforeach
+                <span class="text-muted">Complexidade</span>: {{ $chamado->complexidade }}<br>
+                @else
+                Não atribuído
+                @endif
+            </div>
+        </div>
         <form id="anotacoes_form" name="anotacoes_form" method="POST" action="chamados/{{$chamado->id}}">
             @csrf
             @method('PUT')
@@ -21,8 +42,8 @@
     $(function() {
 
         // {{-- https://stackoverflow.com/questions/931252/ajax-autosave-functionality --}}
-        var $status = $('#anotacoes').find('.status')
-            , $anotacoes = $('#anotacoes').find('textarea')
+        var $status = $('#card-atendente').find('.status')
+            , $anotacoes = $('#anotacoes_form').find('textarea')
             , timeoutId
             , timeout = 1500
 
@@ -35,7 +56,7 @@
 
             // Set timer that will save comment when it fires.
             timeoutId = setTimeout(function() {
-                $form = $('#anotacoes').find('form')
+                $form = $('#anotacoes_form')
                 // Make ajax call to save data.
                 $.ajax({
                     url: $form.attr('action')

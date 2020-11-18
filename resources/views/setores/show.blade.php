@@ -8,7 +8,7 @@
 
         <div class="card card-outline card-primary">
             <div class="card-header">
-                <div class="card-title h5 form-inline my-0">
+                <div class="card-title form-inline my-0">
                     <a href="setores">Setores</a> <i class="fas fa-angle-right mx-2"></i> ({{ $setor->sigla }}) {{ $setor->nome }} |&nbsp;
 
 

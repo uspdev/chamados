@@ -8,46 +8,57 @@
 </div>
 
 <table class="table table-striped meus-chamados">
-  <thead>
-    <tr>
-      <th>Nro</th>
-      <th>Fila</th>
-      <th>Chamado</th>
-      <th>Status</th>
-      <th>Aberto em</th>
-    </tr>
-  </thead>
-  <tbody>
+    <thead>
+        <tr>
+            <th>Nro</th>
+            <th>Assunto</th>
+            <th>Fila</th>
+            <th class="text-right">Aberto em</th>
+        </tr>
+    </thead>
+    <tbody>
 
-    @forelse ($chamados->sortByDesc('created_at') as $chamado)
-    <tr>
-      <td> {{ $chamado->nro }}/{{ Carbon\Carbon::parse($chamado->created_at)->format('Y') }} </td>
-      <td> ({{ $chamado->fila->setor->sigla }}) {{ $chamado->fila->nome }}</td>
-      <td> <a href="chamados/{{$chamado->id}}"> {!! $chamado->assunto !!} </a></td>
-      <td> @include('chamados.partials.status') </td>
-      <td> {{ Carbon\Carbon::parse($chamado->created_at)->format('d/m/Y H:i') }}</td>
-    </tr>
-    @empty
-    <tr>
-      <td colspan="6">Não há chamados</td>
-    </tr>
-    @endforelse
+        @forelse ($chamados as $chamado)
+        <tr>
+            <td> {{ $chamado->nro }}</td>
+            <td>
+                @include('chamados.partials.status-small')
+                <a href="chamados/{{$chamado->id}}"> {!! $chamado->assunto !!} </a>
+                @include('chamados.partials.status-muted')
+            </td>
+            <td> ({{ $chamado->fila->setor->sigla }}) {{ $chamado->fila->nome }}</td>
+            <td class="text-right">
+                @if($chamado->created_at->format('d/m/Y') == date('d/m/Y'))
+                {{ Carbon\Carbon::parse($chamado->created_at)->format('H:i') }}
+                @else
+                {{ Carbon\Carbon::parse($chamado->created_at)->format('d \d\e M.') }}
+                @endif
+            </td>
+        </tr>
+        @empty
+        <tr>
+            <td colspan="6">Não há chamados</td>
+        </tr>
+        @endforelse
 
-  </tbody>
+    </tbody>
 </table>
 
 @section('javascripts_bottom')
 @parent
 <script>
-  $(document).ready(function() {
+    $(document).ready(function() {
 
-    oTable = $('.meus-chamados').DataTable({
-      dom: 't',
-      "paging": false,
-      "sort": true,
-      "order": [[4, "desc"]] 
-    });
+        oTable = $('.meus-chamados').DataTable({
+            dom: 't'
+            , "paging": false
+            , "sort": true
+            , "order": [
+                [0, "desc"]
+            ]
+        });
 
-  })
+    })
+
 </script>
 @endsection
