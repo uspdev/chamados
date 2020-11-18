@@ -123,6 +123,16 @@ class FilaController extends Controller
         return back();
     }
 
+    public function storeTemplateJson(Request $request, Fila $fila)
+    {
+        $this->authorize('admin');
+        $newjson = $request->template;
+        $fila->template = $newjson;
+        $fila->save();
+        $request->session()->flash('alert-info', 'Template salvo com sucesso');
+        return back();
+    }
+    
     public function createTemplate(Fila $fila)
     {
         $template = json_decode($fila->template, true);
