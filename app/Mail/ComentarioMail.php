@@ -24,7 +24,7 @@ class ComentarioMail extends Mailable
     public function __construct(Comentario $comentario)
     {
         $this->comentario = $comentario;
-        $this->chamado = $comentário->chamado;
+        $this->chamado = $comentario->chamado;
         $this->autor = $this->chamado->users()->wherePivot('papel', 'Autor')->first();
     }
 
@@ -37,7 +37,7 @@ class ComentarioMail extends Mailable
     {
         $emails = [];
         /* pessoas envolvidas no chamado */
-        foreach ($this->chamado->users()->wherePivot('papel', '!=', 'Autor') as $user) {
+        foreach ($this->chamado->users()->wherePivot('papel', '!=', 'Autor')->get() as $user) {
             $emails[] = $user->email;
         }
 

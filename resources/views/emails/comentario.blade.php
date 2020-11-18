@@ -1,7 +1,7 @@
 <div>
     <b>Autor(a):</b> <br>
     Número USP: {{ $autor->codpes }} <br>
-    Nome: {{ $autor->name }}
+    Nome: {{ $autor->name }}<br>
     Chamado: #{{ $chamado->nro }}/{{ $chamado->created_at->format('Y') }}
 </div>
 
@@ -10,7 +10,7 @@
 <b>Por:</b> {{ $comentario->user->name }}<br>
 
 <div>
-    <b>Comentário:</b> {!! $comentario->comentario !!}
+    <b>Comentário:</b> {!! nl2br($comentario->comentario) !!}
 </div>
 
 Sistema de chamados. Para comentar/responder acesse:

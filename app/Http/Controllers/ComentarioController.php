@@ -57,19 +57,20 @@ class ComentarioController extends Controller
         $comentario->chamado_id = $chamado->id;
         $comentario->user_id = $user->id;
         $comentario->tipo = 'user';
+        $comentario->save();
 
         if (isset($request->status)) {
             if ($request->status == 'Fechado') {
-                $comentario->chamado->status = 'Fechado';
-                $comentario->chamado->fechado_em = Carbon::now();
+                $chamado->status = 'Fechado';
+                $chamado->fechado_em = Carbon::now();
             } elseif ($request->status == 'Triagem') {
-                $comentario->chamado->status = 'Triagem';
-                $comentario->chamado->fechado_em = null;
+                $chamado->status = 'Triagem';
+                $chamado->fechado_em = null;
             }
         }
-        $comentario->chamado->save();
+        $chamado->save();
 
-        if(config('app.env') == 'production')
+        #if(config('app.env') == 'production')
           Mail::send(new ComentarioMail($comentario));
 
         $request->session()->flash('alert-info', 'Comentário enviado com sucesso');
