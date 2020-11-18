@@ -24,7 +24,11 @@
                     <div class="form-group row">
                         {{ Form::label('template', 'Json', ['class' => 'col-form-label col-sm-2']) }}
                         <div class="col-sm-10">
+                            @if($data->row['template'] == null)
+                            {{ Form::textarea('template', $data->row['template'],['id' => 'template', 'class' => 'form-control', 'rows' => '15'] ) }}
+                            @else
                             {{ Form::textarea('template', json_encode(json_decode($data->row['template']), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE),['id' => 'template', 'class' => 'form-control', 'rows' => '15'] ) }}
+                            @endif
                         </div>
                     </div>
 
