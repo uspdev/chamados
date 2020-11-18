@@ -165,9 +165,16 @@ class ChamadoController extends Controller
      */
     public function storeChamadoVinculado(Request $request, Chamado $chamado)
     {
+        $this->authorize('chamados.create');
+
         if ($request->slct_chamados != $chamado->id) {
+
+            $request->validate([
+                'acesso' => ['in:Leitura'],
+            ]);
+
             $chamado->vinculadosIda()->detach($request->slct_chamados);
-            $chamado->vinculadosIda()->attach($request->slct_chamados, ['acesso' => $request->tipo]);
+            $chamado->vinculadosIda()->attach($request->slct_chamados, ['acesso' => $request->acesso]);
 
             $vinculado = Chamado::find($request->slct_chamados);
             //comentário no chamado principal
@@ -190,7 +197,7 @@ class ChamadoController extends Controller
         } else {
             $request->session()->flash('alert-warning', 'Não é possível vincular o chamado à ele mesmo');
         }
-        return back();
+        return Redirect::to(URL::previous() . "#card_vinculados");
     }
 
     /**
@@ -198,10 +205,13 @@ class ChamadoController extends Controller
      */
     public function deleteChamadoVinculado(Request $request, Chamado $chamado, $id)
     {
+        $this->authorize('chamados.create');
+
         $chamado->vinculadosIda()->detach($id);
         $chamado->vinculadosVolta()->detach($id);
 
         $vinculado = Chamado::find($id);
+        #dd($vinculado);
         //comentário no chamado principal
         Comentario::create([
             'user_id' => \Auth::user()->id,
@@ -219,7 +229,7 @@ class ChamadoController extends Controller
         ]);
 
         $request->session()->flash('alert-info', 'Chamado desvinculado com sucesso');
-        return back();
+        return Redirect::to(URL::previous() . "#card_vinculados");
     }
 
     /**
