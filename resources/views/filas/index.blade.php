@@ -53,9 +53,9 @@ Model:
 
 <?php #dd($data); ?>
 
-<table class="table table-striped table-sm table-hover datatable-nopagination">
+<table class="table table-striped table-hover datatable-nopagination">
     <thead>
-        <tr>
+        <tr>            
             <td>Setor</td>
             <td>Nome</td>
             <td>Descrição</td>
@@ -63,11 +63,10 @@ Model:
     </thead>
     <tbody>
         @foreach ($data->rows as $row)
-        <tr>
+        <tr>            
             <td>{{ $row->setor->sigla }}</td>
-            <td><a class="mr-2" href="filas/{{ $row->id }}">{{ $row->nome }}</a> @include('filas.partials.status')</td>
+            <td>@include('filas.partials.status-small') <a class="mr-2" href="filas/{{ $row->id }}">{{ $row->nome }}</a>@include('filas.partials.status-muted')</td>
             <td>{{ $row->descricao }}</td>
-
         </tr>
         @endforeach
     </tbody>
