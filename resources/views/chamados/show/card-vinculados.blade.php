@@ -9,6 +9,7 @@
 </style>
 @endsection
 
+<a name="card_vinculados"></a>
 <div class="card bg-light mb-3" id="card-vinculados">
     <div class="card-header">
         Chamados Vinculados
@@ -26,7 +27,7 @@
                     {{ Illuminate\Support\Str::limit($vinculado->assunto, 30, '...') }}
                 </a>
                 <span class="hidden-btn d-none">
-                    @include('common.btn-delete-sm', ['action'=>'chamados/'.$chamado->nro.'/vinculado/'.$vinculado->nro])
+                    @include('common.btn-delete-sm', ['action'=>'chamados/'.$chamado->id.'/vinculado/'.$vinculado->id])
                 </span>
             </li>
             @empty
