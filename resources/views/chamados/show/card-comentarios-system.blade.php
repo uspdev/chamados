@@ -25,7 +25,7 @@
         </div>
         <hr />
         @empty
-        Não há comentários
+        Não há registros
         @endforelse
     </div>
 </div>
