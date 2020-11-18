@@ -26,13 +26,14 @@
                         </div>
                     </div>
 
-                    <div class="form-group row">
+{{--                     <div class="form-group row">
                         {{ Form::label('tipo', 'Tipo de Acesso', ['class' => 'col-form-label col-sm-2']) }}
                         <div class="col-sm-10">
                             {{ Form::select('tipo',['leitura'=>'Leitura', 'escrita'=>'Escrita'], 'Leitura', 
                             ['class' => 'form-control col-3']) }}
                         </div>
-                    </div>
+                    </div> --}}
+                    <input type="hidden" name="acesso" value="Leitura">
 
                     <div class="text-right">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
