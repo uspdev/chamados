@@ -47,7 +47,7 @@ class ComentarioMail extends Mailable
         $subject = "[{$app}] Novo comentário no chamado {$this->chamado->nro}/{$chamado_ano}";
 
         return $this->view('emails.comentario')
-            ->from(config('mail.username'))
+            ->from(config('mail.from.address'))
             ->to($this->autor->email)
             ->bcc($emails)
             ->subject($subject);
