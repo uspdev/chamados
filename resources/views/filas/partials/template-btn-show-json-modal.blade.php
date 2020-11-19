@@ -1,11 +1,9 @@
-<button type="button" class="btn btn-sm btn-light text-primary" onclick="add_modal_form()">
+<button type="button" class="btn btn-sm btn-light text-primary" onclick="json_modal_form()">
     <i class="fas fa-copy"></i> Editar Json
 </button>
-<?php
-#dd($data);
-?>
+
 <!-- Modal -->
-<div class="modal fade" id="common-modal-form" data-backdrop="static" tabindex="-1" aria-labelledby="modalShowJson" aria-hidden="true">
+<div class="modal fade" id="json-modal-form" data-backdrop="static" tabindex="-1" aria-labelledby="modalShowJson" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -50,9 +48,8 @@
 <script>
     $(document).ready(function() {
 
-        var jsonForm = $('#common-modal-form');
-
-        add_modal_form = function() {
+        var jsonForm = $('#json-modal-form');
+        json_modal_form = function() {
             jsonForm.modal();
         }
 
