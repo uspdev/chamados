@@ -100,10 +100,7 @@ class ChamadoController extends Controller
      */
     public function show(Chamado $chamado)
     {
-        # ao negar acesso à um chamado seria interessante mostrar uma mensagem ?
-        # é o caso de chamado vinculado, está configurado para mostrar
-        # os vinculados diretos, mas não os subsequentes. Se o fulano clicar no
-        # vinculado do vinculado dá o 403
+        # Vamos negar acesso com mensagem apropriada
         if (!Gate::allows('chamados.view', $chamado)) {
             return view('sem-acesso');
         }
