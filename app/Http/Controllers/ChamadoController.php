@@ -260,7 +260,7 @@ class ChamadoController extends Controller
         # valida customforms
         # está dando erro
         //$request->validate(JSONForms::buildRules($request, $chamado->fila));
-        
+
         $chamado = $this->grava($chamado, $request);
 
         /*
@@ -332,7 +332,9 @@ class ChamadoController extends Controller
             $user->save();
         }
         $chamado->save();
-        $chamado->users()->attach($user->id, ['papel' => 'Autor']);
+        if (!count($chamado->users()->wherePivot('papel', 'Autor')->get())) {
+            $chamado->users()->attach($user->id, ['papel' => 'Autor']);
+        }
         return $chamado;
     }
 
@@ -439,14 +441,14 @@ class ChamadoController extends Controller
      */
 
     /**
-    * **** Passou a ser feito via modal ****
-    * Show the form for editing the specified resource.
-    *
-    * @param  \App\Chamado  $chamado
-    * @return \Illuminate\Http\Response
-    */
+     * **** Passou a ser feito via modal ****
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Chamado  $chamado
+     * @return \Illuminate\Http\Response
+     */
     public function edit(Chamado $chamado)
-    {   
+    {
         $this->authorize('chamados.view', $chamado);
         $fila = $chamado->fila;
         $atendentes = [];
