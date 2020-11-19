@@ -16,10 +16,11 @@
         Arquivos
         <label for="input_arquivo">
             <span class="btn btn-sm btn-light text-primary"> <i class="fas fa-plus"></i> Adicionar</span>
-            <span data-toggle="tooltip" data-html="true" title="Tamanho máximo de cada arquivo: {{$max_upload_size}}MB ">
-                <i class="fas fa-question-circle text-primary"></i>
-            </span>
+
         </label>
+        <span data-toggle="tooltip" data-html="true" title="Tamanho máximo de cada arquivo: {{$max_upload_size}}MB ">
+                <i class="fas fa-question-circle text-secondary"></i>
+            </span>
         <form id="form_arquivo" action="arquivos" method="post" enctype="multipart/form-data" class="w-100 d-inline-block">
             @csrf
             <input type="hidden" name="chamado_id" value="{{$chamado->id}}">
@@ -95,7 +96,7 @@
             </ul>
         </div>
         @else
-        Não há arquivos
+        Sem arquivos anexados
         @endif
 
     </div>
