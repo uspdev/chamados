@@ -366,7 +366,7 @@ class ChamadoController extends Controller
         # Se atendente já existe não vamos adicionar novamente
         if ($chamado->users()->where(['user_id' => $atendente->id, 'papel' => 'Atendente'])->exists()) {
             $request->session()->flash('alert-info', 'Atendente já existe');
-            return back();
+            return Redirect::to(URL::previous() . "#card_atendente");
         }
 
         $chamado->users()->attach($atendente->id, ['papel' => 'Atendente']);
@@ -381,7 +381,7 @@ class ChamadoController extends Controller
         ]);
 
         $request->session()->flash('alert-info', 'Atendente adicionado com sucesso');
-        return back();
+        return Redirect::to(URL::previous() . "#card_atendente");
     }
 
     /**
@@ -429,13 +429,20 @@ class ChamadoController extends Controller
         $papel = $chamado->users()->where('users.id', $user->id)->first()->pivot->papel;
         $chamado->users()->detach($user);
 
+        # verificar se sobrou algum atendente, se não, muda o status
+        if (!count($chamado->users()->wherePivot('papel', 'Atendente')->get())) {
+            $chamado->status = 'Triagem';
+            $chamado->save();
+        }
+
+        $msg = 'O ' . strtolower($papel) . ' ' . $user->name . ' foi removido desse chamado.';
         Comentario::create([
             'user_id' => \Auth::user()->id,
             'chamado_id' => $chamado->id,
-            'comentario' => 'O ' . strtolower($papel) . ' ' . $user->name . ' foi removido desse chamado.',
+            'comentario' => $msg,
             'tipo' => 'system',
         ]);
-        $request->session()->flash('alert-info', $papel . ' ' . $user->name . ' foi removido com sucesso.');
+        $request->session()->flash('alert-info', $msg);
 
         return Redirect::to(URL::previous() . "#card_pessoas");
     }
