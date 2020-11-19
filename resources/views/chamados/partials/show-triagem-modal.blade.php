@@ -1,5 +1,5 @@
 <button type="button" class="btn btn-sm btn-light text-primary" data-toggle="modal" data-target="#common-modal-form">
-    <i class="fas fa-plus"></i> Adicionar
+    <i class="fas fa-plus"></i> Atribuir
 </button>
 <!-- Modal -->
 <div class="modal fade" id="common-modal-form" data-backdrop="static" tabindex="-1">
