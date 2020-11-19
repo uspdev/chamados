@@ -1,4 +1,4 @@
-<button type="button" class="btn btn-sm btn-light text-primary" onclick="add_modal_form()">
+<button type="button" class="btn btn-sm btn-light text-primary" onclick="add_pessoas_modal_form()">
     <i class="fas fa-plus"></i> Adicionar
 </button>
 
@@ -54,11 +54,13 @@
 
         var pessoasForm = $('#common-modal-form');
 
-        add_modal_form = function() {
+        add_pessoas_modal_form = function() {
             pessoasForm.modal();
         }
 
-        pessoasForm.find(':input[name=codpes]').select2({
+        var $oSelect2 = pessoasForm.find(':input[name=codpes]')
+
+        $oSelect2.select2({
             ajax: {
                 url: 'search/partenome'
                 , dataType: 'json'
@@ -70,6 +72,10 @@
             , language: 'pt_br'
         })
 
+        // Abrindo o select2 automaticamente
+        pessoasForm.on('shown.bs.modal', function() {
+            $oSelect2.select2('open')
+        })
     })
 
 </script>
