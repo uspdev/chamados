@@ -2,30 +2,9 @@
 <span class="text-muted">Nome:</span> {{ $data->row['nome'] }}<br>
 <span class="text-muted">Descrição:</span> {{ $data->row['descricao'] }}<br>
 <br>
-<span class="font-weight-bold">Habilitar triagem </span>
-<span data-toggle="tooltip" data-html="true" title="O gerente da fila fará a distribuição dos chamados entre os atendentes/Os atendentes farão auto atribuições por conta própria.">
-    <i class="fas fa-question-circle text-primary"></i>
-</span><br>
 
+@include('filas.partials.triagem')
 
-
-<div class="ml-2">
-
-{!! Form::open(['url'=>'filas/'.$fila->id, 'name' => 'form_config']) !!}
-@method('put')
-@csrf
-<div class="btn-group">
-    <button type="submit" class="btn btn-sm {{($fila->config->triagem) ? 'btn-success' : 'btn-secondary'}}" name="config[triagem]" value="1">
-        Sim
-    </button>
-    <button type="submit" class="btn btn-sm {{(!$fila->config->triagem) ? 'btn-success' : 'btn-secondary'}}" name="config[triagem]" value="0">
-        Não
-    </button>
-</div>
-{!! Form::close(); !!}
-
-
-</div>
 <br>
 <span class="font-weight-bold"><i class="far fa-eye"></i> Visibilidade</span>
 
