@@ -17,7 +17,7 @@
         @include('chamados.show.vinculados-add-modal')
         @endcan
         <span title="Você pode permitir o acesso a outros chamados vinculando-os a este." class="ajuda" data-toggle="tooltip">
-            <i class="fas fa-question-circle"></i>
+            <i class="fas fa-question-circle text-secondary"></i>
         </span>
     </div>
     <div class="card-body">
@@ -34,7 +34,7 @@
                 </span>
             </li>
             @empty
-            nenhum
+            Sem chamados vinculados
             @endforelse
         </ul>
     </div>
