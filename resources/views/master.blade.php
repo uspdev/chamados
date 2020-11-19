@@ -12,5 +12,17 @@
 
 @section('javascripts_bottom')
 @parent
-<script src="js/atendimento.js"></script>
+<script>
+    $(function() {
+        $(".delete-item").on("click", function() {
+            return confirm("Tem certeza que deseja deletar?");
+        });
+
+        $('[data-toggle="tooltip"]').tooltip({
+            container: 'body'
+            , html: true
+        });
+    });
+
+</script>
 @endsection
