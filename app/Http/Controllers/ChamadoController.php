@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\URL;
 
 class ChamadoController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('auth');
@@ -54,7 +53,7 @@ class ChamadoController extends Controller
     }
 
     /**
-     * Mosta lista de filas e respectivas filas
+     * Mostra lista de filas e respectivos setores
      * para selecionar e criar novo chamado
      *
      * @return \Illuminate\Http\Response
@@ -126,7 +125,9 @@ class ChamadoController extends Controller
 
         $max_upload_size = env('APP_UPLOAD_MAX_FILESIZE') != null ? ((int) env('APP_UPLOAD_MAX_FILESIZE')) : 16;
 
-        return view('chamados/show', compact('atendentes', 'autor', 'chamado', 'extras', 'template', 'vinculados', 'complexidades', 'modal_pessoa', 'max_upload_size'));
+        $form = JSONForms::generateForm($chamado->fila, $chamado);
+
+        return view('chamados/show', compact('atendentes', 'autor', 'chamado', 'extras', 'template', 'vinculados', 'complexidades', 'modal_pessoa', 'max_upload_size', 'form'));
     }
 
     /**
@@ -233,24 +234,6 @@ class ChamadoController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Chamado  $chamado
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Chamado $chamado)
-    {
-        // reimplementar o edit ***********************
-        $this->authorize('chamados.view', $chamado);
-        $fila = $chamado->fila;
-        $atendentes = [];
-        $complexidades = Chamado::complexidades();
-        $autor = $chamado->users()->wherePivot('papel', 'Autor')->first();
-        $form = JSONForms::generateForm($fila, $chamado);
-        return view('chamados/edit', compact('autor', 'fila', 'chamado', 'atendentes', 'complexidades', 'form'));
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -278,7 +261,7 @@ class ChamadoController extends Controller
         # valida customforms
         # está dando erro
         $request->validate(JSONForms::buildRules($request, $chamado->fila));
-
+        
         $chamado = $this->grava($chamado, $request);
 
         /*
@@ -350,7 +333,7 @@ class ChamadoController extends Controller
             $user->save();
         }
         $chamado->save();
-        $chamado->users()->attach($user->id, ['papel' => 'Autor']);
+        //$chamado->users()->attach($user->id, ['papel' => 'Autor']);
         return $chamado;
     }
 
@@ -448,6 +431,25 @@ class ChamadoController extends Controller
      *
      *
      */
+
+    /**
+    * **** Passou a ser feito via modal ****
+    * Show the form for editing the specified resource.
+    *
+    * @param  \App\Chamado  $chamado
+    * @return \Illuminate\Http\Response
+    */
+    public function edit(Chamado $chamado)
+    {   
+        $this->authorize('chamados.view', $chamado);
+        $fila = $chamado->fila;
+        $atendentes = [];
+        $complexidades = Chamado::complexidades();
+        $autor = $chamado->users()->wherePivot('papel', 'Autor')->first();
+        $form = JSONForms::generateForm($fila, $chamado);
+        return view('chamados/edit', compact('fila', 'chamado', 'atendentes', 'form'));
+    }
+
     public function devolver(Chamado $chamado)
     {
         return "desativado";
