@@ -2,10 +2,10 @@
 
 <?php 
 #dd($data->row->user);
-$data->model = 'App\Models\Fila';
+#$data->model = 'App\Models\Fila';
 ?>
 
-@section('content')
+@section('styles')
 @parent
 <style>
     .disable-links {
@@ -13,6 +13,10 @@ $data->model = 'App\Models\Fila';
     }
 
 </style>
+@endsection
+
+@section('content')
+@parent
 
 @include('common.list-table-modal')
 <div class="row">
@@ -26,8 +30,8 @@ $data->model = 'App\Models\Fila';
                     <span class="ml-2 {{ $fila->estado == 'Desativada' ? 'disable-links': '' }}">
                         @include('common.list-table-btn-edit', ['row'=>$fila])
                     </span>
-
-                    <span class="ml-auto">
+                    &nbsp; | &nbsp;
+                    <span class="">
                         @include('filas.partials.enable-disable-btn')
                     </span>
                 </div>
