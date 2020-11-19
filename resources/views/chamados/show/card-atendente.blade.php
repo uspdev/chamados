@@ -1,3 +1,4 @@
+<a name="card_atendente"></a>
 <div class="card bg-light border-warning mb-3" id="card-atendente">
     <div class="card-header bg-warning">
         Atendente
@@ -8,15 +9,15 @@
     </div>
     <div class="card-body">
         <div class="mb-3">
-            <span class="font-weight-bold">Atendente</span>
-            @if($chamado->fila->config->triagem)
-            @can('atendente')
-            @includeWhen($chamado->status != 'Fechado', 'chamados.partials.show-triagem-modal', ['modalTitle'=>'Triagem', 'url'=>'ok'])
-            @endcan<br>
-            @else
-            <a href="" class="btn btn-sm btn-light text-primary" ><i class="fas fa-plus"></i> Atender</a>
-            @endif
-
+            <div class="form-inline">
+                Estado: &nbsp; @include('chamados.partials.status')
+                &nbsp;
+                @if($chamado->fila->config->triagem)
+                @includeWhen($chamado->status != 'Fechado', 'chamados.partials.show-triagem-modal', ['modalTitle'=>'Triagem', 'url'=>'ok'])
+                @elseif(!count($atendentes))
+                @include('chamados.show.card-atendente-atender')
+                @endif
+            </div>
             <div class="ml-2">
                 @if($atendentes->count())
                 @foreach($atendentes as $atendente)
@@ -24,15 +25,18 @@
                 @endforeach
                 <span class="text-muted">Complexidade</span>: {{ $chamado->complexidade }}<br>
                 @else
-                Não atribuído
+
                 @endif
             </div>
         </div>
-        <form id="anotacoes_form" name="anotacoes_form" method="POST" action="chamados/{{$chamado->id}}">
-            @csrf
-            @method('PUT')
-            <textarea class="form-control" rows="10" name="anotacoes">{{ $chamado->anotacoes }}</textarea>
-        </form>
+        <div>
+            <form id="anotacoes_form" name="anotacoes_form" method="POST" action="chamados/{{$chamado->id}}">
+                @csrf
+                @method('PUT')
+                <textarea class="form-control" rows="10" name="anotacoes">{{ $chamado->anotacoes }}</textarea>
+            </form>
+        </div>
+
     </div>
 </div>
 
