@@ -16,6 +16,9 @@
         @can('update',$chamado)
         @include('chamados.show.vinculados-add-modal')
         @endcan
+        <span title="Você pode permitir o acesso a outros chamados vinculando-os a este." class="ajuda" data-toggle="tooltip">
+            <i class="fas fa-question-circle"></i>
+        </span>
     </div>
     <div class="card-body">
 
@@ -44,11 +47,12 @@
         $('.lista-vinculados li').hover(
             function() {
                 $(this).find('.hidden-btn').removeClass('d-none');
-            },
-            function() {
+            }
+            , function() {
                 $(this).find('.hidden-btn').addClass('d-none');
             }
         )
     });
+
 </script>
 @endsection
