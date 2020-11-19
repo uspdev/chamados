@@ -104,7 +104,9 @@ class ChamadoController extends Controller
         # é o caso de chamado vinculado, está configurado para mostrar
         # os vinculados diretos, mas não os subsequentes. Se o fulano clicar no
         # vinculado do vinculado dá o 403
-        $this->authorize('chamados.view', $chamado);
+        if (!Gate::allows('chamados.view', $chamado)) {
+            return view('sem-acesso');
+        }
 
         $template = json_decode($chamado->fila->template);
         $extras = json_decode($chamado->extras);
