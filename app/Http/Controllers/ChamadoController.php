@@ -332,7 +332,7 @@ class ChamadoController extends Controller
             $user->save();
         }
         $chamado->save();
-        //$chamado->users()->attach($user->id, ['papel' => 'Autor']);
+        $chamado->users()->attach($user->id, ['papel' => 'Autor']);
         return $chamado;
     }
 
