@@ -10,9 +10,11 @@
 
 @section('javascripts_bottom')
 <script>
-    $(".flash-message").fadeTo(5000, 500).slideUp(500, function() {
-        $(".flash-message").slideUp(500);
-    });
+    $(function() {
+        $(".flash-message").fadeTo(5000, 500).slideUp(500, function() {
+            $(".flash-message").slideUp(500);
+        });
+    })
 
 </script>
 @endsection
