@@ -260,7 +260,7 @@ class ChamadoController extends Controller
 
         # valida customforms
         # está dando erro
-        $request->validate(JSONForms::buildRules($request, $chamado->fila));
+        //$request->validate(JSONForms::buildRules($request, $chamado->fila));
         
         $chamado = $this->grava($chamado, $request);
 

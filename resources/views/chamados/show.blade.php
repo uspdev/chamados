@@ -61,44 +61,39 @@
 
     </div>
 </div>
-
-
-<div class="modal fade" id="chamadoModal" data-backdrop="static" tabindex="-1" aria-labelledby="modalChamadoEdit" aria-hidden="true">
+<div class="modal fade show" id="chamadoModal" data-backdrop="static" tabindex="-1" aria-labelledby="modalChamadoEdit" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalChamadoEdit"><span class="text-muted">Chamado no.</span>
-                    {{ $chamado->nro }}/{{ Carbon\Carbon::parse($chamado->created_at)->format('Y') }}</h5>
+                <h5 class="modal-title" id="modalChamadoEdit">Chamado</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form method="POST" role="form" action="{{ route('chamados.update', $chamado ) }}">
-                @csrf
-                {{ method_field('patch') }}
-                
-                <div class="form-group">
-                    <label for="assunto">Assunto</label>
-                    <input class="form-control" id="assunto" name="assunto" value="{{ $chamado->assunto ?? old('assunto') }}">
-                </div>
-                <div class="form-group">
-                    <label for="descricao">Descrição</label>
-                    <textarea class="form-control" id="descricao" name="descricao" rows="4">{{ $chamado->descricao ?? old('descricao') }}</textarea>
+                <div class="list_table_div_form">
+                    <form method="POST" role="form" action="{{ route('chamados.update', $chamado ) }}">
+                        @csrf
+                        {{ method_field('patch') }}
+                        <div class="form-group row">
+                            <label class="col-form-label col-sm-2" for="assunto">Assunto</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" id="assunto" name="assunto" value="{{ $chamado->assunto ?? old('assunto') }}">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-form-label col-sm-2" for="descricao">Descrição</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" id="descricao" name="descricao" rows="4">{{ $chamado->descricao ?? old('descricao') }}</textarea>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                            <button type="submit" class="btn btn-primary">Salvar</button>
+                        </div>
+                    </form>
                 </div>
 
-                @foreach($form as $input) 
-                <div class="form-group">
-                    @foreach($input as $element)
-                    {{ $element }}
-                    @endforeach
-                </div>
-                @endforeach
-
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Salvar</button>
-                </div>
-                </form>
             </div>
         </div>
     </div>
@@ -106,10 +101,10 @@
 @endsection
 
 @section('javascripts_bottom')
-    @parent
-    <script type="text/javascript">
-        function mostraModal(){
-            $('#chamadoModal').modal('show');
-        }
-    </script>
+@parent
+<script type="text/javascript">
+    function mostraModal() {
+        $('#chamadoModal').modal('show');
+    }
+</script>
 @stop
