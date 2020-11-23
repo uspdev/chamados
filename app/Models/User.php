@@ -20,6 +20,9 @@ class User extends Authenticatable
         'name', 'email', 'password', 'codpes', 'telefone', 'last_login_at',
     ];
 
+    # colocando data aqui ele já envia um objeto carbon
+    protected $dates = ['last_login_at'];
+
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -93,6 +96,7 @@ class User extends Authenticatable
         if (config('chamados.usar_replicado')) {
             $user->email = Pessoa::email($codpes);
             $user->name = Pessoa::dump($codpes)['nompesttd'];
+            $user->telefone = Pessoa::obterRamalUsp($codpes);
         }
         else {
             $user->email = $codpes.'@usuarios.usp.br';
