@@ -50,7 +50,7 @@ class LoginController extends Controller
     {
         $userSenhaUnica = Socialite::driver('senhaunica')->user();
         $user = User::obterOuCriarPorCodpes($userSenhaUnica->codpes);
-        
+
         // atualizar o telefone com a senha unica
         $user->telefone = $userSenhaUnica->telefone;
 
@@ -69,7 +69,7 @@ class LoginController extends Controller
         $user->save();
         Auth::login($user, true);
         session(['perfil' => 'usuario']);
-        return redirect('/');
+            return redirect()->intended('/');
     }
 
     public function logout(Request $request)
