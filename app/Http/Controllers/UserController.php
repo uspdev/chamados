@@ -59,6 +59,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
+        $this->authorize('admin');
         return view('users.show', compact('user'));
     }
 
