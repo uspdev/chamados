@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Log;
 
 class ChamadoController extends Controller
 {
@@ -294,11 +295,44 @@ class ChamadoController extends Controller
             $chamado->complexidade = null;
             $user = \Auth::user();
         } else {
+            
+            if ($chamado->assunto != $request->assunto) {
+                /*  guardando os dados antigos em log para auditoria */
+                Log::info(
+                    ' - Edição de chamado - Usuário: '.\Auth::user()->codpes.' - '.\Auth::user()->name.
+                    ' - Id Chamado: '. $chamado->id.
+                    ' - Assunto antigo: '.$chamado->assunto.
+                    ' - Novo Assunto: '.$request->assunto
+                );
 
-            $chamado->status = 'Triagem';
-            $chamado->assunto = $request->assunto;
-            $chamado->descricao = $request->descricao;
+                Comentario::create([
+                    'user_id' => \Auth::user()->id,
+                    'chamado_id' => $chamado->id,
+                    'comentario' => 'Atualização do assunto',
+                    'tipo' => 'system',
+                ]);
 
+                $chamado->assunto = $request->assunto;
+            }
+            if ($chamado->descricao != $request->descricao) {
+                /* guardando os dados antigos em log para auditoria */
+                Log::info(
+                    ' - Edição de chamado - Usuário: '.\Auth::user()->codpes.' - '.\Auth::user()->name.
+                    ' - Id Chamado: '. $chamado->id.
+                    ' - Descrição antiga: '.$chamado->descricao.
+                    ' - Nova descrição: '.$request->descricao
+                );
+
+                Comentario::create([
+                    'user_id' => \Auth::user()->id,
+                    'chamado_id' => $chamado->id,
+                    'comentario' => 'Atualização da descrição',
+                    'tipo' => 'system',
+                ]);
+
+                $chamado->descricao = $request->descricao;
+            }
+            $chamado->status = 'Triagem';   
             $chamado->extras = json_encode($request->extras);
 
             /* Administradores */
