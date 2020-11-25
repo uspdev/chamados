@@ -75,18 +75,24 @@
                     <form method="POST" role="form" action="{{ route('chamados.update', $chamado ) }}">
                         @csrf
                         {{ method_field('patch') }}
-                        <div class="form-group row">
-                            <label class="col-form-label col-sm-2" for="assunto">Assunto</label>
-                            <div class="col-sm-10">
-                                <input class="form-control" id="assunto" name="assunto" value="{{ $chamado->assunto ?? old('assunto') }}">
-                            </div>
+                        <div class="form-group">
+                            <label class="control-label" for="assunto">Assunto</label>
+                            <input class="form-control" id="assunto" name="assunto" value="{{ $chamado->assunto ?? old('assunto') }}">
                         </div>
-                        <div class="form-group row">
-                            <label class="col-form-label col-sm-2" for="descricao">Descrição</label>
-                            <div class="col-sm-10">
-                                <textarea class="form-control" id="descricao" name="descricao" rows="4">{{ $chamado->descricao ?? old('descricao') }}</textarea>
-                            </div>
+                        
+                        <div class="form-group">
+                            <label class="control-label" for="descricao">Descrição</label>
+                            <textarea class="form-control" id="descricao" name="descricao" rows="4">{{ $chamado->descricao ?? old('descricao') }}</textarea>
                         </div>
+
+                        @foreach($form as $input)
+                        <div class="form-group">
+                            @foreach($input as $element)
+                            {{ $element }}
+                            @endforeach
+                        </div>
+                        @endforeach
+
                         <div class="text-right">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
                             <button type="submit" class="btn btn-primary">Salvar</button>
