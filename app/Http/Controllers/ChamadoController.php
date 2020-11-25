@@ -194,7 +194,6 @@ class ChamadoController extends Controller
             ]);
 
             $request->session()->flash('alert-info', 'Chamado vinculado com sucesso');
-
         } else {
             $request->session()->flash('alert-warning', 'Não é possível vincular o chamado à ele mesmo');
         }
@@ -273,7 +272,6 @@ class ChamadoController extends Controller
 
         $request->session()->flash('alert-info', 'Chamado enviado com sucesso');
         return redirect()->route('chamados.show', $chamado->id);
-
     }
 
     /**
@@ -295,45 +293,44 @@ class ChamadoController extends Controller
             $chamado->complexidade = null;
             $user = \Auth::user();
         } else {
-            
+            $atualizacao = [];
             if ($chamado->assunto != $request->assunto) {
                 /*  guardando os dados antigos em log para auditoria */
-                Log::info(
-                    ' - Edição de chamado - Usuário: '.\Auth::user()->codpes.' - '.\Auth::user()->name.
-                    ' - Id Chamado: '. $chamado->id.
-                    ' - Assunto antigo: '.$chamado->assunto.
-                    ' - Novo Assunto: '.$request->assunto
-                );
-
-                Comentario::create([
-                    'user_id' => \Auth::user()->id,
-                    'chamado_id' => $chamado->id,
-                    'comentario' => 'Atualização do assunto',
-                    'tipo' => 'system',
-                ]);
-
+                Log::info(' - Edição de chamado - Usuário: ' . \Auth::user()->codpes . ' - ' . \Auth::user()->name . ' - Id Chamado: ' . $chamado->id . ' - Assunto antigo: ' . $chamado->assunto . ' - Novo Assunto: ' . $request->assunto);
+                array_push($atualizacao, 'assunto');
                 $chamado->assunto = $request->assunto;
             }
             if ($chamado->descricao != $request->descricao) {
                 /* guardando os dados antigos em log para auditoria */
-                Log::info(
-                    ' - Edição de chamado - Usuário: '.\Auth::user()->codpes.' - '.\Auth::user()->name.
-                    ' - Id Chamado: '. $chamado->id.
-                    ' - Descrição antiga: '.$chamado->descricao.
-                    ' - Nova descrição: '.$request->descricao
-                );
+                Log::info(' - Edição de chamado - Usuário: ' . \Auth::user()->codpes . ' - ' . \Auth::user()->name . ' - Id Chamado: ' . $chamado->id . ' - Descrição antiga: ' . $chamado->descricao . ' - Nova descrição: ' . $request->descricao);
+                array_push($atualizacao, 'descrição');
+                $chamado->descricao = $request->descricao;
+            }
+            if (json_encode($chamado->extras) != json_encode($request->extras)) {
+                /* guardando os dados antigos em log para auditoria */
+                Log::info(' - Edição de chamado - Usuário: ' . \Auth::user()->codpes . ' - ' . \Auth::user()->name . ' - Id Chamado: ' . $chamado->id . ' - Extras antigo: ' . $chamado->extras . ' - Novo extras: ' . json_encode($request->extras));
+                array_push($atualizacao, 'formulário');
+                $chamado->extras = json_encode($request->extras);
+            }
+            $chamado->status = 'Triagem';
 
+            /* Caso tenha alguma atualização, guarda nos registros */
+            if (count($atualizacao) > 0) {
+                if (count($atualizacao) == 1) {
+                    $msg = 'O campo ' . $atualizacao[0] . ' foi atualizado';
+                } elseif (count($atualizacao) > 1) {
+                    $msg = 'Os campos ';
+                    $msg .= implode(", ", array_slice($atualizacao, 0, -1));
+                    $msg .= ' e ' . $atualizacao[count($atualizacao) - 1];
+                    $msg .= ' foram atualizados';
+                }
                 Comentario::create([
                     'user_id' => \Auth::user()->id,
                     'chamado_id' => $chamado->id,
-                    'comentario' => 'Atualização da descrição',
+                    'comentario' => $msg,
                     'tipo' => 'system',
                 ]);
-
-                $chamado->descricao = $request->descricao;
             }
-            $chamado->status = 'Triagem';   
-            $chamado->extras = json_encode($request->extras);
 
             /* Administradores */
             if (Gate::allows('admin')) {
@@ -555,5 +552,4 @@ class ChamadoController extends Controller
 
         return view('chamados/index', compact('chamados'));
     }
-
 }
