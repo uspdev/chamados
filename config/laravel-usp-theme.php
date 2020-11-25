@@ -22,12 +22,12 @@ $admin = [
     [
         'text' => '<i class="fas fa-sitemap ml-2"></i> Setores',
         'url' => 'setores',
-        'can' => 'admin',
+        'can' => 'perfilSetor',
     ],
     [
         'text' => '<i class="fas fa-tasks ml-2"></i> Filas',
         'url' => 'filas',
-        'can' => 'admin',
+        'can' => 'perfilFila',
     ],
     [
         'text' => '<i class="fas fa-users ml-2"></i> Pessoas',
@@ -97,7 +97,7 @@ $right_menu = [
         'title' => 'Configurações',
         'submenu' => $configuracoes,
         'align' => 'right',
-        'can' => 'atendente',
+        #'can' => ['perfilAtendente','perfilFila'],
     ],
 ];
 

@@ -90,6 +90,20 @@ class Fila extends Model
         return $value;
     }
 
+    public static function listarFilas() 
+    {
+        $user = \Auth()->user();
+        if ($user->is_admin) {
+            return SELF::get();
+        }
+        $filas = collect();
+        foreach (\Auth()->user()->setores as $setor) {
+            $filas = $filas->merge($setor->filas);
+        }
+
+        return $filas;
+    }
+
     /**
      * Relacionamento: fila pertence a setor
      */
