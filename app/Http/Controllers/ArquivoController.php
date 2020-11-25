@@ -46,19 +46,37 @@ class ArquivoController extends Controller
             'arquivo.*'    => "required|mimes:jpeg,jpg,png,pdf|max:$max_upload_size",
             'chamado_id' => 'required|integer|exists:chamados,id'
         ]);
-        
+        $fotos_nome = [];
+        $chamado_id = 0;
         foreach ($request->arquivo as $arq) {
             $arquivo = new Arquivo;
             $arquivo->chamado_id = $request->chamado_id;
+            $chamado_id = $arquivo->chamado_id;
             $arquivo->user_id = \Auth::user()->id;
             $arquivo->nome_original = $arq->getClientOriginalName();
             $arquivo->caminho = $arq->store('./arquivos/'. date("Y"));
             $arquivo->mimeType = $arq->getClientMimeType();
             $arquivo->save();
+            if(preg_match('/jpeg|jpg|png/', $arquivo->mimeType)){
+                array_push($fotos_nome,$arquivo->nome_original);
+            }else{
+                Comentario::create([
+                    'user_id' => \Auth::user()->id,
+                    'chamado_id' => $arquivo->chamado_id,
+                    'comentario' => 'O arquivo '. $arquivo->nome_original .' foi adicionado.',
+                    'tipo' => 'system',
+                    ]);
+            }
+        }
+        if(count($fotos_nome) > 0){
+            $comentario = (count($fotos_nome) > 1 )
+            ? 'As imagens '. implode(", ", $fotos_nome) . ' foram adicionadas'
+            : 'A imagem ' . $fotos_nome[0] . ' foi adicionada';
+
             Comentario::create([
                 'user_id' => \Auth::user()->id,
                 'chamado_id' => $arquivo->chamado_id,
-                'comentario' => 'O arquivo '. $arquivo->nome_original .' foi adicionado.',
+                'comentario' => $comentario,
                 'tipo' => 'system',
             ]);
         }
@@ -130,13 +148,16 @@ class ArquivoController extends Controller
     public function destroy(Request $request, Arquivo $arquivo)
     {
         $arquivo->delete();
+        $comentario = preg_match('/jpeg|jpg|png/', $arquivo->mimeType) 
+                ? 'A imagem '. $arquivo->nome_original .' foi excluída'
+                : 'O arquivo '. $arquivo->nome_original .' foi excluído';
         Comentario::create([
             'user_id' => \Auth::user()->id,
             'chamado_id' => $arquivo->chamado_id,
-            'comentario' => 'O arquivo '. $arquivo->nome_original .' foi excluído.',
+            'comentario' => $comentario,
             'tipo' => 'system',
             ]);
-        $request->session()->flash('alert-success', 'O arquivo '. $arquivo->nome_original .' foi excluído com sucesso!');
+        $request->session()->flash('alert-success', $comentario .' com sucesso!');
 
         return back();
     }
