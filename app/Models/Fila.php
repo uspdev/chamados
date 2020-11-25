@@ -90,16 +90,24 @@ class Fila extends Model
         return $value;
     }
 
-    public static function listarFilas() 
+    public static function listarFilas()
     {
         $user = \Auth()->user();
+
+        # listando tudo se admin
         if ($user->is_admin) {
             return SELF::get();
         }
+
         $filas = collect();
+
+        # listando as filas de todos os setores que o usuário faz parte.
         foreach (\Auth()->user()->setores as $setor) {
             $filas = $filas->merge($setor->filas);
         }
+
+        # listando as filas que o user é gerente
+        $filas = $filas->merge($user->filas()->wherePivot('funcao', 'Gerente')->get());
 
         return $filas;
     }

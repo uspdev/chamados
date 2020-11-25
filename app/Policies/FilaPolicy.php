@@ -19,7 +19,11 @@ class FilaPolicy
      */
     public function viewAny(User $user)
     {
-        //
+        if ($user->setores()->count() || $user->is_admin) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -45,8 +49,6 @@ class FilaPolicy
                 return true;
             }
         }
-
-
 
         /* admin */
         if (Gate::allows('perfilAdmin')) {

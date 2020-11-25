@@ -37,17 +37,17 @@ class FilaController extends Controller
 
         $filas = Fila::listarFilas();
 
-        $this->data['fields'] = $this->model::getFields();
-        $this->data['rows'] = $this->model::get();
+        #$this->data['fields'] = Fila::getFields();
+        #$this->data['rows'] = $this->model::get();
         #return view($this->data['url'] . '.index')->with('data', (object) $this->data);
         return view('filas.index')->with(['data' => (object) $this->data, 'filas' => $filas]);
     }
 
-    public function store(FilaRequest $request)
+    public function store(FilaRequest $request, Fila $fila)
     {
-        $this->authorize('perfilFila');
+        $this->authorize('filas.view', $fila);
 
-        $row = $this->model::create($request->all());
+        $row = Fila::create($request->all());
         $user = \Auth::user();
         $row->users()->attach($user->id, ['funcao' => 'Gerente']);
 
@@ -64,7 +64,7 @@ class FilaController extends Controller
      */
     public function update(Request $request, Fila $fila)
     {
-        $this->authorize('perfilFila');
+        $this->authorize('filas.view', $fila);
 
         $fila->fill($request->all());
 
