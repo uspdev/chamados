@@ -103,6 +103,8 @@ class FilaController extends Controller
 
     public function storePessoa(Request $request, Fila $fila)
     {
+        $this->authorize('admin');
+
         $user = User::obterOuCriarPorCodpes($request->codpes);
         $fila->users()->detach($user->id);
         $fila->users()->attach($user->id, ['funcao' => $request->funcao]);
@@ -113,6 +115,8 @@ class FilaController extends Controller
 
     public function destroyPessoa(Request $request, Fila $fila, $id)
     {
+        $this->authorize('admin');
+
         $currentUser = \Auth::user();
         if ($currentUser->id == $id and !$currentUser->is_admin) {
             $request->session()->flash('alert-warning', 'Não é possível remover a si mesmo.');
@@ -126,6 +130,7 @@ class FilaController extends Controller
     public function storeTemplateJson(Request $request, Fila $fila)
     {
         $this->authorize('admin');
+
         $newjson = $request->template;
         $fila->template = $newjson;
         $fila->save();
@@ -135,12 +140,16 @@ class FilaController extends Controller
     
     public function createTemplate(Fila $fila)
     {
+        $this->authorize('admin');
+
         $template = json_decode($fila->template, true);
         return view('filas.template', compact('fila', 'template'));
     }
 
     public function storeTemplate(Request $request, Fila $fila)
     {
+        $this->authorize('admin');
+
         $request->validate([
             'template.*.label' => 'required',
             'template.*.type' => 'required',
