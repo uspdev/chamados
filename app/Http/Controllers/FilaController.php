@@ -6,6 +6,7 @@ use App\Http\Requests\FilaRequest;
 use App\Models\Fila;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class FilaController extends Controller
 {
@@ -32,17 +33,19 @@ class FilaController extends Controller
 
     public function index()
     {
-        $this->authorize('admin');
+        $this->authorize('perfilFila');
+
+        $filas = Fila::listarFilas();
 
         $this->data['fields'] = $this->model::getFields();
         $this->data['rows'] = $this->model::get();
         #return view($this->data['url'] . '.index')->with('data', (object) $this->data);
-        return view('filas.index')->with('data', (object) $this->data);
+        return view('filas.index')->with(['data' => (object) $this->data, 'filas' => $filas]);
     }
 
     public function store(FilaRequest $request)
     {
-        $this->authorize('admin');
+        $this->authorize('perfilFila');
 
         $row = $this->model::create($request->all());
         $user = \Auth::user();
@@ -52,7 +55,7 @@ class FilaController extends Controller
         return redirect('/' . $this->data['url'] . '/' . $row->id);
     }
 
-       /**
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -61,10 +64,10 @@ class FilaController extends Controller
      */
     public function update(Request $request, Fila $fila)
     {
-        $this->authorize('admin');
+        $this->authorize('perfilFila');
 
         $fila->fill($request->all());
-        
+
         if ($request->config) {
             $config = $request->config;
             $fila->config = json_encode($config);
@@ -87,7 +90,10 @@ class FilaController extends Controller
      */
     public function show(Request $request, Fila $fila)
     {
-        $this->authorize('admin');
+        # Vamos negar acesso com mensagem apropriada
+        if (!Gate::allows('filas.view', $fila)) {
+            return view('sem-acesso');
+        }
 
         if ($request->ajax()) {
             return $fila;
@@ -103,7 +109,7 @@ class FilaController extends Controller
 
     public function storePessoa(Request $request, Fila $fila)
     {
-        $this->authorize('admin');
+        $this->authorize('perfilFila');
 
         $user = User::obterOuCriarPorCodpes($request->codpes);
         $fila->users()->detach($user->id);
@@ -115,8 +121,8 @@ class FilaController extends Controller
 
     public function destroyPessoa(Request $request, Fila $fila, $id)
     {
-        $this->authorize('admin');
-
+        $this->authorize('perfilFila');
+        
         $currentUser = \Auth::user();
         if ($currentUser->id == $id and !$currentUser->is_admin) {
             $request->session()->flash('alert-warning', 'Não é possível remover a si mesmo.');
@@ -129,7 +135,7 @@ class FilaController extends Controller
 
     public function storeTemplateJson(Request $request, Fila $fila)
     {
-        $this->authorize('admin');
+        $this->authorize('perfilFila');
 
         $newjson = $request->template;
         $fila->template = $newjson;
@@ -137,19 +143,19 @@ class FilaController extends Controller
         $request->session()->flash('alert-info', 'Template salvo com sucesso');
         return back();
     }
-    
+
     public function createTemplate(Fila $fila)
     {
-        $this->authorize('admin');
-
+        $this->authorize('perfilFila');
+        
         $template = json_decode($fila->template, true);
         return view('filas.template', compact('fila', 'template'));
     }
 
     public function storeTemplate(Request $request, Fila $fila)
     {
-        $this->authorize('admin');
-
+        $this->authorize('perfilFila');
+        
         $request->validate([
             'template.*.label' => 'required',
             'template.*.type' => 'required',
