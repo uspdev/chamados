@@ -1,6 +1,6 @@
-<a href="#responsavel_{{ \Str::lower($setor->sigla) }}" class="btn btn-sm text-primary" data-toggle="collapse" role="button"><i class="fas fa-bars"></i></a>
+<a href="#detalhes_{{ \Str::lower($setor->sigla) }}" class="btn btn-sm text-primary" data-toggle="collapse" role="button"><i class="fas fa-bars"></i></a>
 
-<div class="ml-2 collapse" id="responsavel_{{ \Str::lower($setor->sigla) }}">
+<div class="ml-2 collapse" id="detalhes_{{ \Str::lower($setor->sigla) }}">
     <div class="card">
         <div class="card-body">
             <div class="row">
@@ -9,9 +9,9 @@
 
                     <div class="ml-2">
                         @if(count($setor->users))
-                        @foreach($setor->users as $user)
+                        @foreach($setor->users()->withPivot('funcao')->get() as $user)
                         <div class="form-inline">
-                            {{$user->name}} &nbsp; 
+                            {{$user->name}} ({{ $user->pivot->funcao }})&nbsp; 
                             @include('chamados.show.user-detail')
                             @include('setores.partials.btn-pessoas-delete')
                         </div>

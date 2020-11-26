@@ -31,6 +31,7 @@ class SetorController extends Controller
             $setor = $user->setores()->first();
         }
         $fields = Setor::getFields();
+        $user = \Auth()->user();
 
         # para o form de adicionar pessoas
         $modal_pessoa['url'] = 'setores';
@@ -42,7 +43,7 @@ class SetorController extends Controller
         } else {
             $modal['url'] = 'setores';
             $modal['title'] = 'Editar setor';
-            return view('setores.tree', compact('setor', 'fields', 'modal', 'modal_pessoa'));
+            return view('setores.tree', compact('setor', 'fields', 'modal', 'modal_pessoa', 'user'));
             //return view('setores.index', compact('setores', 'fields'));
         }
     }
@@ -55,7 +56,8 @@ class SetorController extends Controller
      */
     public function show(Request $request, $id)
     {
-        //$this->authorize('admin');
+        #usando no ajax, somente para admin
+        $this->authorize('admin');
 
         if ($request->ajax()) {
             # preenche os dados do form de edição de um setor
@@ -75,7 +77,7 @@ class SetorController extends Controller
      */
     public function store(Request $request)
     {
-        //$this->authorize('admin');
+        $this->authorize('admin');
         $request->validate($this->model::rules);
 
         $setor = Setor::create($request->all());
@@ -92,11 +94,12 @@ class SetorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      * 
-     * Autorizar se usuário for gerente do setor ou de qualquer setor acendente
+     * Por enquanto somente para admin
+     * Talvez, autorizar se usuário for gerente do setor ou de qualquer setor acendente
      */
     public function update(Request $request, $id)
     {
-        #$this->authorize('admin');
+        $this->authorize('admin');
 
         if (defined($this->model . '::rules')) {
             $request->validate($this->model::rules);

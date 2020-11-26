@@ -13,12 +13,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $setor_seeder = (config('chamados.usar_replicado')) ? SetorReplicadoSeeder::class : SetorSeeder::class;
+
         $this->call([
             UserSeeder::class,
-            SetorSeeder::class,
+            $setor_seeder,
             FilaSeeder::class,
             ChamadoSeeder::class,
-            ComentarioSeeder::class
+            ComentarioSeeder::class,
         ]);
     }
 }
