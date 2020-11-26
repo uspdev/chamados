@@ -104,12 +104,18 @@ class Fila extends Model
         # listando as filas de todos os setores que o usuário faz parte.
         foreach (\Auth()->user()->setores as $setor) {
             $filas = $filas->merge($setor->filas);
+
+            #listando as filas do setores filhos do usuario
+            # somente 1 nível por enquanto
+            foreach ($setor->setores as $setor_filho) {
+                $filas = $filas->merge($setor_filho->filas);
+            }
         }
 
         # listando as filas que o user é gerente
         $filas = $filas->merge($user->filas()->wherePivot('funcao', 'Gerente')->get());
 
-        return $filas;
+        return $filas->unique('id');
     }
 
     /**

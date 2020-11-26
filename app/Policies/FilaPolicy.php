@@ -50,6 +50,17 @@ class FilaPolicy
             }
         }
 
+        # gerentes do setor pai
+        # na estrutura do replicado da EESC
+        # tem somente 2 níveis abaixo da unidade
+        if ($setor = $setor->setor) {
+            foreach ($setor->users as $u) {
+                if ($user->codpes == $u->codpes) {
+                    return true;
+                }
+            }
+        }
+
         /* admin */
         if (Gate::allows('perfilAdmin')) {
             return true;
