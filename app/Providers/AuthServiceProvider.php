@@ -14,7 +14,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         #Chamado::Class => ChamadoPolicy::class,
-        #FIla::Class => FilaPolicy::class,
+        #Fila::Class => FilaPolicy::class,
     ];
 
     /**

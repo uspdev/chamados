@@ -23,8 +23,8 @@ Sem setor
 
         // se houver anchor na url, vamos abrir os detalhes 
         if (location.hash) {
-            $('#responsavel_' + location.hash.substring(1)).collapse('show')
-            console.log('abrindo #responsavel_' + window.location.hash.substring(1))
+            $('#detalhes_' + location.hash.substring(1)).collapse('show')
+            console.log('abrindo #detalhes_' + window.location.hash.substring(1))
         }
 
         $("[data-collapse-group='myDivs']").click(function() {
