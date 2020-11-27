@@ -110,8 +110,14 @@ class User extends Authenticatable
         return User::where('codpes',$codpes)->first();
     }
 
+    /**
+     * Obtém se já existir ou cria um novo objeto de usuário
+     * 
+     * @param Int codpes Número USP a ser procurado ou criado
+     * @return Obj $user Objeto do usuário criado
+     */
     public static function obterOuCriarPorCodpes($codpes) {
-        $user = User::where('codpes', $codpes)->first();
+        $user = User::obterPorCodpes($codpes);
         if (empty($user)) {
             $user = User::storeByCodpes($codpes);
         }
