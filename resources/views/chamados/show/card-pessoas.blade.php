@@ -5,7 +5,6 @@
         border: 1px solid brown;
         border-top: 3px solid brown;
     }
-
 </style>
 @endsection
 
@@ -28,7 +27,10 @@
                     @case('Atendente') text-danger @break
                     @endswitch
                 ">
-                    {{ $user->name }} ({{ $user->pivot->papel}})
+                    {{ $user->name }} ({{ $user->pivot->papel}}) 
+                </span>
+                <span class="hidden-btn d-none">
+                    @include('chamados.show.user-detail', ['user'=>$user])
                 </span>
                 <span class="hidden-btn d-none">
                     @switch($user->pivot->papel)
@@ -55,12 +57,11 @@
         $('.lista-pessoas li').hover(
             function() {
                 $(this).find('.hidden-btn').removeClass('d-none');
-            }
-            , function() {
+            },
+            function() {
                 $(this).find('.hidden-btn').addClass('d-none');
             }
         )
     });
-
 </script>
 @endsection
