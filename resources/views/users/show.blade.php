@@ -29,7 +29,7 @@
         <div class="col-md-12">
             <div class="h4 mt-2">Filas</div>
             @forelse($user->filas as $fila)
-                <div><a href="filas/{{ $fila->id }}">{{ $fila->nome }}</a> - {{ $fila->descricao }}</div>
+                <div><a href="filas/{{ $fila->id }}">({{$fila->Setor->sigla}}) {{ $fila->nome }}</a> - {{ $fila->descricao }}</div>
             @empty
                 Sem filas
             @endforelse
