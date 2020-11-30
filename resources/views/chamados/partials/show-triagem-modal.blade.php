@@ -12,51 +12,48 @@
                 </button>
             </div>
             <div class="modal-body">
-
                 <div class="list_table_div_form">
-
                     {!! Form::open(['url'=>'triagem/'.$chamado->id]) !!}
                     @method('post')
                     @csrf
-
                     <div class="col-sm form-group">
-                        <label for="codpes"><b>Atribuir para:</b></label>
-                        <select name="codpes" class="form-control">
-                            <option value="" selected="">Escolher</option>
-
-                            @foreach($chamado->fila->users as $atendente)
-                            <option value="{{ $atendente->codpes }}">
-                                {{ $atendente->name }}
-                            </option>
-                            @endforeach
-                        </select>
+                        <label class="col-form-label col-sm-2" for="codpes"><b>Atendente:</b></label>
+                        <div class="col-sm-10">
+                            <select name="codpes" class="form-control">
+                                <option value="" selected="">Escolher</option>
+                                @foreach($chamado->fila->users as $atendente)
+                                <option value="{{ $atendente->codpes }}">
+                                    {{ $atendente->name }}
+                                </option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
-
-                    <div class="col-sm form-group">
-                        <label for="complexidade"><b>Complexidade:</b></label>
-                        <select name="complexidade" class="form-control">
-                            <option value="" selected="">Escolher</option>
-                            @foreach($complexidades as $complexidade)
-                            @if(old('complexidade') == '' and isset($chamado->complexidade))
-                            <option value="{{ $complexidade }}" {{ ( $chamado->complexidade == $complexidade) ? 'selected' : ''}}>
-                                {{ $complexidade }}
-                            </option>
-                            @else
-                            <option value="{{ $complexidade }}" {{ (old('complexidade') == $complexidade) ? 'selected' : ''}}>
-                                {{ $complexidade }}
-                            </option>
-                            @endif
-                            @endforeach
-                        </select>
+                    <div class="col-sm form-group mt-2">
+                        <label class="col-form-label col-sm-2" for="complexidade"><b>Complexidade:</b></label>
+                        <div class="col-sm-10">
+                            <select name="complexidade" class="form-control">
+                                <option value="" selected="">Escolher</option>
+                                @foreach($complexidades as $complexidade)
+                                @if(old('complexidade') == '' and isset($chamado->complexidade))
+                                <option value="{{ $complexidade }}" {{ ( $chamado->complexidade == $complexidade) ? 'selected' : ''}}>
+                                    {{ $complexidade }}
+                                </option>
+                                @else
+                                <option value="{{ $complexidade }}" {{ (old('complexidade') == $complexidade) ? 'selected' : ''}}>
+                                    {{ $complexidade }}
+                                </option>
+                                @endif
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
-
                     <div class="text-right">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
                         <button type="submit" class="btn btn-primary">Salvar</button>
                     </div>
                     {!! Form::close(); !!}
                 </div>
-
             </div>
         </div>
         {{-- <div class="modal-footer"></div> --}}

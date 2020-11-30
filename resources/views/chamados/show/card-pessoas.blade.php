@@ -30,9 +30,6 @@
                     {{ $user->name }} ({{ $user->pivot->papel}}) 
                 </span>
                 <span class="hidden-btn d-none">
-                    @include('chamados.show.user-detail', ['user'=>$user])
-                </span>
-                <span class="hidden-btn d-none">
                     @switch($user->pivot->papel)
                     @case('Autor') @case('Atendente') {{-- libera delete para atendente e admin --}}
                     @if (Gate::allows('perfilAtendente') or Gate::allows('perfilAdmin'))
@@ -43,6 +40,9 @@
                     @include('common.btn-delete-sm', ['action'=>'chamados/'.$chamado->id.'/pessoas/'.$user->id])
                     @break
                     @endswitch
+                </span>
+                <span class="hidden-btn d-none">
+                    @include('chamados.show.user-detail', ['user'=>$user])
                 </span>
             </li>
             @endforeach

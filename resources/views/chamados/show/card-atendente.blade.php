@@ -33,7 +33,7 @@
             <form id="anotacoes_form" name="anotacoes_form" method="POST" action="chamados/{{$chamado->id}}">
                 @csrf
                 @method('PUT')
-                <textarea class="form-control" rows="10" name="anotacoes">{{ $chamado->anotacoes }}</textarea>
+                <textarea class="form-control" rows="2" name="anotacoes">{{ $chamado->anotacoes }}</textarea>
             </form>
         </div>
 

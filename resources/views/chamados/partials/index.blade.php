@@ -1,6 +1,7 @@
 <div class="row">
     <div class="col-md-12 form-inline">
-        <div class="h4 mt-2">Meus Chamados</div>
+    <div class="d-none d-sm-block h4 mt-2">Meus Chamados <i class="fas fa-search"></i></div>
+    <div class="d-block d-sm-none h4 mt-2"><i class="fas fa-search"></i></div>
         @include('partials.datatable-filter-box', ['otable'=>'oTable'])
         @include('chamados.partials.mostra-ano')
 

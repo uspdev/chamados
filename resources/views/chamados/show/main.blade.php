@@ -16,7 +16,6 @@
     @endif
 
     <span class="text-muted">Assunto:</span> {{ $chamado->assunto }}<br>
-    <span class="text-muted">Descrição:</span><br>
-    <span class="ml-2">{{ $chamado->descricao ?? '' }}</span><br>
+    <span class="text-muted">Descrição:</span> {{ $chamado->descricao ?? '' }}<br>
     <br>
 </div>
