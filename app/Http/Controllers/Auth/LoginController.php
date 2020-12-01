@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Setor;
 use App\Models\User;
 use Auth;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -51,25 +52,32 @@ class LoginController extends Controller
         $userSenhaUnica = Socialite::driver('senhaunica')->user();
         $user = User::obterOuCriarPorCodpes($userSenhaUnica->codpes);
 
-        // atualizar o telefone com a senha unica
+        // atualizar dados com a senha unica
+        // assim se houver atualizações na uSP é refletido aqui
         $user->telefone = $userSenhaUnica->telefone;
+        $user->email = $userSenhaUnica->email;
+        $user->name = $userSenhaUnica->nompes;
 
-        $admins_id = explode(',', config('chamados.admins'));
-        if (in_array($userSenhaUnica->codpes, $admins_id)) {
+        // vamos verificar no config se o usuário é admin
+        $admins_codpes = explode(',', config('chamados.admins'));
+        if (in_array($userSenhaUnica->codpes, $admins_codpes)) {
             $user->is_admin = true;
         }
 
-        // se fora do replicado, bind dos dados
-        if (!config('chamados.usar_replicado')) {
-            $user->email = $userSenhaUnica->email;
-            $user->name = $userSenhaUnica->nompes;
-        }
         $user->last_login_at = now();
-
         $user->save();
+
+        # vincular a pessoa e o vinculo ao setor
+        foreach ($userSenhaUnica->vinculo as $vinculo) {
+            $setor = Setor::where('cod_set_replicado', $vinculo['codigoSetor'])->first();
+            if ($setor) {
+                $user->setores()->attach($setor, ['funcao' => $vinculo['nomeVinculo']]);
+            }
+        }
+
         Auth::login($user, true);
         session(['perfil' => 'usuario']);
-            return redirect()->intended('/');
+        return redirect()->intended('/');
     }
 
     public function logout(Request $request)
