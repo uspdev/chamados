@@ -46,7 +46,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $this->authorize('admin');
-        User::storeByCodpes($request->codpes);
+        User::obterOuCriarPorCodpes($request->codpes);
         $request->session()->flash('alert-info', 'Atendente adicionado com sucesso');
         return redirect('/users');
     }
