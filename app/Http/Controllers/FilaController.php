@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\FilaRequest;
 use App\Models\Fila;
 use App\Models\User;
+use App\Models\Setor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -33,26 +34,26 @@ class FilaController extends Controller
 
     public function index()
     {
-        $this->authorize('perfilFila');
+        $this->authorize('filas.viewAny');
 
         $filas = Fila::listarFilas();
-
-        #$this->data['fields'] = Fila::getFields();
-        #$this->data['rows'] = $this->model::get();
-        #return view($this->data['url'] . '.index')->with('data', (object) $this->data);
         return view('filas.index')->with(['data' => (object) $this->data, 'filas' => $filas]);
     }
 
-    public function store(FilaRequest $request, Fila $fila)
+    public function store(FilaRequest $request)
     {
-        $this->authorize('filas.view', $fila);
+        $setor_id = $request->setor_id;
+        if (!Gate::allows('filas.create', Setor::find($setor_id))) {
+            return view('sem-acesso');
+        }
 
-        $row = Fila::create($request->all());
-        $user = \Auth::user();
-        $row->users()->attach($user->id, ['funcao' => 'Gerente']);
+        $fila = Fila::create($request->all());
+        
+        # não vamos adicionar gerente automaticamente
+        #$fila->users()->attach(\Auth::user(), ['funcao' => 'Gerente']);
 
         $request->session()->flash('alert-info', 'Dados adicionados com sucesso');
-        return redirect('/' . $this->data['url'] . '/' . $row->id);
+        return redirect('/' . $this->data['url'] . '/' . $fila->id);
     }
 
     /**
@@ -66,6 +67,9 @@ class FilaController extends Controller
     {
         $this->authorize('filas.view', $fila);
 
+        # aqui tem de validar dados do post
+        ####################
+
         $fila->fill($request->all());
 
         if ($request->config) {
@@ -75,11 +79,8 @@ class FilaController extends Controller
 
         $fila->save();
 
-        #dd($fila);
-
         $request->session()->flash('alert-info', 'Dados editados com sucesso');
         return back();
-        //return redirect('/' . $this->data['url']);
     }
 
     /**
@@ -109,7 +110,7 @@ class FilaController extends Controller
 
     public function storePessoa(Request $request, Fila $fila)
     {
-        $this->authorize('perfilFila');
+        $this->authorize('filas.update', $fila);
 
         $user = User::obterOuCriarPorCodpes($request->codpes);
         $fila->users()->detach($user->id);
@@ -121,7 +122,7 @@ class FilaController extends Controller
 
     public function destroyPessoa(Request $request, Fila $fila, $id)
     {
-        $this->authorize('perfilFila');
+        $this->authorize('filas.update', $fila);
         
         $currentUser = \Auth::user();
         if ($currentUser->id == $id and !$currentUser->is_admin) {
@@ -135,7 +136,7 @@ class FilaController extends Controller
 
     public function storeTemplateJson(Request $request, Fila $fila)
     {
-        $this->authorize('perfilFila');
+        $this->authorize('filas.update', $fila);
 
         $newjson = $request->template;
         $fila->template = $newjson;
@@ -146,7 +147,7 @@ class FilaController extends Controller
 
     public function createTemplate(Fila $fila)
     {
-        $this->authorize('perfilFila');
+        $this->authorize('filas.update', $fila);
         
         $template = json_decode($fila->template, true);
         return view('filas.template', compact('fila', 'template'));
@@ -154,7 +155,7 @@ class FilaController extends Controller
 
     public function storeTemplate(Request $request, Fila $fila)
     {
-        $this->authorize('perfilFila');
+        $this->authorize('filas.update', $fila);
         
         $request->validate([
             'template.*.label' => 'required',

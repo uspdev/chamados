@@ -27,7 +27,7 @@ $admin = [
     [
         'text' => '<i class="fas fa-tasks ml-2"></i> Filas',
         'url' => 'filas',
-        'can' => 'perfilFila',
+        'can' => 'filas.viewAny',
     ],
     [
         'text' => '<i class="fas fa-users ml-2"></i> Pessoas',
@@ -97,7 +97,7 @@ $right_menu = [
         'title' => 'Configurações',
         'submenu' => $configuracoes,
         'align' => 'right',
-        #'can' => ['perfilAtendente','perfilFila'],
+        #'can' => ['perfilAtendente','filas.viewAny'],
     ],
 ];
 

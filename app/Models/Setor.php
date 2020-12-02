@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Gate;
 
 class Setor extends Model
 {
@@ -48,6 +49,9 @@ class Setor extends Model
         ],
     ];
 
+    /**
+     * utilizado nas views common
+     */
     public static function getFields()
     {
         $fields = SELF::fields;
@@ -61,12 +65,18 @@ class Setor extends Model
         return $fields;
     }
 
+    /**
+     * retorna todos os setores autorizados para o usuário
+     * utilizado nas views common, para o select
+     */
     public static function allToSelect()
     {
-        $rows = SELF::select('id', 'sigla', 'nome')->get()->toArray();
+        $setores = SELF::get();
         $ret = [];
-        foreach ($rows as $row) {
-            $ret[$row['id']] = $row['sigla'] . ' - ' . $row['nome'];
+        foreach ($setores as $setor) {
+            if (Gate::allows('setores.view', $setor)) {
+            $ret[$setor->id] = $setor->sigla . ' - ' . $setor->nome;
+            }
         }
         return $ret;
     }

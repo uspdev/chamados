@@ -73,14 +73,6 @@ class AuthServiceProvider extends ServiceProvider
             }
         });
 
-        Gate::define('perfilFila', function ($user) {
-            if ($user->setores()->count() || $user->is_admin) {
-                return true;
-            } else {
-                return false;
-            }
-        });
-
         Gate::define('trocarPerfil', function ($user) {
             if (Gate::allows('admin') || Gate::allows('atendente')) {
                 return true;
@@ -92,5 +84,6 @@ class AuthServiceProvider extends ServiceProvider
         # policies
         Gate::resource('chamados', 'App\Policies\ChamadoPolicy');
         Gate::resource('filas', 'App\Policies\FilaPolicy');
+        Gate::resource('setores', 'App\Policies\setorPolicy');
     }
 }
