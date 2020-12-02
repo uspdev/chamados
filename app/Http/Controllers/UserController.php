@@ -101,6 +101,9 @@ class UserController extends Controller
         return back();
     }
 
+    /**
+     * Permite fazer buscas ajax por nome, formatado para datatables
+     */
     public function partenome(Request $request)
     {
         $this->authorize('usuario');
