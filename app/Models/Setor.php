@@ -17,7 +17,7 @@ class Setor extends Model
         'nome',
         'setor_id',
         'cod_set_replicado',
-        'cod_set_pai_replicado'
+        'cod_set_pai_replicado',
     ];
 
     public const rules = [
@@ -66,7 +66,7 @@ class Setor extends Model
         $rows = SELF::select('id', 'sigla', 'nome')->get()->toArray();
         $ret = [];
         foreach ($rows as $row) {
-            $ret[$row['id']] = $row['sigla'].' - '.$row['nome'];
+            $ret[$row['id']] = $row['sigla'] . ' - ' . $row['nome'];
         }
         return $ret;
     }
@@ -74,6 +74,12 @@ class Setor extends Model
     public static function getDefaultColumn()
     {
         return 'sigla';
+    }
+
+    public static function vincularPessoa($setor, $user, $funcao)
+    {
+        $setor->users()->wherePivot('funcao', $funcao)->detach($user);
+        $user->setores()->attach($setor, ['funcao' => $funcao]);
     }
 
     /**

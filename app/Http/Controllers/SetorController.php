@@ -119,8 +119,7 @@ class SetorController extends Controller
     public function storePessoa(Request $request, Setor $setor)
     {
         $user = User::obterOuCriarPorCodpes($request->codpes);
-        $setor->users()->wherePivot('funcao', 'Gerente')->detach($user);
-        $setor->users()->attach($user, ['funcao' => 'Gerente']);
+        Setor::vincularPessoa($setor, $user, 'Gerente');
 
         $request->session()->flash('alert-info', 'Pessoa adicionada com sucesso');
 

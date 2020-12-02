@@ -69,9 +69,8 @@ class LoginController extends Controller
 
         # vincular a pessoa e o vinculo ao setor
         foreach ($userSenhaUnica->vinculo as $vinculo) {
-            $setor = Setor::where('cod_set_replicado', $vinculo['codigoSetor'])->first();
-            if ($setor) {
-                $user->setores()->attach($setor, ['funcao' => $vinculo['nomeVinculo']]);
+            if ($setor = Setor::where('cod_set_replicado', $vinculo['codigoSetor'])->first()) {
+                Setor::vincularPessoa($setor, $user, $vinculo['nomeVinculo']);
             }
         }
 
