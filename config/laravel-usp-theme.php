@@ -17,7 +17,7 @@ $admin = [
     [
         'type' => 'header',
         'text' => '<b><i class="fas fa-cogs"></i>  Configurações</b>',
-        'can' => 'admin',
+        'can' => 'menuConfiguracoes',
     ],
     [
         'text' => '<i class="fas fa-sitemap ml-2"></i> Setores',
@@ -73,7 +73,7 @@ $menu = [
     [
         'text' => 'Meus Chamados',
         'url' => 'chamados',
-        'can' => 'chamados.create',
+        'can' => 'chamados.viewAny',
     ],
 ];
 

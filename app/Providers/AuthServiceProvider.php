@@ -74,11 +74,11 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('trocarPerfil', function ($user) {
-            if (Gate::allows('admin') || Gate::allows('atendente')) {
-                return true;
-            } else {
-                return false;
-            }
+            return Gate::any(['admin', 'atendente']);
+        });
+
+        Gate::define('menuConfiguracoes', function ($user) {
+            return Gate::any(['perfilSetor', 'filas.viewAny']);
         });
 
         # policies

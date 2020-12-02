@@ -20,7 +20,7 @@ class FilaPolicy
      */
     public function viewAny(User $user)
     {
-        if ($user->setores()->count() || $user->is_admin) {
+        if ($user->filas()->count() || $user->is_admin) {
             return true;
         } else {
             return false;
