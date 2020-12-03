@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Gate;
 
 class Setor extends Model
 {
@@ -17,7 +18,7 @@ class Setor extends Model
         'nome',
         'setor_id',
         'cod_set_replicado',
-        'cod_set_pai_replicado'
+        'cod_set_pai_replicado',
     ];
 
     public const rules = [
@@ -48,6 +49,9 @@ class Setor extends Model
         ],
     ];
 
+    /**
+     * utilizado nas views common
+     */
     public static function getFields()
     {
         $fields = SELF::fields;
@@ -61,12 +65,18 @@ class Setor extends Model
         return $fields;
     }
 
+    /**
+     * retorna todos os setores autorizados para o usuário
+     * utilizado nas views common, para o select
+     */
     public static function allToSelect()
     {
-        $rows = SELF::select('id', 'sigla', 'nome')->get()->toArray();
+        $setores = SELF::get();
         $ret = [];
-        foreach ($rows as $row) {
-            $ret[$row['id']] = $row['sigla'].' - '.$row['nome'];
+        foreach ($setores as $setor) {
+            if (Gate::allows('setores.view', $setor)) {
+            $ret[$setor->id] = $setor->sigla . ' - ' . $setor->nome;
+            }
         }
         return $ret;
     }
@@ -74,6 +84,12 @@ class Setor extends Model
     public static function getDefaultColumn()
     {
         return 'sigla';
+    }
+
+    public static function vincularPessoa($setor, $user, $funcao)
+    {
+        $setor->users()->wherePivot('funcao', $funcao)->detach($user);
+        $user->setores()->attach($setor, ['funcao' => $funcao]);
     }
 
     /**

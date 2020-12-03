@@ -25,8 +25,8 @@ class ChamadoPolicy
     /**
      * Determine whether the user can view the chamado.
      *
-     * @param  \App\User  $user
-     * @param  \App\Chamado  $chamado
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\Chamado  $chamado
      * @return mixed
      */
     public function view(User $user, Chamado $chamado)

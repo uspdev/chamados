@@ -17,7 +17,7 @@ $admin = [
     [
         'type' => 'header',
         'text' => '<b><i class="fas fa-cogs"></i>  Configurações</b>',
-        'can' => 'admin',
+        'can' => 'menuConfiguracoes',
     ],
     [
         'text' => '<i class="fas fa-sitemap ml-2"></i> Setores',
@@ -27,7 +27,7 @@ $admin = [
     [
         'text' => '<i class="fas fa-tasks ml-2"></i> Filas',
         'url' => 'filas',
-        'can' => 'perfilFila',
+        'can' => 'filas.viewAny',
     ],
     [
         'text' => '<i class="fas fa-users ml-2"></i> Pessoas',
@@ -73,7 +73,7 @@ $menu = [
     [
         'text' => 'Meus Chamados',
         'url' => 'chamados',
-        'can' => 'chamados.create',
+        'can' => 'chamados.viewAny',
     ],
 ];
 
@@ -97,7 +97,7 @@ $right_menu = [
         'title' => 'Configurações',
         'submenu' => $configuracoes,
         'align' => 'right',
-        #'can' => ['perfilAtendente','perfilFila'],
+        #'can' => ['perfilAtendente','filas.viewAny'],
     ],
 ];
 

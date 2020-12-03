@@ -90,7 +90,7 @@ class User extends Authenticatable
         // return $fields;
     }
 
-    public static function storeByCodpes($codpes) {
+    public static function criarPorCodpes($codpes) {
         $user = new User;
         $user->codpes = $codpes;
         if (config('chamados.usar_replicado')) {
@@ -113,13 +113,13 @@ class User extends Authenticatable
     /**
      * Obtém se já existir ou cria um novo objeto de usuário
      * 
-     * @param Int codpes Número USP a ser procurado ou criado
+     * @param Int $codpes Número USP a ser procurado ou criado
      * @return Obj $user Objeto do usuário criado
      */
     public static function obterOuCriarPorCodpes($codpes) {
         $user = User::obterPorCodpes($codpes);
         if (empty($user)) {
-            $user = User::storeByCodpes($codpes);
+            $user = User::criarPorCodpes($codpes);
         }
         return $user;
     }

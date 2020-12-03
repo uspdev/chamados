@@ -8,7 +8,7 @@ use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Support\Facades\Gate;
 
-class FilaPolicy
+class SetorPolicy
 {
     use HandlesAuthorization;
 
@@ -20,7 +20,8 @@ class FilaPolicy
      */
     public function viewAny(User $user)
     {
-        if ($user->filas()->count() || $user->is_admin) {
+        return false;
+        if ($user->setores()->count() || $user->is_admin) {
             return true;
         } else {
             return false;
@@ -34,50 +35,8 @@ class FilaPolicy
      * @param  \App\Models\Fila  $fila
      * @return mixed
      */
-    public function view(User $user, Fila $fila)
+    public function view(User $user, Setor $setor)
     {
-        # gerentes e atendentes da fila
-        foreach ($fila->users as $u) {
-            if ($user->codpes == $u->codpes) {
-                return true;
-            }
-        }
-
-        # gerentes do setor
-        $setor = $fila->setor;
-        foreach ($setor->users as $u) {
-            if ($user->codpes == $u->codpes) {
-                return true;
-            }
-        }
-
-        # gerentes do setor pai
-        # na estrutura do replicado da EESC
-        # tem somente 2 níveis abaixo da unidade
-        if ($setor = $setor->setor) {
-            foreach ($setor->users as $u) {
-                if ($user->codpes == $u->codpes) {
-                    return true;
-                }
-            }
-        }
-
-        /* admin */
-        if (Gate::allows('perfilAdmin')) {
-            return true;
-        }
-    }
-
-    /**
-     * Determine whether the user can create models.
-     * A criação de fila é dependente do setor
-     *
-     * @param  \App\Models\User  $user
-     * @return mixed
-     */
-    public function create(User $user, Setor $setor)
-    {
-        # igual ao setores.view, pois o gerente do setor tem autonomia sobre as filas
         # gerentes do setor
         foreach ($setor->users()->wherePivot('funcao', 'Gerente')->get() as $u) {
             if ($user->codpes == $u->codpes) {
@@ -100,6 +59,19 @@ class FilaPolicy
         if (Gate::allows('perfilAdmin')) {
             return true;
         }
+
+        return false;
+    }
+
+    /**
+     * Determine whether the user can create models.
+     *
+     * @param  \App\Models\User  $user
+     * @return mixed
+     */
+    public function create(User $user)
+    {
+        //
     }
 
     /**
@@ -111,13 +83,7 @@ class FilaPolicy
      */
     public function update(User $user, Fila $fila)
     {
-        # se for gerente da fila
-        if ($fila->users()->wherePivot('funcao', 'Gerente')) {
-            return true;
-        }
-
-        # se for gerente do setor ascendente
-        return $this->create($user, $fila->setor);
+        //
     }
 
     /**

@@ -5,28 +5,48 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-6">
-                    <b>Pessoas</b>@include('setores.partials.adicionar-pessoas')<br>
+                    <div>
+                        <b>Gerentes</b>@include('setores.partials.adicionar-pessoas')<br>
 
-                    <div class="ml-2">
-                        @if(count($setor->users))
-                        @foreach($setor->users()->withPivot('funcao')->get() as $user)
-                        <div class="form-inline">
-                            {{$user->name}} ({{ $user->pivot->funcao }})&nbsp; 
-                            @include('chamados.show.user-detail')
-                            @include('setores.partials.btn-pessoas-delete')
+                        <div class="ml-2">
+                            @if(count($setor->users))
+                            @foreach($setor->users()->wherePivot('funcao','Gerente')->get() as $user)
+                            <div class="form-inline">
+                                {{$user->name}} ({{ $user->pivot->funcao }})&nbsp;
+                                @include('chamados.show.user-detail')
+                                @include('setores.partials.btn-pessoas-delete')
+                            </div>
+                            @endforeach
+                            @else
+                            Nenhuma pessoa
+                            @endif
                         </div>
-                        @endforeach
-                        @else
-                        Nenhuma pessoa
-                        @endif
+                    </div>
+                    <br>
+                    <div>
+                        <b>Filas</b><br>
+                        <div class="ml-2">
+                            @foreach($setor->filas as $fila)
+                            <a href="filas/{{$fila->id}}">{{$fila->nome}} <i class="fas fa-share"></i></a><br>
+                            @endforeach
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <b>Filas</b><br>
-                    <div class="ml-2">
-                        @foreach($setor->filas as $fila)
-                        <a href="filas/{{$fila->id}}">{{$fila->nome}} <i class="fas fa-share"></i></a><br>
-                        @endforeach
+                    <div>
+                        <b>Pessoas</b><br>
+                        <div class="ml-2">
+                            @if(count($setor->users))
+                            @foreach($setor->users()->wherePivot('funcao','!=','Gerente')->get() as $user)
+                            <div class="form-inline">
+                                {{$user->name}} ({{ $user->pivot->funcao }})&nbsp;
+                                @include('chamados.show.user-detail')
+                            </div>
+                            @endforeach
+                            @else
+                            Nenhuma pessoa
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>

@@ -84,7 +84,7 @@ class SetorController extends Controller
 
         $request->session()->flash('alert-info', 'Dados adicionados com sucesso');
 
-        return Redirect::to(URL::previous() . "#".strtolower($setor->sigla));
+        return Redirect::to(URL::previous() . "#" . strtolower($setor->sigla));
     }
 
     /**
@@ -93,7 +93,7 @@ class SetorController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
-     * 
+     *
      * Por enquanto somente para admin
      * Talvez, autorizar se usuário for gerente do setor ou de qualquer setor acendente
      */
@@ -110,7 +110,7 @@ class SetorController extends Controller
         $setor->save();
 
         $request->session()->flash('alert-info', 'Dados editados com sucesso');
-        return Redirect::to(URL::previous() . "#".strtolower($setor->sigla));
+        return Redirect::to(URL::previous() . "#" . strtolower($setor->sigla));
     }
 
     /**
@@ -119,17 +119,16 @@ class SetorController extends Controller
     public function storePessoa(Request $request, Setor $setor)
     {
         $user = User::obterOuCriarPorCodpes($request->codpes);
-        $setor->users()->detach($user);
-        $setor->users()->attach($user, ['funcao' => 'Gerente']);
+        Setor::vincularPessoa($setor, $user, 'Gerente');
 
         $request->session()->flash('alert-info', 'Pessoa adicionada com sucesso');
 
         #vamos retornar inclundo anchor
-        return Redirect::to(URL::previous() . "#".strtolower($setor->sigla));
+        return Redirect::to(URL::previous() . "#" . strtolower($setor->sigla));
     }
 
     /**
-     * Autorizar pessoas que sao gerentes do setor ou de setor acendente
+     * Remover pessoas que sao gerentes do setor ou de setor acendente
      */
     public function destroyPessoa(Request $request, Setor $setor, $id)
     {
@@ -142,11 +141,10 @@ class SetorController extends Controller
             $request->session()->flash('alert-warning', 'Não é possível remover a si mesmo.');
             return back();
         }
-        $setor->users()->detach($id);
+        $setor->users()->wherePivot('funcao','Gerente')->detach($id);
         $request->session()->flash('alert-info', 'Pessoa removida com sucesso');
-        return Redirect::to(URL::previous() . "#".strtolower($setor->sigla));
+        return Redirect::to(URL::previous() . "#" . strtolower($setor->sigla));
 
     }
-    
 
 }

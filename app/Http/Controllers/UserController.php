@@ -46,7 +46,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $this->authorize('admin');
-        User::storeByCodpes($request->codpes);
+        User::obterOuCriarPorCodpes($request->codpes);
         $request->session()->flash('alert-info', 'Atendente adicionado com sucesso');
         return redirect('/users');
     }
@@ -101,6 +101,9 @@ class UserController extends Controller
         return back();
     }
 
+    /**
+     * Permite fazer buscas ajax por nome, formatado para datatables
+     */
     public function partenome(Request $request)
     {
         $this->authorize('usuario');
