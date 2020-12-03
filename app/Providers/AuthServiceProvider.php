@@ -81,6 +81,11 @@ class AuthServiceProvider extends ServiceProvider
             return Gate::any(['perfilSetor', 'filas.viewAny']);
         });
 
+        # se o admin assumir identidade de outro usuário, permite retornar
+        Gate::define('desassumir', function ($user) {
+            return session('adminCodpes');
+        });
+
         # policies
         Gate::resource('chamados', 'App\Policies\ChamadoPolicy');
         Gate::resource('filas', 'App\Policies\FilaPolicy');

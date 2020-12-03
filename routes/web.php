@@ -36,9 +36,10 @@ Route::post('filas/{fila}/template', [FilaController::class, 'storeTemplate'])->
 
 // USERS
 Route::get('search/partenome', [UserController::class,'partenome']);
-Route::resource('users', UserController::class);
 Route::get('users/perfil/{perfil}', [UserController::class, 'trocarPerfil']);
+Route::get('users/desassumir', [UserController::class, 'desassumir']);
 Route::get('users/{user}/assumir', [UserController::class, 'assumir']);
+Route::resource('users', UserController::class);
 
 // CHAMADOS - VINCULADOS
 Route::get('chamados/listarChamadosAjax', [ChamadoController::class,'listarChamadosAjax']);

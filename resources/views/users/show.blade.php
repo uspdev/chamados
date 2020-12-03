@@ -5,7 +5,7 @@
 
     <div class="row">
         <div class="col-md-12">
-            <div class="h4 mt-2"><a href="users">Usuários</a> <i class="fas fa-angle-right"></i> {{ $user->name }}</div>
+            <div class="h4 mt-2"><a href="users">Usuários</a> <i class="fas fa-angle-right"></i> {{ $user->name }} | @include('users.partials.btn-change-user')</div>
             <div>Nome: {{ $user->name }}</div>
             <div>email: {{ $user->email }}</div>
             <div>telefone: {{ $user->telefone }}</div>
