@@ -2,7 +2,7 @@
 @parent
 <style>
     #card-principal-conteudo {
-        font-size: 1.3em !important;
+        font-size: 1.1em !important;
     }
 </style>
 @endsection

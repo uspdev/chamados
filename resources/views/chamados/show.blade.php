@@ -13,7 +13,6 @@
         background-color: LightBlue;
         border-top: 3px solid blue;
     }
-
 </style>
 @endsection
 
@@ -59,21 +58,18 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-8">
                         @include('chamados.show.card-comentarios-user')
                     </div>
                     <div class="col-md-4">
                         @include('chamados.show.card-arquivos')
                         @include('chamados.show.card-pessoas')
                         @include('chamados.show.card-vinculados')
-                    </div>
-                    <div class="col-md-4">
                         @include('chamados.show.card-comentarios-system')
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 <div class="modal fade show" id="chamadoModal" data-backdrop="static" tabindex="-1" aria-labelledby="modalChamadoEdit" aria-hidden="true">
@@ -123,6 +119,5 @@
     function mostraModal() {
         $('#chamadoModal').modal('show');
     }
-
 </script>
 @stop

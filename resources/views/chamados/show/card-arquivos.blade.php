@@ -7,7 +7,6 @@
         border: 1px solid DarkGoldenRod;
         border-top: 3px solid DarkGoldenRod;
     }
-
 </style>
 @endsection
 
@@ -15,12 +14,12 @@
     <div class="card-header form-inline">
         Arquivos
         <label for="input_arquivo">
-            <span class="btn btn-sm btn-light text-primary"> <i class="fas fa-plus"></i> Adicionar</span>
+            <span class="btn btn-sm btn-light text-primary ml-2"> <i class="fas fa-plus"></i> Adicionar</span>
 
         </label>
         <span data-toggle="tooltip" data-html="true" title="Tamanho máximo de cada arquivo: {{$max_upload_size}}MB ">
-                <i class="fas fa-question-circle text-secondary"></i>
-            </span>
+            <i class="fas fa-question-circle text-secondary ml-2"></i>
+        </span>
         <form id="form_arquivo" action="arquivos" method="post" enctype="multipart/form-data" class="w-100 d-inline-block">
             @csrf
             <input type="hidden" name="chamado_id" value="{{$chamado->id}}">

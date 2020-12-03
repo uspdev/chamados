@@ -14,24 +14,25 @@
             </div>
             <div class="modal-body">
 
-                    {!! Form::open(['url'=>'comentarios/'.$chamado->id]) !!}
-                    @method('post')
-                    @csrf
+                {!! Form::open(['url'=>'comentarios/'.$chamado->id]) !!}
+                @method('post')
+                @csrf
 
-                    <div class="form-group">
-                        <label for="comentario"><b>Novo comentário:</b></label>
-                        <textarea class="form-control" id="comentario" name="comentario" rows="7"></textarea>
-                    </div>
+                <div class="form-group">
+                    <textarea class="form-control" id="comentario" name="comentario" rows="7"></textarea>
+                </div>
 
-                    <div class="form-group">
-                        @if($chamado->status == 'Triagem' or $chamado->status == 'Atribuído')
-                        <button type="submit" class="btn btn-primary" value="">Enviar</button>
-                        <button type="submit" class="btn btn-danger" name="status" value="Fechado">Enviar e fechar chamado</button>
-                        @else
-                        <button type="submit" class="btn btn-danger" name="status" value="Triagem">Enviar e reabrir chamado</button>
-                        @endif
-                    </div>
-                    {!! Form::close(); !!}
+                <div class="form-group">
+                    @if($chamado->status == 'Triagem' or $chamado->status == 'Atribuído')
+                    <button type="submit" class="btn btn-primary" value="">Enviar</button>
+                    <button type="submit" class="btn btn-danger" name="status" value="Fechado">Enviar e fechar chamado</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    @else
+                    <button type="submit" class="btn btn-danger" name="status" value="Triagem">Enviar e reabrir chamado</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    @endif
+                </div>
+                {!! Form::close(); !!}
 
             </div>
         </div>
@@ -42,15 +43,9 @@
 @parent
 <script>
     $(document).ready(function() {
-
         $('#comentarioModal').on('shown.bs.modal', function() {
             $('#comentario').trigger('focus')
         })
-
-
-
-
     })
-
 </script>
 @endsection
