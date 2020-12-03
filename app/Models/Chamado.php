@@ -18,6 +18,10 @@ class Chamado extends Model
     # para atribuição em massa
     protected $fillable = ['assunto', 'descricao', 'anotacoes'];
 
+    public const rules = [
+        'complexidade' => ['required'], //falta tratar todas as possibilidades 
+    ];
+
     /**
      * Constantes usadas no bd
      */
