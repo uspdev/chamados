@@ -374,11 +374,9 @@ class ChamadoController extends Controller
      */
     public function triagemStore(Request $request, Chamado $chamado)
     {
-        //$this->authorize('admin');
         $this->authorize('atendente');
         
-        $request->validate(Chamado::rules);
-        
+        $request->validate(Chamado::rules);        
         
         $chamado->complexidade = $request->complexidade;
         $atendente = User::obterPorCodpes($request->codpes);
