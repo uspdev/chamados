@@ -1,5 +1,7 @@
 @extends('master')
 
+@section('title', '#'.$chamado->nro.'/'.$chamado->created_at->year)
+
 @section('styles')
 @parent
 <style>
@@ -11,6 +13,7 @@
         background-color: LightBlue;
         border-top: 3px solid blue;
     }
+
 </style>
 @endsection
 
@@ -120,5 +123,6 @@
     function mostraModal() {
         $('#chamadoModal').modal('show');
     }
+
 </script>
 @stop
