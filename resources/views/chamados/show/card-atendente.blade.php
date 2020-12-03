@@ -8,35 +8,36 @@
         </span>
     </div>
     <div class="card-body">
-        <div class="mb-3">
-            <div class="form-inline">
-                Estado: &nbsp; @include('chamados.partials.status')
-                &nbsp;
-                @if($chamado->fila->config->triagem)
-                @includeWhen($chamado->status != 'Fechado', 'chamados.partials.show-triagem-modal', ['modalTitle'=>'Triagem', 'url'=>'ok'])
-                @elseif(!count($atendentes))
-                @include('chamados.show.card-atendente-atender')
-                @endif
+        <div class="row mb-3">
+            <div class="col-8">
+                <form id="anotacoes_form" name="anotacoes_form" method="POST" action="chamados/{{$chamado->id}}">
+                    @csrf
+                    @method('PUT')
+                    <textarea class="form-control" rows="2" name="anotacoes">{{ $chamado->anotacoes }}</textarea>
+                </form>
             </div>
-            <div class="ml-2">
-                @if($atendentes->count())
-                @foreach($atendentes as $atendente)
-                {{ $atendente->name }} @include('chamados.show.user-detail', ['user'=>$atendente])<br>
-                @endforeach
-                <span class="text-muted">Complexidade</span>: {{ $chamado->complexidade }}<br>
-                @else
+            <div class="col-4">
+                <div class="form-inline">
+                    Estado: &nbsp; @include('chamados.partials.status')
+                    &nbsp;
+                    @if($chamado->fila->config->triagem)
+                    @includeWhen($chamado->status != 'Fechado', 'chamados.partials.show-triagem-modal', ['modalTitle'=>'Triagem', 'url'=>'ok'])
+                    @elseif(!count($atendentes))
+                    @include('chamados.partials.show-atender-modal', ['modalTitle'=>'Triagem', 'url'=>'ok'])
+                    @endif
+                </div>
+                <div class="ml-2">
+                    @if($atendentes->count())
+                    @foreach($atendentes as $atendente)
+                    {{ $atendente->name }} @include('chamados.show.user-detail', ['user'=>$atendente])<br>
+                    @endforeach
+                    <span class="text-muted">Complexidade</span>: {{ $chamado->complexidade }}<br>
+                    @else
 
-                @endif
+                    @endif
+                </div>
             </div>
         </div>
-        <div>
-            <form id="anotacoes_form" name="anotacoes_form" method="POST" action="chamados/{{$chamado->id}}">
-                @csrf
-                @method('PUT')
-                <textarea class="form-control" rows="2" name="anotacoes">{{ $chamado->anotacoes }}</textarea>
-            </form>
-        </div>
-
     </div>
 </div>
 
@@ -46,10 +47,9 @@
     $(function() {
 
         // {{-- https://stackoverflow.com/questions/931252/ajax-autosave-functionality --}}
-        var $status = $('#card-atendente').find('.status')
-            , $anotacoes = $('#anotacoes_form').find('textarea')
-            , timeoutId
-            , timeout = 1500
+        var $status = $('#card-atendente').find('.status'),
+            $anotacoes = $('#anotacoes_form').find('textarea'),
+            timeoutId, timeout = 1500
 
         $anotacoes.keyup(function() { // keypress or keyup to detect backspaces
             $status.show()
@@ -63,11 +63,11 @@
                 $form = $('#anotacoes_form')
                 // Make ajax call to save data.
                 $.ajax({
-                    url: $form.attr('action')
-                    , type: 'put'
-                    , dataType: 'json'
-                    , data: $form.serialize()
-                    , success: function(data) {
+                    url: $form.attr('action'),
+                    type: 'put',
+                    dataType: 'json',
+                    data: $form.serialize(),
+                    success: function(data) {
                         console.log($('#anotacoes_form').find('textarea').val())
                         if (data.message == 'success') {
                             $status.attr('class', 'badge badge-secondary').html('<i class="fas fa-save"></i> Salvo');
@@ -83,6 +83,5 @@
             }, timeout);
         });
     });
-
 </script>
 @stop
