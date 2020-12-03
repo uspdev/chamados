@@ -20,10 +20,18 @@ class FilaPolicy
      */
     public function viewAny(User $user)
     {
-        if ($user->filas()->count() || $user->is_admin) {
+        # se o usuário pertence a alguma fila
+        if ($user->filas()->count()) {
             return true;
-        } else {
-            return false;
+        } 
+
+        # se o usuário é gerente de algum setor
+        if ($user->setores()->wherePivot('funcao', 'Gerente')->count()) {
+            return true;
+        } 
+
+        if ($user->is_admin) {
+            return true;
         }
     }
 

@@ -121,14 +121,13 @@ class UserController extends Controller
                         'id' => $pessoa['codpes'],
                     ];
                 }
-            }
-            else {
-                $pessoas = User::where('name', 'like', '%'.$request->term.'%')->get()->take(1);
+            } else {
+                $pessoas = User::where('name', 'like', '%' . $request->term . '%')->get()->take(1);
 
                 foreach ($pessoas as $pessoa) {
                     $results[] = [
                         'text' => $pessoa->codpes . ' ' . $pessoa->name,
-                        'id' => $pessoa->codpes
+                        'id' => $pessoa->codpes,
                     ];
                 }
             }
@@ -170,8 +169,25 @@ class UserController extends Controller
     {
         $this->authorize('admin');
 
+        session(['adminCodpes' => \Auth::user()->codpes]);
         \Auth::login($user, true);
         session(['perfil' => 'usuario']);
+
+        return redirect('/');
+    }
+
+    /**
+     * Permite retornar a identidade original
+     */
+    public function desassumir()
+    {
+        $this->authorize('desassumir');
+
+        $user = User::obterPorCodpes(session('adminCodpes'));
+        session(['adminCodpes' => 0]);
+        \Auth::login($user, true);
+        session(['perfil' => 'usuario']);
+
         return redirect('/');
     }
 }

@@ -82,6 +82,11 @@ $right_menu = [
         'text' => '<span class="badge badge-danger">Admin</span>',
         'url' => '',
         'can' => 'perfilAdmin',
+    ],   
+    [
+        'text' => '<span class="badge badge-danger">Desassumir identidade</span>',
+        'url' => 'users/desassumir',
+        'can' => 'desassumir',
     ],
     [
         'text' => '<span class="badge badge-warning">Atendente</span>',
@@ -103,7 +108,6 @@ $right_menu = [
 
 return [
     'title' => config('app.name'),
-    #skins (requer LARAVEL-USP-THEME v2)
     'skin' => env('USP_THEME_SKIN', 'uspdev'),
     'app_url' => config('app.url'),
     'logout_method' => 'POST',
