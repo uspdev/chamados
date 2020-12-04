@@ -181,4 +181,12 @@ class Chamado extends Model
     {
         return $this->hasMany('App\Models\Arquivo');
     }
+
+    /**
+     * relacionamento com patrimonios
+     */
+    public function patrimonios()
+    {
+        return $this->belongsToMany('App\Models\Patrimonio', 'chamado_patrimonio')->withTimestamps();
+    }
 }

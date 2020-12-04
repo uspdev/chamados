@@ -65,6 +65,7 @@
                         @include('chamados.show.card-arquivos')
                         @include('chamados.show.card-pessoas')
                         @include('chamados.show.card-vinculados')
+                        @include('chamados.show.card-patrimonios')
                         @include('chamados.show.card-comentarios-system')
                     </div>
                 </div>

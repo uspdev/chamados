@@ -53,6 +53,10 @@ Route::get('chamados/anos/{ano}', [ChamadoController::class,'mudaAno']);
 Route::post('chamados/{chamado}/pessoas', [ChamadoController::class,'storePessoa']);
 Route::delete('chamados/{chamado}/pessoas/{user}', [ChamadoController::class,'destroyPessoa']);
 
+// CHAMADOS - PATRIMONIOS
+Route::post('chamados/{chamado}/patrimonios', [ChamadoController::class,'storePatrimonio']);
+Route::delete('chamados/{chamado}/patrimonios/{patrimonio}', [ChamadoController::class,'destroyPatrimonio']);
+
 // CHAMADOS
 Route::get('chamados/create', [ChamadoController::class, 'listaFilas']);
 Route::get('chamados/create/{fila}/', [ChamadoController::class, 'create'])->name('chamados.create');
