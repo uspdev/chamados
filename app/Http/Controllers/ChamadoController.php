@@ -8,6 +8,7 @@ use App\Models\Comentario;
 use App\Models\Fila;
 use App\Models\Setor;
 use App\Models\User;
+use App\Models\Patrimonio;
 use App\Utils\JSONForms;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -466,93 +467,43 @@ class ChamadoController extends Controller
     }
 
     /**
-     *
-     * desativados
-     *
-     *
-     *
-     *
+     * Adicionar patrimonios relacionadas ao chamado
+     * autorizado a qualquer um que tenha acesso ao chamado
+     * request->codpes = required, int
      */
+    public function storePatrimonio(Request $request, Chamado $chamado)
+    {
+        if(config('chamados.usar_replicado') == 'true'){
+            $request->validate([
+                'numpat' => 'required|patrimonio',
+            ]);
+        } else {
+            $request->validate([
+                'numpat' => 'required',
+            ]);
+        }
+
+        $patrimonio = Patrimonio::where('numpat',$request->numpat)->first();
+        if(!$patrimonio) {
+            $patrimonio = new Patrimonio;
+            $patrimonio->numpat = $request->numpat;
+            $patrimonio->save();
+        }
+        $chamado->patrimonios()->attach($patrimonio);
+       
+        # continua ...
+    }
 
     /**
-     * **** Passou a ser feito via modal ****
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Chamado  $chamado
-     * @return \Illuminate\Http\Response
+     * Remove patrimonios relacionadas ao chamado
+     * Autorização: se for remover autor, ou atendente,somente para atendente ou admin
+     * se for observador, qualquer um que tenha acesso ao chamado
+     * $user = required
      */
-    public function edit(Chamado $chamado)
+    public function destroyPatrimonio(Request $request, Chamado $chamado, User $user)
     {
-        $this->authorize('chamados.view', $chamado);
-        $fila = $chamado->fila;
-        $atendentes = [];
-        $complexidades = Chamado::complexidades();
-        $autor = $chamado->users()->wherePivot('papel', 'Autor')->first();
-        $form = JSONForms::generateForm($fila, $chamado);
-        return view('chamados/edit', compact('fila', 'chamado', 'atendentes', 'form'));
+
     }
 
-    public function devolver(Chamado $chamado)
-    {
-        return "desativado";
-        $this->authorize('atendente');
-        return view('chamados/devolver', compact('chamado'));
-    }
-
-    public function todos(Request $request)
-    {
-        return "desativado";
-        $this->authorize('admin');
-        $chamados = Chamado::orderBy('created_at', 'desc');
-        // search terms
-        if (isset($request->status)) {
-            $chamados->where('status', '=', $request->status);
-        }
-        if (isset($request->search)) {
-            $chamados->where('chamado', 'LIKE', "%" . $request->search . "%");
-        }
-        $chamados = $chamados->paginate(10);
-        return view('chamados/todos', compact('chamados'));
-    }
-
-    public function buscaid(Request $request)
-    {
-        return 'desativado';
-        $this->authorize('atendente');
-        $chamado = isset($request->id) ? Chamado::find($request->id) : null;
-        $mensagem = null;
-        if (isset($request->id) and is_null($chamado)) {
-            $mensagem = 'Não há chamado com este Id.';
-        }
-        return view('chamados/buscaid', compact('chamado', 'mensagem'));
-    }
-
-    # acho que nao vai mais usar
-    public function triagem()
-    {
-        return 'disable';
-        /* Chamados de quem está logado */
-        $this->authorize('chamados.viewAny');
-        $user = \Auth::user();
-        $chamados = Chamado::where('status', 'Triagem')->orderBy('created_at', 'desc')->get();
-        return view('chamados/index', compact('chamados'));
-    }
-
-    public function atender()
-    {
-        return 'disable';
-        /* Chamados de quem está logado */
-        $this->authorize('chamados.viewAny');
-
-        $user = \Auth::user();
-        $chamados = Chamado::whereHas('users', function ($pivot) {
-            $user = \Auth::user();
-            $pivot->where([
-                ['user_id', $user->id],
-                ['papel', 'Atendente'],
-            ]);
-        })->orderBy('created_at', 'desc')->paginate(10);
-
-        return view('chamados/index', compact('chamados'));
-    }
+    
 }
