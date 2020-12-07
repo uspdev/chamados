@@ -8,7 +8,7 @@
         </span>
     </div>
     <div class="card-body">
-        <div class="row mb-3">
+        <div class="row">
             <div class="col-8">
                 <form id="anotacoes_form" name="anotacoes_form" method="POST" action="chamados/{{$chamado->id}}">
                     @csrf
@@ -17,13 +17,13 @@
                 </form>
             </div>
             <div class="col-4">
-                <div class="form-inline">
+            <div class="form-inline">
                     Estado: &nbsp; @include('chamados.partials.status')
                     &nbsp;
                     @if($chamado->fila->config->triagem)
                     @includeWhen($chamado->status != 'Fechado', 'chamados.partials.show-triagem-modal', ['modalTitle'=>'Triagem', 'url'=>'ok'])
-                    @elseif(!count($atendentes))
-                    @include('chamados.partials.show-atender-modal', ['modalTitle'=>'Triagem', 'url'=>'ok'])
+                    @else
+                    @includeWhen($chamado->status != 'Fechado', 'chamados.partials.show-atender-modal', ['modalTitle'=>'Atender', 'url'=>'ok'])
                     @endif
                 </div>
                 <div class="ml-2">
@@ -45,7 +45,6 @@
 @parent
 <script>
     $(function() {
-
         // {{-- https://stackoverflow.com/questions/931252/ajax-autosave-functionality --}}
         var $status = $('#card-atendente').find('.status'),
             $anotacoes = $('#anotacoes_form').find('textarea'),

@@ -27,12 +27,12 @@ class Chamado extends Model
      */
     public static function complexidades()
     {
-        return ['baixa', 'média', 'alta'];
+        return ['Baixa', 'Média', 'Alta'];
     }
 
     public static function status()
     {
-        return ['Triagem', 'Atribuído', 'Fechado'];
+        return ['Triagem', 'Atribuído', 'Fechado', 'Aguardando Solicitante', 'Aguardando Peças'];
     }
 
     # valores possiveis para pivot do relacionamento com users

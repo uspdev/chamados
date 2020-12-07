@@ -25,25 +25,9 @@
                         </div>
                     </div>
 
-                    <div class="form-group row mb-2">
-                        <label class="col-form-label col-sm-2" for="complexidade"><b>Complexidade:</b></label>
-                        <div class="col-sm-10">
-                            <select name="complexidade" class="form-control" style="width: 100%;">
-                                <option value="" selected="">Escolher</option>
-                                @foreach($complexidades as $complexidade)
-                                @if(old('complexidade') == '' and isset($chamado->complexidade))
-                                <option value="{{ $complexidade }}" {{ ( $chamado->complexidade == $complexidade) ? 'selected' : ''}}>
-                                    {{ $complexidade }}
-                                </option>
-                                @else
-                                <option value="{{ $complexidade }}" {{ (old('complexidade') == $complexidade) ? 'selected' : ''}}>
-                                    {{ $complexidade }}
-                                </option>
-                                @endif
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
+                    @include('chamados.show.mudar-status')
+                    @include('chamados.show.mudar-complexidade')
+
                     <div class="text-right">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
                         <button type="submit" class="btn btn-primary">Salvar</button>

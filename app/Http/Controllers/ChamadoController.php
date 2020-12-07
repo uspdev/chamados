@@ -118,6 +118,7 @@ class ChamadoController extends Controller
         # Seria interessante vincular recursivos? Acho que não mas ...
         $vinculados = $chamado->vinculados;
         $complexidades = Chamado::complexidades();
+        $status_list = Chamado::status();
 
         # para o form de adicionar pessoas
         $modal_pessoa['url'] = 'chamados';
@@ -127,7 +128,7 @@ class ChamadoController extends Controller
 
         $form = JSONForms::generateForm($chamado->fila, $chamado);
 
-        return view('chamados/show', compact('atendentes', 'autor', 'chamado', 'extras', 'template', 'vinculados', 'complexidades', 'modal_pessoa', 'max_upload_size', 'form'));
+        return view('chamados/show', compact('atendentes', 'autor', 'chamado', 'extras', 'template', 'vinculados', 'complexidades', 'status_list', 'modal_pessoa', 'max_upload_size', 'form'));
     }
 
     /**
