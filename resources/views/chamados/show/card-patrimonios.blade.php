@@ -5,6 +5,7 @@
         border: 1px solid brown;
         border-top: 3px solid brown;
     }
+
 </style>
 @endsection
 
@@ -25,7 +26,11 @@
         <ul class="ml-2 list-unstyled lista-patrimonios">
             @foreach($chamado->patrimonios as $patrimonio)
             <li class="form-inline">
-                    {{ $patrimonio->numpat }}
+                {{ substr($patrimonio->numpat, 0, -6) }}.{{substr($patrimonio->numpat, strlen($patrimonio->numpat)-6,) }}: 
+                {{ $patrimonio->replicado()->nomsgpitmmat ?? 'nome' }} -
+                {{ $patrimonio->replicado()->epfmarpat }} -
+                {{ $patrimonio->replicado()->tippat }} -
+                {{ $patrimonio->replicado()->modpat }}
             </li>
             @endforeach
         </ul>
@@ -39,11 +44,12 @@
         $('.lista-patrimonios li').hover(
             function() {
                 $(this).find('.hidden-btn').removeClass('d-none');
-            },
-            function() {
+            }
+            , function() {
                 $(this).find('.hidden-btn').addClass('d-none');
             }
         )
     });
+
 </script>
 @endsection

@@ -12,9 +12,9 @@ use App\Models\Patrimonio;
 use App\Utils\JSONForms;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Log;
 
 class ChamadoController extends Controller
 {
@@ -422,6 +422,8 @@ class ChamadoController extends Controller
      */
     public function storePessoa(Request $request, Chamado $chamado)
     {
+        $this->authorize('chamados.view', $chamado);
+        
         $user = User::obterOuCriarPorCodpes($request->codpes);
         $chamado->users()->attach($user, ['papel' => 'Observador']);
 
@@ -445,8 +447,10 @@ class ChamadoController extends Controller
      */
     public function destroyPessoa(Request $request, Chamado $chamado, User $user)
     {
+        $this->authorize('chamados.view', $chamado);
+
         $papel = $chamado->users()->where('users.id', $user->id)->first()->pivot->papel;
-        $chamado->users()->detach($user);
+        $chamado->users()->wherePivot('papel', $papel)->detach($user);
 
         # verificar se sobrou algum atendente, se não, muda o status
         if (!count($chamado->users()->wherePivot('papel', 'Atendente')->get())) {
@@ -489,9 +493,12 @@ class ChamadoController extends Controller
             $patrimonio->numpat = $request->numpat;
             $patrimonio->save();
         }
+        $chamado->patrimonios()->detach($patrimonio);
         $chamado->patrimonios()->attach($patrimonio);
        
         # continua ...
+        return Redirect::to(URL::previous() . "#card_patrimonios");
+
     }
 
     /**
