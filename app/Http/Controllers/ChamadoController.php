@@ -72,9 +72,10 @@ class ChamadoController extends Controller
      */
     public function store(ChamadoRequest $request, Fila $fila)
     {
-        # limitar _as filas que o usuario pode criar, somente filas "em produção"
+        # limitar as filas que o usuario pode criar, somente filas "em produção"
         $this->authorize('chamados.create');
         $request->validate(JSONForms::buildRules($request, $fila));
+
         # transaction para não ter problema de inconsistência do DB
         $chamado = \DB::transaction(function () use ($request, $fila) {
             $chamado = new Chamado;
@@ -216,12 +217,14 @@ class ChamadoController extends Controller
     public function update(Request $request, Chamado $chamado)
     {
         $this->authorize('chamados.update', $chamado);
+
         # inicialmente atende a atualização do campo anotacoes via ajax
         if ($request->ajax()) {
             $chamado->fill($request->all());
             $chamado->save();
             return response()->json(['message' => 'success', 'data' => $chamado]);
         }
+        
         # acho que valida atendente
         if (Gate::allows('admin') and isset($request->atribuido_para)) {
             $request->validate([
