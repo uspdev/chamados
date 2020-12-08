@@ -1,29 +1,33 @@
 <a name="card_atendente"></a>
 <div class="card bg-light border-warning mb-3" id="card-atendente">
     <div class="card-header bg-warning">
-        Atendente
-        <span title="Esta região é visível somente para o atendente, para que possa fazer anotações técnicas" class="ajuda" data-toggle="tooltip"><i class="fas fa-question-circle"></i></span>
-        <span class="status">
-            <span class="badge badge-light"></span>
-        </span>
-        <div class="form-inline float-right">
-            @if($chamado->fila->config->triagem)
-            @includeWhen($chamado->status != 'Fechado', 'chamados.partials.show-triagem-modal', ['modalTitle'=>'Triagem', 'url'=>'ok'])
-            @else
-            @includeWhen($chamado->status != 'Fechado', 'chamados.partials.show-atender-modal', ['modalTitle'=>'Atender', 'url'=>'ok'])
-            @endif
+        <div class="form-inline">
+            Atendente
+            <span title="Esta região é visível somente para o atendente, para que possa fazer anotações técnicas" class="ajuda mx-2" data-toggle="tooltip"><i class="fas fa-question-circle"></i></span>
+            <span class="status">
+                <span class="badge badge-light mr-2"></span>
+            </span>            
+                @if($chamado->fila->config->triagem)
+                @includeWhen($chamado->status != 'Fechado', 'chamados.partials.show-triagem-modal', ['modalTitle'=>'Triagem', 'url'=>'ok'])
+                @else
+                @includeWhen($chamado->status != 'Fechado', 'chamados.partials.show-atender-modal', ['modalTitle'=>'Atender', 'url'=>'ok'])
+                @endif
+            
         </div>
+        
     </div>
     <div class="card-body">
-        <div class="row">
-            <div class="col-12 col-lg-8">
+        <div class="row">           
+            
+            <div class="col-md-8">
                 <form id="anotacoes_form" name="anotacoes_form" method="POST" action="chamados/{{$chamado->id}}">
                     @csrf
                     @method('PUT')
+                    <b>Anotações:</b>
                     <textarea class="form-control" rows="3" name="anotacoes">{{ $chamado->anotacoes }}</textarea>
                 </form>
             </div>
-            <div class="col-12 col-lg-4">
+            <div class="col-md-4">
                 <div class="form-inline">
                     @include('chamados.show.mudar-status')
                 </div>

@@ -39,9 +39,6 @@ class Chamado extends Model
     {
         if($formCollective){
             return [
-                'Triagem'=>'Triagem',
-                'Atribuído'=>'Atribuído',
-                'Fechado'=>'Fechado',
                 'Aguardando Solicitante'=>'Aguardando Solicitante',
                 'Aguardando Peças'=>'Aguardando Peças'
             ];
