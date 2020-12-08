@@ -49,8 +49,9 @@ class ChamadoController extends Controller
         $chamado = new Chamado;
         $chamado->fila = $fila;
         $complexidades = Chamado::complexidades();
+        $status_list = Chamado::status();
         $form = JSONForms::generateForm($fila);
-        return view('chamados/create', compact('fila', 'chamado', 'complexidades', 'form'));
+        return view('chamados/create', compact('fila', 'chamado', 'complexidades', 'status_list', 'form'));
     }
 
     /**
@@ -117,8 +118,8 @@ class ChamadoController extends Controller
         # estamos carregando os vinculados diretos.
         # Seria interessante vincular recursivos? Acho que não mas ...
         $vinculados = $chamado->vinculados;
-        $complexidades = Chamado::complexidades();
-        $status_list = Chamado::status();
+        $complexidades = Chamado::complexidades(true);
+        $status_list = Chamado::status(true);
 
         # para o form de adicionar pessoas
         $modal_pessoa['url'] = 'chamados';
@@ -289,36 +290,54 @@ class ChamadoController extends Controller
     /* Evita duplicarmos código  */
     private function grava(Chamado $chamado, Request $request)
     {
+
         if ($request->status == 'devolver') {
             $chamado->status = 'Triagem';
             $chamado->complexidade = null;
             $user = \Auth::user();
         } else {
             $atualizacao = [];
-            if ($chamado->assunto != $request->assunto) {
+            $novo_valor = [];
+            if ($chamado->assunto != $request->assunto && !empty($request->assunto)) {
                 /*  guardando os dados antigos em log para auditoria */
                 Log::info(' - Edição de chamado - Usuário: ' . \Auth::user()->codpes . ' - ' . \Auth::user()->name . ' - Id Chamado: ' . $chamado->id . ' - Assunto antigo: ' . $chamado->assunto . ' - Novo Assunto: ' . $request->assunto);
                 array_push($atualizacao, 'assunto');
                 $chamado->assunto = $request->assunto;
             }
-            if ($chamado->descricao != $request->descricao) {
+            if ($chamado->descricao != $request->descricao && !empty($request->descricao)) {
                 /* guardando os dados antigos em log para auditoria */
                 Log::info(' - Edição de chamado - Usuário: ' . \Auth::user()->codpes . ' - ' . \Auth::user()->name . ' - Id Chamado: ' . $chamado->id . ' - Descrição antiga: ' . $chamado->descricao . ' - Nova descrição: ' . $request->descricao);
                 array_push($atualizacao, 'descrição');
                 $chamado->descricao = $request->descricao;
             }
-            if (json_encode($chamado->extras) != json_encode($request->extras)) {
+            if (json_encode($chamado->extras) != json_encode($request->extras) && !empty($request->extras)) {
                 /* guardando os dados antigos em log para auditoria */
                 Log::info(' - Edição de chamado - Usuário: ' . \Auth::user()->codpes . ' - ' . \Auth::user()->name . ' - Id Chamado: ' . $chamado->id . ' - Extras antigo: ' . $chamado->extras . ' - Novo extras: ' . json_encode($request->extras));
                 array_push($atualizacao, 'formulário');
                 $chamado->extras = json_encode($request->extras);
             }
-            $chamado->status = 'Triagem';
+            if (!empty($request->status)) {
+                if ($chamado->status != $request->status) {
+                    array_push($atualizacao, 'status');
+                    array_push($novo_valor, $request->status);
+                    $chamado->status = $request->status;
+                }
+            }
+            if (!empty($request->complexidade)) {
+                if ($chamado->complexidade != $request->complexidade) {
+                    array_push($atualizacao, 'complexidade');
+                    array_push($novo_valor, $request->complexidade);
+                    $chamado->complexidade = $request->complexidade;
+                }
+            }
 
             /* Caso tenha alguma atualização, guarda nos registros */
             if (count($atualizacao) > 0) {
                 if (count($atualizacao) == 1) {
                     $msg = 'O campo ' . $atualizacao[0] . ' foi atualizado';
+                    if ($atualizacao[0] == 'status' || $atualizacao[0] == 'complexidade') {
+                        $msg .= ' para ' . $novo_valor[0];
+                    }
                 } elseif (count($atualizacao) > 1) {
                     $msg = 'Os campos ';
                     $msg .= implode(", ", array_slice($atualizacao, 0, -1));
@@ -376,10 +395,11 @@ class ChamadoController extends Controller
     public function triagemStore(Request $request, Chamado $chamado)
     {
         $this->authorize('atendente');
-        
-        $request->validate(Chamado::rules);        
-        
-        $chamado->complexidade = $request->complexidade;
+
+        if ($request->codpes == '') {
+            $request->session()->flash('alert-warning', 'É necessário selecionar um atendente');
+            return Redirect::to(URL::previous() . "#card_atendente");
+        }
         $atendente = User::obterPorCodpes($request->codpes);
 
         # Se atendente já existe não vamos adicionar novamente
@@ -490,7 +510,7 @@ class ChamadoController extends Controller
         $complexidades = Chamado::complexidades();
         $autor = $chamado->users()->wherePivot('papel', 'Autor')->first();
         $form = JSONForms::generateForm($fila, $chamado);
-        return view('chamados/edit', compact('fila', 'chamado', 'atendentes', 'form'));
+        return view('chamados/edit', compact('fila', 'chamado', 'atendentes', 'form', 'complexidades'));
     }
 
     public function devolver(Chamado $chamado)

@@ -23,14 +23,11 @@
                             <input type="hidden" name="codpes" value="{{ \Auth::user()->codpes }}">
                             <input class="form-control" type="text" name="name" value="{{ \Auth::user()->name }}" readonly style="width: 100%;">
                         </div>
-                    </div>
-
-                    @include('chamados.show.mudar-status')
-                    @include('chamados.show.mudar-complexidade')
+                    </div>                    
 
                     <div class="text-right">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                        <button type="submit" class="btn btn-primary">Salvar</button>
+                        <button type="submit" class="btn btn-primary">Atender</button>
                     </div>
 
                     {!! Form::close(); !!}

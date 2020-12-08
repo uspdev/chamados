@@ -1,24 +1,20 @@
+@section('styles')
+@parent
+<style>
+    #btn_salvar_status {
+        display: none;
+    }
+</style>
+@endsection
+
 <div class="col-sm form-group mt-2">
-    <label class="col-form-label col-sm-2" for="status"><b>Status:</b></label>
-    <div class="col-sm-10">
-        <select name="status" class="form-control"">
-            <option value="" selected="">Escolher</option>
-            @foreach($status_list as $status)
-            {{-- Caso não tiver nenhum atendente --}}
-            @if(!$atendentes->count() and $status == 'Atribuído' and $chamado->status == 'Triagem')
-            <option value="{{ $status }}" selected>
-            {{ $status }}
-            </option>
-            @elseif(old('status') == '' and isset($chamado->status))
-            <option value="{{ $status }}" {{ ( $chamado->status == $status) ? 'selected' : ''}}>
-                {{ $status }}
-            </option>
-            @else
-            <option value="{{ $status }}" {{ (old('status') == $status) ? 'selected' : ''}}>
-                {{ $status }}
-            </option>
-            @endif
-            @endforeach
-        </select>
+    <label class="col-form-label col-4" for="status"><b>Status:</b></label>
+    <div class="col-sm">
+        <form id="status_form" name="status_form" method="POST" action="chamados/{{$chamado->id}}">
+            @csrf
+            @method('PUT')
+            {{ Form::select('status', $status_list, $chamado->status, ['id'=>'estado', 'class'=>'form-control col-8'] ) }}
+            {{ Form::submit('Salvar', ['id'=>'btn_salvar_status', 'class'=>'btn btn-primary']) }}
+        </form>
     </div>
 </div>

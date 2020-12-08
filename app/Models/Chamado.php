@@ -16,23 +16,39 @@ class Chamado extends Model
     #protected $with = ['users', 'fila', 'setor'];
 
     # para atribuição em massa
-    protected $fillable = ['assunto', 'descricao', 'anotacoes'];
-
-    public const rules = [
-        'complexidade' => ['required'], //falta tratar todas as possibilidades 
-    ];
+    protected $fillable = ['assunto', 'descricao', 'anotacoes', 'status', 'complexidade'];
 
     /**
      * Constantes usadas no bd
      */
-    public static function complexidades()
+    public static function complexidades($formCollective = false)
     {
-        return ['Baixa', 'Média', 'Alta'];
+        if($formCollective){
+            return [
+                'Baixa' => 'Baixa',
+                'Média' => 'Média',
+                'Alta' => 'Alta'
+            ];
+        }else{
+            return [ 'Baixa', 'Média', 'Alta'];
+        }
+        
     }
 
-    public static function status()
+    public static function status($formCollective = false)
     {
-        return ['Triagem', 'Atribuído', 'Fechado', 'Aguardando Solicitante', 'Aguardando Peças'];
+        if($formCollective){
+            return [
+                'Triagem'=>'Triagem',
+                'Atribuído'=>'Atribuído',
+                'Fechado'=>'Fechado',
+                'Aguardando Solicitante'=>'Aguardando Solicitante',
+                'Aguardando Peças'=>'Aguardando Peças'
+            ];
+        }else{
+            return ['Triagem', 'Atribuído', 'Fechado', 'Aguardando Solicitante', 'Aguardando Peças']; 
+        }
+        
     }
 
     # valores possiveis para pivot do relacionamento com users

@@ -23,7 +23,7 @@
                 </div>
 
                 <div class="form-group">
-                    @if($chamado->status == 'Triagem' or $chamado->status == 'Atribuído')
+                    @if($chamado->status != 'Fechado')
                     <button type="submit" class="btn btn-primary" value="">Enviar</button>
                     <button type="submit" class="btn btn-danger" name="status" value="Fechado">Enviar e fechar chamado</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>

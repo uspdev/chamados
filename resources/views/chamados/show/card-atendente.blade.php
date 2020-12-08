@@ -6,35 +6,29 @@
         <span class="status">
             <span class="badge badge-light"></span>
         </span>
+        <div class="form-inline float-right">
+            @if($chamado->fila->config->triagem)
+            @includeWhen($chamado->status != 'Fechado', 'chamados.partials.show-triagem-modal', ['modalTitle'=>'Triagem', 'url'=>'ok'])
+            @else
+            @includeWhen($chamado->status != 'Fechado', 'chamados.partials.show-atender-modal', ['modalTitle'=>'Atender', 'url'=>'ok'])
+            @endif
+        </div>
     </div>
     <div class="card-body">
         <div class="row">
-            <div class="col-8">
+            <div class="col-12 col-lg-8">
                 <form id="anotacoes_form" name="anotacoes_form" method="POST" action="chamados/{{$chamado->id}}">
                     @csrf
                     @method('PUT')
-                    <textarea class="form-control" rows="2" name="anotacoes">{{ $chamado->anotacoes }}</textarea>
+                    <textarea class="form-control" rows="3" name="anotacoes">{{ $chamado->anotacoes }}</textarea>
                 </form>
             </div>
-            <div class="col-4">
-            <div class="form-inline">
-                    Estado: &nbsp; @include('chamados.partials.status')
-                    &nbsp;
-                    @if($chamado->fila->config->triagem)
-                    @includeWhen($chamado->status != 'Fechado', 'chamados.partials.show-triagem-modal', ['modalTitle'=>'Triagem', 'url'=>'ok'])
-                    @else
-                    @includeWhen($chamado->status != 'Fechado', 'chamados.partials.show-atender-modal', ['modalTitle'=>'Atender', 'url'=>'ok'])
-                    @endif
+            <div class="col-12 col-lg-4">
+                <div class="form-inline">
+                    @include('chamados.show.mudar-status')
                 </div>
-                <div class="ml-2">
-                    @if($atendentes->count())
-                    @foreach($atendentes as $atendente)
-                    {{ $atendente->name }} @include('chamados.show.user-detail', ['user'=>$atendente])<br>
-                    @endforeach
-                    <span class="text-muted">Complexidade</span>: {{ $chamado->complexidade }}<br>
-                    @else
-
-                    @endif
+                <div class="form-inline">
+                    @include('chamados.show.mudar-complexidade')
                 </div>
             </div>
         </div>
@@ -81,6 +75,17 @@
                 });
             }, timeout);
         });
+
+        var $estado = $('#status_form').find('#estado'),
+            $complexidade = $('#complexidade_form').find('#complexidade');
+        
+        $estado.change(function() {
+            $('#status_form').find('#btn_salvar_status').show();
+        });
+        
+        $complexidade.change(function() {
+            $('#complexidade_form').find('#btn_salvar_complexidade').show();
+        });        
     });
 </script>
 @stop
