@@ -6,9 +6,9 @@ use App\Http\Requests\ChamadoRequest;
 use App\Models\Chamado;
 use App\Models\Comentario;
 use App\Models\Fila;
+use App\Models\Patrimonio;
 use App\Models\Setor;
 use App\Models\User;
-use App\Models\Patrimonio;
 use App\Utils\JSONForms;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -105,17 +105,17 @@ class ChamadoController extends Controller
         }
         $atendentes = $chamado->users()->wherePivot('papel', 'Atendente')->get();
         $autor = $chamado->users()->wherePivot('papel', 'Autor')->first();
+
         # estamos carregando os vinculados diretos.
         # Seria interessante vincular recursivos? Acho que não mas ...
         $vinculados = $chamado->vinculados;
+
         $complexidades = Chamado::complexidades(true);
         $status_list = Chamado::status(true);
-        # para o form de adicionar pessoas
-        $modal_pessoa['url'] = 'chamados';
-        $modal_pessoa['title'] = 'Adicionar observador';
+
         $max_upload_size = env('APP_UPLOAD_MAX_FILESIZE') != null ? ((int) env('APP_UPLOAD_MAX_FILESIZE')) : 16;
         $form = JSONForms::generateForm($chamado->fila, $chamado);
-        return view('chamados/show', compact('atendentes', 'autor', 'chamado', 'extras', 'template', 'vinculados', 'complexidades', 'status_list', 'modal_pessoa', 'max_upload_size', 'form'));
+        return view('chamados/show', compact('atendentes', 'autor', 'chamado', 'extras', 'template', 'vinculados', 'complexidades', 'status_list', 'max_upload_size', 'form'));
     }
     /**
      * Retornando os chamados para criar vinculo entre eles
@@ -353,6 +353,11 @@ class ChamadoController extends Controller
     {
         $this->authorize('atendente');
 
+        $request->validate(Chamado::rules);
+
+        $chamado->complexidade = $request->complexidade;
+        $atendente = User::obterPorCodpes($request->codpes);
+
         if ($request->codpes == '') {
             $request->session()->flash('alert-warning', 'É necessário selecionar um atendente');
             return Redirect::to(URL::previous() . "#card_atendente");
@@ -396,7 +401,7 @@ class ChamadoController extends Controller
         $this->authorize('chamados.view', $chamado);
 
         $user = User::obterOuCriarPorCodpes($request->codpes);
-        $chamado->users()->attach($user, ['papel' => 'Observador']);
+        $chamado->users()->attach($user, ['papel' => $request->papel]);
 
         Comentario::create([
             'user_id' => \Auth::user()->id,
@@ -418,6 +423,13 @@ class ChamadoController extends Controller
         $this->authorize('chamados.view', $chamado);
 
         $papel = $chamado->users()->where('users.id', $user->id)->first()->pivot->papel;
+
+        # para autor e atendente, vamos negar se não for atendente
+        if ('Autor' == $papel || 'Observador' == $papel) {
+            $this->authorize('atendente');
+        }
+
+        # vamos remover de fato
         $chamado->users()->wherePivot('papel', $papel)->detach($user);
 
         # verificar se sobrou algum atendente, se não, muda o status
@@ -452,6 +464,7 @@ class ChamadoController extends Controller
                 'numpat' => 'required',
             ]);
         }
+
         $patrimonio = Patrimonio::where('numpat', $request->numpat)->first();
         if (!$patrimonio) {
             $patrimonio = new Patrimonio;
@@ -474,4 +487,5 @@ class ChamadoController extends Controller
     public function destroyPatrimonio(Request $request, Chamado $chamado, User $user)
     {
     }
+
 }

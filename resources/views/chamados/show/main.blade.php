@@ -8,7 +8,7 @@
 @endsection
 
 <div id="card-principal-conteudo">
-    <span class="text-muted">Criado por:</span> {{ $autor->name}} @include('chamados.show.user-detail', ['user'=>$autor])<br>
+    <span class="text-muted">Criado por:</span> {!! $autor->name ?? '<span class="text-danger">** Sem autor **</span>' !!} @includewhen($autor, 'chamados.show.user-detail', ['user'=>$autor])<br>
     <span class="text-muted">Criado em:</span> {{ Carbon\Carbon::parse($chamado->created_at)->format('d/m/Y H:i') }}<br>
 
     @if(!is_null($chamado->fechado_em))

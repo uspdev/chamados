@@ -32,13 +32,13 @@
                 <span class="hidden-btn d-none">
                     @switch($user->pivot->papel)
                     @case('Autor') @case('Atendente') {{-- libera delete para atendente e admin --}}
-                    @if (Gate::allows('perfilAtendente') or Gate::allows('perfilAdmin'))
-                    @include('common.btn-delete-sm', ['action'=>'chamados/'.$chamado->id.'/pessoas/'.$user->id])
-                    @endif
-                    @break
+                        @if (Gate::allows('perfilAtendente') or Gate::allows('perfilAdmin'))
+                        @include('common.btn-delete-sm', ['action'=>'chamados/'.$chamado->id.'/pessoas/'.$user->id])
+                        @endif
+                        @break
                     @case('Observador') {{-- libera delete para todos --}}
-                    @include('common.btn-delete-sm', ['action'=>'chamados/'.$chamado->id.'/pessoas/'.$user->id])
-                    @break
+                        @include('common.btn-delete-sm', ['action'=>'chamados/'.$chamado->id.'/pessoas/'.$user->id])
+                        @break
                     @endswitch
                 </span>
                 <span class="hidden-btn d-none">
