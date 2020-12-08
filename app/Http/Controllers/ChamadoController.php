@@ -412,7 +412,7 @@ class ChamadoController extends Controller
         $codpes = $request->codpes;
 
         # para cadastrar autor e atendente, vamos negar se usuário não for atendente
-        if ('Autor' == $papel || 'Observador' == $papel) {
+        if ('Autor' == $papel || 'Atendente' == $papel) {
             $this->authorize('atendente');
         }
 
@@ -450,7 +450,7 @@ class ChamadoController extends Controller
         $papel = $chamado->users()->where('users.id', $user->id)->first()->pivot->papel;
 
         # para remover autor e atendente, vamos negar se usuário não for atendente
-        if ('Autor' == $papel || 'Observador' == $papel) {
+        if ('Autor' == $papel || 'Atendente' == $papel) {
             $this->authorize('atendente');
         }
 
