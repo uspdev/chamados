@@ -22,12 +22,12 @@ class CreateChamadosTable extends Migration
             // de autoincrement por ano aí pode ser obrigatório
             $table->integer('nro')->nullable();
             $table->string('assunto', 255);
-            $table->enum('status', ['Triagem', 'Atribuído','Fechado']);
+            $table->string('status', 30)->default('Triagem');
 
             /* Campos opcionais do chamado */
             $table->text('descricao')->nullable();
             $table->dateTime('fechado_em')->nullable();
-            $table->enum('complexidade', ['baixa', 'média','alta'])->nullable();
+            $table->string('complexidade', 15)->nullable();
             $table->json('extras')->nullable();
 
             # este campo de anotações deverá ficar visível somente para atendentes.
