@@ -27,36 +27,40 @@ class Chamado extends Model
      */
     public static function complexidades($formCollective = false)
     {
-        if($formCollective){
+        if ($formCollective) {
             return [
                 'Baixa' => 'Baixa',
                 'Média' => 'Média',
-                'Alta' => 'Alta'
+                'Alta' => 'Alta',
             ];
-        }else{
-            return [ 'Baixa', 'Média', 'Alta'];
+        } else {
+            return ['Baixa', 'Média', 'Alta'];
         }
-        
+
     }
 
     public static function status($formCollective = false)
     {
-        if($formCollective){
+        if ($formCollective) {
             return [
-                'Aguardando Solicitante'=>'Aguardando Solicitante',
-                'Aguardando Peças'=>'Aguardando Peças'
+                'Aguardando Solicitante' => 'Aguardando Solicitante',
+                'Aguardando Peças' => 'Aguardando Peças',
             ];
-        }else{
-            return ['Triagem', 'Atribuído', 'Fechado', 'Aguardando Solicitante', 'Aguardando Peças']; 
+        } else {
+            return ['Triagem', 'Atribuído', 'Fechado', 'Aguardando Solicitante', 'Aguardando Peças'];
         }
-        
+
     }
 
     # valores possiveis para pivot do relacionamento com users
-    public static function pessoaFuncoes($select = false)
+    public static function pessoaPapeis($formCollective = false)
     {
-        if ($select) {
-            return ['Observador' => 'Observador', 'Atendente' => 'Atendente', 'Autor' => 'Autor'];
+        if ($formCollective) {
+            return [
+                'Observador' => 'Observador',
+                'Atendente' => 'Atendente',
+                'Autor' => 'Autor',
+            ];
         } else {
             return ['Observador', 'Atendente', 'Autor'];
         }

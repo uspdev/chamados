@@ -404,7 +404,7 @@ class ChamadoController extends Controller
         $request->validate(
             [
                 'codpes' => 'required|integer',
-                'papel' => 'required|in:' . implode(',', Chamado::pessoaFuncoes()),
+                'papel' => 'required|in:' . implode(',', Chamado::pessoaPapeis()),
             ]
         );
 

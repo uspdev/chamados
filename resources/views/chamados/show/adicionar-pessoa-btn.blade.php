@@ -29,7 +29,7 @@
                     <div class="form-group row">
                         {{ Form::label('papel','Papel', ['class' => 'col-form-label col-sm-2']) }}
                         <div class="col-sm-10">
-                            {{ Form::select('papel',\app\Models\Chamado::pessoaFuncoes(true), null, ['class' => 'form-control']) }}
+                            {{ Form::select('papel',\app\Models\Chamado::pessoaPapeis(true), null, ['class' => 'form-control']) }}
                         </div>
                     </div>
                     @else
