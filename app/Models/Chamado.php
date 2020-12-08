@@ -16,7 +16,11 @@ class Chamado extends Model
     #protected $with = ['users', 'fila', 'setor'];
 
     # para atribuição em massa
-    protected $fillable = ['assunto', 'descricao', 'anotacoes', 'status', 'complexidade'];
+    protected $fillable = ['assunto', 'descricao', 'anotacoes'];
+
+    public const rules = [
+        'complexidade' => ['required'], //falta tratar todas as possibilidades
+    ];
 
     /**
      * Constantes usadas no bd
@@ -49,9 +53,13 @@ class Chamado extends Model
     }
 
     # valores possiveis para pivot do relacionamento com users
-    public static function pessoaFuncoes()
+    public static function pessoaFuncoes($select = false)
     {
-        return ['Atendente', 'Autor', 'Observador'];
+        if ($select) {
+            return ['Observador' => 'Observador', 'Atendente' => 'Atendente', 'Autor' => 'Autor'];
+        } else {
+            return ['Observador', 'Atendente', 'Autor'];
+        }
     }
 
     /**
@@ -107,18 +115,15 @@ class Chamado extends Model
     {
         if (Gate::allows('perfilAdmin')) {
             $chamados = SELF::ano($ano)->nro($nro)->assunto($assunto)->get();
-        } 
-        elseif (Gate::allows('perfilAtendente')) {
+        } elseif (Gate::allows('perfilAtendente')) {
             $chamados = collect();
             $filas = \Auth::user()->filas;
             foreach ($filas as $fila) {
                 $chamados = $chamados->merge($fila->chamados()->ano($ano)->nro($nro)->assunto($assunto)->get());
             }
-        } 
-        elseif (Gate::allows('perfilUsuario')) {
+        } elseif (Gate::allows('perfilUsuario')) {
             $chamados = \Auth::user()->chamados()->ano($ano)->nro($nro)->assunto($assunto)->get();
-        } 
-        else {
+        } else {
             $chamados = collect();
         }
         $chamados = $chamados->unique('id');
