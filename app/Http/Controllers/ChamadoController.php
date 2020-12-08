@@ -428,7 +428,7 @@ class ChamadoController extends Controller
             Comentario::create([
                 'user_id' => \Auth::user()->id,
                 'chamado_id' => $chamado->id,
-                'comentario' => 'O ' . strtolower($papel) . $user->name . ' foi adicionado ao chamado.',
+                'comentario' => 'O ' . strtolower($papel) . ' ' . $user->name . ' foi adicionado ao chamado.',
                 'tipo' => 'system',
             ]);
 
