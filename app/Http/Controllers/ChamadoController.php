@@ -6,9 +6,9 @@ use App\Http\Requests\ChamadoRequest;
 use App\Models\Chamado;
 use App\Models\Comentario;
 use App\Models\Fila;
+use App\Models\Patrimonio;
 use App\Models\Setor;
 use App\Models\User;
-use App\Models\Patrimonio;
 use App\Utils\JSONForms;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -72,9 +72,10 @@ class ChamadoController extends Controller
      */
     public function store(ChamadoRequest $request, Fila $fila)
     {
-        # limitar _as filas que o usuario pode criar, somente filas "em produção"
+        # limitar as filas que o usuario pode criar, somente filas "em produção"
         $this->authorize('chamados.create');
         $request->validate(JSONForms::buildRules($request, $fila));
+
         # transaction para não ter problema de inconsistência do DB
         $chamado = \DB::transaction(function () use ($request, $fila) {
             $chamado = new Chamado;
@@ -105,17 +106,17 @@ class ChamadoController extends Controller
         }
         $atendentes = $chamado->users()->wherePivot('papel', 'Atendente')->get();
         $autor = $chamado->users()->wherePivot('papel', 'Autor')->first();
+
         # estamos carregando os vinculados diretos.
         # Seria interessante vincular recursivos? Acho que não mas ...
         $vinculados = $chamado->vinculados;
+
         $complexidades = Chamado::complexidades(true);
         $status_list = Chamado::status(true);
-        # para o form de adicionar pessoas
-        $modal_pessoa['url'] = 'chamados';
-        $modal_pessoa['title'] = 'Adicionar observador';
+
         $max_upload_size = env('APP_UPLOAD_MAX_FILESIZE') != null ? ((int) env('APP_UPLOAD_MAX_FILESIZE')) : 16;
         $form = JSONForms::generateForm($chamado->fila, $chamado);
-        return view('chamados/show', compact('atendentes', 'autor', 'chamado', 'extras', 'template', 'vinculados', 'complexidades', 'status_list', 'modal_pessoa', 'max_upload_size', 'form'));
+        return view('chamados/show', compact('atendentes', 'autor', 'chamado', 'extras', 'template', 'vinculados', 'complexidades', 'status_list', 'max_upload_size', 'form'));
     }
     /**
      * Retornando os chamados para criar vinculo entre eles
@@ -216,12 +217,14 @@ class ChamadoController extends Controller
     public function update(Request $request, Chamado $chamado)
     {
         $this->authorize('chamados.update', $chamado);
+
         # inicialmente atende a atualização do campo anotacoes via ajax
         if ($request->ajax()) {
             $chamado->fill($request->all());
             $chamado->save();
             return response()->json(['message' => 'success', 'data' => $chamado]);
         }
+        
         # acho que valida atendente
         if (Gate::allows('admin') and isset($request->atribuido_para)) {
             $request->validate([
@@ -353,6 +356,11 @@ class ChamadoController extends Controller
     {
         $this->authorize('atendente');
 
+        $request->validate(Chamado::rules);
+
+        $chamado->complexidade = $request->complexidade;
+        $atendente = User::obterPorCodpes($request->codpes);
+
         if ($request->codpes == '') {
             $request->session()->flash('alert-warning', 'É necessário selecionar um atendente');
             return Redirect::to(URL::previous() . "#card_atendente");
@@ -390,21 +398,46 @@ class ChamadoController extends Controller
      * Adicionar pessoas relacionadas ao chamado
      * autorizado a qualquer um que tenha acesso ao chamado
      * request->codpes = required, int
+     * request->papel = required
      */
     public function storePessoa(Request $request, Chamado $chamado)
     {
         $this->authorize('chamados.view', $chamado);
 
-        $user = User::obterOuCriarPorCodpes($request->codpes);
-        $chamado->users()->attach($user, ['papel' => 'Observador']);
+        $request->validate(
+            [
+                'codpes' => 'required|integer',
+                'papel' => 'required|in:' . implode(',', Chamado::pessoaPapeis()),
+            ]
+        );
 
-        Comentario::create([
-            'user_id' => \Auth::user()->id,
-            'chamado_id' => $chamado->id,
-            'comentario' => 'O observador ' . $user->name . ' foi adicionado ao chamado.',
-            'tipo' => 'system',
-        ]);
-        $request->session()->flash('alert-info', 'Observador adicionado com sucesso.');
+        $papel = $request->papel;
+        $codpes = $request->codpes;
+
+        # para cadastrar autor e atendente, vamos negar se usuário não for atendente
+        if ('Autor' == $papel || 'Atendente' == $papel) {
+            $this->authorize('atendente');
+        }
+
+        $user = User::obterOuCriarPorCodpes($codpes);
+
+        # O usuário já existe nesse papel?
+        if ($chamado->users()->where('users.id', $user->id)->wherePivot('papel', $papel)->first()) {
+            $request->session()->flash('alert-info', $papel . ' já existe.');
+
+        } else {
+            $chamado->users()->attach($user, ['papel' => $papel]);
+
+            Comentario::create([
+                'user_id' => \Auth::user()->id,
+                'chamado_id' => $chamado->id,
+                'comentario' => 'O ' . strtolower($papel) . ' ' . $user->name . ' foi adicionado ao chamado.',
+                'tipo' => 'system',
+            ]);
+
+            $request->session()->flash('alert-info', $papel . ' adicionado com sucesso.');
+        }
+
         return Redirect::to(URL::previous() . "#card_pessoas");
     }
     /**
@@ -418,6 +451,13 @@ class ChamadoController extends Controller
         $this->authorize('chamados.view', $chamado);
 
         $papel = $chamado->users()->where('users.id', $user->id)->first()->pivot->papel;
+
+        # para remover autor e atendente, vamos negar se usuário não for atendente
+        if ('Autor' == $papel || 'Atendente' == $papel) {
+            $this->authorize('atendente');
+        }
+
+        # vamos remover de fato
         $chamado->users()->wherePivot('papel', $papel)->detach($user);
 
         # verificar se sobrou algum atendente, se não, muda o status
@@ -452,6 +492,7 @@ class ChamadoController extends Controller
                 'numpat' => 'required',
             ]);
         }
+
         $patrimonio = Patrimonio::where('numpat', $request->numpat)->first();
         if (!$patrimonio) {
             $patrimonio = new Patrimonio;
@@ -474,4 +515,5 @@ class ChamadoController extends Controller
     public function destroyPatrimonio(Request $request, Chamado $chamado, User $user)
     {
     }
+
 }
