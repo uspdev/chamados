@@ -395,21 +395,32 @@ class ChamadoController extends Controller
      * Adicionar pessoas relacionadas ao chamado
      * autorizado a qualquer um que tenha acesso ao chamado
      * request->codpes = required, int
+     * request->papel = required
      */
     public function storePessoa(Request $request, Chamado $chamado)
     {
         $this->authorize('chamados.view', $chamado);
 
-        $user = User::obterOuCriarPorCodpes($request->codpes);
-        $chamado->users()->attach($user, ['papel' => $request->papel]);
+        $papel = $request->papel;
+        $codpes = $request->codpes;
+
+        # para cadastrar autor e atendente, vamos negar se usuário não for atendente
+        if ('Autor' == $papel || 'Observador' == $papel) {
+            $this->authorize('atendente');
+        }
+
+        $user = User::obterOuCriarPorCodpes($codpes);
+        $chamado->users()->attach($user, ['papel' => $papel]);
 
         Comentario::create([
             'user_id' => \Auth::user()->id,
             'chamado_id' => $chamado->id,
-            'comentario' => 'O observador ' . $user->name . ' foi adicionado ao chamado.',
+            'comentario' => 'O ' . strtolower($papel) . $user->name . ' foi adicionado ao chamado.',
             'tipo' => 'system',
         ]);
-        $request->session()->flash('alert-info', 'Observador adicionado com sucesso.');
+
+        $request->session()->flash('alert-info', $papel . ' adicionado com sucesso.');
+
         return Redirect::to(URL::previous() . "#card_pessoas");
     }
     /**
@@ -424,7 +435,7 @@ class ChamadoController extends Controller
 
         $papel = $chamado->users()->where('users.id', $user->id)->first()->pivot->papel;
 
-        # para autor e atendente, vamos negar se não for atendente
+        # para remover autor e atendente, vamos negar se usuário não for atendente
         if ('Autor' == $papel || 'Observador' == $papel) {
             $this->authorize('atendente');
         }
