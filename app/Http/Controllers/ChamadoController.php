@@ -401,6 +401,13 @@ class ChamadoController extends Controller
     {
         $this->authorize('chamados.view', $chamado);
 
+        $request->validate(
+            [
+                'codpes' => 'required|integer',
+                'papel' => 'required|in:' . implode(',', Chamado::pessoaFuncoes()),
+            ]
+        );
+
         $papel = $request->papel;
         $codpes = $request->codpes;
 
@@ -410,16 +417,23 @@ class ChamadoController extends Controller
         }
 
         $user = User::obterOuCriarPorCodpes($codpes);
-        $chamado->users()->attach($user, ['papel' => $papel]);
 
-        Comentario::create([
-            'user_id' => \Auth::user()->id,
-            'chamado_id' => $chamado->id,
-            'comentario' => 'O ' . strtolower($papel) . $user->name . ' foi adicionado ao chamado.',
-            'tipo' => 'system',
-        ]);
+        # O usuário já existe nesse papel?
+        if ($chamado->users()->where('users.id', $user->id)->wherePivot('papel', $papel)->first()) {
+            $request->session()->flash('alert-info', $papel . ' já existe.');
 
-        $request->session()->flash('alert-info', $papel . ' adicionado com sucesso.');
+        } else {
+            $chamado->users()->attach($user, ['papel' => $papel]);
+
+            Comentario::create([
+                'user_id' => \Auth::user()->id,
+                'chamado_id' => $chamado->id,
+                'comentario' => 'O ' . strtolower($papel) . $user->name . ' foi adicionado ao chamado.',
+                'tipo' => 'system',
+            ]);
+
+            $request->session()->flash('alert-info', $papel . ' adicionado com sucesso.');
+        }
 
         return Redirect::to(URL::previous() . "#card_pessoas");
     }
