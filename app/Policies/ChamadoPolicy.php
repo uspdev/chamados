@@ -83,21 +83,30 @@ class ChamadoPolicy
      */
     public function update(User $user, Chamado $chamado)
     {
-        # em principio vamos deixar igual ao view
-        # mas vinculados seria acesso leitura somente
-        return SELF::view($user, $chamado);
-
+        /* autor, atendentes e observadores */
         foreach ($chamado->users as $u) {
             if ($user->codpes == $u->codpes) {
                 return true;
             }
         }
+
+        # atendentes que estão na fila.
+        # NÃO está diferenciando gerente e atendente. Pode ser relevante em caso de triagem
+        $fila = $chamado->fila;
+        foreach ($fila->users as $u) {
+            if ($user->codpes == $u->codpes) {
+                return true;
+            }
+        }
+
+        /* chamados vinculados -somente um nível */
+        # não pode editar
+
         if (Gate::allows('admin')) {
             return true;
         }
+
         return false;
-        #$atendentes = explode(',', config('chamados.atendentes'));
-        #return in_array($user->codpes, $atendentes);
     }
 
     /**
