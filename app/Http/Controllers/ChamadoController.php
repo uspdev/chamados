@@ -418,7 +418,6 @@ class ChamadoController extends Controller
         $this->authorize('chamados.view', $chamado);
 
         $papel = $chamado->users()->where('users.id', $user->id)->first()->pivot->papel;
-        $chamado->users()->detach($user);
         $chamado->users()->wherePivot('papel', $papel)->detach($user);
 
         # verificar se sobrou algum atendente, se não, muda o status
@@ -436,6 +435,7 @@ class ChamadoController extends Controller
         $request->session()->flash('alert-info', $msg);
         return Redirect::to(URL::previous() . "#card_pessoas");
     }
+
     /**
      * Adicionar patrimonios relacionadas ao chamado
      * autorizado a qualquer um que tenha acesso ao chamado
