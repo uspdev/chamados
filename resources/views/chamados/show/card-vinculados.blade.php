@@ -23,7 +23,7 @@
     <div class="card-body">
 
         <ul class="ml-2 list-unstyled lista-vinculados">
-            @forelse($vinculados as $vinculado)
+            @forelse($chamado->vinculados as $vinculado)
             <li class="form-inline">
                 <a href="chamados/{{$vinculado->id}}">
                     {{ $vinculado->nro }}/{{ Carbon\Carbon::parse($vinculado->created_at)->format('Y') }}
