@@ -84,11 +84,22 @@ class Fila extends Model
         return ['Em elaboração', 'Em produção', 'Desativada'];
     }
 
+    /**
+     * Accessor para $config
+     */
     public function getConfigAttribute($value)
     {
         $value = $value ? json_decode($value) : new \StdClass;
         $value->triagem = isset($value->triagem) ? $value->triagem : true;
         return $value;
+    }
+
+    /**
+     * Accessor para $template
+     */
+    public function getTemplateAttribute($value)
+    {
+        return (empty($value)) ? '{}' : $value;
     }
 
     public static function listarFilas()

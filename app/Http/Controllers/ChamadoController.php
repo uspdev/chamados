@@ -107,22 +107,15 @@ class ChamadoController extends Controller
         }
         $template = json_decode($chamado->fila->template);
         $extras = json_decode($chamado->extras);
-        if (empty($template)) {
-            $template = [];
-        }
         $atendentes = $chamado->users()->wherePivot('papel', 'Atendente')->get();
         $autor = $chamado->users()->wherePivot('papel', 'Autor')->first();
-
-        # estamos carregando os vinculados diretos.
-        # Seria interessante vincular recursivos? Acho que não mas ...
-        $vinculados = $chamado->vinculados;
 
         $complexidades = Chamado::complexidades(true);
         $status_list = Chamado::status(true);
 
-        $max_upload_size = env('APP_UPLOAD_MAX_FILESIZE') != null ? ((int) env('APP_UPLOAD_MAX_FILESIZE')) : 16;
+        $max_upload_size = config('chamados.upload_max_filesize');
         $form = JSONForms::generateForm($chamado->fila, $chamado);
-        return view('chamados/show', compact('atendentes', 'autor', 'chamado', 'extras', 'template', 'vinculados', 'complexidades', 'status_list', 'max_upload_size', 'form'));
+        return view('chamados/show', compact('atendentes', 'autor', 'chamado', 'extras', 'template', 'complexidades', 'status_list', 'max_upload_size', 'form'));
     }
 
     /**
