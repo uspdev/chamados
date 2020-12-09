@@ -24,14 +24,10 @@ class ChamadoRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            #'telefone'       => 'required',
-            'assunto'        => 'required',
-            'descricao'      => 'required',
-            'patrimonio'     => 'nullable',
-            'extras'         => 'nullable',
-            'codpes'         => 'nullable|codpes',
-            'complexidade'   => 'nullable',
-            'atribuido_para' => 'nullable'
+            'assunto' => 'required',
+            'descricao' => 'required',
+            'extras' => 'nullable',
+            'complexidade' => 'nullable',
         ];
         return $rules;
     }
@@ -43,8 +39,8 @@ class ChamadoRequest extends FormRequest
     public function messages()
     {
         return [
-            #'telefone.required' => 'Telefone requerido',
-            'descricao.required' => 'Preencher o campo descrição'
+            'assunto.required' => 'Preencher o campo assunto',
+            'descricao.required' => 'Preencher o campo descrição',
         ];
     }
 }
