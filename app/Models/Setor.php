@@ -24,9 +24,9 @@ class Setor extends Model
     public const rules = [
         'sigla' => ['required', 'max:15'],
         'nome' => ['required', 'max:255'],
-        'setor_id' => '',
-        'cod_set_replicado' => '',
-        'cod_set_pai_replicado' => '',
+        'setor_id' => 'integer',
+        'cod_set_replicado' => 'nullable',
+        'cod_set_pai_replicado' => 'nullable',
     ];
 
     # funcoes é pivot do relacionamento com users
