@@ -11,27 +11,27 @@ use Illuminate\Support\Facades\URL;
 
 class SetorController extends Controller
 {
-    use ResourceTrait;
-
-    protected $model = 'App\Models\Setor';
-
     public function __construct()
     {
         $this->middleware('auth');
     }
 
+    /**
+     * Mostra lista de setores de acordo com as permissões do usuário
+     */
     public function index(Request $request)
     {
-        //$this->authorize('admin');
+
+        $user = \Auth::user();
 
         if (Gate::allows('admin')) {
+            # se for admin mostra tudo
             $setor = Setor::where('setor_id', null)->first();
         } else {
-            $user = \Auth::user();
+            # se o usuário é gerente de um setor, mostra ele e os descendentes
             $setor = $user->setores()->first();
         }
         $fields = Setor::getFields();
-        $user = \Auth()->user();
 
         # para o form de adicionar pessoas
         $modal_pessoa['url'] = 'setores';
@@ -44,7 +44,6 @@ class SetorController extends Controller
             $modal['url'] = 'setores';
             $modal['title'] = 'Editar setor';
             return view('setores.tree', compact('setor', 'fields', 'modal', 'modal_pessoa', 'user'));
-            //return view('setores.index', compact('setores', 'fields'));
         }
     }
 
@@ -64,6 +63,7 @@ class SetorController extends Controller
             return Setor::find($id);
         } else {
             # desativado por enquanto
+            return false;
             $setor = Setor::find($id);
             return view('setores.show', compact('setor'));
         }
@@ -78,12 +78,11 @@ class SetorController extends Controller
     public function store(Request $request)
     {
         $this->authorize('admin');
-        $request->validate($this->model::rules);
+        $request->validate(Setor::rules);
 
         $setor = Setor::create($request->all());
 
         $request->session()->flash('alert-info', 'Dados adicionados com sucesso');
-
         return Redirect::to(URL::previous() . "#" . strtolower($setor->sigla));
     }
 
@@ -94,18 +93,15 @@ class SetorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      *
-     * Por enquanto somente para admin
+     * Por enquanto somente para admin (masaki, 12/2020)
      * Talvez, autorizar se usuário for gerente do setor ou de qualquer setor acendente
      */
     public function update(Request $request, $id)
     {
         $this->authorize('admin');
+        $request->validate(Setor::rules);
 
-        if (defined($this->model . '::rules')) {
-            $request->validate($this->model::rules);
-        }
-
-        $setor = $this->model::find($id);
+        $setor = Setor::find($id);
         $setor->fill($request->all());
         $setor->save();
 
@@ -114,10 +110,29 @@ class SetorController extends Controller
     }
 
     /**
-     * Autorizar usuarios que sao gerentes do setor ou de setor acendente
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Request $request, $id)
+    {
+        $this->authorize('admin');
+
+        $setor = Setor::find($id);
+        $setor->delete();
+
+        $request->session()->flash('alert-success', 'Dados removidos com sucesso!');
+        return back();
+    }
+
+    /**
+     * Adiciona pessoas como gerente do setor
      */
     public function storePessoa(Request $request, Setor $setor)
     {
+        $this->authorize('setores.view', $setor);
+
         $user = User::obterOuCriarPorCodpes($request->codpes);
         Setor::vincularPessoa($setor, $user, 'Gerente');
 
@@ -128,10 +143,12 @@ class SetorController extends Controller
     }
 
     /**
-     * Remover pessoas que sao gerentes do setor ou de setor acendente
+     * Remove pessoas que sao gerentes do setor
      */
     public function destroyPessoa(Request $request, Setor $setor, $id)
     {
+        $this->authorize('setores.view', $setor);
+
         $currentUser = \Auth::user();
 
         # remover a si mesmo pode se for admin, ok
@@ -141,7 +158,7 @@ class SetorController extends Controller
             $request->session()->flash('alert-warning', 'Não é possível remover a si mesmo.');
             return back();
         }
-        $setor->users()->wherePivot('funcao','Gerente')->detach($id);
+        $setor->users()->wherePivot('funcao', 'Gerente')->detach($id);
         $request->session()->flash('alert-info', 'Pessoa removida com sucesso');
         return Redirect::to(URL::previous() . "#" . strtolower($setor->sigla));
 
