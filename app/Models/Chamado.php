@@ -18,9 +18,14 @@ class Chamado extends Model
     # para atribuição em massa
     protected $fillable = ['assunto', 'descricao', 'anotacoes'];
 
+    # valor default
+    protected $attributes = [
+        'status' => 'Triagem',
+    ];
+
     /**
      * Constantes usadas no bd
-     * 
+     *
      * @formSelect Bool true se for usado em form-select
      */
     public static function complexidades($formSelect = false)
@@ -53,7 +58,7 @@ class Chamado extends Model
     /**
      * Valores possiveis para pivot do relacionamento com users
      */
-    # 
+    #
     public static function pessoaPapeis($formSelect = false)
     {
         if ($formSelect) {
