@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Validator;
 
 class ChamadoController extends Controller
 {
@@ -360,7 +361,7 @@ class ChamadoController extends Controller
         }
         return $chamado;
     }
-    
+
     /**
      * adiciona atendentes. Pode ser mais de um
      */
@@ -402,10 +403,18 @@ class ChamadoController extends Controller
      */
     public function mudaAno(Request $request)
     {
-        $ano = $request->ano;
-        if ($ano != null || $ano != '') {
-            session(['ano' => $ano]);
+        # A validação ainda precisa passar para um local mais apropriado
+        $validator = Validator::make(['ano' => $request->ano], [
+            'ano' => 'required|integer|in:' . implode(',',Chamado::anos()),
+        ]);
+
+        if ($validator->fails()) {
+            return back()
+                ->withErrors($validator)
+                ->withInput();
         }
+
+        session(['ano' => $request->ano]);
         return back();
     }
 
