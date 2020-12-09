@@ -18,16 +18,14 @@ class Chamado extends Model
     # para atribuição em massa
     protected $fillable = ['assunto', 'descricao', 'anotacoes'];
 
-    public const rules = [
-        'complexidade' => ['required'], //falta tratar todas as possibilidades
-    ];
-
     /**
      * Constantes usadas no bd
+     * 
+     * @formSelect Bool true se for usado em form-select
      */
-    public static function complexidades($formCollective = false)
+    public static function complexidades($formSelect = false)
     {
-        if ($formCollective) {
+        if ($formSelect) {
             return [
                 'Baixa' => 'Baixa',
                 'Média' => 'Média',
@@ -39,9 +37,9 @@ class Chamado extends Model
 
     }
 
-    public static function status($formCollective = false)
+    public static function status($formSelect = false)
     {
-        if ($formCollective) {
+        if ($formSelect) {
             return [
                 'Aguardando Solicitante' => 'Aguardando Solicitante',
                 'Aguardando Peças' => 'Aguardando Peças',
@@ -52,10 +50,13 @@ class Chamado extends Model
 
     }
 
-    # valores possiveis para pivot do relacionamento com users
-    public static function pessoaPapeis($formCollective = false)
+    /**
+     * Valores possiveis para pivot do relacionamento com users
+     */
+    # 
+    public static function pessoaPapeis($formSelect = false)
     {
-        if ($formCollective) {
+        if ($formSelect) {
             return [
                 'Observador' => 'Observador',
                 'Atendente' => 'Atendente',
