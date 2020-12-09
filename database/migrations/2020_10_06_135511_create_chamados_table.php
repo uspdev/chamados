@@ -17,12 +17,9 @@ class CreateChamadosTable extends Migration
             $table->bigIncrements('id');
 
             /* Campos obrigatórios*/
-
-            // por enquanto está nullable mas depois de implementar a lógica
-            // de autoincrement por ano aí pode ser obrigatório
-            $table->integer('nro')->nullable();
+            $table->integer('nro');
             $table->string('assunto', 255);
-            $table->string('status', 30)->default('Triagem');
+            $table->string('status', 30);
 
             /* Campos opcionais do chamado */
             $table->text('descricao')->nullable();
@@ -30,7 +27,7 @@ class CreateChamadosTable extends Migration
             $table->string('complexidade', 15)->nullable();
             $table->json('extras')->nullable();
 
-            # este campo de anotações deverá ficar visível somente para atendentes.
+            # visível somente para atendentes
             $table->text('anotacoes')->nullable();
 
             /* Relacionamentos */
