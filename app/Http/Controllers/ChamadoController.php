@@ -22,6 +22,7 @@ class ChamadoController extends Controller
     {
         $this->middleware('auth');
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -36,6 +37,7 @@ class ChamadoController extends Controller
         $chamados = Chamado::listarChamados(session('ano'));
         return view('chamados/index', compact('chamados'));
     }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -51,6 +53,7 @@ class ChamadoController extends Controller
         $form = JSONForms::generateForm($fila);
         return view('chamados/create', compact('fila', 'chamado', 'complexidades', 'status_list', 'form'));
     }
+
     /**
      * Mostra lista de filas e respectivos setores
      * para selecionar e criar novo chamado
@@ -64,6 +67,7 @@ class ChamadoController extends Controller
         }])->orderBy('sigla')->get();
         return view('chamados.listafilas', compact('setores'));
     }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -87,6 +91,7 @@ class ChamadoController extends Controller
         $request->session()->flash('alert-info', 'Chamado enviado com sucesso');
         return redirect()->route('chamados.show', $chamado->id);
     }
+
     /**
      * Display the specified resource.
      *
@@ -118,6 +123,7 @@ class ChamadoController extends Controller
         $form = JSONForms::generateForm($chamado->fila, $chamado);
         return view('chamados/show', compact('atendentes', 'autor', 'chamado', 'extras', 'template', 'vinculados', 'complexidades', 'status_list', 'max_upload_size', 'form'));
     }
+
     /**
      * Retornando os chamados para criar vinculo entre eles
      * @param Request $request - assunto ou número do chamado
@@ -145,6 +151,7 @@ class ChamadoController extends Controller
         }
         return null;
     }
+
     /**
      * Vincula chamados
      * @param $request->slct_chamados - nrp do chamado a ser vinculado
@@ -180,6 +187,7 @@ class ChamadoController extends Controller
         }
         return Redirect::to(URL::previous() . "#card_vinculados");
     }
+
     /**
      * Desvincula chamados
      */
@@ -207,6 +215,7 @@ class ChamadoController extends Controller
         $request->session()->flash('alert-info', 'Chamado desvinculado com sucesso');
         return Redirect::to(URL::previous() . "#card_vinculados");
     }
+
     /**
      * Update the specified resource in storage.
      *
@@ -224,7 +233,7 @@ class ChamadoController extends Controller
             $chamado->save();
             return response()->json(['message' => 'success', 'data' => $chamado]);
         }
-        
+
         # acho que valida atendente
         if (Gate::allows('admin') and isset($request->atribuido_para)) {
             $request->validate([
@@ -243,6 +252,7 @@ class ChamadoController extends Controller
         $request->session()->flash('alert-info', 'Chamado enviado com sucesso');
         return redirect()->route('chamados.show', $chamado->id);
     }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -253,6 +263,7 @@ class ChamadoController extends Controller
     {
         //
     }
+
     /* Evita duplicarmos código  */
     private function grava(Chamado $chamado, Request $request)
     {
@@ -349,6 +360,7 @@ class ChamadoController extends Controller
         }
         return $chamado;
     }
+    
     /**
      * adiciona atendentes. Pode ser mais de um
      */
@@ -356,9 +368,10 @@ class ChamadoController extends Controller
     {
         $this->authorize('atendente');
 
-        $request->validate(Chamado::rules);
+        $request->validate([
+            'codpes' => 'required|codpes',
+        ]);
 
-        $chamado->complexidade = $request->complexidade;
         $atendente = User::obterPorCodpes($request->codpes);
 
         if ($request->codpes == '') {
@@ -383,6 +396,7 @@ class ChamadoController extends Controller
         $request->session()->flash('alert-info', 'Atendente adicionado com sucesso');
         return Redirect::to(URL::previous() . "#card_atendente");
     }
+
     /**
      * Salva o ano na sessão usada no index
      */
@@ -394,6 +408,7 @@ class ChamadoController extends Controller
         }
         return back();
     }
+
     /**
      * Adicionar pessoas relacionadas ao chamado
      * autorizado a qualquer um que tenha acesso ao chamado
@@ -440,6 +455,7 @@ class ChamadoController extends Controller
 
         return Redirect::to(URL::previous() . "#card_pessoas");
     }
+
     /**
      * Remove pessoas relacionadas ao chamado
      * Autorização: se for remover autor, ou atendente,somente para atendente ou admin
