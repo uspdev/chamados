@@ -4,7 +4,7 @@
 
 <?php #dd($data); ?>
 
-<table class="table table-striped table-sm table-hover datatable-nopagination">
+<table class="table table-striped table-sm table-hover datatable-nopagination display responsive" style="width:100%">
     <thead>
         <tr>
             @if ($data->showId ?? true)

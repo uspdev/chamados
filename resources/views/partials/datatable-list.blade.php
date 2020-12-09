@@ -2,7 +2,7 @@
 
 {{-- enviar $row, $model ['name', 'label'] --}}
 
-<table class="table table-striped table-sm table-hover datatable-nopagination">
+<table class="table table-striped table-sm table-hover datatable-nopagination display responsive" style="width:100%">
     <thead>
         <tr>
             @foreach ($fields as $col)
