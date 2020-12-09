@@ -9,6 +9,7 @@ class Fila extends Model
 {
     use HasFactory;
 
+    # valor default
     protected $attributes = [
         'estado' => 'Em elaboração',
     ];
