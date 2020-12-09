@@ -23,12 +23,12 @@ class FilaPolicy
         # se o usuário pertence a alguma fila
         if ($user->filas()->count()) {
             return true;
-        } 
+        }
 
         # se o usuário é gerente de algum setor
         if ($user->setores()->wherePivot('funcao', 'Gerente')->count()) {
             return true;
-        } 
+        }
 
         if ($user->is_admin) {
             return true;
@@ -120,8 +120,10 @@ class FilaPolicy
     public function update(User $user, Fila $fila)
     {
         # se for gerente da fila
-        if ($fila->users()->wherePivot('funcao', 'Gerente')) {
-            return true;
+        foreach ($fila->users()->wherePivot('funcao', 'Gerente')->get() as $u) {
+            if ($user->codpes == $u->codpes) {
+                return true;
+            }
         }
 
         # se for gerente do setor ascendente
