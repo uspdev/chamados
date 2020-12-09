@@ -29,6 +29,7 @@ class Setor extends Model
         'cod_set_pai_replicado' => '',
     ];
 
+    # funcoes é pivot do relacionamento com users
     public const funcoes = ['Gerente', 'Colaborador'];
 
     protected const fields = [
