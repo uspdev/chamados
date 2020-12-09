@@ -103,7 +103,7 @@ class ChamadoController extends Controller
     {
         # Vamos negar acesso com mensagem apropriada
         if (!Gate::allows('chamados.view', $chamado)) {
-            return view('sem-acesso', 403);
+            return response()->view('sem-acesso', [], 403);
         }
         $template = json_decode($chamado->fila->template);
         $extras = json_decode($chamado->extras);
