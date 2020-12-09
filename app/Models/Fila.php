@@ -137,6 +137,14 @@ class Fila extends Model
     }
 
     /**
+     * pivot da tabela user_fila
+     */
+    public static function userFuncoes()
+    {
+        return ['Gerente', 'Atendente'];
+    }
+
+    /**
      * Relacionamento: chamado pertence a fila
      */
     public function chamados()
