@@ -89,6 +89,6 @@ class AuthServiceProvider extends ServiceProvider
         # policies
         Gate::resource('chamados', 'App\Policies\ChamadoPolicy');
         Gate::resource('filas', 'App\Policies\FilaPolicy');
-        Gate::resource('setores', 'App\Policies\setorPolicy');
+        Gate::resource('setores', 'App\Policies\SetorPolicy');
     }
 }
