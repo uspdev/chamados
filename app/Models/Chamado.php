@@ -52,7 +52,14 @@ class Chamado extends Model
         } else {
             return ['Triagem', 'Atribuído', 'Fechado', 'Aguardando Solicitante', 'Aguardando Peças'];
         }
+    }
 
+    /**
+     * Retorna array com anos selecionáveis, em ordem inversa
+     */
+    public static function anos()
+    {
+        return range(date('Y'), 2018, -1);
     }
 
     /**

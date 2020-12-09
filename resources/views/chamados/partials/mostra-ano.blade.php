@@ -5,9 +5,9 @@
         </a>
 
         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-            <a class="dropdown-item" href="chamados/anos/2020">2020</a>
-            <a class="dropdown-item" href="chamados/anos/2019">2019</a>
-            <a class="dropdown-item" href="chamados/anos/2018">2018</a>
+        @foreach(\App\Models\Chamado::anos() as $ano)
+            <a class="dropdown-item" href="chamados/anos/{{ $ano }}">{{ $ano }}</a>
+        @endforeach
         </div>
     </div>
 </div>
