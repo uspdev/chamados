@@ -7,14 +7,14 @@
 <div class="row">
     <div class="col-md-12 form-inline">
         <span class="h4 mt-2">Filas</span>
-        @include('common.list-table-filter-box')
+        @include('partials.datatable-filter-box', ['otable'=>'oTable'])
         @include('common.list-table-modal-btn-create')
     </div>
 </div>
 
 <?php #dd($data); ?>
 
-<table class="table table-striped table-hover datatable-nopagination">
+<table class="table table-striped table-hover datatable-nopagination display responsive" style="width:100%">
     <thead>
         <tr>
             <td>Setor</td>

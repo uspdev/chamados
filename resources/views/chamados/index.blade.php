@@ -12,7 +12,7 @@
     </div>
 </div>
 
-<table class="table table-striped meus-chamados">
+<table class="table table-striped meus-chamados display responsive" style="width:100%">
     <thead>
         <tr>
             <th>Nro</th>

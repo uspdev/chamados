@@ -10,7 +10,7 @@
     </div>
 </div>
 
-<table class="table table-sm table-hover novo-chamado">
+<table class="table table-sm table-hover novo-chamado display responsive" style="width:100%"">
     <thead>
         <tr>
             <td><span class="d-none">Filas</span></td>
