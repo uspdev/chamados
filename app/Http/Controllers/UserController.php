@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    use ResourceTrait;
-
     public function __construct()
     {
         $this->middleware('auth');
