@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Arquivo;
+use App\Models\Comentario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use App\Models\Comentario;
 
 class ArquivoController extends Controller
 {
@@ -37,14 +37,11 @@ class ArquivoController extends Controller
      */
     public function store(Request $request)
     {
-
-        
-        $max_upload_size = env('APP_UPLOAD_MAX_FILESIZE') != null ? ((int)env('APP_UPLOAD_MAX_FILESIZE'))*1024 : 16*1024;
-        
+        $max_upload_size = config('chamados.upload_max_filesize');
 
         $request->validate([
-            'arquivo.*'    => "required|mimes:jpeg,jpg,png,pdf|max:$max_upload_size",
-            'chamado_id' => 'required|integer|exists:chamados,id'
+            'arquivo.*' => "required|mimes:jpeg,jpg,png,pdf|max:$max_upload_size",
+            'chamado_id' => 'required|integer|exists:chamados,id',
         ]);
         $fotos_nome = [];
         $chamado_id = 0;
@@ -54,23 +51,23 @@ class ArquivoController extends Controller
             $chamado_id = $arquivo->chamado_id;
             $arquivo->user_id = \Auth::user()->id;
             $arquivo->nome_original = $arq->getClientOriginalName();
-            $arquivo->caminho = $arq->store('./arquivos/'. date("Y"));
+            $arquivo->caminho = $arq->store('./arquivos/' . date("Y"));
             $arquivo->mimeType = $arq->getClientMimeType();
             $arquivo->save();
-            if(preg_match('/jpeg|jpg|png/', $arquivo->mimeType)){
-                array_push($fotos_nome,$arquivo->nome_original);
-            }else{
+            if (preg_match('/jpeg|jpg|png/', $arquivo->mimeType)) {
+                array_push($fotos_nome, $arquivo->nome_original);
+            } else {
                 Comentario::create([
                     'user_id' => \Auth::user()->id,
                     'chamado_id' => $arquivo->chamado_id,
-                    'comentario' => 'O arquivo '. $arquivo->nome_original .' foi adicionado.',
+                    'comentario' => 'O arquivo ' . $arquivo->nome_original . ' foi adicionado.',
                     'tipo' => 'system',
-                    ]);
+                ]);
             }
         }
-        if(count($fotos_nome) > 0){
-            $comentario = (count($fotos_nome) > 1 )
-            ? 'As imagens '. implode(", ", $fotos_nome) . ' foram adicionadas'
+        if (count($fotos_nome) > 0) {
+            $comentario = (count($fotos_nome) > 1)
+            ? 'As imagens ' . implode(", ", $fotos_nome) . ' foram adicionadas'
             : 'A imagem ' . $fotos_nome[0] . ' foi adicionada';
 
             Comentario::create([
@@ -82,7 +79,6 @@ class ArquivoController extends Controller
         }
         $request->session()->flash('alert-success', 'Arquivo(s) adicionado(s) com sucesso!');
 
-        
         return back();
     }
 
@@ -118,24 +114,24 @@ class ArquivoController extends Controller
     public function update(Request $request, Arquivo $arquivo)
     {
         $request->validate([
-            'nome_arquivo'    => 'required',
+            'nome_arquivo' => 'required',
         ],
-        [
-            'nome_arquivo.required'    => 'O nome do arquivo é obrigatório!',
-        ]);
+            [
+                'nome_arquivo.required' => 'O nome do arquivo é obrigatório!',
+            ]);
         $nome_antigo = $arquivo->nome_original;
         $arquivo->nome_original = $request->nome_arquivo;
-        if(substr($arquivo->nome_original, -4) != '.pdf'){
+        if (substr($arquivo->nome_original, -4) != '.pdf') {
             $arquivo->nome_original .= '.pdf';
         }
         $arquivo->update();
         Comentario::create([
             'user_id' => \Auth::user()->id,
             'chamado_id' => $arquivo->chamado_id,
-            'comentario' => 'O arquivo '. $nome_antigo .' foi renomeado para '.$request->nome_arquivo.'.',
+            'comentario' => 'O arquivo ' . $nome_antigo . ' foi renomeado para ' . $request->nome_arquivo . '.',
             'tipo' => 'system',
-            ]);
-        request()->session()->flash('alert-success','Arquivo renomeado com sucesso!');
+        ]);
+        request()->session()->flash('alert-success', 'Arquivo renomeado com sucesso!');
         return back();
     }
 
@@ -148,16 +144,16 @@ class ArquivoController extends Controller
     public function destroy(Request $request, Arquivo $arquivo)
     {
         $arquivo->delete();
-        $comentario = preg_match('/jpeg|jpg|png/', $arquivo->mimeType) 
-                ? 'A imagem '. $arquivo->nome_original .' foi excluída'
-                : 'O arquivo '. $arquivo->nome_original .' foi excluído';
+        $comentario = preg_match('/jpeg|jpg|png/', $arquivo->mimeType)
+        ? 'A imagem ' . $arquivo->nome_original . ' foi excluída'
+        : 'O arquivo ' . $arquivo->nome_original . ' foi excluído';
         Comentario::create([
             'user_id' => \Auth::user()->id,
             'chamado_id' => $arquivo->chamado_id,
             'comentario' => $comentario,
             'tipo' => 'system',
-            ]);
-        $request->session()->flash('alert-success', $comentario .' com sucesso!');
+        ]);
+        $request->session()->flash('alert-success', $comentario . ' com sucesso!');
 
         return back();
     }
