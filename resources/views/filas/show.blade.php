@@ -1,10 +1,5 @@
 @extends('master')
 
-<?php 
-#dd($data->row->user);
-#$data->model = 'App\Models\Fila';
-?>
-
 @section('styles')
 @parent
 <style>
