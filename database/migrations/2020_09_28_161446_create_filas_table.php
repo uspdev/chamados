@@ -18,8 +18,14 @@ class CreateFilasTable extends Migration
             $table->string('nome', 90);
             $table->string('estado', 90);
             $table->string('descricao', 255)->nullable();
+
+            # modelo de formulário opcional da fila
             $table->json('template')->nullable();
+
+            # configurações específicas
             $table->json('config')->nullable();
+
+            # relacionamento com setor
             $table->foreignId('setor_id')->constrained('setores');
             $table->timestamps();
         });

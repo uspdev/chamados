@@ -18,8 +18,7 @@ class CreateUserFilaTable extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('fila_id')->constrained('filas')->onDelete('cascade');
 
-            $funcoes = ['Gerente','Atendente'];
-            $table->enum('funcao', $funcoes);
+            $table->string('funcao', 30);
 
             $table->timestamps();
         });
