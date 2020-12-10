@@ -42,10 +42,7 @@ class FilaController extends Controller
 
     public function store(FilaRequest $request)
     {
-        $setor_id = $request->setor_id;
-        if (!Gate::allows('filas.create', Setor::find($setor_id))) {
-            return response()->view('sem-acesso', [], 403);
-        }
+        $this->authorize('filas.create');
 
         $fila = Fila::create($request->all());
         
@@ -91,10 +88,7 @@ class FilaController extends Controller
      */
     public function show(Request $request, Fila $fila)
     {
-        # Vamos negar acesso com mensagem apropriada
-        if (!Gate::allows('filas.view', $fila)) {
-            return response()->view('sem-acesso', [], 403);
-        }
+        $this->authorize('filas.view', $fila);
 
         if ($request->ajax()) {
             return $fila;
