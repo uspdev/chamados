@@ -22,4 +22,9 @@ class Patrimonio extends Model
     {
         return $this->belongsToMany('App\Models\Chamado', 'chamado_patrimonio')->withTimestamps();
     }
+
+    public function numFormatado()
+    {
+        return str_pad(substr($this->numpat, 0, -6), 3, '0', STR_PAD_LEFT) . '.' . substr($this->numpat, strlen($this->numpat) - 6);
+    }
 }

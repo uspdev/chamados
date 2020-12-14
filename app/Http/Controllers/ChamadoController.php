@@ -505,7 +505,7 @@ class ChamadoController extends Controller
             Log::info($patrimonio);
             if ($patrimonio->replicado()->anoorc != null) {
                 $results[] = [
-                    'text' => str_pad(substr($patrimonio->numpat, 0, -6), 3, '0', STR_PAD_LEFT) . '.' . substr($patrimonio->numpat, strlen($patrimonio->numpat) - 6) . ' - ' . $patrimonio->replicado()->epfmarpat . ' - ' . $patrimonio->replicado()->tippat . ' - ' . $patrimonio->replicado()->modpat,
+                    'text' => $patrimonio->numFormatado() . ' - ' . $patrimonio->replicado()->epfmarpat . ' - ' . $patrimonio->replicado()->tippat . ' - ' . $patrimonio->replicado()->modpat,
                     'id' => $patrimonio->numpat,
                 ];
                 return response(compact('results'));
@@ -521,6 +521,8 @@ class ChamadoController extends Controller
      */
     public function storePatrimonio(Request $request, Chamado $chamado)
     {
+        $this->authorize('chamados.view', $chamado);
+
         if (config('chamados.usar_replicado') == 'true') {
             $request->validate([
                 'numpat' => 'required|patrimonio',
@@ -537,8 +539,24 @@ class ChamadoController extends Controller
             $patrimonio->numpat = str_replace('.', '', $request->numpat);
             $patrimonio->save();
         }
-        $chamado->patrimonios()->detach($patrimonio);
+
+        $existia = $chamado->patrimonios()->detach($patrimonio);
+
         $chamado->patrimonios()->attach($patrimonio);
+
+        if (!$existia) {
+            $msg = 'O patrimônio ' . $patrimonio->numFormatado() . ' foi adicionado a esse chamado.';
+            Comentario::create([
+                'user_id' => \Auth::user()->id,
+                'chamado_id' => $chamado->id,
+                'comentario' => $msg,
+                'tipo' => 'system',
+            ]);
+
+            $request->session()->flash('alert-info', $msg);
+        } else {
+            $request->session()->flash('alert-info', 'O patrimônio ' . $patrimonio->numFormatado() . ' já estava vinculado à esse chamado.');
+        }
 
         # continua ...
         return Redirect::to(URL::previous() . "#card_patrimonios");
@@ -550,7 +568,22 @@ class ChamadoController extends Controller
      * se for observador, qualquer um que tenha acesso ao chamado
      * $user = required
      */
-    public function destroyPatrimonio(Request $request, Chamado $chamado, User $user)
+    public function destroyPatrimonio(Request $request, Chamado $chamado, Patrimonio $patrimonio)
     {
+        $this->authorize('chamados.view', $chamado);
+
+        $chamado->patrimonios()->detach($patrimonio);
+
+        $msg = 'O patrimônio ' . $patrimonio->numFormatado() . ' foi removido desse chamado.';
+        Comentario::create([
+            'user_id' => \Auth::user()->id,
+            'chamado_id' => $chamado->id,
+            'comentario' => $msg,
+            'tipo' => 'system',
+        ]);
+
+        $request->session()->flash('alert-info', $msg);
+
+        return Redirect::to(URL::previous() . "#card_patrimonio");
     }
 }

@@ -26,6 +26,9 @@
                     {{ $patrimonio->replicado()->epfmarpat ?? '' }}
                     {{ $patrimonio->replicado()->tippat ?? '' }}
                     {{ $patrimonio->replicado()->modpat ?? '' }}
+                    <span class="hidden-btn d-none">
+                        @include('common.btn-delete-sm', ['action'=>'chamados/'.$chamado->id.'/patrimonios/'.$patrimonio->id])
+                    </span>
                 </li>
             @endforeach
         </ul>
