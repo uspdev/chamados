@@ -54,6 +54,7 @@ Route::post('chamados/{chamado}/pessoas', [ChamadoController::class,'storePessoa
 Route::delete('chamados/{chamado}/pessoas/{user}', [ChamadoController::class,'destroyPessoa']);
 
 // CHAMADOS - PATRIMONIOS
+Route::get('chamados/listarPatrimoniosAjax', [ChamadoController::class,'listarPatrimoniosAjax']);
 Route::post('chamados/{chamado}/patrimonios', [ChamadoController::class,'storePatrimonio']);
 Route::delete('chamados/{chamado}/patrimonios/{patrimonio}', [ChamadoController::class,'destroyPatrimonio']);
 

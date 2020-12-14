@@ -398,7 +398,7 @@ class ChamadoController extends Controller
     {
         # A validação ainda precisa passar para um local mais apropriado
         $validator = Validator::make(['ano' => $request->ano], [
-            'ano' => 'required|integer|in:' . implode(',',Chamado::anos()),
+            'ano' => 'required|integer|in:' . implode(',', Chamado::anos()),
         ]);
 
         if ($validator->fails()) {
@@ -441,7 +441,6 @@ class ChamadoController extends Controller
         # O usuário já existe nesse papel?
         if ($chamado->users()->where('users.id', $user->id)->wherePivot('papel', $papel)->first()) {
             $request->session()->flash('alert-info', $papel . ' já existe.');
-
         } else {
             $chamado->users()->attach($user, ['papel' => $papel]);
 
@@ -495,6 +494,28 @@ class ChamadoController extends Controller
     }
 
     /**
+     * Retornando patrimônio para inserção em chamados
+     * @param Request $request - numpat
+     * @return json
+     */
+    public function listarPatrimoniosAjax(Request $request)
+    {
+        if ($request->term) {
+            $patrimonio = new Patrimonio();
+            $patrimonio->numpat = str_replace('.', '', $request->term);
+            Log::info($patrimonio);
+            if ($patrimonio->replicado()->anoorc != null) {
+                $results[] = [
+                    'text' => str_pad(substr($patrimonio->numpat, 0, -6), 3, '0', STR_PAD_LEFT) . '.' . substr($patrimonio->numpat, strlen($patrimonio->numpat) - 6) . ' - ' . $patrimonio->replicado()->epfmarpat . ' - ' . $patrimonio->replicado()->tippat . ' - ' . $patrimonio->replicado()->modpat,
+                    'id' => $patrimonio->numpat,
+                ];
+                return response(compact('results'));
+            }
+        }
+        return null;
+    }
+
+    /**
      * Adicionar patrimonios relacionadas ao chamado
      * autorizado a qualquer um que tenha acesso ao chamado
      * request->codpes = required, int
@@ -511,10 +532,10 @@ class ChamadoController extends Controller
             ]);
         }
 
-        $patrimonio = Patrimonio::where('numpat', $request->numpat)->first();
+        $patrimonio = Patrimonio::where('numpat', str_replace('.', '', $request->numpat))->first();
         if (!$patrimonio) {
             $patrimonio = new Patrimonio;
-            $patrimonio->numpat = $request->numpat;
+            $patrimonio->numpat = str_replace('.', '', $request->numpat);
             $patrimonio->save();
         }
         $chamado->patrimonios()->detach($patrimonio);
@@ -533,5 +554,4 @@ class ChamadoController extends Controller
     public function destroyPatrimonio(Request $request, Chamado $chamado, User $user)
     {
     }
-
 }
