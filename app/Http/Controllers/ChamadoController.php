@@ -63,6 +63,7 @@ class ChamadoController extends Controller
      */
     public function listaFilas()
     {
+        $this->authorize('chamados.create');
         $setores = Setor::with(['filas' => function ($query) {
             $query->where('estado', 'Em produção');
         }])->orderBy('sigla')->get();
@@ -101,10 +102,8 @@ class ChamadoController extends Controller
      */
     public function show(Chamado $chamado)
     {
-        # Vamos negar acesso com mensagem apropriada
-        if (!Gate::allows('chamados.view', $chamado)) {
-            return response()->view('sem-acesso', [], 403);
-        }
+        $this->authorize('chamados.view', $chamado);
+
         $template = json_decode($chamado->fila->template);
         $extras = json_decode($chamado->extras);
         $atendentes = $chamado->users()->wherePivot('papel', 'Atendente')->get();
