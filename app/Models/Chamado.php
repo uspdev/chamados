@@ -24,7 +24,7 @@ class Chamado extends Model
     ];
 
     /**
-     * Constantes usadas no bd
+     * Retorna array de complexidades
      *
      * @formSelect Bool true se for usado em form-select
      */
@@ -42,6 +42,10 @@ class Chamado extends Model
 
     }
 
+    /**
+     * Retorna os status possiveis no chamado.
+     * Para o form, vamos excluir os status padrão que não poderão ser setados pelo atendente
+     */
     public static function status($formSelect = false)
     {
         if ($formSelect) {

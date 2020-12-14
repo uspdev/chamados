@@ -7,11 +7,9 @@ use App\Models\Fila;
 use App\Models\User;
 use App\Models\Setor;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 
 class FilaController extends Controller
 {
-    protected $model = 'App\Models\Fila';
 
     protected $data = [
         'title' => 'Filas',
@@ -28,10 +26,6 @@ class FilaController extends Controller
         $this->middleware('auth');
     }
 
-    use ResourceTrait {
-        store as protected traitStore;
-    }
-
     public function index()
     {
         $this->authorize('filas.viewAny');
@@ -42,10 +36,12 @@ class FilaController extends Controller
 
     public function store(FilaRequest $request)
     {
-        $this->authorize('filas.create');
+        # Para criar uma nova fila precisamos do setor para autorizar
+        $setor = Setor::find($request->setor_id);
+        $this->authorize('filas.create', $setor);
 
         $fila = Fila::create($request->all());
-        
+
         # não vamos adicionar gerente automaticamente
         #$fila->users()->attach(\Auth::user(), ['funcao' => 'Gerente']);
 
@@ -117,7 +113,7 @@ class FilaController extends Controller
     public function destroyPessoa(Request $request, Fila $fila, $id)
     {
         $this->authorize('filas.update', $fila);
-        
+
         $currentUser = \Auth::user();
         if ($currentUser->id == $id and !$currentUser->is_admin) {
             $request->session()->flash('alert-warning', 'Não é possível remover a si mesmo.');
@@ -142,7 +138,7 @@ class FilaController extends Controller
     public function createTemplate(Fila $fila)
     {
         $this->authorize('filas.update', $fila);
-        
+
         $template = json_decode($fila->template, true);
         return view('filas.template', compact('fila', 'template'));
     }
@@ -150,7 +146,7 @@ class FilaController extends Controller
     public function storeTemplate(Request $request, Fila $fila)
     {
         $this->authorize('filas.update', $fila);
-        
+
         $request->validate([
             'template.*.label' => 'required',
             'template.*.type' => 'required',

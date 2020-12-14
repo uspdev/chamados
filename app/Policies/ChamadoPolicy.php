@@ -19,7 +19,7 @@ class ChamadoPolicy
      */
     public function viewAny(User $user)
     {
-        return true;
+        return $user;
     }
 
     /**
@@ -71,7 +71,7 @@ class ChamadoPolicy
      */
     public function create(User $user)
     {
-        return true;
+        return $user;
     }
 
     /**
