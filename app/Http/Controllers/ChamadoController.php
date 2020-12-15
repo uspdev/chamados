@@ -500,12 +500,25 @@ class ChamadoController extends Controller
     public function listarPatrimoniosAjax(Request $request)
     {
         if ($request->term) {
-            $patrimonio = new Patrimonio();
-            $patrimonio->numpat = str_replace('.', '', $request->term);
-            Log::info($patrimonio);
-            if ($patrimonio->replicado()->anoorc != null) {
+            if (config('chamados.usar_replicado') == 'true') {
+                $patrimonio = new Patrimonio();
+                $patrimonio->numpat = str_replace('.', '', $request->term);
+                if ($patrimonio->replicado()->anoorc != null) {
+                    $results[] = [
+                        'text' => $patrimonio->numFormatado() . ' - ' . $patrimonio->replicado()->epfmarpat . ' - ' . $patrimonio->replicado()->tippat . ' - ' . $patrimonio->replicado()->modpat,
+                        'id' => $patrimonio->numpat,
+                    ];
+                    return response(compact('results'));
+                }
+            } else {
+                $patrimonio = Patrimonio::where('numpat', str_replace('.', '', $request->term))->first();
+                if (!$patrimonio) {
+                    $patrimonio = new Patrimonio;
+                    $patrimonio->numpat = str_replace('.', '', $request->term);
+                    $patrimonio->save();
+                }
                 $results[] = [
-                    'text' => $patrimonio->numFormatado() . ' - ' . $patrimonio->replicado()->epfmarpat . ' - ' . $patrimonio->replicado()->tippat . ' - ' . $patrimonio->replicado()->modpat,
+                    'text' => $patrimonio->numFormatado(),
                     'id' => $patrimonio->numpat,
                 ];
                 return response(compact('results'));
@@ -557,8 +570,7 @@ class ChamadoController extends Controller
         } else {
             $request->session()->flash('alert-info', 'O patrimônio ' . $patrimonio->numFormatado() . ' já estava vinculado à esse chamado.');
         }
-
-        # continua ...
+        
         return Redirect::to(URL::previous() . "#card_patrimonios");
     }
 

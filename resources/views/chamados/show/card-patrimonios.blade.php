@@ -22,12 +22,15 @@
         <ul class="ml-2 list-unstyled lista-patrimonios">
             @foreach ($chamado->patrimonios as $patrimonio)
                 <li class="form-inline">
-                    {{ $patrimonio->numFormatado() }}:
-                    {{ $patrimonio->replicado()->epfmarpat ?? '' }}
-                    {{ $patrimonio->replicado()->tippat ?? '' }}
-                    {{ $patrimonio->replicado()->modpat ?? '' }}
+                    <b>{{ $patrimonio->numFormatado() }}</b>
+                    @if (config('chamados.usar_replicado') == 'true')
+                        : {{ $patrimonio->replicado()->epfmarpat ?? '' }}
+                        {{ $patrimonio->replicado()->tippat ?? '' }}
+                        {{ $patrimonio->replicado()->modpat ?? '' }}
+                    @endif
                     <span class="hidden-btn d-none">
-                        @include('common.btn-delete-sm', ['action'=>'chamados/'.$chamado->id.'/patrimonios/'.$patrimonio->id])
+                        @include('common.btn-delete-sm',
+                        ['action'=>'chamados/'.$chamado->id.'/patrimonios/'.$patrimonio->id])
                     </span>
                     <span class="hidden-btn d-none">
                         @include('patrimonios.show.patrimonio-detail', ['patrimonio'=>$patrimonio])
