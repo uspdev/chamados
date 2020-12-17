@@ -13,6 +13,11 @@
         background-color: LightBlue;
         border-top: 3px solid blue;
     }
+
+    .disable-links {
+        pointer-events: none;
+    }
+
 </style>
 @endsection
 
@@ -120,5 +125,6 @@
     function mostraModal() {
         $('#chamadoModal').modal('show');
     }
+
 </script>
 @stop
