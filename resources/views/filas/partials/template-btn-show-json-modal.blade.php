@@ -15,17 +15,17 @@
             <div class="modal-body">
 
                 <div class="list_table_div_form">
-                    {!! Form::open( ['url'=>$data->url.'/'.$data->row->id.'/template_json', 'id' => 'jsonForm']) !!}
+                    {!! Form::open( ['url'=>$data->url.'/'.$fila->id.'/template_json', 'id' => 'jsonForm']) !!}
                     @method('POST')
                     @csrf
 
                     <div class="form-group row">
                         {{ Form::label('template', 'Json', ['class' => 'col-form-label col-sm-2']) }}
                         <div class="col-sm-10">
-                            @if($data->row['template'] == null)
-                            {{ Form::textarea('template', $data->row['template'],['id' => 'template', 'class' => 'form-control', 'rows' => '15'] ) }}
+                            @if($fila->template == null)
+                            {{ Form::textarea('template', $fila->template,['id' => 'template', 'class' => 'form-control', 'rows' => '15'] ) }}
                             @else
-                            {{ Form::textarea('template', json_encode(json_decode($data->row['template']), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE),['id' => 'template', 'class' => 'form-control', 'rows' => '15'] ) }}
+                            {{ Form::textarea('template', json_encode(json_decode($fila->template), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE),['id' => 'template', 'class' => 'form-control', 'rows' => '15'] ) }}
                             @endif
                         </div>
                     </div>

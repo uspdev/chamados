@@ -15,7 +15,7 @@
             <div class="modal-body">
 
                 <div class="list_table_div_form">
-                    {!! Form::open( ['url'=>$data->url.'/'.$data->row->id.'/pessoas']) !!}
+                    {!! Form::open( ['url'=>$data->url.'/'.$fila->id.'/pessoas']) !!}
                     @method('POST')
                     @csrf
 

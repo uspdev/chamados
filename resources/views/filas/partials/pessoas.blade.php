@@ -11,11 +11,11 @@
 </div>
 
 <ul class="list-unstyled ml-2 lista-pessoas">
-    @foreach($data->row->users as $user)
+    @foreach($fila->users as $user)
     <li class="form-inline">
         {{ $user->name }} - {{ $user->pivot->funcao }}
         <span class="hidden-btn d-none">
-            @include('common.btn-delete-sm', ['action'=>'filas/'.$data->row['id'].'/pessoas/'.$user->id])
+            @include('common.btn-delete-sm', ['action'=>'filas/'.$fila->id.'/pessoas/'.$user->id])
         </span>
     </li>
     @endforeach
