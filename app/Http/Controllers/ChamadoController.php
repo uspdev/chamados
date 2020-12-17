@@ -64,9 +64,7 @@ class ChamadoController extends Controller
     public function listaFilas()
     {
         $this->authorize('chamados.create');
-        $setores = Setor::with(['filas' => function ($query) {
-            $query->where('estado', 'Em produção');
-        }])->orderBy('sigla')->get();
+        $setores = Fila::listarFilasParaNovoChamado();
         return view('chamados.listafilas', compact('setores'));
     }
 
@@ -570,7 +568,7 @@ class ChamadoController extends Controller
         } else {
             $request->session()->flash('alert-info', 'O patrimônio ' . $patrimonio->numFormatado() . ' já estava vinculado à esse chamado.');
         }
-        
+
         return Redirect::to(URL::previous() . "#card_patrimonios");
     }
 
