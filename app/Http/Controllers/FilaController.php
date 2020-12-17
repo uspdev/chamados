@@ -66,8 +66,7 @@ class FilaController extends Controller
         $fila->fill($request->all());
 
         if ($request->config) {
-            $config = $request->config;
-            $fila->config = json_encode($config);
+            $fila->config = $request->config;
         }
 
         $fila->save();
@@ -89,12 +88,10 @@ class FilaController extends Controller
         if ($request->ajax()) {
             return $fila;
         } else {
-            $this->data['row'] = $fila;
+            $data = (object) $this->data;
+            $config = $fila->config;
 
-            #$config = $fila->config ? json_decode($fila->config) : new \StdClass;
-            #$config->triagem = isset($config->triagem) ? $config->triagem : false;
-
-            return view('filas.show')->with(['data' => (object) $this->data, 'fila' => $fila]);
+            return view('filas.show', compact(['fila', 'data','config']));
         }
     }
 

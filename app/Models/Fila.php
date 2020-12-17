@@ -85,13 +85,41 @@ class Fila extends Model
     }
 
     /**
-     * Accessor para $config
+     * Accessor getter para $config
      */
     public function getConfigAttribute($value)
     {
-        $value = $value ? json_decode($value) : new \StdClass;
-        $value->triagem = isset($value->triagem) ? $value->triagem : true;
-        return $value;
+        $value = json_decode($value);
+
+        $v = new \StdClass;
+        $v->alunos = isset($value->visibilidade->alunos) ? $value->visibilidade->alunos : config('chamados.filas.visibilidade.alunos');
+        $v->servidores = isset($value->visibilidade->servidores) ? $value->visibilidade->servidores : config('chamados.filas.visibilidade.servidores');
+        $v->setores = isset($value->visibilidade->setores) ? $value->visibilidade->setores : config('chamados.filas.visibilidade.setores');
+
+        $out = new \StdClass;
+        $out->triagem = $value->triagem ?? config('chamados.filas.triagem');
+        $out->patrimonio = $value->patrimonio ?? config('chamados.filas.patrimonio');
+        $out->visibilidade = $v;
+
+        return $out;
+    }
+
+    /**
+     * Accessor setter para $config
+     */
+    public function setConfigAttribute($value)
+    {
+        $v = new \StdClass;
+        $v->alunos = $value['visibilidade']['alunos'] ?? 0;
+        $v->servidores = $value['visibilidade']['servidores'] ?? 0;
+        $v->setores = $value['visibilidade']['setores'];
+
+        $config = new \StdClass;
+        $config->triagem = $value['triagem'];
+        $config->patrimonio = $value['patrimonio'];
+        $config->visibilidade = $v;
+
+        $this->attributes['config'] = json_encode($config);
     }
 
     /**
@@ -128,6 +156,53 @@ class Fila extends Model
         $filas = $filas->merge($user->filas()->wherePivot('funcao', 'Gerente')->get());
 
         return $filas->unique('id');
+    }
+
+    /**
+     * Mostra lista de setores e respectivas filas
+     * para selecionar e criar novo chamado
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public static function listarFilasParaNovoChamado()
+    {
+        $setores = Setor::get();
+        foreach ($setores as &$setor) {
+            $filas = $setor->filas;
+
+            # pegando somente os em produção
+            $filas = $filas->filter(function ($fila, $key) {
+                return $fila->estado == 'Em produção';
+            });
+
+            # filtrando por visibilidade de setor
+            $filas = $filas->filter(function ($fila, $key) {
+                if ($fila->config->visibilidade->setores == 'interno') {
+                    return \Auth::user()->setores
+                        ->where('sigla', $fila->setor->sigla)
+                        ->first();
+                } else {
+                    return true;
+                }
+            });
+
+            #filtrando servidores
+            $filas = $filas->filter(function ($fila, $key) {
+                if ($fila->config->visibilidade->servidores == 1) {
+                    return \Auth::user()->setores()
+                        ->wherePivot('funcao', 'Servidor')
+                        ->first();
+                } else {
+                    return !\Auth::user()->setores()
+                    ->wherePivot('funcao', 'Servidor')
+                    ->first();
+                }
+            });
+
+            $setor->filas = $filas;
+        }
+
+        return $setores;
     }
 
     /**
