@@ -92,13 +92,13 @@ class Fila extends Model
         $value = json_decode($value);
 
         $v = new \StdClass;
-        $v->alunos = isset($value->visibilidade->alunos) ? $value->visibilidade->alunos : config('chamados.filas.visibilidade.alunos');
-        $v->servidores = isset($value->visibilidade->servidores) ? $value->visibilidade->servidores : config('chamados.filas.visibilidade.servidores');
-        $v->setores = isset($value->visibilidade->setores) ? $value->visibilidade->setores : config('chamados.filas.visibilidade.setores');
+        $v->alunos = isset($value->visibilidade->alunos) ? $value->visibilidade->alunos : config('filas.config.visibilidade.alunos');
+        $v->servidores = isset($value->visibilidade->servidores) ? $value->visibilidade->servidores : config('filas.config.visibilidade.servidores');
+        $v->setores = isset($value->visibilidade->setores) ? $value->visibilidade->setores : config('filas.config.visibilidade.setores');
 
         $out = new \StdClass;
-        $out->triagem = $value->triagem ?? config('chamados.filas.triagem');
-        $out->patrimonio = $value->patrimonio ?? config('chamados.filas.patrimonio');
+        $out->triagem = $value->triagem ?? config('filas.config.triagem');
+        $out->patrimonio = $value->patrimonio ?? config('filas.config.patrimonio');
         $out->visibilidade = $v;
 
         return $out;
