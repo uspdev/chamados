@@ -8,14 +8,17 @@ use Illuminate\Support\HtmlString;
 
 class JSONForms
 {
+    /**
+     * Valida os campos do formulário
+     */
     public static function buildRules($request, $fila)
     {
         $template = json_decode($fila->template);
-            $validate = [];
-            if ($template) {
+        $validate = [];
+        if ($template) {
             foreach ($template as $key => $json) {
                 if (isset($json->validate)) {
-                    $field = "extras.".$key;
+                    $field = "extras." . $key;
                     $validate[$field] = $json->validate;
                 }
             }
@@ -23,11 +26,13 @@ class JSONForms
         return $validate;
     }
 
+    /**
+     * Renderiza o formulário como array
+     */
     public static function JSON2Form($template, $data)
     {
-        Form::macro('help', function($text)
-        {
-            $help = new HtmlString('<small class="form-text text-muted">'.$text.'</small>');
+        Form::macro('help', function ($text) {
+            $help = new HtmlString('<small class="form-text text-muted">' . $text . '</small>');
             return $help;
         });
 
@@ -70,6 +75,9 @@ class JSONForms
         return $form;
     }
 
+    /**
+     * Trata as entradas para renderizar o formulário
+     */
     public static function generateForm($fila, $chamado = null)
     {
         $template = json_decode($fila->template);
