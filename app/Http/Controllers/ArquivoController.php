@@ -37,10 +37,8 @@ class ArquivoController extends Controller
      */
     public function store(Request $request)
     {
-        $max_upload_size = config('chamados.upload_max_filesize');
-
         $request->validate([
-            'arquivo.*' => "required|mimes:jpeg,jpg,png,pdf|max:$max_upload_size",
+            'arquivo.*' => 'required|mimes:jpeg,jpg,png,pdf|max:'.config('chamados.upload_max_filesize'),
             'chamado_id' => 'required|integer|exists:chamados,id',
         ]);
         $fotos_nome = [];
