@@ -14,10 +14,7 @@
 @endcan
 
 <div class="ml-2">
-    @if(!empty($data->row->template))
     @foreach(json_decode($fila->template) as $field=>$value)
-    {{ $value->label }}<br>
+    {{ $value->label }} - {{ $value->type }}<br>
     @endforeach
-    @endif
-    Descrição (padrão)<br>
 </div>
