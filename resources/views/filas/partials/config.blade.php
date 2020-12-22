@@ -1,4 +1,6 @@
-<div class="font-weight-bold"><i class="fas fa-cogs"></i> Configurações</div>
+<div class="font-weight-bold">
+    <i class="fas fa-cogs"></i> Configurações
+</div>
 
 {!! Form::open(['url' => 'filas/' . $fila->id, 'name' => 'form_config']) !!}
 @method('put')
