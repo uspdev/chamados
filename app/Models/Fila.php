@@ -94,6 +94,7 @@ class Fila extends Model
         $v = new \StdClass;
         $v->alunos = isset($value->visibilidade->alunos) ? $value->visibilidade->alunos : config('filas.config.visibilidade.alunos');
         $v->servidores = isset($value->visibilidade->servidores) ? $value->visibilidade->servidores : config('filas.config.visibilidade.servidores');
+        $v->gerentes = isset($value->visibilidade->gerentes) ? $value->visibilidade->gerentes : config('filas.config.visibilidade.gerentes');
         $v->setores = isset($value->visibilidade->setores) ? $value->visibilidade->setores : config('filas.config.visibilidade.setores');
 
         $out = new \StdClass;
@@ -112,6 +113,7 @@ class Fila extends Model
         $v = new \StdClass;
         $v->alunos = $value['visibilidade']['alunos'] ?? 0;
         $v->servidores = $value['visibilidade']['servidores'] ?? 0;
+        $v->gerentes = $value['visibilidade']['gerentes'] ?? 0;
         $v->setores = $value['visibilidade']['setores'];
 
         $config = new \StdClass;
@@ -166,11 +168,15 @@ class Fila extends Model
      */
     public static function listarFilasParaNovoChamado()
     {
+        # primeiro vamos pegar todas as filas
         $setores = Setor::get();
+
+        # e depois filtrar as que não pode
         foreach ($setores as &$setor) {
+            # primeiro vamos pegar todas as filas
             $filas = $setor->filas;
 
-            # pegando somente os em produção
+            # pegando somente as filas em produção
             $filas = $filas->filter(function ($fila, $key) {
                 return $fila->estado == 'Em produção';
             });
@@ -182,21 +188,31 @@ class Fila extends Model
                         ->where('sigla', $fila->setor->sigla)
                         ->first();
                 } else {
+                    // setores == 'todos'
                     return true;
                 }
             });
 
-            #filtrando servidores
+            #filtrando servidores e gerentes
             $filas = $filas->filter(function ($fila, $key) {
-                if ($fila->config->visibilidade->servidores == 1) {
-                    return \Auth::user()->setores()
-                        ->wherePivot('funcao', 'Servidor')
-                        ->first();
-                } else {
-                    return !\Auth::user()->setores()
+
+                # primeiro servidores
+                $servidor = \Auth::user()->setores()
                     ->wherePivot('funcao', 'Servidor')
                     ->first();
+                if ($fila->config->visibilidade->servidores && $servidor) {
+                    return true;
                 }
+
+                # depois filtrando gerentes
+                $gerente = \Auth::user()->setores()
+                    ->wherePivot('funcao', 'Gerente')
+                    ->first();
+                if ($fila->config->visibilidade->gerentes && $gerente) {
+                    return true;
+                }
+
+                return false;
             });
 
             $setor->filas = $filas;

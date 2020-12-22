@@ -52,6 +52,12 @@
                 servidores
             </label>
         </div>
+        <div class="form-check form-check-inline">
+            <label class="form-check-label">
+                <input class="form-check-input" type="checkbox" name="config[visibilidade][gerentes]" value="1" {{ $fila->config->visibilidade->gerentes ? 'checked' : '' }}>
+                gerentes de filas e setores
+            </label>
+        </div>
     </div>
 
     <div>
