@@ -5,7 +5,8 @@ $config = [
     'visibilidade' => [
         'alunos' => 0,
         'servidores' => 1,
-        'gerentes' => 0, # gerentes de filas e setores
+        'setor_gerentes' => 0, # gerentes de setores
+        'fila_gerentes' => 0, # gerentes de filas
         'setores' => 'todos', # todos ou interno
     ],
     'patrimonio' => 0,

@@ -6,11 +6,16 @@
 @method('put')
 
 <div class="ml-2 mt-2">
-    <div class="font-weight-bold">
-        Triagem
-        <span data-toggle="tooltip" data-html="true" title="O gerente da fila fará a distribuição dos chamados entre os atendentes/Os atendentes farão auto atribuições por conta própria.">
-            <i class="fas fa-question-circle text-primary"></i>
-        </span>
+    <span class="font-weight-bold">Triagem</span>
+    <a data-toggle="collapse" href="#ajuda_triagem">
+        <i class="fas fa-question-circle text-primary"></i>
+    </a>
+    <div class="collapse" id="ajuda_triagem">
+        <div class="card-body card-ajuda">
+            <b>Ajuda para triagem</b><br>
+            Se habilitado, o gerente da fila deverá atribuir novos chamados
+            para um atendente. Se desabilitado, o atendente poderá auto-atribuir o chamado.
+        </div>
     </div>
 
     <div class="ml-2">
@@ -33,40 +38,65 @@
 
 <div class="ml-2 mt-3">
     <div class="font-weight-bold">Visibilidade
-        <span data-toggle="tooltip" data-html="true" title="Controla quem poderá abrir chamados nessa fila.">
+        <a data-toggle="collapse" href="#ajuda_visibilidade">
             <i class="fas fa-question-circle text-primary"></i>
-        </span>
+        </a>
     </div>
-
+    <div class="collapse" id="ajuda_visibilidade">
+        <div class="card-body card-ajuda">
+            <b>Ajuda para visibilidade</b><br>
+            Controla quem pode criar chamados nessa fila.<br>
+            No grupo pessoas, selecione a categoria de pessoas que deseja liberar.<br>
+            No grupo setores, escolha entre interno (somente pessoas vinculadas ao setor),
+            ou todos.<br>
+            <br>
+            <b>Exemplo 1</b>: Criar fila para uso interno em um departamento acadêmico:
+            selecione <b>servidores</b> e <b>interno</b>.<br>
+            <b>Exemplo 2</b>: Criar fila em um setor administrativo que ficará disponível
+            aos chefes e secretários da Unidade: selecione <b>gerentes de setor</b> e <b>todos</b>.<br>
+            <b>Exemplo 3</b>: Criar fila para uso somente das pessoas cadastradas na fila:
+            selecione <b>interno</b>.<br>
+            <br>
+            OBS.: A liberação para alunos estará disponível em breve.
+        </div>
+    </div>
     <div class="ml-2">
-        <span class="text-muted mr-2">por usuários:</span>
-        <div class="form-check form-check-inline">
-            <label class="form-check-label">
-                <input class="form-check-input" type="checkbox" name="config[visibilidade][alunos]" value="1" {{ $fila->config->visibilidade->alunos ? 'checked' : '' }}>
-                alunos
-            </label>
-        </div>
-        <div class="form-check form-check-inline">
-            <label class="form-check-label">
-                <input class="form-check-input" type="checkbox" name="config[visibilidade][servidores]" value="1" {{ $fila->config->visibilidade->servidores ? 'checked' : '' }}>
-                servidores
-            </label>
-        </div>
-        <div class="form-check form-check-inline">
-            <label class="form-check-label">
-                <input class="form-check-input" type="checkbox" name="config[visibilidade][gerentes]" value="1" {{ $fila->config->visibilidade->gerentes ? 'checked' : '' }}>
-                gerentes de filas e setores
-            </label>
+        <span class="text-muted mr-2">pessoas:</span>
+        <div class="ml-3">
+            <div class="form-check form-check-inline">
+                <label class="form-check-label">
+                    <input disabled class="form-check-input" type="checkbox" name="config[visibilidade][alunos]" value="1" {{ $fila->config->visibilidade->alunos ? 'checked' : '' }}>
+                    alunos
+                </label>
+            </div>
+            <div class="form-check form-check-inline">
+                <label class="form-check-label">
+                    <input class="form-check-input" type="checkbox" name="config[visibilidade][servidores]" value="1" {{ $fila->config->visibilidade->servidores ? 'checked' : '' }}>
+                    servidores
+                </label>
+            </div>
+            <br>
+            <div class="form-check form-check-inline">
+                <label class="form-check-label">
+                    <input class="form-check-input" type="checkbox" name="config[visibilidade][setor_gerentes]" value="1" {{ $fila->config->visibilidade->setor_gerentes ? 'checked' : '' }}>
+                    gerentes de setor
+                </label>
+            </div>
+            <div class="form-check form-check-inline">
+                <label class="form-check-label">
+                    <input class="form-check-input" type="checkbox" name="config[visibilidade][fila_gerentes]" value="1" {{ $fila->config->visibilidade->fila_gerentes ? 'checked' : '' }}>
+                    gerentes de fila
+                </label>
+            </div>
         </div>
     </div>
-
     <div>
         <div class="btn-group ml-2">
-            <span class="text-muted mr-2">por setor:</span>
+            <span class="text-muted mr-2">setores:</span>
             <div class="form-check form-check-inline">
                 <label class="form-check-label">
                     <input class="form-check-input" type="radio" name="config[visibilidade][setores]" value="interno" {{ $fila->config->visibilidade->setores == 'interno' ? 'checked' : '' }}>
-                    {{ $fila->setor->sigla }}
+                    interno ({{ $fila->setor->sigla }})
                 </label>
             </div>
             <div class="form-check form-check-inline">

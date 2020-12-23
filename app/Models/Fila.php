@@ -91,11 +91,11 @@ class Fila extends Model
     {
         $value = json_decode($value);
 
+        #dd(config('filas.config.visibilidade'));
         $v = new \StdClass;
-        $v->alunos = isset($value->visibilidade->alunos) ? $value->visibilidade->alunos : config('filas.config.visibilidade.alunos');
-        $v->servidores = isset($value->visibilidade->servidores) ? $value->visibilidade->servidores : config('filas.config.visibilidade.servidores');
-        $v->gerentes = isset($value->visibilidade->gerentes) ? $value->visibilidade->gerentes : config('filas.config.visibilidade.gerentes');
-        $v->setores = isset($value->visibilidade->setores) ? $value->visibilidade->setores : config('filas.config.visibilidade.setores');
+        foreach (config('filas.config.visibilidade') as $key => $val) {
+            $v->$key = isset($value->visibilidade->$key) ? $value->visibilidade->$key : $val;
+        }
 
         $out = new \StdClass;
         $out->triagem = $value->triagem ?? config('filas.config.triagem');
@@ -111,10 +111,9 @@ class Fila extends Model
     public function setConfigAttribute($value)
     {
         $v = new \StdClass;
-        $v->alunos = $value['visibilidade']['alunos'] ?? 0;
-        $v->servidores = $value['visibilidade']['servidores'] ?? 0;
-        $v->gerentes = $value['visibilidade']['gerentes'] ?? 0;
-        $v->setores = $value['visibilidade']['setores'];
+        foreach (config('filas.config.visibilidade') as $key => $val) {
+            $v->$key = $value['visibilidade'][$key] ?? 0;
+        }
 
         $config = new \StdClass;
         $config->triagem = $value['triagem'];
@@ -177,41 +176,60 @@ class Fila extends Model
             $filas = $setor->filas;
 
             # pegando somente as filas em produção
-            $filas = $filas->filter(function ($fila, $key) {
-                return $fila->estado == 'Em produção';
-            });
+            // $filas = $filas->filter(function ($fila, $key) {
+            //     return $fila->estado == 'Em produção';
+            // });
 
             # filtrando por visibilidade de setor
+            // $filas = $filas->filter(function ($fila, $key) {
+            //     if ($fila->config->visibilidade->setores == 'interno') {
+            //         return \Auth::user()->setores
+            //             ->where('sigla', $fila->setor->sigla)
+            //             ->first();
+            //     } else {
+            //         // setores == 'todos'
+            //         return true;
+            //     }
+            // });
+
+            # agora vamos remover as filas onde não se pode abrir chamados
             $filas = $filas->filter(function ($fila, $key) {
-                if ($fila->config->visibilidade->setores == 'interno') {
-                    return \Auth::user()->setores
-                        ->where('sigla', $fila->setor->sigla)
-                        ->first();
-                } else {
-                    // setores == 'todos'
+
+                # bloqueia as filas que não estão em produção
+                if ($fila->estado != 'Em produção') {
+                    return false;
+                }
+
+                # liberando pessoas (gerentes, servidores, etc) do proprio setor (interno)
+                $interno = \Auth::user()->setores->contains($fila->setor);
+                if ($fila->config->visibilidade->setores == 'interno' && $interno) {
                     return true;
                 }
-            });
 
-            #filtrando servidores e gerentes
-            $filas = $filas->filter(function ($fila, $key) {
+                # liberando as filas que o usuário participa (gerente e atendente)
+                if (\Auth::user()->filas->contains($fila)) {
+                    return true;
+                }
 
-                # primeiro servidores
-                $servidor = \Auth::user()->setores()
-                    ->wherePivot('funcao', 'Servidor')
-                    ->first();
+                # liberando todos os servidores
+                $servidor = \Auth::user()->setores()->wherePivot('funcao', 'Servidor')->first();
                 if ($fila->config->visibilidade->servidores && $servidor) {
                     return true;
                 }
 
-                # depois filtrando gerentes
-                $gerente = \Auth::user()->setores()
-                    ->wherePivot('funcao', 'Gerente')
-                    ->first();
-                if ($fila->config->visibilidade->gerentes && $gerente) {
+                # liberando gerentes de todos os setores
+                $gerente_setor = \Auth::user()->setores()->wherePivot('funcao', 'Gerente')->first();
+                if ($fila->config->visibilidade->setor_gerentes && $gerente_setor) {
                     return true;
                 }
 
+                # liberando gerentes de todas as filas
+                $gerente_fila = \Auth::user()->filas()->wherePivot('funcao', 'Gerente')->first();
+                if ($fila->config->visibilidade->fila_gerentes && $gerente_fila) {
+                    return true;
+                }
+
+                # se não houver nenhuma liberação então bloqueia a fila
                 return false;
             });
 
