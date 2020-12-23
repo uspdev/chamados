@@ -8,3 +8,4 @@
     {{ $value->label }} - {{ $value->type }}<br>
     @endforeach
 </div>
+<br>
