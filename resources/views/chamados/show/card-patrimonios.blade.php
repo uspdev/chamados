@@ -51,6 +51,7 @@
                 },
                 function() {
                     $(this).find('.hidden-btn').addClass('d-none');
+                    $(this).find('.show').removeClass('show');
                 }
             )
         });
