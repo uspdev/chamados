@@ -12,6 +12,38 @@ class Fila extends Model
     # valor default
     protected $attributes = [
         'estado' => 'Em elaboração',
+        'template' => '{
+                            "complexidade": {
+                                "label": "Complexidade",
+                                "type": "select",
+                                "value": {
+                                    "baixa": "Baixa",
+                                    "media": "Média",
+                                    "alta": "Alta"
+                                }
+                            },
+                            "prioridade": {
+                                "label": "Prioridade",
+                                "type": "select",
+                                "value": {
+                                    "baixa": "Baixa",
+                                    "media": "Média",
+                                    "alta": "Alta"
+                                }
+                            },
+                            "tipo": {
+                                "label": "Tipo de problema",
+                                "type": "select",
+                                "value": {
+                                    "telefonia": "Problemas com telefone",
+                                    "impressora": "Problemas com impressora",
+                                    "software": "Instalação de software",
+                                    "virus": "Computador com vírus",
+                                    "site": "Não consigo atualizar o site do meu setor",
+                                    "outro": "Não sei classificar meu problema"
+                                }
+                            }
+                        }',
     ];
 
     protected $fillable = [

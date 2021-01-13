@@ -29,7 +29,7 @@ class JSONForms
     /**
      * Renderiza o formulário como array
      */
-    public static function JSON2Form($template, $data)
+    public static function JSON2Form($template, $data, $perfil)
     {
         Form::macro('help', function ($text) {
             $help = new HtmlString('<small class="form-text text-muted">' . $text . '</small>');
@@ -70,7 +70,17 @@ class JSONForms
             if (isset($json->help)) {
                 $input[] = Form::help($json->help);
             }
-            $form[] = $input;
+
+            if ($perfil) {
+                if (isset($json->can)) {                
+                    if ($json->can == $perfil) {
+                        $form[] = $input;
+                    }
+                }
+            }else{
+                $form[] = $input;
+            }
+            
         }
         return $form;
     }
@@ -78,7 +88,7 @@ class JSONForms
     /**
      * Trata as entradas para renderizar o formulário
      */
-    public static function generateForm($fila, $chamado = null)
+    public static function generateForm($fila, $chamado = null, $perfil = null)
     {
         $template = json_decode($fila->template);
         $data = null;
@@ -87,7 +97,7 @@ class JSONForms
             if ($chamado) {
                 $data = json_decode($chamado->extras);
             }
-            $form = JSONForms::JSON2Form($template, $data);
+            $form = JSONForms::JSON2Form($template, $data, $perfil);
         }
         return $form;
     }

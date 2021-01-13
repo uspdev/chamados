@@ -174,7 +174,7 @@ class FilaController extends Controller
         }
         $fila->template = json_encode($template);
         $fila->save();
-
+        $request->session()->flash('alert-info', 'Template salvo com sucesso');
         return back();
     }
 }
