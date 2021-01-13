@@ -24,7 +24,6 @@ class ChamadoFactory extends Factory
      */
     public function definition()
     {
-        $complexidades = Chamado::complexidades();
         $statuses = Chamado::status();
         $status = $statuses[array_rand($statuses)];
         $fechado_em = null;
@@ -38,7 +37,6 @@ class ChamadoFactory extends Factory
                 'assunto'        =>  $this->faker->sentence,
                 'descricao'      =>  $this->faker->sentence,
                 'status'         =>  $status,
-                'complexidade'   =>  $complexidades[array_rand($complexidades)],
                 'fila_id'        =>  Fila::inRandomOrder()->first()->id,
                 'fechado_em'     =>  $fechado_em
             ];

@@ -49,10 +49,9 @@ class ChamadoController extends Controller
         $this->authorize('chamados.create');
         $chamado = new Chamado;
         $chamado->fila = $fila;
-        $complexidades = Chamado::complexidades();
         $status_list = Chamado::status();
         $form = JSONForms::generateForm($fila);
-        return view('chamados/create', compact('fila', 'chamado', 'complexidades', 'status_list', 'form'));
+        return view('chamados/create', compact('fila', 'chamado', 'status_list', 'form'));
     }
 
     /**
@@ -107,12 +106,12 @@ class ChamadoController extends Controller
         $atendentes = $chamado->users()->wherePivot('papel', 'Atendente')->get();
         $autor = $chamado->users()->wherePivot('papel', 'Autor')->first();
 
-        $complexidades = Chamado::complexidades(true);
         $status_list = Chamado::status(true);
 
         $max_upload_size = config('chamados.upload_max_filesize');
         $form = JSONForms::generateForm($chamado->fila, $chamado);
-        return view('chamados/show', compact('atendentes', 'autor', 'chamado', 'extras', 'template', 'complexidades', 'status_list', 'max_upload_size', 'form'));
+        $formAtendente = JSONForms::generateForm($chamado->fila, $chamado, 'perfilAtendente');
+        return view('chamados/show', compact('atendentes', 'autor', 'chamado', 'extras', 'template', 'status_list', 'max_upload_size', 'form', 'formAtendente'));
     }
 
     /**
@@ -260,7 +259,6 @@ class ChamadoController extends Controller
     {
         if ($request->status == 'devolver') {
             $chamado->status = 'Triagem';
-            $chamado->complexidade = null;
             $user = \Auth::user();
         } else {
             $atualizacao = [];
@@ -281,7 +279,18 @@ class ChamadoController extends Controller
                 /* guardando os dados antigos em log para auditoria */
                 Log::info(' - Edição de chamado - Usuário: ' . \Auth::user()->codpes . ' - ' . \Auth::user()->name . ' - Id Chamado: ' . $chamado->id . ' - Extras antigo: ' . $chamado->extras . ' - Novo extras: ' . json_encode($request->extras));
                 array_push($atualizacao, 'formulário');
-                $chamado->extras = json_encode($request->extras);
+                $extras_chamados = json_decode($chamado->extras, true);
+                $extras_request = $request->extras;
+                /* se não for um chamado novo */
+                if ($chamado->extras != null) {
+                    /* atualiza todos os campos que não vieram no request para não perder os mesmos */
+                    foreach ($extras_chamados as $campoc => $valuec) {
+                        if (!array_key_exists($campoc, $extras_request)) {
+                            $extras_request[$campoc] = $extras_chamados[$campoc];
+                        }
+                    }
+                }
+                $chamado->extras = json_encode($extras_request);
             }
             if (!empty($request->status)) {
                 if ($chamado->status != $request->status) {
@@ -290,18 +299,11 @@ class ChamadoController extends Controller
                     $chamado->status = $request->status;
                 }
             }
-            if (!empty($request->complexidade)) {
-                if ($chamado->complexidade != $request->complexidade) {
-                    array_push($atualizacao, 'complexidade');
-                    array_push($novo_valor, $request->complexidade);
-                    $chamado->complexidade = $request->complexidade;
-                }
-            }
             /* Caso tenha alguma atualização, guarda nos registros */
             if (count($atualizacao) > 0) {
                 if (count($atualizacao) == 1) {
                     $msg = 'O campo ' . $atualizacao[0] . ' foi atualizado';
-                    if ($atualizacao[0] == 'status' || $atualizacao[0] == 'complexidade') {
+                    if ($atualizacao[0] == 'status') {
                         $msg .= ' para ' . $novo_valor[0];
                     }
                 } elseif (count($atualizacao) > 1) {

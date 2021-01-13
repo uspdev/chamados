@@ -21,7 +21,6 @@ class ChamadoSeeder extends Seeder
                 'assunto' => 'Monitor não liga 2019',
                 'descricao' => 'Não dá sinal de vida.',
                 'status' => 'Triagem',
-                'complexidade' => null,
                 'extras' => '
                 {
                     "predio" : "Administração",
@@ -38,7 +37,6 @@ class ChamadoSeeder extends Seeder
                 'assunto' => 'Computador não liga',
                 'descricao' => 'Saiu fumaça da parte de trás.',
                 'status' => 'Triagem',
-                'complexidade' => null,
                 'extras' => '
                 {
                     "predio" : "Administração",
@@ -54,7 +52,6 @@ class ChamadoSeeder extends Seeder
                 'assunto' => 'Monitor não liga',
                 'descricao' => 'Não dá sinal de vida.',
                 'status' => 'Triagem',
-                'complexidade' => null,
                 'extras' => '
                 {
                     "predio" : "Administração",

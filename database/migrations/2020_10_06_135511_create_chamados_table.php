@@ -24,7 +24,6 @@ class CreateChamadosTable extends Migration
             /* Campos opcionais do chamado */
             $table->text('descricao')->nullable();
             $table->dateTime('fechado_em')->nullable();
-            $table->string('complexidade', 15)->nullable();
             $table->json('extras')->nullable();
 
             # visível somente para atendentes

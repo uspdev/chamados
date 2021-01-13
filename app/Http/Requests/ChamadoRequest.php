@@ -27,7 +27,6 @@ class ChamadoRequest extends FormRequest
             'assunto' => 'required',
             'descricao' => 'required',
             'extras' => 'nullable',
-            'complexidade' => 'nullable',
         ];
         return $rules;
     }

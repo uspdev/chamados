@@ -24,25 +24,6 @@ class Chamado extends Model
     ];
 
     /**
-     * Retorna array de complexidades
-     *
-     * @formSelect Bool true se for usado em form-select
-     */
-    public static function complexidades($formSelect = false)
-    {
-        if ($formSelect) {
-            return [
-                'Baixa' => 'Baixa',
-                'Média' => 'Média',
-                'Alta' => 'Alta',
-            ];
-        } else {
-            return ['Baixa', 'Média', 'Alta'];
-        }
-
-    }
-
-    /**
      * Retorna os status possiveis no chamado.
      * Para o form, vamos excluir os status padrão que não poderão ser setados pelo atendente
      */

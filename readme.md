@@ -102,7 +102,7 @@ Nesse escopo, os objetivos das mudanças em andamento são:
 	* a relação setores e users será n:n com atributo tipo: admin, etc
 4. reorganizar a tabela de chamados
 	* possui atributos comuns e atributos específicos
-	* Atributos comuns: status, complexidade, assunto, descricao, criador, atribuido_para, datas de abertura, fechamento, atribuição, etc
+	* Atributos comuns: status, assunto, descricao, criador, atribuido_para, datas de abertura, fechamento, atribuição, etc
 	* Atributos especificos: são aqueles criados pelo gerente da fila, como por exemplo: patrimonio, sala/predio, outros campos de texto, campos de radio e checkbox, urgência do atendimento, etc
 5. permitir anexos (pdf e fotos)
 6. Diferenciar "meus chamados" e "chamados atribuidos para mim" e "chamados em minhas filas"

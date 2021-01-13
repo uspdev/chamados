@@ -24,16 +24,12 @@
                     @csrf
                     @method('PUT')
                     <b>Anotações:</b>
-                    <textarea class="form-control" rows="3" name="anotacoes">{{ $chamado->anotacoes }}</textarea>
+                    <textarea class="form-control" rows="5" name="anotacoes">{{ $chamado->anotacoes }}</textarea>
                 </form>
             </div>
             <div class="col-md-4">
-                <div class="form-inline">
-                    @include('chamados.show.mudar-status')
-                </div>
-                <div class="form-inline">
-                    @include('chamados.show.mudar-complexidade')
-                </div>
+                @includewhen(Gate::check('perfilAtendente') || Gate::check('perfilAdmin'),'chamados.show.mudar-status')
+                @includewhen(Gate::check('perfilAtendente') || Gate::check('perfilAdmin'),'chamados.show.dados-formulario-atendente')
             </div>
         </div>
     </div>
@@ -81,15 +77,15 @@
         });
 
         var $estado = $('#status_form').find('#estado'),
-            $complexidade = $('#complexidade_form').find('#complexidade');
-        
+            $form_atendente = $("input, textarea, select",'#form_atendente');
+                    
         $estado.change(function() {
             $('#status_form').find('#btn_salvar_status').show();
         });
         
-        $complexidade.change(function() {
-            $('#complexidade_form').find('#btn_salvar_complexidade').show();
-        });        
+        $form_atendente.change(function() {
+            $('#form_atendente').find('#btn_salvar_form_atendente').show();
+        });   
     });
 </script>
 @stop
