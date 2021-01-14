@@ -88,6 +88,11 @@ class ChamadoController extends Controller
             return $chamado;
         });
         $request->session()->flash('alert-info', 'Chamado enviado com sucesso');
+        if ($chamado->fila->config->patrimonio) {
+            if ($chamado->patrimonios->count() < 1) {
+                $request->session()->flash('alert-danger', 'É obrigatório cadastrar um número de patrimônio!');
+            }
+        }
         return redirect()->route('chamados.show', $chamado->id);
     }
 
@@ -239,6 +244,11 @@ class ChamadoController extends Controller
         Mail::send(new ChamadoMail($chamado,$user));
         depois de atualizar, tem de registrar nos comentários
          */
+        if ($chamado->fila->config->patrimonio) {
+            if ($chamado->patrimonios->count() < 1) {
+                $request->session()->flash('alert-danger', 'É obrigatório cadastrar um número de patrimônio!');
+            }
+        }
         $request->session()->flash('alert-info', 'Chamado enviado com sucesso');
         return redirect()->route('chamados.show', $chamado->id);
     }
@@ -596,6 +606,6 @@ class ChamadoController extends Controller
 
         $request->session()->flash('alert-info', $msg);
 
-        return Redirect::to(URL::previous() . "#card_patrimonio");
+        return Redirect::to(URL::previous() . "#card_patrimonios");
     }
 }
