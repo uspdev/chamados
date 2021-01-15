@@ -49,7 +49,7 @@ class ChamadoController extends Controller
         $this->authorize('chamados.create');
         $chamado = new Chamado;
         $chamado->fila = $fila;
-        $status_list = Chamado::status();
+        $status_list = $fila->config->status->system;
         $form = JSONForms::generateForm($fila);
         return view('chamados/create', compact('fila', 'chamado', 'status_list', 'form'));
     }
@@ -110,8 +110,8 @@ class ChamadoController extends Controller
         $extras = json_decode($chamado->extras);
         $atendentes = $chamado->users()->wherePivot('papel', 'Atendente')->get();
         $autor = $chamado->users()->wherePivot('papel', 'Autor')->first();
-
-        $status_list = Chamado::status(true);
+        
+        $status_list = $chamado->fila->config->status->select;
 
         $max_upload_size = config('chamados.upload_max_filesize');
         $form = JSONForms::generateForm($chamado->fila, $chamado);
@@ -192,7 +192,6 @@ class ChamadoController extends Controller
         $chamado->vinculadosIda()->detach($id);
         $chamado->vinculadosVolta()->detach($id);
         $vinculado = Chamado::find($id);
-        #dd($vinculado);
         //comentário no chamado principal
         Comentario::create([
             'user_id' => \Auth::user()->id,

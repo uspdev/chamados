@@ -10,6 +10,7 @@ class Fila extends Model
     use HasFactory;
 
     # valor default
+    # passando um template com select até que seja feito uma melhoria na tela do formulário. Assim é só mudar o texto do json.
     protected $attributes = [
         'estado' => 'Em elaboração',
         'template' => '{
@@ -44,6 +45,29 @@ class Fila extends Model
                                 }
                             }
                         }',
+        'config' => '{
+                "triagem":"0",
+                "patrimonio":"0",
+                "visibilidade":{
+                    "alunos":0,
+                    "servidores":"1",
+                    "setor_gerentes":0,
+                    "fila_gerentes":0,
+                    "setores":"todos"
+                },
+                "status":{
+                    "select":{
+                        "Espera":"Espera",
+                        "Aguardando":"Aguardando",
+                        "Cancelado":"Cancelado"
+                    },
+                    "system":{
+                        "Encerrado":"Encerrado",
+                        "Pendente":"Pendente",
+                        "Em andamento":"Em andamento"
+                    }
+                }
+            }'
     ];
 
     protected $fillable = [
@@ -133,7 +157,7 @@ class Fila extends Model
         $out->triagem = $value->triagem ?? config('filas.config.triagem');
         $out->patrimonio = $value->patrimonio ?? config('filas.config.patrimonio');
         $out->visibilidade = $v;
-
+        $out->status = $value->status ?? config('filas.config.status');
         return $out;
     }
 
@@ -151,6 +175,24 @@ class Fila extends Model
         $config->triagem = $value['triagem'];
         $config->patrimonio = $value['patrimonio'];
         $config->visibilidade = $v;
+        
+        $se = new \StdClass;
+        foreach ($value['status']['select'] as $key) {
+            if($key)
+                $se->$key = $key;
+        }
+
+        $sy = new \StdClass;
+        foreach ($value['status']['system'] as $key) {
+            if($key)
+                $sy->$key = $key;
+        }
+
+        $s = new \StdClass;
+        $s->select = $se;
+        $s->system = $sy;
+
+        $config->status = $s;
 
         $this->attributes['config'] = json_encode($config);
     }
