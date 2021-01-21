@@ -117,25 +117,38 @@
     @include('ajuda.filas.config-status')
 
     <div class="ml-2">
-        <div class="form-group">
-            <label class="form-label">Select:</label><br>
-            @foreach ($fila->config->status->select as $input)
-                <input class="form-control" type="text" name="config[status][select][]" value="{{ $input ?? '' }}"><br>
-            @endforeach
-            <input class="form-control" type="text" name="config[status][select][]" value=""><br>
-        </div>
-
-        <div class="form-group">
-            <label class="form-label">System:</label><br>
-            @foreach ($fila->config->status->system as $input)
-                <input class="form-control" type="text" name="config[status][system][]" value="{{ $input ?? '' }}"><br>
-            @endforeach
-            <input class="form-control" type="text" name="config[status][system][]" value="">
+        <div class="form-group form-row">
+            <div class="col-3" id="options_select">
+                <label class="form-label">Select:</label>
+                <button type="button" class="btn btn-sm btn-primary ml-2 mb-2" id="btn_adiciona_select" style="height: 22px; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; margin-bottom: 0px;"><i class="fa fa-plus"></i></button>
+                @foreach ($fila->config->status->select as $input)
+                    <input class="form-control col-12" type="text" name="config[status][select][]" value="{{ $input ?? '' }}">
+                @endforeach
+            </div>
+            <div class="col-3">
+                <label class="form-label">System:</label><br>
+                @foreach ($fila->config->status->system as $input)
+                    <input class="form-control col-12" type="text" name="config[status][system][]" value="{{ $input ?? '' }}" @if(!Gate::check('perfilAdmin')) disabled @endif>
+                @endforeach
+                {{-- <input class="form-control col-12" type="text" name="config[status][system][]" value=""> --}}
+            </div>
         </div>
     </div>
 </div>
 
 <div class="mt-3">
-    <input type="submit" name="ok" value="ok">
+    <input class="btn-sm btn-primary" type="submit" name="ok" value="ok">
 </div>
 {!! Form::close() !!}
+
+@section('javascripts_bottom')
+    @parent
+    <script>
+
+        $(document).on('click', '#btn_adiciona_select', function() {
+            var novoItem = '<input class="form-control col-12" type="text" name="config[status][select][]" value="">';
+            $("#options_select").append(novoItem);
+        });
+
+    </script>
+@endsection
