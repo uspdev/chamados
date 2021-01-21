@@ -7,6 +7,7 @@ use App\Models\Fila;
 use App\Models\User;
 use App\Models\Setor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class FilaController extends Controller
 {
@@ -62,11 +63,18 @@ class FilaController extends Controller
 
         # aqui tem de validar dados do post
         ####################
-
+        
         $fila->fill($request->all());
 
         if ($request->config) {
-            $fila->config = $request->config;
+            # se não for admin não pode modificar os status do sistema. Repassamos como estava a config.
+            if (!isset($request->config['status']['system'])) {
+                $aux = $request->config;
+                $aux['status']['system'] = get_object_vars($fila->config->status->system);
+                $fila->config = $aux;
+            } else {
+                $fila->config = $request->config;
+            }
         }
 
         $fila->save();
@@ -91,7 +99,7 @@ class FilaController extends Controller
             $data = (object) $this->data;
             $config = $fila->config;
 
-            return view('filas.show', compact(['fila', 'data','config']));
+            return view('filas.show', compact(['fila', 'data', 'config']));
         }
     }
 
