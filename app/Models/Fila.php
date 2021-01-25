@@ -182,6 +182,12 @@ class Fila extends Model
                 $se->$key = $key;
         }
 
+        $sec = new \StdClass;
+        foreach ($value['status']['select_cor'] as $key) {
+            if($key)
+                $sec->$key = $key;
+        }
+
         $sy = new \StdClass;
         foreach ($value['status']['system'] as $key) {
             if($key)
@@ -190,6 +196,7 @@ class Fila extends Model
 
         $s = new \StdClass;
         $s->select = $se;
+        $s->select_cor = $sec;
         $s->system = $sy;
 
         $config->status = $s;

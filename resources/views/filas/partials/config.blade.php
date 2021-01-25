@@ -120,18 +120,38 @@
         <div class="form-group form-row">
             <div class="col-3" id="options_select">
                 <label class="form-label">Select:</label>
-                <button type="button" class="btn btn-sm btn-primary ml-2 mb-2" id="btn_adiciona_select" style="height: 22px; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; margin-bottom: 0px;"><i class="fa fa-plus"></i></button>
+                <button type="button" class="btn btn-sm btn-primary ml-2 mb-2" id="btn_adiciona_select"
+                    style="height: 22px; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; margin-bottom: 0px;"><i
+                        class="fa fa-plus"></i></button>
                 @foreach ($fila->config->status->select as $input)
                     <input class="form-control col-12" type="text" name="config[status][select][]" value="{{ $input ?? '' }}">
                 @endforeach
             </div>
-            <div class="col-3">
-                <label class="form-label">System:</label><br>
-                @foreach ($fila->config->status->system as $input)
-                    <input class="form-control col-12" type="text" name="config[status][system][]" value="{{ $input ?? '' }}" @if(!Gate::check('perfilAdmin')) disabled @endif>
+            <div class="col-3" id="options_select_cor">
+                <label class="form-label">Cor:</label>
+                @foreach ($fila->config->status->select_cor as $input)
+                    <select name="config[status][select_cor][]" class="form-control col-12">
+                        <option value="">Selecione...</option>
+                        <option value="danger" class="bg-danger text-white" @if($input == 'danger') selected @endif>Danger</option>
+                        <option value="warning" class="bg-warning text-dark" @if($input == 'warning') selected @endif>Warning</option>
+                        <option value="primary" class="bg-primary text-white" @if($input == 'primary') selected @endif>Primary</option>
+                        <option value="secondary" class="bg-secondary text-white" @if($input == 'secondary') selected @endif>Secondary</option>
+                        <option value="success" class="bg-success text-white" @if($input == 'success') selected @endif>Success</option>
+                        <option value="info" class="bg-info text-white" @if($input == 'info') selected @endif>Info</div>
+                        <option value="dark" class="bg-dark text-white" @if($input == 'dark') selected @endif>Dark</div>
+                        <option value="white" class="bg-white text-dark" @if($input == 'white') selected @endif>White</div>
+                    </select>
                 @endforeach
-                {{-- <input class="form-control col-12" type="text" name="config[status][system][]" value=""> --}}
             </div>
+            @if (Gate::check('perfilAdmin'))
+                <div class="col-3">
+                    <label class="form-label">System:</label><br>
+                    @foreach ($fila->config->status->system as $input)
+                        <input class="form-control col-12" type="text" name="config[status][system][]"
+                            value="{{ $input ?? '' }}">
+                    @endforeach
+                </div>
+            @endif
         </div>
     </div>
 </div>
@@ -144,10 +164,13 @@
 @section('javascripts_bottom')
     @parent
     <script>
-
         $(document).on('click', '#btn_adiciona_select', function() {
-            var novoItem = '<input class="form-control col-12" type="text" name="config[status][select][]" value="">';
+            var novoItem =
+                '<input class="form-control col-12" type="text" name="config[status][select][]" value="">';
             $("#options_select").append(novoItem);
+
+            var novoItemCor = '<select name="config[status][select_cor][]" class="form-control col-12"><option value="">Selecione...</option><option value="danger" class="bg-danger text-white">Danger</option><option value="warning" class="bg-warning text-dark">Warning</option><option value="primary" class="bg-primary text-white">Primary</option><option value="secondary" class="bg-secondary text-white">Secondary</option><option value="success" class="bg-success text-white">Success</option><option value="info" class="bg-info text-white">Info</div><option value="dark" class="bg-dark text-white">Dark</div><option value="white" class="bg-white text-dark">White</div></select>';
+            $("#options_select_cor").append(novoItemCor);
         });
 
     </script>

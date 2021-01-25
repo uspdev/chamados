@@ -67,14 +67,23 @@ class FilaController extends Controller
         $fila->fill($request->all());
 
         if ($request->config) {
-            # se não for admin não pode modificar os status do sistema. Repassamos como estava a config.
-            if (!isset($request->config['status']['system'])) {
-                $aux = $request->config;
-                $aux['status']['system'] = get_object_vars($fila->config->status->system);
-                $fila->config = $aux;
-            } else {
-                $fila->config = $request->config;
+            $qtd_select = count(array_filter($request->config['status']['select'], function($x) { return !empty($x); }));
+            $qtd_select_cor = count(array_filter($request->config['status']['select_cor'], function($x) { return !empty($x); }));
+
+            if($qtd_select == $qtd_select_cor){
+                # se não for admin não pode modificar os status do sistema. Repassamos como estava a config.
+                if (!isset($request->config['status']['system'])) {
+                    $aux = $request->config;
+                    $aux['status']['system'] = get_object_vars($fila->config->status->system);
+                    $fila->config = $aux;
+                } else {
+                    $fila->config = $request->config;
+                }
+            }else {
+                $request->session()->flash('alert-danger', 'É obrigatório cadastrar uma cor diferente para cada status!');
+                return back()->withInput();
             }
+            
         }
 
         $fila->save();
