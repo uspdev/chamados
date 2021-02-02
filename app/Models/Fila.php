@@ -140,6 +140,20 @@ class Fila extends Model
         return ['Em elaboração', 'Em produção', 'Desativada'];
     }
 
+    public function getStatusToSelect()
+    {
+        $status = $this->config->status;
+        $out = [];
+        foreach ($status as $item) {
+            foreach ($item as $key => $value) {
+                if ($key == "label") {
+                    $out[$value] = $value;
+                }
+            }
+        }
+        return $out;
+    }
+
     /**
      * Accessor getter para $config
      */
@@ -176,30 +190,14 @@ class Fila extends Model
         $config->patrimonio = $value['patrimonio'];
         $config->visibilidade = $v;
         
-        $se = new \StdClass;
-        foreach ($value['status']['select'] as $key) {
-            if($key)
-                $se->$key = $key;
+        $status = [];
+        for ( $i = 0; $i < count($value['status']['select']); $i++) {
+            $s = new \StdClass;
+            $s->label = $value['status']['select'][$i];
+            $s->color = $value['status']['select_cor'][$i];
+            array_push($status, $s);
         }
-
-        $sec = new \StdClass;
-        foreach ($value['status']['select_cor'] as $key) {
-            if($key)
-                $sec->$key = $key;
-        }
-
-        $sy = new \StdClass;
-        foreach ($value['status']['system'] as $key) {
-            if($key)
-                $sy->$key = $key;
-        }
-
-        $s = new \StdClass;
-        $s->select = $se;
-        $s->select_cor = $sec;
-        $s->system = $sy;
-
-        $config->status = $s;
+        $config->status = $status;
 
         $this->attributes['config'] = json_encode($config);
     }

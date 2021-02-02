@@ -63,27 +63,35 @@ class FilaController extends Controller
 
         # aqui tem de validar dados do post
         ####################
-        
+
         $fila->fill($request->all());
 
         if ($request->config) {
-            $qtd_select = count(array_filter($request->config['status']['select'], function($x) { return !empty($x); }));
-            $qtd_select_cor = count(array_filter($request->config['status']['select_cor'], function($x) { return !empty($x); }));
-
-            if($qtd_select == $qtd_select_cor){
-                # se não for admin não pode modificar os status do sistema. Repassamos como estava a config.
-                if (!isset($request->config['status']['system'])) {
-                    $aux = $request->config;
-                    $aux['status']['system'] = get_object_vars($fila->config->status->system);
-                    $fila->config = $aux;
+            $qtd_select = count(array_filter($request->config['status']['select'], function ($x) {
+                return !empty($x);
+            }));
+            $qtd_select_cor = count(array_filter($request->config['status']['select_cor'], function ($x) {
+                return !empty($x);
+            }));
+            # verifica se colocou uma cor para cada status
+            if ($qtd_select == $qtd_select_cor) {
+                # se não tiver entradas duplicadas
+                if (count(array_unique($request->config['status']['select'])) == count($request->config['status']['select'])) {
+                    # se não for usado status reservados pelo sistema
+                    if (!array_intersect(array_map('strtolower', $request->config['status']['select']), array_map('strtolower', ["Fechado", "Em andamento", "Triagem", "Novo"]))) {
+                        $fila->config = $request->config;
+                    } else {
+                        $request->session()->flash('alert-danger', 'Não é possível utilizar status iguais aos do sistema ("Fechado", "Em andamento", "Novo")!');
+                        return back()->withInput();
+                    }
                 } else {
-                    $fila->config = $request->config;
+                    $request->session()->flash('alert-danger', 'Não é possível utilizar status iguais!');
+                    return back()->withInput();
                 }
-            }else {
-                $request->session()->flash('alert-danger', 'É obrigatório cadastrar uma cor diferente para cada status!');
+            } else {
+                $request->session()->flash('alert-danger', 'É obrigatório cadastrar uma cor para cada status!');
                 return back()->withInput();
             }
-            
         }
 
         $fila->save();
