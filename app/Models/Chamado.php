@@ -24,6 +24,15 @@ class Chamado extends Model
     ];
 
     /**
+     * Retorna os status possiveis no chamado.
+     * Passou a ser gerado pela fila. Em uso somente pelas migrations.
+     */
+    public static function status()
+    {
+        return ['Triagem', 'Atribuído', 'Fechado', 'Aguardando Solicitante', 'Aguardando Peças'];
+    }
+    
+    /**
      * Retorna a cor para os labels.
      * 
      */

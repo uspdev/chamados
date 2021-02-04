@@ -55,18 +55,24 @@ class Fila extends Model
                     "fila_gerentes":0,
                     "setores":"todos"
                 },
-                "status":{
-                    "select":{
-                        "Espera":"Espera",
-                        "Aguardando":"Aguardando",
-                        "Cancelado":"Cancelado"
+                "status":[
+                    {
+                        "label":"Finalizado",
+                        "color":"danger"
                     },
-                    "system":{
-                        "Encerrado":"Encerrado",
-                        "Pendente":"Pendente",
-                        "Em andamento":"Em andamento"
+                    {
+                        "label":"Em Andamento",
+                        "color":"info"
+                    },
+                    {
+                        "label":"Cancelado",
+                        "color":"dark"
+                    },
+                    {
+                        "label":"Em Espera",
+                        "color":"primary"
                     }
-                }
+                ]
             }'
     ];
 
@@ -143,23 +149,27 @@ class Fila extends Model
     public function getStatusToSelect()
     {
         $status = $this->config->status;
-        $out = [];
-        foreach ($status as $item) {
-            foreach ($item as $key => $value) {
-                if ($key == "label") {
-                    $out[strtolower($value)] = $value;
+        if ($status) {
+            $out = [];
+            foreach ($status as $item) {
+                foreach ($item as $key => $value) {
+                    if ($key == "label") {
+                        $out[strtolower($value)] = $value;
+                    }
                 }
             }
+            return $out;
         }
-        return $out;
     }
 
     public function getColortoLabel($chamado_status)
     {
         $status = $this->config->status;
-        foreach ($status as $item) {
-            if (strtolower($item->label) == $chamado_status) {
-                return $item->color;
+        if ($status) {
+            foreach ($status as $item) {
+                if (strtolower($item->label) == $chamado_status) {
+                    return $item->color;
+                }
             }
         }
     }
@@ -199,9 +209,9 @@ class Fila extends Model
         $config->triagem = $value['triagem'];
         $config->patrimonio = $value['patrimonio'];
         $config->visibilidade = $v;
-        
+
         $status = [];
-        for ( $i = 0; $i < count($value['status']['select']); $i++) {
+        for ($i = 0; $i < count($value['status']['select']); $i++) {
             $s = new \StdClass;
             $s->label = $value['status']['select'][$i];
             $s->color = $value['status']['select_cor'][$i];
