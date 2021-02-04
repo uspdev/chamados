@@ -147,11 +147,21 @@ class Fila extends Model
         foreach ($status as $item) {
             foreach ($item as $key => $value) {
                 if ($key == "label") {
-                    $out[$value] = $value;
+                    $out[strtolower($value)] = $value;
                 }
             }
         }
         return $out;
+    }
+
+    public function getColortoLabel($chamado_status)
+    {
+        $status = $this->config->status;
+        foreach ($status as $item) {
+            if (strtolower($item->label) == $chamado_status) {
+                return $item->color;
+            }
+        }
     }
 
     /**

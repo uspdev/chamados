@@ -24,19 +24,12 @@ class Chamado extends Model
     ];
 
     /**
-     * Retorna os status possiveis no chamado.
-     * Para o form, vamos excluir os status padrão que não poderão ser setados pelo atendente
+     * Retorna a cor para os labels.
+     * 
      */
-    public static function status($formSelect = false)
+    public static function color( $chamado )
     {
-        if ($formSelect) {
-            return [
-                'Aguardando Solicitante' => 'Aguardando Solicitante',
-                'Aguardando Peças' => 'Aguardando Peças',
-            ];
-        } else {
-            return ['Triagem', 'Atribuído', 'Fechado', 'Aguardando Solicitante', 'Aguardando Peças'];
-        }
+        return $chamado->fila->getColortoLabel($chamado->status);
     }
 
     /**
