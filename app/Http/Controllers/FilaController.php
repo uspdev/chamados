@@ -81,7 +81,7 @@ class FilaController extends Controller
                     if (!array_intersect(array_map('strtolower', $request->config['status']['select']), array_map('strtolower', ["Fechado", "Em andamento", "Triagem", "Novo"]))) {
                         $fila->config = $request->config;
                     } else {
-                        $request->session()->flash('alert-danger', 'Não é possível utilizar status iguais aos do sistema ("Fechado", "Em andamento", "Novo")!');
+                        $request->session()->flash('alert-danger', 'Não é possível utilizar status iguais aos do sistema ("Fechado", "Em andamento", "Novo", "Triagem")!');
                         return back()->withInput();
                     }
                 } else {

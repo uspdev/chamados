@@ -5,6 +5,6 @@
     <div class="card-body card-ajuda">
         <b>Ajuda para status</b><br>
         Select - Opções que podem ser utilizadas pelos atendentes.<br>
-        System - Opções que o sistema utiliza (Não podem ser modificadas).
+        O sistema utiliza alguns status exclusivos (Triagem, Novo, Em Andamento, Fechado) que não podem ser duplicados.
     </div>
 </div>

@@ -344,7 +344,7 @@ class ChamadoController extends Controller
                     /* acho que o user deveria vir direto pelo form */
                     $atendente = User::where('codpes', $request->atribuido_para)->first();
                     $chamado->users()->attach($atendente->id, ['papel' => 'Atendente']);
-                    $chamado->status = 'Atribuído';
+                    $chamado->status = 'Em Andamento';
                 }
             } else {
                 $user = \Auth::user();
@@ -385,7 +385,7 @@ class ChamadoController extends Controller
             return Redirect::to(URL::previous() . "#card_atendente");
         }
         $chamado->users()->attach($atendente->id, ['papel' => 'Atendente']);
-        $chamado->status = 'Atribuído';
+        $chamado->status = 'Em Andamento';
         $chamado->save();
         Comentario::create([
             'user_id' => \Auth::user()->id,

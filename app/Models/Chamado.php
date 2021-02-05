@@ -29,7 +29,7 @@ class Chamado extends Model
      */
     public static function status()
     {
-        return ['Triagem', 'Atribuído', 'Fechado', 'Aguardando Solicitante', 'Aguardando Peças'];
+        return ['Triagem', 'Em Andamento', 'Fechado', 'Aguardando Solicitante', 'Aguardando Peças'];
     }
     
     /**

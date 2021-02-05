@@ -57,11 +57,11 @@ class Fila extends Model
                 },
                 "status":[
                     {
-                        "label":"Finalizado",
+                        "label":"Aguardando Solicitante",
                         "color":"danger"
                     },
                     {
-                        "label":"Em Andamento",
+                        "label":"Aguardando Peças",
                         "color":"info"
                     },
                     {
