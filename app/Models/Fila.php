@@ -10,6 +10,7 @@ class Fila extends Model
     use HasFactory;
 
     # valor default
+    # passando um template com select até que seja feito uma melhoria na tela do formulário. Assim é só mudar o texto do json.
     protected $attributes = [
         'estado' => 'Em elaboração',
         'template' => '{
@@ -44,6 +45,35 @@ class Fila extends Model
                                 }
                             }
                         }',
+        'config' => '{
+                "triagem":"0",
+                "patrimonio":"0",
+                "visibilidade":{
+                    "alunos":0,
+                    "servidores":"1",
+                    "setor_gerentes":0,
+                    "fila_gerentes":0,
+                    "setores":"todos"
+                },
+                "status":[
+                    {
+                        "label":"Aguardando Solicitante",
+                        "color":"danger"
+                    },
+                    {
+                        "label":"Aguardando Peças",
+                        "color":"info"
+                    },
+                    {
+                        "label":"Cancelado",
+                        "color":"dark"
+                    },
+                    {
+                        "label":"Em Espera",
+                        "color":"primary"
+                    }
+                ]
+            }'
     ];
 
     protected $fillable = [
@@ -116,6 +146,34 @@ class Fila extends Model
         return ['Em elaboração', 'Em produção', 'Desativada'];
     }
 
+    public function getStatusToSelect()
+    {
+        $status = $this->config->status;
+        if ($status) {
+            $out = [];
+            foreach ($status as $item) {
+                foreach ($item as $key => $value) {
+                    if ($key == "label") {
+                        $out[strtolower($value)] = $value;
+                    }
+                }
+            }
+            return $out;
+        }
+    }
+
+    public function getColortoLabel($chamado_status)
+    {
+        $status = $this->config->status;
+        if ($status) {
+            foreach ($status as $item) {
+                if (strtolower($item->label) == $chamado_status) {
+                    return $item->color;
+                }
+            }
+        }
+    }
+
     /**
      * Accessor getter para $config
      */
@@ -133,7 +191,7 @@ class Fila extends Model
         $out->triagem = $value->triagem ?? config('filas.config.triagem');
         $out->patrimonio = $value->patrimonio ?? config('filas.config.patrimonio');
         $out->visibilidade = $v;
-
+        $out->status = $value->status ?? config('filas.config.status');
         return $out;
     }
 
@@ -151,6 +209,15 @@ class Fila extends Model
         $config->triagem = $value['triagem'];
         $config->patrimonio = $value['patrimonio'];
         $config->visibilidade = $v;
+
+        $status = [];
+        for ($i = 0; $i < count($value['status']['select']); $i++) {
+            $s = new \StdClass;
+            $s->label = $value['status']['select'][$i];
+            $s->color = $value['status']['select_cor'][$i];
+            array_push($status, $s);
+        }
+        $config->status = $status;
 
         $this->attributes['config'] = json_encode($config);
     }

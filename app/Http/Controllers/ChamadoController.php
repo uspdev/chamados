@@ -49,9 +49,8 @@ class ChamadoController extends Controller
         $this->authorize('chamados.create');
         $chamado = new Chamado;
         $chamado->fila = $fila;
-        $status_list = Chamado::status();
         $form = JSONForms::generateForm($fila);
-        return view('chamados/create', compact('fila', 'chamado', 'status_list', 'form'));
+        return view('chamados/create', compact('fila', 'chamado', 'form'));
     }
 
     /**
@@ -110,13 +109,12 @@ class ChamadoController extends Controller
         $extras = json_decode($chamado->extras);
         $atendentes = $chamado->users()->wherePivot('papel', 'Atendente')->get();
         $autor = $chamado->users()->wherePivot('papel', 'Autor')->first();
-
-        $status_list = Chamado::status(true);
-
+        $status_list = $chamado->fila->getStatusToSelect();
+        $color = $chamado->fila->getColortoLabel($chamado->status);
         $max_upload_size = config('chamados.upload_max_filesize');
         $form = JSONForms::generateForm($chamado->fila, $chamado);
         $formAtendente = JSONForms::generateForm($chamado->fila, $chamado, 'perfilAtendente');
-        return view('chamados/show', compact('atendentes', 'autor', 'chamado', 'extras', 'template', 'status_list', 'max_upload_size', 'form', 'formAtendente'));
+        return view('chamados/show', compact('atendentes', 'autor', 'chamado', 'extras', 'template', 'status_list', 'color', 'max_upload_size', 'form', 'formAtendente'));
     }
 
     /**
@@ -192,7 +190,6 @@ class ChamadoController extends Controller
         $chamado->vinculadosIda()->detach($id);
         $chamado->vinculadosVolta()->detach($id);
         $vinculado = Chamado::find($id);
-        #dd($vinculado);
         //comentário no chamado principal
         Comentario::create([
             'user_id' => \Auth::user()->id,
@@ -347,7 +344,7 @@ class ChamadoController extends Controller
                     /* acho que o user deveria vir direto pelo form */
                     $atendente = User::where('codpes', $request->atribuido_para)->first();
                     $chamado->users()->attach($atendente->id, ['papel' => 'Atendente']);
-                    $chamado->status = 'Atribuído';
+                    $chamado->status = 'Em Andamento';
                 }
             } else {
                 $user = \Auth::user();
@@ -388,7 +385,7 @@ class ChamadoController extends Controller
             return Redirect::to(URL::previous() . "#card_atendente");
         }
         $chamado->users()->attach($atendente->id, ['papel' => 'Atendente']);
-        $chamado->status = 'Atribuído';
+        $chamado->status = 'Em Andamento';
         $chamado->save();
         Comentario::create([
             'user_id' => \Auth::user()->id,
