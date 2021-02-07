@@ -3,7 +3,6 @@
 namespace App\Mail;
 
 use App\Models\Comentario;
-use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -35,21 +34,16 @@ class ComentarioMail extends Mailable
      */
     public function build()
     {
-        $emails = [];
-        /* pessoas envolvidas no chamado */
-        foreach ($this->chamado->users()->wherePivot('papel', '!=', 'Autor')->get() as $user) {
-            $emails[] = $user->email;
-        }
 
-        // Monta título do email
+        // Monta subject do email
         $app = config('app.name');
         $chamado_ano = $this->chamado->created_at->format('Y');
-        $subject = "[{$app}] Novo comentário no chamado {$this->chamado->nro}/{$chamado_ano}";
+        $subject = "[{$app} {$this->chamado->nro}/{$chamado_ano}] Novo comentário";
 
-        return $this->view('emails.comentario')
-            ->from(config('mail.from.address'))
-            ->to($this->autor->email)
-            ->bcc($emails)
-            ->subject($subject);
+        return $this->from(config('mail.from.address'), config('mail.from.name'))
+        #->to($this->autor->email)
+        #->bcc($emails)
+            ->subject($subject)
+            ->view('emails.comentario');
     }
 }
