@@ -71,7 +71,7 @@ class ComentarioController extends Controller
         $chamado->save();
 
         #if(config('app.env') == 'production')
-          Mail::send(new ComentarioMail($comentario));
+          #Mail::send(new ComentarioMail($comentario));
 
         $request->session()->flash('alert-info', 'Comentário enviado com sucesso');
         return redirect("chamados/$chamado->id");
