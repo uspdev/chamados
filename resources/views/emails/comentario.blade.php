@@ -1,8 +1,6 @@
 <div>
-    <b>Autor(a):</b> <br>
-    Número USP: {{ $autor->codpes }} <br>
-    Nome: {{ $autor->name }}<br>
-    Chamado: #{{ $chamado->nro }}/{{ $chamado->created_at->format('Y') }}
+    <b>Autor:</b> {{ $autor->codpes }} - {{ $autor->name }}<br>
+    Chamado número: {{ $chamado->nro }}/{{ $chamado->created_at->format('Y') }}
 </div>
 
 <br>
