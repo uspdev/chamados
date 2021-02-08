@@ -24,16 +24,25 @@ class Comentario extends Model
         Comentario::observe(ComentarioObserver::class);
     }
 
+    /**
+     * os tipos de comentários. Aparecerão em cards separados no chamado. 
+     */
     public static function tipos()
     {
         return ['user', 'system'];
     }
 
+    /**
+     * relacionamento com user
+     */
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
+    /** 
+     * relacionamento com chamado
+     */
     public function chamado()
     {
         return $this->belongsTo(Chamado::class);
