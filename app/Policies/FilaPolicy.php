@@ -21,7 +21,7 @@ class FilaPolicy
     public function viewAny(User $user)
     {
         # se o usuário pertence a alguma fila
-        if ($user->filas()->count()) {
+        if ($user->filas()->wherePivot('funcao', 'Gerente')->count()) {
             return true;
         }
 
@@ -53,7 +53,7 @@ class FilaPolicy
 
         # gerentes do setor
         $setor = $fila->setor;
-        foreach ($setor->users as $u) {
+        foreach ($setor->users()->wherePivot('funcao','Gerente')->get() as $u) {
             if ($user->codpes == $u->codpes) {
                 return true;
             }
@@ -63,7 +63,7 @@ class FilaPolicy
         # na estrutura do replicado da EESC
         # tem somente 2 níveis abaixo da unidade
         if ($setor = $setor->setor) {
-            foreach ($setor->users as $u) {
+            foreach ($setor->users()->wherePivot('funcao','Gerente')->get() as $u) {
                 if ($user->codpes == $u->codpes) {
                     return true;
                 }

@@ -242,7 +242,7 @@ class Fila extends Model
         $filas = collect();
 
         # listando as filas de todos os setores que o usuário faz parte.
-        foreach (\Auth()->user()->setores as $setor) {
+        foreach (\Auth()->user()->setores()->wherePivot('funcao','Gerente')->get() as $setor) {
             $filas = $filas->merge($setor->filas);
 
             #listando as filas do setores filhos do usuario

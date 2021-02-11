@@ -20,8 +20,8 @@ class SetorPolicy
      */
     public function viewAny(User $user)
     {
-        return false;
-        if ($user->setores()->count() || $user->is_admin) {
+        /* autorizando somente para os gerentes de qualquer setor */
+        if ($user->setores()->wherePivot('funcao','Gerente')->count() || $user->is_admin)  {
             return true;
         } else {
             return false;
