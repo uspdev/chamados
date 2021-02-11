@@ -20,19 +20,14 @@ $admin = [
         'can' => 'menuConfiguracoes',
     ],
     [
-        'text' => '<i class="fas fa-sitemap ml-2"></i> Setores',
-        'url' => 'setores',
-        'can' => 'perfilSetor',
-    ],
-    [
-        'text' => '<i class="fas fa-tasks ml-2"></i> Filas',
-        'url' => 'filas',
-        'can' => 'filas.viewAny',
-    ],
-    [
         'text' => '<i class="fas fa-users ml-2"></i> Pessoas',
         'url' => 'users',
         'can' => 'admin',
+    ],
+    [
+        'text' => '<i class="fas fa-users ml-2"></i> Meu Perfil',
+        'url' => 'users/meuperfil',
+        'can' => 'usuario',
     ],
 ];
 
@@ -66,14 +61,24 @@ $configuracoes = array_merge($admin, $trocarPerfil);
 
 $menu = [
     [
-        'text' => 'Novo Chamado',
+        'text' => '<i class="far fa-plus-square"></i> Novo Chamado',
         'url' => 'chamados/create',
         'can' => 'chamados.create',
     ],
     [
-        'text' => 'Meus Chamados',
+        'text' => '<i class="far fa-list-alt"></i> Meus Chamados',
         'url' => 'chamados',
         'can' => 'chamados.viewAny',
+    ],
+    [
+        'text' => '<i class="fas fa-sitemap ml-2"></i> Setores',
+        'url' => 'setores',
+        'can' => 'setores.viewAny',
+    ],
+    [
+        'text' => '<i class="fas fa-tasks ml-2"></i> Filas',
+        'url' => 'filas',
+        'can' => 'filas.viewAny',
     ],
 ];
 
