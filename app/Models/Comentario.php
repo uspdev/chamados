@@ -4,9 +4,9 @@ namespace App\Models;
 
 use App\Models\Chamado;
 use App\Models\User;
+use App\Observers\ComentarioObserver;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Observers\ComentarioObserver;
 
 class Comentario extends Model
 {
@@ -24,8 +24,18 @@ class Comentario extends Model
         Comentario::observe(ComentarioObserver::class);
     }
 
+    public static function criar($arr)
+    {
+        $c = new Comentario();
+        foreach ($arr as $key => $val) {
+                $c->$key = $val;
+        }
+        $c->save();
+        return $c;
+    }
+
     /**
-     * os tipos de comentários. Aparecerão em cards separados no chamado. 
+     * os tipos de comentários. Aparecerão em cards separados no chamado.
      */
     public static function tipos()
     {
@@ -40,7 +50,7 @@ class Comentario extends Model
         return $this->belongsTo(User::class);
     }
 
-    /** 
+    /**
      * relacionamento com chamado
      */
     public function chamado()

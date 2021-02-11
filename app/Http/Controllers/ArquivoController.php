@@ -55,7 +55,7 @@ class ArquivoController extends Controller
             if (preg_match('/jpeg|jpg|png/', $arquivo->mimeType)) {
                 array_push($fotos_nome, $arquivo->nome_original);
             } else {
-                Comentario::create([
+                Comentario::criar([
                     'user_id' => \Auth::user()->id,
                     'chamado_id' => $arquivo->chamado_id,
                     'comentario' => 'O arquivo ' . $arquivo->nome_original . ' foi adicionado.',
@@ -68,7 +68,7 @@ class ArquivoController extends Controller
             ? 'As imagens ' . implode(", ", $fotos_nome) . ' foram adicionadas'
             : 'A imagem ' . $fotos_nome[0] . ' foi adicionada';
 
-            Comentario::create([
+            Comentario::criar([
                 'user_id' => \Auth::user()->id,
                 'chamado_id' => $arquivo->chamado_id,
                 'comentario' => $comentario,
@@ -123,7 +123,7 @@ class ArquivoController extends Controller
             $arquivo->nome_original .= '.pdf';
         }
         $arquivo->update();
-        Comentario::create([
+        Comentario::criar([
             'user_id' => \Auth::user()->id,
             'chamado_id' => $arquivo->chamado_id,
             'comentario' => 'O arquivo ' . $nome_antigo . ' foi renomeado para ' . $request->nome_arquivo . '.',
@@ -145,7 +145,7 @@ class ArquivoController extends Controller
         $comentario = preg_match('/jpeg|jpg|png/', $arquivo->mimeType)
         ? 'A imagem ' . $arquivo->nome_original . ' foi excluída'
         : 'O arquivo ' . $arquivo->nome_original . ' foi excluído';
-        Comentario::create([
+        Comentario::criar([
             'user_id' => \Auth::user()->id,
             'chamado_id' => $arquivo->chamado_id,
             'comentario' => $comentario,

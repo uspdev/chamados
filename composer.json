@@ -21,7 +21,8 @@
         "uspdev/laravel-usp-theme": "^2.0",
         "uspdev/laravel-usp-validators": "^1.0",
         "uspdev/replicado": "^1.5",
-        "uspdev/senhaunica-socialite": "^2.0"
+        "uspdev/senhaunica-socialite": "^2.0",
+        "masakik/supervisor": "dev-master"
     },
     "require-dev": {
         "facade/ignition": "^2.3.6",
@@ -30,6 +31,12 @@
         "nunomaduro/collision": "^5.0",
         "phpunit/phpunit": "^9.0"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/masakik/laravel-supervisor-config-generator"
+        }
+    ],
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",

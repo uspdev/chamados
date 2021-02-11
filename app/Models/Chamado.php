@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Comentario;
 use App\Models\Fila;
+use App\Observers\ChamadoObserver;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Gate;
@@ -24,6 +25,16 @@ class Chamado extends Model
     ];
 
     /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        Chamado::observe(ChamadoObserver::class);
+    }
+
+    /**
      * Retorna os status possiveis no chamado.
      * Passou a ser gerado pela fila. Em uso somente pelas migrations.
      */
@@ -31,12 +42,12 @@ class Chamado extends Model
     {
         return ['Triagem', 'Em Andamento', 'Fechado', 'Aguardando Solicitante', 'Aguardando Peças'];
     }
-    
+
     /**
      * Retorna a cor para os labels.
-     * 
+     *
      */
-    public static function color( $chamado )
+    public static function color($chamado)
     {
         return $chamado->fila->getColortoLabel($chamado->status);
     }

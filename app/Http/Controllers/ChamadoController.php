@@ -83,15 +83,32 @@ class ChamadoController extends Controller
             $chamado = new Chamado;
             $chamado->nro = Chamado::obterProximoNumero();
             $chamado->fila_id = $fila->id;
-            $chamado = $this->grava($chamado, $request);
+            $chamado->assunto = $request->assunto;
+            $chamado->status = 'Triagem';
+
+            $chamado->descricao = $request->descricao;
+            $chamado->extras = json_encode($request->extras);
+
+            // vamos salvar sem evento pois o autor ainda não está cadastrado
+            $chamado->saveQuietly();
+
+            $chamado->users()->attach(\Auth::user(), ['papel' => 'Autor']);
+            
+            // agora sim vamos disparar o evento
+            event('eloquent.created: App\Models\Chamado', $chamado);
+
             return $chamado;
         });
+
         $request->session()->flash('alert-info', 'Chamado enviado com sucesso');
+
+        // talvez esa confirmação deva ficar em outro lugar
         if ($chamado->fila->config->patrimonio) {
             if ($chamado->patrimonios->count() < 1) {
                 $request->session()->flash('alert-danger', 'É obrigatório cadastrar um número de patrimônio!');
             }
         }
+
         return redirect()->route('chamados.show', $chamado->id);
     }
 
@@ -161,14 +178,14 @@ class ChamadoController extends Controller
             $chamado->vinculadosIda()->attach($request->slct_chamados, ['acesso' => $request->acesso]);
             $vinculado = Chamado::find($request->slct_chamados);
             //comentário no chamado principal
-            Comentario::create([
+            Comentario::criar([
                 'user_id' => \Auth::user()->id,
                 'chamado_id' => $chamado->id,
                 'comentario' => 'O chamado no. ' . $vinculado->nro . '/' . $vinculado->created_at->year . ' foi vinculado à esse chamado',
                 'tipo' => 'system',
             ]);
             // comentário no chamado vinculado
-            Comentario::create([
+            Comentario::criar([
                 'user_id' => \Auth::user()->id,
                 'chamado_id' => $vinculado->id,
                 'comentario' => 'Esse chamado foi vinculado ao chamado no. ' . $chamado->nro . '/' . $chamado->created_at->year,
@@ -191,14 +208,14 @@ class ChamadoController extends Controller
         $chamado->vinculadosVolta()->detach($id);
         $vinculado = Chamado::find($id);
         //comentário no chamado principal
-        Comentario::create([
+        Comentario::criar([
             'user_id' => \Auth::user()->id,
             'chamado_id' => $chamado->id,
             'comentario' => 'O chamado no. ' . $vinculado->nro . '/' . $vinculado->created_at->year . ' foi desvinculado desse chamado',
             'tipo' => 'system',
         ]);
         // comentário no chamado vinculado
-        Comentario::create([
+        Comentario::criar([
             'user_id' => \Auth::user()->id,
             'chamado_id' => $vinculado->id,
             'comentario' => 'Esse chamado foi desvinculado do chamado no. ' . $chamado->nro . '/' . $chamado->created_at->year,
@@ -319,7 +336,7 @@ class ChamadoController extends Controller
                     $msg .= ' e ' . $atualizacao[count($atualizacao) - 1];
                     $msg .= ' foram atualizados';
                 }
-                Comentario::create([
+                Comentario::criar([
                     'user_id' => \Auth::user()->id,
                     'chamado_id' => $chamado->id,
                     'comentario' => $msg,
@@ -387,7 +404,7 @@ class ChamadoController extends Controller
         $chamado->users()->attach($atendente->id, ['papel' => 'Atendente']);
         $chamado->status = 'Em Andamento';
         $chamado->save();
-        Comentario::create([
+        Comentario::criar([
             'user_id' => \Auth::user()->id,
             'chamado_id' => $chamado->id,
             'comentario' => 'O chamado foi atribuído para o(a) atendente ' . $atendente->name,
@@ -450,7 +467,7 @@ class ChamadoController extends Controller
         } else {
             $chamado->users()->attach($user, ['papel' => $papel]);
 
-            Comentario::create([
+            Comentario::criar([
                 'user_id' => \Auth::user()->id,
                 'chamado_id' => $chamado->id,
                 'comentario' => 'O ' . strtolower($papel) . ' ' . $user->name . ' foi adicionado ao chamado.',
@@ -489,7 +506,7 @@ class ChamadoController extends Controller
             $chamado->save();
         }
         $msg = 'O ' . strtolower($papel) . ' ' . $user->name . ' foi removido desse chamado.';
-        Comentario::create([
+        Comentario::criar([
             'user_id' => \Auth::user()->id,
             'chamado_id' => $chamado->id,
             'comentario' => $msg,
@@ -566,7 +583,7 @@ class ChamadoController extends Controller
 
         if (!$existia) {
             $msg = 'O patrimônio ' . $patrimonio->numFormatado() . ' foi adicionado a esse chamado.';
-            Comentario::create([
+            Comentario::criar([
                 'user_id' => \Auth::user()->id,
                 'chamado_id' => $chamado->id,
                 'comentario' => $msg,
@@ -594,7 +611,7 @@ class ChamadoController extends Controller
         $chamado->patrimonios()->detach($patrimonio);
 
         $msg = 'O patrimônio ' . $patrimonio->numFormatado() . ' foi removido desse chamado.';
-        Comentario::create([
+        Comentario::criar([
             'user_id' => \Auth::user()->id,
             'chamado_id' => $chamado->id,
             'comentario' => $msg,
