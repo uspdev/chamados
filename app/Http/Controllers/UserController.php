@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -57,7 +58,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        $this->authorize('admin');
+        $this->authorize('users.view', $user);
         return view('users.show', compact('user'));
     }
 
@@ -187,5 +188,10 @@ class UserController extends Controller
         session(['perfil' => 'usuario']);
 
         return redirect('/');
+    }
+
+    public function meuperfil()
+    {
+        return redirect('users/'.\Auth::user()->id);
     }
 }

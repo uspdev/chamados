@@ -65,14 +65,7 @@ class AuthServiceProvider extends ServiceProvider
             }
         });
 
-        Gate::define('perfilSetor', function ($user) {
-            if ($user->setores()->count() || $user->is_admin) {
-                return true;
-            } else {
-                return false;
-            }
-        });
-
+        
         Gate::define('trocarPerfil', function ($user) {
             return Gate::any(['admin', 'atendente']);
         });
@@ -90,5 +83,6 @@ class AuthServiceProvider extends ServiceProvider
         Gate::resource('chamados', 'App\Policies\ChamadoPolicy');
         Gate::resource('filas', 'App\Policies\FilaPolicy');
         Gate::resource('setores', 'App\Policies\SetorPolicy');
+        Gate::resource('users', 'App\Policies\UserPolicy');
     }
 }
