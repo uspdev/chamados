@@ -20,9 +20,30 @@ Depois de instalar os requisitos, faça um clone do projeto
 
 	git clone git@github.com:uspdev/chamados
 
-Criar user e banco de dados:
+Criar user e banco de dados (em mysql):
 
 	grant all privileges on chamados.* to chamados@'%' identified by 'chamados';
+
+## Configuração em produção
+
+    apt install memcached
+    apt install supervisor
+    configurar a conta de email para acesso menos seguro pois a conexão é via smtp
+
+    git clone git@github.com:uspdev/chamados ou via https
+    composer install --no-dev
+	cp .env.example .env (configurar o necessário)
+	php artisan key:generate
+    php artisan migrate
+    php artisan supervisor:queue
+
+Configurar o apache ou nginx
+
+### Atualização em produção
+
+    git pull
+    composer install
+    php artisan migrate
 
 ## Configuração
 
@@ -34,6 +55,16 @@ Criar user e banco de dados:
     php artisan migrate --seed
 	php artisan serve
 
+
+
+
+Para usar cache no replicado precisa do memcached. Veja https://github.com/uspdev/cache.
+
+Para as filas de envio de email o sistema precisa do Supervisor. NO ubuntu ou debian instale com:
+
+    apt install supervisor
+
+Configuração do supervisor: TODO
 
 ## Problemas e soluções
 
