@@ -4,7 +4,6 @@ namespace App\Observers;
 
 use App\Mail\ComentarioMail;
 use App\Models\Comentario;
-use Mail;
 
 class ComentarioObserver
 {
@@ -19,9 +18,21 @@ class ComentarioObserver
         /* envia para cada pessoa envolvida no chamado */
         foreach ($comentario->chamado->users()->get() as $user) {
             #dd($user->pivot->papel);
-            Mail::to($user->email)
+            \Mail::to($user->email)
                 ->queue(new ComentarioMail($comentario));
         }
+        // rodar a fila
+        /*
+    Atendentes e gerentes
+    novo chamado - pessoas da fila (s)
+    atualização de outros chamados (pessoas da fila)(s)
+
+    Usuário comum
+    atualizacao de chamados que participa (s)
+
+    guardar log de tudo
+     */
+
     }
 
     /**

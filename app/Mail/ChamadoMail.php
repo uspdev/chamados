@@ -2,17 +2,16 @@
 
 namespace App\Mail;
 
-use App\Models\Comentario;
+use App\Models\Chamado;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class ComentarioMail extends Mailable
+class ChamadoMail extends Mailable
 {
-    use MailTrait;
     use Queueable, SerializesModels;
+    use MailTrait;
 
-    public $comentario;
     public $chamado;
     public $autor;
 
@@ -21,10 +20,9 @@ class ComentarioMail extends Mailable
      *
      * @return void
      */
-    public function __construct(Comentario $comentario)
+    public function __construct(Chamado $chamado)
     {
-        $this->comentario = $comentario;
-        $this->chamado = $comentario->chamado;
+        $this->chamado = $chamado;
         $this->autor = $this->chamado->users()->wherePivot('papel', 'Autor')->first();
     }
 
@@ -35,8 +33,9 @@ class ComentarioMail extends Mailable
      */
     public function build()
     {
-        return $this->from(config('mail.from.address'), config('mail.from.name'))
+        return $this
+            ->from(config('mail.from.address'), config('mail.from.name'))
             ->subject($this->construirAssunto())
-            ->view('emails.novo_comentario');
+            ->view('emails.novo_chamado');
     }
 }
