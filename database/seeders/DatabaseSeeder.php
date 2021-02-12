@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\Models\Chamado;
+use App\Models\Comentario;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,6 +15,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+
+        // desativando eventos no seeder
+        Chamado::flushEventListeners();
+        Comentario::flushEventListeners();
+
+        // so vamos fazer o seeder de setores se houver replicado
         $setor_seeder = (config('chamados.usar_replicado')) ? SetorReplicadoSeeder::class : SetorSeeder::class;
 
         $this->call([
