@@ -15,16 +15,20 @@ class ComentarioMail extends Mailable
     public $comentario;
     public $chamado;
     public $autor;
+    public $papel;
+    public $user;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Comentario $comentario)
+    public function __construct($data)
     {
-        $this->comentario = $comentario;
-        $this->chamado = $comentario->chamado;
+        $this->papel = $data['papel'];
+        $this->user = $data['user'];
+        $this->comentario = $data['comentario'];
+        $this->chamado = $this->comentario->chamado;
         $this->autor = $this->chamado->users()->wherePivot('papel', 'Autor')->first();
     }
 

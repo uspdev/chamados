@@ -2,8 +2,8 @@
 
 namespace App\Observers;
 
-use App\Models\Chamado;
 use App\Mail\ChamadoMail;
+use App\Models\Chamado;
 
 class ChamadoObserver
 {
@@ -15,14 +15,17 @@ class ChamadoObserver
      */
     public function created(Chamado $chamado)
     {
-        // Vamos enviar email para o autor 
-        \Mail::to(\Auth::user()->email)
-            ->queue(new ChamadoMail($chamado));
+        // Vamos enviar email para o autor
+        $papel = 'Autor do chamado';
+        $user = \Auth::user();
+        \Mail::to($user->email)
+            ->queue(new ChamadoMail(compact('papel', 'user', 'chamado')));
 
         // e para as pessoas da fila (atendentes e gerentes)
         foreach ($chamado->fila->users()->get() as $user) {
+            $papel = $user->pivot->funcao . ' da fila (' . $chamado->fila->setor->sigla . ') ' . $chamado->fila->nome;
             \Mail::to($user->email)
-            ->queue(new ChamadoMail($chamado));
+                ->queue(new ChamadoMail(compact('papel', 'user', 'chamado')));
         }
     }
 

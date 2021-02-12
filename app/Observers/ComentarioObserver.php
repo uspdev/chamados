@@ -15,12 +15,24 @@ class ComentarioObserver
      */
     public function created(Comentario $comentario)
     {
-        /* envia para cada pessoa envolvida no chamado */
+        // envia para cada pessoa envolvida no chamado
         foreach ($comentario->chamado->users()->get() as $user) {
-            #dd($user->pivot->papel);
+            #tentei passar $user no ComentarioMail mas não estava conseguindo extrair o papel no blade
+            #masaki, 2/2021
+            $papel = $user->pivot->papel . ' do chamado';
             \Mail::to($user->email)
-                ->queue(new ComentarioMail($comentario));
+                ->queue(new ComentarioMail(compact('papel', 'user', 'comentario')));
         }
+
+        // enquanto não houver atendente atribuido envia email para todos da fila
+        if ($comentario->chamado->users()->wherePivot('papel', 'Atendente')->count() == 0) {
+            foreach ($comentario->chamado->fila->users()->get() as $user) {
+                $papel = $user->pivot->funcao . ' da fila (' . $comentario->chamado->fila->setor->sigla . ') ' . $comentario->chamado->fila->nome;
+                \Mail::to($user->email)
+                    ->queue(new ComentarioMail(compact('papel', 'user', 'comentario')));
+            }
+        }
+
         // rodar a fila
         /*
     Atendentes e gerentes

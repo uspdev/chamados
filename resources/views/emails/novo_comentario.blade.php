@@ -1,5 +1,7 @@
 @include('emails.cabecalho')
 <br>
+@include('emails.dados_chamado')
+<br>
 <div style="background-color: AliceBlue;
         padding: 5px;">
     <b>Novo comentário adicionado</b><br>

@@ -14,15 +14,19 @@ class ChamadoMail extends Mailable
 
     public $chamado;
     public $autor;
+    public $papel;
+    public $user;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Chamado $chamado)
+    public function __construct($data)
     {
-        $this->chamado = $chamado;
+        $this->papel = $data['papel'];
+        $this->user = $data['user'];
+        $this->chamado = $data['chamado'];
         $this->autor = $this->chamado->users()->wherePivot('papel', 'Autor')->first();
     }
 
