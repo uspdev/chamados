@@ -20,7 +20,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $this->authorize('users.viewAnys');
+        $this->authorize('users.viewAny');
         $users = User::all();
         return view('users.index')->with('users', $users);
     }
@@ -185,7 +185,7 @@ class UserController extends Controller
         $user = User::obterPorCodpes(session('adminCodpes'));
         session(['adminCodpes' => 0]);
         \Auth::login($user, true);
-        session(['perfil' => 'usuario']);
+        session(['perfil' => 'admin']);
 
         return redirect('/');
     }
