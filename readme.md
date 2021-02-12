@@ -35,9 +35,27 @@ Criar user e banco de dados (em mysql):
 	cp .env.example .env (configurar o necessário)
 	php artisan key:generate
     php artisan migrate
+
+**Configurar o apache ou nginx**
+
+**Configurar o cache**
+
+Para usar cache no replicado precisa do memcached. Veja https://github.com/uspdev/cache.
+
+* `apt install memcached`
+* Configure o arquivo /etc/memcached.conf
+* Restarte o serviço
+
+**Configurar Supervisor**
+
+Para as filas de envio de email o sistema precisa de um servidor que mantenha rodando o processo que monitora as filas. O recomendado é o Supervisor. No ubuntu ou debian instale com
+
+    apt install supervisor
+
+Para gerar o arquivo de configuração e colocar na pasta apropriada (`/etc/supervisor/conf.d/`) rode como **`root`**
+
     php artisan supervisor:queue
 
-Configurar o apache ou nginx
 
 ### Atualização em produção
 
@@ -45,7 +63,7 @@ Configurar o apache ou nginx
     composer install
     php artisan migrate
 
-## Configuração
+## Configuração em ambiente de desenvolvimento
 
 é necessário a instalação do composer para prosseguir
 
@@ -55,16 +73,13 @@ Configurar o apache ou nginx
     php artisan migrate --seed
 	php artisan serve
 
+Para enviar emails é necessário executar as tarefas na fila. Para isso, em outro terminal rode
+
+    php artisan queue:listen
 
 
 
-Para usar cache no replicado precisa do memcached. Veja https://github.com/uspdev/cache.
 
-Para as filas de envio de email o sistema precisa do Supervisor. NO ubuntu ou debian instale com:
-
-    apt install supervisor
-
-Configuração do supervisor: TODO
 
 ## Problemas e soluções
 
