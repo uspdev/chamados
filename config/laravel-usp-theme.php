@@ -22,7 +22,7 @@ $admin = [
     [
         'text' => '<i class="fas fa-users ml-2"></i> Pessoas',
         'url' => 'users',
-        'can' => 'admin',
+        'can' => 'users.viewAny',
     ],
     [
         'text' => '<i class="fas fa-users ml-2"></i> Meu Perfil',

@@ -18,7 +18,10 @@ class UserPolicy
      */
     public function viewAny(User $user)
     {
-        //
+        /* admin */
+        if (Gate::allows('perfilAdmin')) {
+            return true;
+        }
     }
 
     /**
