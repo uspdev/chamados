@@ -21,10 +21,13 @@ class SetorPolicy
     public function viewAny(User $user)
     {
         /* autorizando somente para os gerentes de qualquer setor */
-        if ($user->setores()->wherePivot('funcao','Gerente')->count() || $user->is_admin)  {
+        if ($user->setores()->wherePivot('funcao', 'Gerente')->count()) {
             return true;
-        } else {
-            return false;
+        }
+
+        # para admins
+        if (Gate::allows('perfilAdmin')) {
+            return true;
         }
     }
 
