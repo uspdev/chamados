@@ -35,10 +35,14 @@ class User extends Authenticatable
     /**
      * The attributes that should be cast to native types.
      *
+     * O config está com o formato json no BD
+     * referencia: https://nullthoughts.com/development/2019/01/29/laravel-json-column-types/
+     * 
      * @var array
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'config'=>'json',
     ];
 
     public const rules = [
