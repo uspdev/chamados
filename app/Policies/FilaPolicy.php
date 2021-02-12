@@ -30,7 +30,8 @@ class FilaPolicy
             return true;
         }
 
-        if ($user->is_admin) {
+        # para admins
+        if (Gate::allows('perfilAdmin')) {
             return true;
         }
     }
