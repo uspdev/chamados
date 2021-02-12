@@ -24,6 +24,9 @@ class CreateUsersTable extends Migration
 
             #admins do sistema
             $table->boolean('is_admin')->nullable();
+
+            #opções do usuário
+            $table->json('config')->nullable();
             
             $table->string('password')->nullable();
             $table->rememberToken();
