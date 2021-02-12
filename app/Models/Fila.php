@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Gate;
 
 class Fila extends Model
 {
@@ -73,7 +74,7 @@ class Fila extends Model
                         "color":"primary"
                     }
                 ]
-            }'
+            }',
     ];
 
     protected $fillable = [
@@ -235,14 +236,14 @@ class Fila extends Model
         $user = \Auth()->user();
 
         # listando tudo se admin
-        if ($user->is_admin) {
+        if (Gate::allows('perfilAdmin')) {
             return SELF::get();
         }
 
         $filas = collect();
 
         # listando as filas de todos os setores que o usuário faz parte.
-        foreach (\Auth()->user()->setores()->wherePivot('funcao','Gerente')->get() as $setor) {
+        foreach (\Auth()->user()->setores()->wherePivot('funcao', 'Gerente')->get() as $setor) {
             $filas = $filas->merge($setor->filas);
 
             #listando as filas do setores filhos do usuario
