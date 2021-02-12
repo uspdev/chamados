@@ -70,10 +70,6 @@ class AuthServiceProvider extends ServiceProvider
             return Gate::any(['admin', 'atendente']);
         });
 
-        Gate::define('menuConfiguracoes', function ($user) {
-            return Gate::any(['perfilSetor', 'filas.viewAny']);
-        });
-
         # se o admin assumir identidade de outro usuário, permite retornar
         Gate::define('desassumir', function ($user) {
             return session('adminCodpes');

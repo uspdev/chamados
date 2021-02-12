@@ -17,7 +17,6 @@ $admin = [
     [
         'type' => 'header',
         'text' => '<b><i class="fas fa-cogs"></i>  Configurações</b>',
-        'can' => 'menuConfiguracoes',
     ],
     [
         'text' => '<i class="fas fa-users ml-2"></i> Pessoas',
