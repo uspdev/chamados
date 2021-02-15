@@ -1,14 +1,33 @@
 # Sobre o projeto
 
-Sistema que gerencia o fluxo de chamados técnicos de informática.
+Sistema que gerencia o fluxo de chamados técnicos ou solicitações de atendimento. Foi idealizado para chamados de informática e de zeladoria (manutenção predial) mas pode ser estendido a quaisquer outros serviços. Todas as atividades são notificadas por email aos interessados.
 
-Está sendo modificado para poder atender chamados de qualquer setor da unidade.
+Características:
 
+-   Múltiplas filas de atendimentos
+    -   com ou sem triagem
+    -   controle de visibilidade por categoria de pessoas
+    -   formulário de chamado personalizado
+    -   cadastro de gerentes e atendentes
+    -   organizado por setores
+-   Chamado com várias opções
+    -   Suporte a arquivos anexos
+    -   Permite vincular chamados
+    -   Permite cadastrar observadores
+    -   Permite referenciar patrimônios USP
+-   Autenticação por senha única
 
 ## Requisitos
 
-* Git
-* Composer
+Esse sistema foi projetado para rodar em servidores linux (Ubuntu e Debian).
+
+-   PHP 7.3
+-   Apache ou Nginx
+-   Banco de dados local (MariaDB mas pode ser qualquer um suportado pelo Laravel)
+-   Git
+-   Composer
+-   Credenciais para senha única
+-   Acesso ao replicado
 
 Bibliotecas necessárias do php:
 
@@ -16,48 +35,92 @@ Bibliotecas necessárias do php:
 
 ## Instalação
 
-Depois de instalar os requisitos, faça um clone do projeto 
-
-	git clone git@github.com:uspdev/chamados
+    git clone git@github.com:uspdev/chamados
+    composer install
+    cp .env.example .env
+    php artisan key:generate
 
 Criar user e banco de dados (em mysql):
 
-	grant all privileges on chamados.* to chamados@'%' identified by 'chamados';
+    sudo mysql
+    create database chamados;
+    grant all privileges on chamados.* to chamados@'%' identified by 'chamados';
+    flush privileges;
 
-## Configuração em produção
+## Configuração em ambiente de produção
+
+### Configurar o cache
+
+A bibliteca (https://github.com/uspdev/cache) usada no replicado utiliza o servidor memcached. Se você pretende utilizá-lo instale e configure ele:
 
     apt install memcached
-    apt install supervisor
-    configurar a conta de email para acesso menos seguro pois a conexão é via smtp
+    vim /etc/memcached.conf
+        I = 5M
+        -m 128
 
-    git clone git@github.com:uspdev/chamados ou via https
-    composer install --no-dev
-	cp .env.example .env (configurar o necessário)
-	php artisan key:generate
+    /etc/init.d/memcached restart
+
+
+### Email
+
+Configurar a conta de email para acesso menos seguro pois a conexão é via smtp.
+
+### Configurar o apache ou nginx
+
+Deve apontar para a \<pasta do projeto\>/public, assim como qualquer projeto laravel.
+
+No Apache é possivel utilizar a extensão MPM-ITK (http://mpm-itk.sesse.net/) que permite rodar seu *Servidor Virtual* com usuário próprio. Isso facilita rodar o sistema como um usuário comum e não precisa ajustar as permissões da pasta `storage/`.
+
+    sudo apt install libapache2-mpm-itk
+    sudo a2enmod mpm_itk
+    sudo service apache2 restart 
+
+Dentro do seu virtualhost coloque
+
+    <IfModule mpm_itk_module>
+    AssignUserId nome_do_usuario nome_do_usuario
+    </IfModule>
+
+### Configurar senha única
+
+Cadastre uma nova URL no configurador de senha única utilizando o caminho `/callback`. Guarde o callback_id para colocar no arquivo `.env`.
+
+### Edite o arquivo .env
+
+Há várias opções que precisam ser ajustadas nesse arquivo. Faça com atenção para não deixar passar nada. O arquivo está todo documentado.
+
+### Popular banco de dados
+
     php artisan migrate
 
-**Configurar o apache ou nginx**
+Os setores da unidade podem ser importados do Replicado. Para isso rode:
 
-**Configurar o cache**
+    php artisan db:seed --class=SetorReplicadoSeeder
 
-Para usar cache no replicado precisa do memcached. Veja https://github.com/uspdev/cache.
+### Instalar e configurar o Supervisor
 
-* `apt install memcached`
-* Configure o arquivo /etc/memcached.conf
-* Restarte o serviço
-
-**Configurar Supervisor**
-
-Para as filas de envio de email o sistema precisa de um servidor que mantenha rodando o processo que monitora as filas. O recomendado é o Supervisor. No ubuntu ou debian instale com
+Para as filas de envio de email o sistema precisa de um gerenciador que mantenha rodando o processo que monitora as filas. O recomendado é o Supervisor. No Ubuntu ou Debian instale com:
 
     apt install supervisor
 
 Para gerar o arquivo de configuração e colocar na pasta apropriada (`/etc/supervisor/conf.d/`) rode como **`root`**
 
-    php artisan supervisor:queue
+    sudo php artisan supervisor:queue
 
+Ajustes necessários: por enquanto é necessário ajustar no arquivo gerado:
+
+    user=<username>
+    redirecionar stderr_logfile = <aplicacao>/storage/logs/<seu arquivo de log>
+
+Reinicie o Supervisor
+
+    sudo supervisorctl reread
+    sudo supervisorctl update
+    sudo supervisorctl restart all
 
 ### Atualização em produção
+
+Para receber as últimas atualizações do sistema rode:
 
     git pull
     composer install
@@ -65,20 +128,21 @@ Para gerar o arquivo de configuração e colocar na pasta apropriada (`/etc/supe
 
 ## Configuração em ambiente de desenvolvimento
 
-é necessário a instalação do composer para prosseguir
+Ainda é preciso descrever melhor mas pode seguir as instruções para ambiente de produção com os ajustes necessários.
 
-    composer install
-	cp .env.example .env
-	php artisan key:generate
-    php artisan migrate --seed
-	php artisan serve
+    php artisan migrate:fresh --seed
 
-Para enviar emails é necessário executar as tarefas na fila. Para isso, em outro terminal rode
+O senhaunica-fake pode não ser adequado pois o sistema coloca as pessoas nos respectivos setores com as informações da senha única.
+
+Para subir o servidor
+
+    php artisan serve
+
+**CUIDADO**: você pode enviar emails indesejados para as pessoas.
+
+Para enviar emails é necessário executar as tarefas na fila.   Para isso, em outro terminal rode
 
     php artisan queue:listen
-
-
-
 
 
 ## Problemas e soluções
@@ -87,75 +151,25 @@ Ao rodar pela primeira vez com apache, as variáveis de ambiente relacionadas ao
 
 https://www.php.net/manual/pt_BR/function.getenv.php#117301
 
+Para limpar e recriar todo o DB, rode sempre que necessário:
 
-Fresh start
+    php artisan migrate:fresh --seed
 
-	php artisan migrate:fresh --seed
+## Histórico
 
-## Filas customizáveis
-Podemos configurar as filas com campos específicos a elas. Por ora, isso deve ser feito no `php artisan tinker` e adicionar o JSON direto lá.
+* O sistema de chamados foi transferido da FFLCH para o USPDev.
+  * Adaptar para o uso por várias unidades
+  * Expandir para o uso por outros setores como por exemplo o serviço de manutenção
+  * Implementado conceito de filas
 
+## Detalhamento técnico
 
-### Campos opcionais
-  * `can`: autorização de mexer num dado atributo;
-  * `help`: campo de ajuda;
-  * `value`: valores possíveis para o select;
-  * `validate`: regras de validação.
+Foram utilizados vários recursos do laravel que podem não ser muito trivial para todos.
 
-Exemplo de JSON:
-``` json
-{
-    "dia": {
-        "label"     : "Dia do atendimento",
-        "type"      : "date",
-        "validate"  : "required"
-    },
-    "obs": {
-        "label"     : "Observações",
-        "type"      : "textarea",
-        "can"       : "admin",
-        "help"      : "Observações técnicas"
-    },
-    "tipo": {
-        "label"     : "Tipo de problema",
-        "type"      : "select",
-        "value"     : {
-            "virus" : "Computador com vírus",
-            "outro" : "Outro problema"
-        }
-    }
-}
-```
+* O monitoramento de novos chamados ou novas mensagens nos chamados é feito usando *observers* (https://laravel.com/docs/8.x/eloquent#observers)
+* Os emails enviados são colocados em filas (jobs) para liberar a execução do php (https://laravel.com/docs/8.x/mail#queueing-mail)
 
-## Roadmap
+## Todo
 
-O sistema de chamados foi transferido da FFLCH para o USPDev. 
-Nesse escopo, os objetivos das mudanças em andamento são:
-
-* Adaptar para o uso por várias unidades
-* Expandir para o uso por outros setores como por exemplo o serviço de manutenção
-
-### Etapas
-
-1. Criar tabela de setores que podem prestar serviços
-2. Renomear categorias para filas
-	* o admin de cada setor poderá criar filas
-	* o criador da fila é gerente dela, que pode distribuir chamados (triagem)
-	* o gerente pode adicionar atendentes que poderão ser atribuídos aos chamados bem como atribuir para si mesmo (autotriagem)
-	* a fila possui visibilidade que controla qual grupo da comunidade pode abrir chamado
-3. Criar as associações entre filas e users, setores e users, chamado e users, etc
-	* a relação entre filas e users será um relacionamento n:n com atributo de tipo: atendente, gerente, etc
-	* a relação setores e users será n:n com atributo tipo: admin, etc
-4. reorganizar a tabela de chamados
-	* possui atributos comuns e atributos específicos
-	* Atributos comuns: status, assunto, descricao, criador, atribuido_para, datas de abertura, fechamento, atribuição, etc
-	* Atributos especificos: são aqueles criados pelo gerente da fila, como por exemplo: patrimonio, sala/predio, outros campos de texto, campos de radio e checkbox, urgência do atendimento, etc
-5. permitir anexos (pdf e fotos)
-6. Diferenciar "meus chamados" e "chamados atribuidos para mim" e "chamados em minhas filas"
-
-### Andamento
-
-1. Feito
-2. Foi criado a tabela filas para posteriormente migrar os dados de categorias
-
-
+* Monitorar jobs com falhas
+* Monitorar arquivos de log
