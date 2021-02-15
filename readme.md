@@ -93,15 +93,16 @@ Há várias opções que precisam ser ajustadas nesse arquivo. Faça com atenç�
 
     php artisan migrate
 
-Os setores da unidade podem ser importados do Replicado. Para isso rode:
+Os setores e respectivos designados podem ser importados do Replicado.  Para isso rode:
 
     php artisan db:seed --class=SetorReplicadoSeeder
 
+Depois de importado faça uma conferência para não haver inconsistências.
 ### Instalar e configurar o Supervisor
 
-Para as filas de envio de email o sistema precisa de um gerenciador que mantenha rodando o processo que monitora as filas. O recomendado é o Supervisor. No Ubuntu ou Debian instale com:
+Para as filas de envio de email o sistema precisa de um gerenciador que mantenha rodando o processo que monitora as filas. O recomendado é o **Supervisor**. No Ubuntu ou Debian instale com:
 
-    apt install supervisor
+    sudo apt install supervisor
 
 Para gerar o arquivo de configuração e colocar na pasta apropriada (`/etc/supervisor/conf.d/`) rode como **`root`**
 
@@ -112,7 +113,7 @@ Ajustes necessários: por enquanto é necessário ajustar no arquivo gerado:
     user=<username>
     redirecionar stderr_logfile = <aplicacao>/storage/logs/<seu arquivo de log>
 
-Reinicie o Supervisor
+Reinicie o **Supervisor**
 
     sudo supervisorctl reread
     sudo supervisorctl update
@@ -125,6 +126,8 @@ Para receber as últimas atualizações do sistema rode:
     git pull
     composer install
     php artisan migrate
+
+Caso tenha alguma atualização, não deixe de conferir o readme.md quanto a outras providências que podem ser necessárias.
 
 ## Configuração em ambiente de desenvolvimento
 
