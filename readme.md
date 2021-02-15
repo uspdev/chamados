@@ -21,11 +21,11 @@ Características:
 
 ### Tela de chamado
 
-![Tela de chamado](./docs/tela_chamado.png|width=50%)
+![Tela de chamado](./docs/tela_chamado.png|width=100px)
 
 ### Tela de fila
 
-![Tela de chamado](./docs/tela_fila.png|width=50%)
+![Tela de chamado](./docs/tela_fila.png|width=100px)
 ## Requisitos
 
 Esse sistema foi projetado para rodar em servidores linux (Ubuntu e Debian).
