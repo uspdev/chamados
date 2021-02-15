@@ -17,6 +17,15 @@ Características:
     -   Permite referenciar patrimônios USP
 -   Autenticação por senha única
 
+## Prints
+
+### Tela de chamado
+
+![Tela de chamado](./docs/tela_chamado.png|width=50%)
+
+### Tela de fila
+
+![Tela de chamado](./docs/tela_fila.png|width=50%)
 ## Requisitos
 
 Esse sistema foi projetado para rodar em servidores linux (Ubuntu e Debian).
