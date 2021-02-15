@@ -20,10 +20,10 @@ Características:
 ## Prints
 
 ### Telas de chamado e de fila
-
+<p float="left">
 <img src="https://github.com/uspdev/chamados/raw/master/docs/tela_chamado.png" width=49%>
 <img src="https://github.com/uspdev/chamados/raw/master/docs/tela_fila.png" width=49%>
-
+</p>
 
 ## Requisitos
 
