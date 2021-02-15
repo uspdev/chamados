@@ -19,13 +19,12 @@ Características:
 
 ## Prints
 
-### Tela de chamado
+### Telas de chamado e de fila
 
-![Tela de chamado](./docs/tela_chamado.png)
+<img src="https://github.com/uspdev/chamados/raw/master/docs/tela_chamado.png" width=49%>
+<img src="https://github.com/uspdev/chamados/raw/master/docs/tela_fila.png" width=49%>
 
-### Tela de fila
 
-![Tela de chamado](./docs/tela_fila.png)
 ## Requisitos
 
 Esse sistema foi projetado para rodar em servidores linux (Ubuntu e Debian).
