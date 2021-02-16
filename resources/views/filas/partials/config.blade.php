@@ -50,6 +50,13 @@
                     servidores
                 </label>
             </div>
+            <div class="form-check form-check-inline">
+                <label class="form-check-label">
+                    <input class="form-check-input" type="checkbox" name="config[visibilidade][todos]" value="1"
+                        {{ $fila->config->visibilidade->todos ? 'checked' : '' }}>
+                    todos (USP)
+                </label>
+            </div>
             <br>
             <div class="form-check form-check-inline">
                 <label class="form-check-label">

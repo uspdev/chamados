@@ -52,6 +52,7 @@ class Fila extends Model
                 "visibilidade":{
                     "alunos":0,
                     "servidores":"1",
+                    "todos" => 0,
                     "setor_gerentes":0,
                     "fila_gerentes":0,
                     "setores":"todos"
@@ -275,29 +276,17 @@ class Fila extends Model
             # primeiro vamos pegar todas as filas
             $filas = $setor->filas;
 
-            # pegando somente as filas em produção
-            // $filas = $filas->filter(function ($fila, $key) {
-            //     return $fila->estado == 'Em produção';
-            // });
-
-            # filtrando por visibilidade de setor
-            // $filas = $filas->filter(function ($fila, $key) {
-            //     if ($fila->config->visibilidade->setores == 'interno') {
-            //         return \Auth::user()->setores
-            //             ->where('sigla', $fila->setor->sigla)
-            //             ->first();
-            //     } else {
-            //         // setores == 'todos'
-            //         return true;
-            //     }
-            // });
-
             # agora vamos remover as filas onde não se pode abrir chamados
             $filas = $filas->filter(function ($fila, $key) {
 
                 # bloqueia as filas que não estão em produção
                 if ($fila->estado != 'Em produção') {
                     return false;
+                }
+
+                # liberando fila para todos USP
+                if ($fila->config->visibilidade->todos) {
+                    return true;
                 }
 
                 # liberando pessoas (gerentes, servidores, etc) do proprio setor (interno)
