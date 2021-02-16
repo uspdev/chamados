@@ -64,6 +64,7 @@
             ajax: {
                 url: 'search/partenome'
                 , dataType: 'json'
+                , delay: 1000
             }
             , dropdownParent: pessoasForm
             , minimumInputLength: 4
