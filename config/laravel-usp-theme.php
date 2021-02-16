@@ -75,6 +75,11 @@ $menu = [
         'can' => 'perfilAtendente',
     ],
     [
+        'text' => '<i class="far fa-list-alt"></i> Chamados Admin',
+        'url' => 'chamados',
+        'can' => 'perfilAdmin',
+    ],
+    [
         'text' => '<i class="fas fa-sitemap ml-2"></i> Setores',
         'url' => 'setores',
         'can' => 'setores.viewAny',
