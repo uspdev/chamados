@@ -1,6 +1,6 @@
-Olá, se você está aqui é porque você quer saber mais como uma pessoa que atende aos chamados pode interagir com o sistema.
+A pessoa que atende chamados é cadastrado como **atendente** ou **gerente** em uma fila. Quando um **usuário** criar um novo chamado, o atendente é notificado por email. 
 
-A pessoa que atende chamados é cadastrado como atendente em uma fila. Nessa condição você será notificado por email em todos os chamados realizados para a fila e poderá interagir com os chamados. Se você for cadastrado em mais de uma fila, poderá realizar atendimentos em todas as filas.
+Nessa condição você será notificado por email em todos os chamados realizados para a fila e poderá interagir com os chamados. Se você for cadastrado em mais de uma fila, poderá realizar atendimentos em todas as filas.
 
 No menu à direita você escolhe o perfil que deseja utilizar, como **atendente** ou como **usuário**.
 
