@@ -27,6 +27,10 @@
                     @endif
 
                     @include('filas.partials.enable-disable-btn')
+                    
+                    @if($fila->users->isEmpty())
+                    <span class="badge badge-danger ml-3">Cadastre pelo menos uma pessoa nessa fila</span>
+                    @endif
                 </div>
             </div>
 
