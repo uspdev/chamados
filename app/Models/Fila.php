@@ -52,7 +52,7 @@ class Fila extends Model
                 "visibilidade":{
                     "alunos":0,
                     "servidores":"1",
-                    "todos" => 0,
+                    "todos":0,
                     "setor_gerentes":0,
                     "fila_gerentes":0,
                     "setores":"todos"
