@@ -1,4 +1,4 @@
-<button type="button" class="btn btn-primary" onclick="json_modal_form()">
+<button type="button" class="btn btn-primary btn-sm" onclick="json_modal_form()">
     <i class="fas fa-plus"></i> Adicionar Campo
 </button>
 
@@ -18,16 +18,16 @@
                     {!! Form::open(['route' => ['filas.storetemplate', $fila->id], 'id' => 'template-form', 'method' => 'POST']) !!}
                     {!! Form::token() !!}
                     <div id="template-new" class="form-group row mt-2">
-                        <div class="col-1"><strong>Campo</strong></div>
-                        <div class="col"><input class="form-control" name="campo"></div>
+                        <div class="col-2"><strong>Campo</strong></div>
+                        <input class="form-control col-9" name="campo">
                     </div>
                     @foreach ($fila->getTemplateFields() as $field)
                         <div class="form-group row mt-2">
-                            <div class="col-1"><strong>{{ ucfirst($field) }}</strong></div>
-                            <div class="col">
+                            <div class="col-2"><strong>{{ ucfirst($field) }}</strong></div>
+                            
                                 @switch($field)
                                     @case('type')
-                                    <select class="form-control" name="new[{{ $field }}]">
+                                    <select class="form-control col-9" name="new[{{ $field }}]">
                                         <option value='text'>Texto</option>
                                         <option value='select'>Caixa de Seleção</option>
                                         <option value='data'>Dia</option>
@@ -35,25 +35,25 @@
                                     </select>
                                     @break
                                     @case('validate')
-                                    <select class="form-control" name="new[{{ $field }}]">
+                                    <select class="form-control col-9" name="new[{{ $field }}]">
                                         <option value=''>Sem validação</option>
                                         <option value='required'>Obrigatório</option>
                                         <option value='required|integer'>Obrigatório - Somente números</option>
                                     </select>
                                     @break
                                     @case('can')
-                                    <select class="form-control" name="new[{{ $field }}]">
+                                    <select class="form-control col-9" name="new[{{ $field }}]">
                                         <option value=''>Exibido para todos</option>
                                         <option value='perfilAtendente'>Somente Atendentes</option>
                                     </select>
                                     @break
                                     @default
-                                    <input class="form-control" name="new[{{ $field }}]">
+                                    <input class="form-control col-9" name="new[{{ $field }}]">
                                 @endswitch
-                            </div>
+                            
                         </div>
                     @endforeach
-                    <div class="text-right">
+                    <div class="text-right mt-2">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
                         <button class="btn btn-primary ml-1" type="submit">Salvar</button>
                     </div>
