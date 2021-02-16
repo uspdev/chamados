@@ -25,7 +25,7 @@
             <input type="hidden" name="chamado_id" value="{{$chamado->id}}">
             <input type="hidden" id="max_upload_size" name="max_upload_size" value="{{$max_upload_size}}">
 
-            <input type="file" name="arquivo[]" id="input_arquivo" accept=".jpeg,.jpg,.png,.pdf" class="d-none" multiple>
+            <input type="file" name="arquivo[]" id="input_arquivo" accept="image/jpeg,image/png,application/pdf" class="d-none" multiple capture="environment">
 
             <div class="nome-arquivo w-100" id="nome_arquivo">
                 <ul class="preview-files"></ul>
