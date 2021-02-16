@@ -25,7 +25,7 @@
                         </div>
                     </div>
 
-                    @can('atendente')
+                    @can('perfilAtendente')
                     <div class="form-group row">
                         {{ Form::label('papel','Papel', ['class' => 'col-form-label col-sm-2']) }}
                         <div class="col-sm-10">
