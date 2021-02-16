@@ -67,7 +67,12 @@ $menu = [
     [
         'text' => '<i class="far fa-list-alt"></i> Meus Chamados',
         'url' => 'chamados',
-        'can' => 'chamados.viewAny',
+        'can' => 'perfilUsuario',
+    ],
+    [
+        'text' => '<i class="far fa-list-alt"></i> Meus Atendimentos',
+        'url' => 'chamados',
+        'can' => 'perfilAtendente',
     ],
     [
         'text' => '<i class="fas fa-sitemap ml-2"></i> Setores',
