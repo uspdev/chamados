@@ -32,6 +32,9 @@
                 @include('filas.partials.status-small')
                 <a class="mr-2" href="filas/{{ $fila->id }}">{{ $fila->nome }}</a>
                 @include('filas.partials.status-muted')
+                @if($fila->users->isEmpty())
+                <span class="badge badge-danger ml-3">Sem pessoas</span>
+                @endif
             </td>
             <td>{{ $fila->descricao }}</td>
         </tr>
