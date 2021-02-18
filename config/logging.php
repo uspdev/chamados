@@ -36,7 +36,7 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['daily'],
+            'channels' => ['daily', 'daily_info'],
             'ignore_exceptions' => false,
         ],
 
@@ -48,9 +48,16 @@ return [
 
         'daily' => [
             'driver' => 'daily',
-            'path' => storage_path('logs/laravel.log'),
+            'path' => storage_path('logs/debug.log'),
             'level' => 'debug',
-            'days' => 14,
+            'days' => 30,
+        ],
+
+        'daily_info' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/info.log'),
+            'level' => 'info',
+            'days' => 30,
         ],
 
         'slack' => [
