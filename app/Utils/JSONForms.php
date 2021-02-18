@@ -43,7 +43,7 @@ class JSONForms
 
             # se o template tem autorização
             if (isset($json->can)) {
-                if (!Gate::allows($json->can)) {
+                if (!Gate::allows(strtolower($json->can))) {
                     continue;
                 }
             }
@@ -72,15 +72,14 @@ class JSONForms
             }
 
             if ($perfil) {
-                if (isset($json->can)) {                
+                if (isset($json->can)) {
                     if ($json->can == $perfil) {
                         $form[] = $input;
                     }
                 }
-            }else{
+            } else {
                 $form[] = $input;
             }
-            
         }
         return $form;
     }

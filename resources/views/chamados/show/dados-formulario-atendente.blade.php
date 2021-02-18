@@ -12,7 +12,7 @@
         <form id="form_atendente" name="form_atendente" method="POST" action="chamados/{{$chamado->id}}">
             @csrf
             @method('PUT')
-            @foreach ($formAtendente as $input)            
+            @foreach ($formAtendente as $input)  
                 @foreach ($input as $element)
                     {{ $element }}                      
                 @endforeach 

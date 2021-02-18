@@ -28,8 +28,8 @@
                 </form>
             </div>
             <div class="col-md-4">
-                @includewhen(Gate::check('perfilAtendente') || Gate::check('perfilAdmin'),'chamados.show.mudar-status')
-                @includewhen(Gate::check('perfilAtendente') || Gate::check('perfilAdmin'),'chamados.show.dados-formulario-atendente')
+                @includewhen(Gate::check('atendente'),'chamados.show.mudar-status')
+                @includewhen(Gate::check('atendente'),'chamados.show.dados-formulario-atendente')
             </div>
         </div>
     </div>

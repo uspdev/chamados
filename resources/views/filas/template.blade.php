@@ -54,7 +54,7 @@
                                                                 @case('can')
                                                                 <select class="form-control" name="template[{{ $tkey }}][{{ $field }}]">
                                                                     <option value='' {{ $tvalue[$field] == '' ? 'selected' : '' }}>Exibido para todos</option>
-                                                                    <option value='perfilAtendente' {{ $tvalue[$field] == 'perfilAtendente' ? 'selected' : '' }}>Somente Atendentes</option>
+                                                                    <option value='Atendente' {{ $tvalue[$field] == 'Atendente' ? 'selected' : '' }}>Somente Atendentes</option>
                                                                 </select>
                                                                 @break
                                                                 @default
@@ -73,7 +73,7 @@
                                                                 @case('can')
                                                                 <select class="form-control" name="template[{{ $tkey }}][{{ $field }}]">
                                                                     <option value=''>Exibido para todos</option>
-                                                                    <option value='perfilAtendente'>Somente Atendentes</option>
+                                                                    <option value='Atendente'>Somente Atendentes</option>
                                                                 </select>
                                                                 @break
                                                                 @default
@@ -92,6 +92,7 @@
                                     @else
                                         Não existe formulário para essa fila.
                                     @endif
+                                    <button class="btn btn-primary ml-1" type="submit">Salvar</button>
                                 </div>
                             </div>
                         </div>
