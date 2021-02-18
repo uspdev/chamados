@@ -58,7 +58,7 @@ class ChamadoPolicy
         }
 
         /* admin */
-        if (Gate::allows('perfilAdmin')) {
+        if (Gate::allows('perfiladmin')) {
             return true;
         }
     }

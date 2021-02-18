@@ -41,7 +41,7 @@ class AuthServiceProvider extends ServiceProvider
         # perfis
         # o perfil é o modo como o usuário se apresenta
         # ideal para mostrar os menus e a lista de chamados
-        Gate::define('perfilAdmin', function ($user) {
+        Gate::define('perfiladmin', function ($user) {
             if (session('perfil') != 'admin') {
                 return false;
             } else {
@@ -49,7 +49,7 @@ class AuthServiceProvider extends ServiceProvider
             }
         });
 
-        Gate::define('perfilAtendente', function ($user) {
+        Gate::define('perfilatendente', function ($user) {
             if (session('perfil') == 'atendente') {
                 return true;
             } else {
@@ -57,7 +57,7 @@ class AuthServiceProvider extends ServiceProvider
             }
         });
 
-        Gate::define('perfilUsuario', function ($user) {
+        Gate::define('perfilusuario', function ($user) {
             if (session('perfil') == 'usuario' || empty(session('perfil'))) {
                 return true;
             } else {

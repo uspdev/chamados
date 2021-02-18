@@ -19,7 +19,7 @@ class UserPolicy
     public function viewAny(User $user)
     {
         /* admin */
-        if (Gate::allows('perfilAdmin')) {
+        if (Gate::allows('perfiladmin')) {
             return true;
         }
     }
@@ -39,7 +39,7 @@ class UserPolicy
         }
 
         /* admin */
-        if (Gate::allows('perfilAdmin')) {
+        if (Gate::allows('perfiladmin')) {
             return true;
         }
     }

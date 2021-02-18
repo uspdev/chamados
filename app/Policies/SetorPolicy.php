@@ -26,7 +26,7 @@ class SetorPolicy
         }
 
         # para admins
-        if (Gate::allows('perfilAdmin')) {
+        if (Gate::allows('perfiladmin')) {
             return true;
         }
     }
@@ -59,7 +59,7 @@ class SetorPolicy
         }
 
         /* admin */
-        if (Gate::allows('perfilAdmin')) {
+        if (Gate::allows('perfiladmin')) {
             return true;
         }
 

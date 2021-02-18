@@ -31,7 +31,7 @@ class FilaPolicy
         }
 
         # para admins
-        if (Gate::allows('perfilAdmin')) {
+        if (Gate::allows('perfiladmin')) {
             return true;
         }
     }
@@ -72,7 +72,7 @@ class FilaPolicy
         }
 
         /* admin */
-        if (Gate::allows('perfilAdmin')) {
+        if (Gate::allows('perfiladmin')) {
             return true;
         }
     }
@@ -106,7 +106,7 @@ class FilaPolicy
         }
 
         /* admin */
-        if (Gate::allows('perfilAdmin')) {
+        if (Gate::allows('perfiladmin')) {
             return true;
         }
     }
