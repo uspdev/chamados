@@ -278,7 +278,10 @@ class ChamadoController extends Controller
         //
     }
 
-    /* Evita duplicarmos código  */
+    /* Evita duplicarmos código  
+       Está sendo usado somente no update, no store foi separado pois 
+       tem bem pouca coisa daqui.
+    */
     private function grava(Chamado $chamado, Request $request)
     {
         if ($request->status == 'devolver') {
@@ -380,6 +383,9 @@ class ChamadoController extends Controller
 
     /**
      * adiciona atendentes. Pode ser mais de um
+     * 
+     * Com o storePessoa, que é mais genérico talves esse método possa ser eliminado
+     * TODO: Masaki em 17/2/2021
      */
     public function triagemStore(Request $request, Chamado $chamado)
     {
@@ -466,6 +472,14 @@ class ChamadoController extends Controller
             $request->session()->flash('alert-info', $papel . ' já existe.');
         } else {
             $chamado->users()->attach($user, ['papel' => $papel]);
+
+            // se o usuario adicionado for atendente e o status for triagem 
+            // vamos mudar o status para Em andamento
+            // Este trecho pode substituir o triagemStore. TODO
+            if (('Atendente' == $papel) && ('Triagem' == $chamado->status)) {
+                $chamado->status = 'Em andamento';
+                $chamado->save();
+            }
 
             Comentario::criar([
                 'user_id' => \Auth::user()->id,
