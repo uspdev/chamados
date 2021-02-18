@@ -1,10 +1,8 @@
-Este sistema foi idealizado para que você usuário, possa criar **solicitações/chamados** para os setores que possuem **filas de atendimento**. Você poderá acompanhar todas as suas solicitações e sempre que houver alguma alteração será enviado uma notificado por email.
+Este sistema foi idealizado para que você usuário, possa criar **solicitações/chamados** para os setores que possuem **filas de atendimento**. Você poderá acompanhar todas as suas solicitações e sempre que houver alguma alteração será enviado uma notificação por email.
 
-Você deve se identificar no sistema usando sua senha única.
+O acesso ao sistema é por meio da senha única USP.
 
-
-
-#### Novo chamado
+#### Menu "Novo chamado"
 
 Para criar novos chamados, primeiramente é necessário escolher em qual **fila de atendimento** ele será criado. As **filas de atendimento** podem ser específicas para determinado tipo de solicitação. Ao abrir um novo chamado, você poderá identificar a finalidade da fila pelo seu nome e descrição.
 
