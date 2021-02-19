@@ -130,7 +130,7 @@ class ChamadoController extends Controller
         $color = $chamado->fila->getColortoLabel($chamado->status);
         $max_upload_size = config('chamados.upload_max_filesize');
         $form = JSONForms::generateForm($chamado->fila, $chamado);
-        $formAtendente = JSONForms::generateForm($chamado->fila, $chamado, 'Atendente');
+        $formAtendente = JSONForms::generateForm($chamado->fila, $chamado, 'atendente');
         return view('chamados/show', compact('atendentes', 'autor', 'chamado', 'extras', 'template', 'status_list', 'color', 'max_upload_size', 'form', 'formAtendente'));
     }
 
@@ -319,7 +319,7 @@ class ChamadoController extends Controller
                             /* não vamos atualizar o registro do sistema quando for campo exclusivo do atendente  */                            
                             if (empty($template->$campoc->can)){
                                 $atualiza_extras = true;
-                            } elseif ($template->$campoc->can != "Atendente") {                            
+                            } elseif ($template->$campoc->can != "atendente") {                            
                                 $atualiza_extras = true;
                             }
                         }

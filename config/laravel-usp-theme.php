@@ -67,17 +67,17 @@ $menu = [
     [
         'text' => '<i class="far fa-list-alt"></i> Meus Chamados',
         'url' => 'chamados',
-        'can' => 'perfilUsuario',
+        'can' => 'perfilusuario',
     ],
     [
         'text' => '<i class="far fa-list-alt"></i> Meus Atendimentos',
         'url' => 'chamados',
-        'can' => 'perfilAtendente',
+        'can' => 'perfilatendente',
     ],
     [
         'text' => '<i class="far fa-list-alt"></i> Chamados Admin',
         'url' => 'chamados',
-        'can' => 'perfilAdmin',
+        'can' => 'perfiladmin',
     ],
     [
         'text' => '<i class="fas fa-sitemap ml-2"></i> Setores',
@@ -95,7 +95,7 @@ $right_menu = [
     [
         'text' => '<span class="badge badge-danger">Admin</span>',
         'url' => '',
-        'can' => 'perfilAdmin',
+        'can' => 'perfiladmin',
     ],   
     [
         'text' => '<span class="badge badge-danger">Desassumir identidade</span>',
@@ -105,7 +105,7 @@ $right_menu = [
     [
         'text' => '<span class="badge badge-warning">Atendente</span>',
         'url' => '',
-        'can' => 'perfilAtendente',
+        'can' => 'perfilatendente',
     ],
     [
         'text' => '<i class="fas fa-question-circle"></i> Ajuda',
@@ -116,7 +116,7 @@ $right_menu = [
         'title' => 'Configurações',
         'submenu' => $configuracoes,
         'align' => 'right',
-        #'can' => ['perfilAtendente','filas.viewAny'],
+        #'can' => ['perfilatendente','filas.viewAny'],
     ],
 ];
 

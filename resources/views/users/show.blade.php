@@ -6,11 +6,11 @@
 <div class="row">
     <div class="col-md-12">
         <div class="h4 mt-2">
-            @if(Gate::check('perfilAdmin'))
+            @if(Gate::check('perfiladmin'))
             <a href="users">Usuários</a> <i class="fas fa-angle-right"></i>
             @endif
             {{ $user->name }}
-            @if(Gate::check('perfilAdmin')) | @include('users.partials.btn-change-user')
+            @if(Gate::check('perfiladmin')) | @include('users.partials.btn-change-user')
             @endif
         </div>
         <div class="ml-2">

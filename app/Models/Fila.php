@@ -237,7 +237,7 @@ class Fila extends Model
         $user = \Auth()->user();
 
         # listando tudo se admin
-        if (Gate::allows('perfilAdmin')) {
+        if (Gate::allows('perfiladmin')) {
             return SELF::get();
         }
 
