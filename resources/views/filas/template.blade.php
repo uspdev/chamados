@@ -92,6 +92,7 @@
                                     @else
                                         Não existe formulário para essa fila.
                                     @endif
+                                    <button class="btn btn-primary ml-1" type="submit">Salvar</button>
                                 </div>
                             </div>
                         </div>

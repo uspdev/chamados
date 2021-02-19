@@ -93,7 +93,7 @@ class ChamadoController extends Controller
             $chamado->saveQuietly();
 
             $chamado->users()->attach(\Auth::user(), ['papel' => 'Autor']);
-            
+
             // agora sim vamos disparar o evento
             event('eloquent.created: App\Models\Chamado', $chamado);
 
@@ -305,12 +305,12 @@ class ChamadoController extends Controller
             if (json_encode($chamado->extras) != json_encode($request->extras) && !empty($request->extras)) {
                 /* guardando os dados antigos em log para auditoria */
                 Log::info(' - Edição de chamado - Usuário: ' . \Auth::user()->codpes . ' - ' . \Auth::user()->name . ' - Id Chamado: ' . $chamado->id . ' - Extras antigo: ' . $chamado->extras . ' - Novo extras: ' . json_encode($request->extras));
-                array_push($atualizacao, 'formulário');
                 $extras_chamados = json_decode($chamado->extras, true);
                 $extras_request = $request->extras;
                 /* se não for um chamado novo */
                 if ($chamado->extras != null) {
                     /* atualiza todos os campos que não vieram no request para não perder os mesmos */
+                    $atualiza_extras = false;
                     foreach ($extras_chamados as $campoc => $valuec) {
                         if (!array_key_exists($campoc, $extras_request)) {
                             $extras_request[$campoc] = $extras_chamados[$campoc];
@@ -324,6 +324,9 @@ class ChamadoController extends Controller
                             }
                         }
                     }
+                }
+                if ($atualiza_extras) {
+                    array_push($atualizacao, 'formulário');
                 }
                 $chamado->extras = json_encode($extras_request);
             }
