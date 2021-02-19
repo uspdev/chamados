@@ -60,15 +60,14 @@ Route::get('chamados/listarPatrimoniosAjax', [ChamadoController::class,'listarPa
 Route::post('chamados/{chamado}/patrimonios', [ChamadoController::class,'storePatrimonio']);
 Route::delete('chamados/{chamado}/patrimonios/{patrimonio}', [ChamadoController::class,'destroyPatrimonio']);
 
+// CHAMADOS - TRIAGEM
+Route::post('chamados/{chamado}/triagem', [ChamadoController::class,'triagemStore']);
+
 // CHAMADOS
 Route::get('chamados/create', [ChamadoController::class, 'listaFilas']);
 Route::get('chamados/create/{fila}/', [ChamadoController::class, 'create'])->name('chamados.create');
 Route::post('chamados/create/{fila}/', [ChamadoController::class, 'store'])->name('chamados.store');
 Route::resource('chamados', ChamadoController::class)->except(['create', 'store']);
-
-#Route::get('chamados/{chamado}/devolver', [ChamadoController::class,'devolver']);
-
-Route::post('triagem/{chamado}', [ChamadoController::class,'triagemStore']);
 
 // COMENTARIOS
 Route::resource('comentarios/{chamado}/', ComentarioController::class);
