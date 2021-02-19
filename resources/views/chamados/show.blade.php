@@ -55,8 +55,7 @@
                 <div class="col-md-12">
                     <div class="row">
                         <div class="col-md-12">
-                            @includewhen(Gate::check('perfilAtendente') ||
-                            Gate::check('perfilAdmin'),'chamados.show.card-atendente')
+                            @includewhen(Gate::check('perfilatendente') || Gate::check('perfiladmin'),'chamados.show.card-atendente')
                         </div>
                     </div>
                 </div>

@@ -120,23 +120,23 @@ class Chamado extends Model
     /**
      * Lista os chamados autorizados para o usuário
      * considerando o ano e o perfil:
-     * Se perfilAdmin mostra todos os chamados
-     * Se perfilAtendente mostra todos os chamados das filas que atende
-     * Se perfilUsuario mostra os chamados que ele está cadastrado como criador ou observador
+     * Se perfiladmin mostra todos os chamados
+     * Se perfilatendente mostra todos os chamados das filas que atende
+     * Se perfilusuario mostra os chamados que ele está cadastrado como criador ou observador
      *
      * Vamos considerar chamados de filas desativadas
      */
     public static function listarChamados($ano, $nro = null, $assunto = null)
     {
-        if (Gate::allows('perfilAdmin')) {
+        if (Gate::allows('perfiladmin')) {
             $chamados = SELF::ano($ano)->nro($nro)->assunto($assunto)->get();
-        } elseif (Gate::allows('perfilAtendente')) {
+        } elseif (Gate::allows('perfilatendente')) {
             $chamados = collect();
             $filas = \Auth::user()->filas;
             foreach ($filas as $fila) {
                 $chamados = $chamados->merge($fila->chamados()->ano($ano)->nro($nro)->assunto($assunto)->get());
             }
-        } elseif (Gate::allows('perfilUsuario')) {
+        } elseif (Gate::allows('perfilusuario')) {
             $chamados = \Auth::user()->chamados()->ano($ano)->nro($nro)->assunto($assunto)->get();
         } else {
             $chamados = collect();

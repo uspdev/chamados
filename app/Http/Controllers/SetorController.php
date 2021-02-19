@@ -25,7 +25,7 @@ class SetorController extends Controller
         
         $user = \Auth::user();
 
-        if (Gate::allows('perfilAdmin')) {
+        if (Gate::allows('perfiladmin')) {
             # se for admin mostra tudo
             $setor = Setor::where('setor_id', null)->first();
         } else {

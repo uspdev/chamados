@@ -44,7 +44,7 @@
                                     @case('can')
                                     <select class="form-control col-9" name="new[{{ $field }}]">
                                         <option value=''>Exibido para todos</option>
-                                        <option value='perfilAtendente'>Somente Atendentes</option>
+                                        <option value='atendente'>Somente Atendentes</option>
                                     </select>
                                     @break
                                     @default
