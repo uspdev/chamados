@@ -6,14 +6,14 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{ $modalTitle }}</h5>
+                <h5 class="modal-title">Atribuir</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="list_table_div_form">
-                    {!! Form::open(['url'=>'triagem/'.$chamado->id]) !!}
+                    {!! Form::open(['url'=>'chamados/'.$chamado->id.'/triagem']) !!}
                     @method('post')
                     @csrf
                     <div class="col-sm form-group">
@@ -23,19 +23,15 @@
                                 <option value="" selected="">Escolher</option>
                                 @foreach($chamado->fila->users as $atendente)
                                 @if(old('codpes') == $atendente->codpes)
-                                <option value="{{ $atendente->codpes }}" selected>
-                                    {{ $atendente->name }}
-                                </option>
+                                <option value="{{ $atendente->codpes }}" selected>{{ $atendente->name }}</option>
                                 @else
-                                <option value="{{ $atendente->codpes }}">
-                                    {{ $atendente->name }}
-                                </option>
-                                @endif                                
+                                <option value="{{ $atendente->codpes }}">{{ $atendente->name }}</option>
+                                @endif
                                 @endforeach
                             </select>
                         </div>
                     </div>
-                                        
+
                     <div class="text-right">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
                         <button type="submit" class="btn btn-primary">Salvar</button>
