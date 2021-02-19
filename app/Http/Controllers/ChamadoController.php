@@ -278,10 +278,10 @@ class ChamadoController extends Controller
         //
     }
 
-    /* Evita duplicarmos código  
-       Está sendo usado somente no update, no store foi separado pois 
-       tem bem pouca coisa daqui.
-    */
+    /* Evita duplicarmos código
+    Está sendo usado somente no update, no store foi separado pois
+    tem bem pouca coisa daqui.
+     */
     private function grava(Chamado $chamado, Request $request)
     {
         if ($request->status == 'devolver') {
@@ -316,10 +316,10 @@ class ChamadoController extends Controller
                             $extras_request[$campoc] = $extras_chamados[$campoc];
                         } else {
                             $template = json_decode($chamado->fila->template);
-                            /* não vamos atualizar o registro do sistema quando for campo exclusivo do atendente  */                            
-                            if (empty($template->$campoc->can)){
+                            /* não vamos atualizar o registro do sistema quando for campo exclusivo do atendente  */
+                            if (empty($template->$campoc->can)) {
                                 $atualiza_extras = true;
-                            } elseif ($template->$campoc->can != "atendente") {                            
+                            } elseif ($template->$campoc->can != "atendente") {
                                 $atualiza_extras = true;
                             }
                         }
@@ -394,25 +394,21 @@ class ChamadoController extends Controller
 
     /**
      * adiciona atendentes. Pode ser mais de um
-     * 
+     *
      * Com o storePessoa, que é mais genérico talves esse método possa ser eliminado
      * TODO: Masaki em 17/2/2021
      */
     public function triagemStore(Request $request, Chamado $chamado)
     {
-        $this->authorize('atendente');
+        $this->authorize('chamados.view', $chamado);
 
-        $request->validate([
-            'codpes' => 'required|codpes',
-        ]);
+        $request->validate(
+            ['codpes' => 'required|codpes'],
+            ['codpes.required' => 'Necessário informar atendente'],
+        );
 
         $atendente = User::obterPorCodpes($request->codpes);
 
-        if ($request->codpes == '') {
-            $request->session()->flash('alert-warning', 'É necessário selecionar um atendente');
-            return Redirect::to(URL::previous() . "#card_atendente");
-        }
-        $atendente = User::obterPorCodpes($request->codpes);
         # Se atendente já existe não vamos adicionar novamente
         if ($chamado->users()->where(['user_id' => $atendente->id, 'papel' => 'Atendente'])->exists()) {
             $request->session()->flash('alert-info', 'Atendente já existe');
@@ -421,12 +417,14 @@ class ChamadoController extends Controller
         $chamado->users()->attach($atendente->id, ['papel' => 'Atendente']);
         $chamado->status = 'Em Andamento';
         $chamado->save();
+
         Comentario::criar([
             'user_id' => \Auth::user()->id,
             'chamado_id' => $chamado->id,
             'comentario' => 'O chamado foi atribuído para o(a) atendente ' . $atendente->name,
             'tipo' => 'system',
         ]);
+        
         $request->session()->flash('alert-info', 'Atendente adicionado com sucesso');
         return Redirect::to(URL::previous() . "#card_atendente");
     }
@@ -484,7 +482,7 @@ class ChamadoController extends Controller
         } else {
             $chamado->users()->attach($user, ['papel' => $papel]);
 
-            // se o usuario adicionado for atendente e o status for triagem 
+            // se o usuario adicionado for atendente e o status for triagem
             // vamos mudar o status para Em andamento
             // Este trecho pode substituir o triagemStore. TODO
             if (('Atendente' == $papel) && ('Triagem' == $chamado->status)) {
