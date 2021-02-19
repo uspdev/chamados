@@ -6,19 +6,17 @@
             <span title="Esta região é visível somente para o atendente, para que possa fazer anotações técnicas" class="ajuda mx-2" data-toggle="tooltip"><i class="fas fa-question-circle"></i></span>
             <span class="status">
                 <span class="badge badge-light mr-2"></span>
-            </span>            
-                @if($chamado->fila->config->triagem)
-                @includeWhen($chamado->status != 'Fechado', 'chamados.partials.show-triagem-modal', ['modalTitle'=>'Triagem', 'url'=>'ok'])
-                @else
-                @includeWhen($chamado->status != 'Fechado', 'chamados.partials.show-atender-modal', ['modalTitle'=>'Atender', 'url'=>'ok'])
-                @endif
-            
+            </span>
+            @if($chamado->fila->config->triagem && Gate::check('filas.update', $chamado->fila))
+            @includeWhen($chamado->status != 'Fechado', 'chamados.partials.show-triagem-modal')
+            @else
+            @includeWhen($chamado->status != 'Fechado', 'chamados.partials.show-atender-modal')
+            @endif
         </div>
-        
     </div>
     <div class="card-body">
-        <div class="row">           
-            
+        <div class="row">
+
             <div class="col-md-8">
                 <form id="anotacoes_form" name="anotacoes_form" method="POST" action="chamados/{{$chamado->id}}">
                     @csrf
@@ -40,9 +38,9 @@
 <script>
     $(function() {
         // {{-- https://stackoverflow.com/questions/931252/ajax-autosave-functionality --}}
-        var $status = $('#card-atendente').find('.status'),
-            $anotacoes = $('#anotacoes_form').find('textarea'),
-            timeoutId, timeout = 1500
+        var $status = $('#card-atendente').find('.status')
+            , $anotacoes = $('#anotacoes_form').find('textarea')
+            , timeoutId, timeout = 1500
 
         $anotacoes.keyup(function() { // keypress or keyup to detect backspaces
             $status.show()
@@ -56,11 +54,11 @@
                 $form = $('#anotacoes_form')
                 // Make ajax call to save data.
                 $.ajax({
-                    url: $form.attr('action'),
-                    type: 'put',
-                    dataType: 'json',
-                    data: $form.serialize(),
-                    success: function(data) {
+                    url: $form.attr('action')
+                    , type: 'put'
+                    , dataType: 'json'
+                    , data: $form.serialize()
+                    , success: function(data) {
                         console.log($('#anotacoes_form').find('textarea').val())
                         if (data.message == 'success') {
                             $status.attr('class', 'badge badge-secondary').html('<i class="fas fa-save"></i> Salvo');
@@ -76,16 +74,17 @@
             }, timeout);
         });
 
-        var $estado = $('#status_form').find('#estado'),
-            $form_atendente = $("input, textarea, select",'#form_atendente');
-                    
+        var $estado = $('#status_form').find('#estado')
+            , $form_atendente = $("input, textarea, select", '#form_atendente');
+
         $estado.change(function() {
             $('#status_form').find('#btn_salvar_status').show();
         });
-        
+
         $form_atendente.change(function() {
             $('#form_atendente').find('#btn_salvar_form_atendente').show();
-        });   
+        });
     });
+
 </script>
 @stop

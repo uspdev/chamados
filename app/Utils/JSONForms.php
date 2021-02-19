@@ -3,13 +3,17 @@
 namespace App\Utils;
 
 use Form;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\HtmlString;
 
 class JSONForms
 {
     /**
      * Valida os campos do formulário
+     *
+     * @param $request Campos do do formulário a serem validados
+     * @param $fila Fila de onde vai pegar as regras de validação
+     *
+     * @return Array Contendo a validação
      */
     public static function buildRules($request, $fila)
     {
@@ -27,34 +31,20 @@ class JSONForms
     }
 
     /**
-     * Renderiza o formulário como array
+     * Renderiza o formulário como array contendo html
      */
-    public static function JSON2Form($template, $data, $perfil)
+    protected static function JSON2Form($template, $data, $perfil)
     {
-        Form::macro('help', function ($text) {
-            $help = new HtmlString('<small class="form-text text-muted">' . $text . '</small>');
-            return $help;
-        });
-
         $form = [];
         foreach ($template as $key => $json) {
             $input = [];
             $type = $json->type;
 
-            # se o template tem autorização
-            if (isset($json->can)) {
-                if (!Gate::allows(strtolower($json->can))) {
-                    continue;
-                }
-            }
-
             $input[] = Form::label("extras[$key]", $template->$key->label, ['class' => 'control-label']);
 
             # valores preenchidos
-            $value = null;
-            if (isset($data->$key)) {
-                $value = $data->$key;
-            }
+            # aqui temos de usar "or" pois "||" não preenche corretamente
+            $value = $data->$key ?? null;
 
             switch ($type) {
                 //caso seja um select passa o valor padrao
@@ -68,16 +58,11 @@ class JSONForms
             }
 
             if (isset($json->help)) {
-                $input[] = Form::help($json->help);
+                $input[] = new HtmlString('<small class="form-text text-muted">' . $json->help . '</small>');
             }
 
-            if ($perfil) {
-                if (isset($json->can)) {
-                    if ($json->can == $perfil) {
-                        $form[] = $input;
-                    }
-                }
-            } else {
+            # vamos incluir o input se "can for igual ao perfil" ou "se não houver can"
+            if (($perfil && isset($json->can) && $json->can == $perfil) || (!$perfil && !isset($json->can))) {
                 $form[] = $input;
             }
         }
@@ -90,12 +75,9 @@ class JSONForms
     public static function generateForm($fila, $chamado = null, $perfil = null)
     {
         $template = json_decode($fila->template);
-        $data = null;
         $form = [];
         if ($template) {
-            if ($chamado) {
-                $data = json_decode($chamado->extras);
-            }
+            $data = json_decode($chamado->extras) ?? null;
             $form = JSONForms::JSON2Form($template, $data, $perfil);
         }
         return $form;
