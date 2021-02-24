@@ -120,16 +120,20 @@ class UserController extends Controller
                         'id' => $pessoa['codpes'],
                     ];
                 }
-            } else {
-                $pessoas = User::where('name', 'like', '%' . $request->term . '%')->get()->take(1);
-
-                foreach ($pessoas as $pessoa) {
-                    $results[] = [
-                        'text' => $pessoa->codpes . ' ' . $pessoa->name,
-                        'id' => $pessoa->codpes,
-                    ];
-                }
             }
+
+            # mesmo pegando do replicado vamos pegar da base local também
+            $pessoas = User::where('name', 'like', '%' . $request->term . '%')->get()->take(1);
+            foreach ($pessoas as $pessoa) {
+                $results[] = [
+                    'text' => $pessoa->codpes . ' ' . $pessoa->name,
+                    'id' => "$pessoa->codpes",
+                ];
+            }
+
+            # removendo duplicados
+            $results = array_map("unserialize", array_unique(array_map("serialize", $results)));
+
             return response(compact('results'));
         }
     }
@@ -192,6 +196,6 @@ class UserController extends Controller
 
     public function meuperfil()
     {
-        return redirect('users/'.\Auth::user()->id);
+        return redirect('users/' . \Auth::user()->id);
     }
 }
