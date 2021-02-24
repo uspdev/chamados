@@ -3,8 +3,9 @@
 </a>
 <div class="collapse" id="ajuda_status">
     <div class="card-body card-ajuda">
-        <b>Ajuda para status</b><br>
-        Select - Opções que podem ser utilizadas pelos atendentes.<br>
-        O sistema utiliza alguns status exclusivos (Triagem, Novo, Em Andamento, Fechado) que não podem ser duplicados.
+        São estados (status) adicionais que podem ser configurados para a fila.<br>
+        Estes estados aparecerão no card do atendente.<br>
+        O sistema utiliza alguns estados exclusivos 
+        (Triagem, Novo, Em Andamento, Fechado) que não podem ser duplicados nem alterados.
     </div>
 </div>

@@ -21,13 +21,7 @@
             <div class="card-header">
                 <div class="card-title form-inline my-0">
                     <a href="filas">Filas</a> <i class="fas fa-angle-right mx-2"></i> ({{ $fila->setor->sigla }}) {{ $fila->nome }} | &nbsp;
-
-                    @if($fila->estado != 'Desativada')
-                    @include('common.list-table-btn-edit', ['row'=>$fila]) &nbsp; | &nbsp;
-                    @endif
-
                     @include('filas.partials.enable-disable-btn')
-                    
                     @if($fila->users->isEmpty())
                     <span class="badge badge-danger ml-3">Cadastre pelo menos uma pessoa nessa fila</span>
                     @endif
@@ -38,12 +32,12 @@
                 <div class="row">
                     <div class="col-md-7">
                         {{-- Principal --}}
-                        <span class="text-muted">Setor:</span> {{ $fila->setor->sigla }}<br>
-                        <span class="text-muted">Nome:</span> {{ $fila->nome }}<br>
-                        <span class="text-muted">Descrição:</span> {{ $fila->descricao }}<br>
+                        @include('filas.partials.principal')
                         <br>
+                        {{-- Config --}}
                         @include('filas.partials.config')
                         <br>
+                        {{-- Formulario --}}
                         @include('filas.partials.formulario')
                     </div>
                     <div class="col-md-5">
