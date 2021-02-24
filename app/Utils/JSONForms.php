@@ -77,7 +77,7 @@ class JSONForms
         $template = json_decode($fila->template);
         $form = [];
         if ($template) {
-            $data = json_decode($chamado->extras) ?? null;
+            $data = ($chamado) ? json_decode($chamado->extras) : null;
             $form = JSONForms::JSON2Form($template, $data, $perfil);
         }
         return $form;

@@ -54,10 +54,11 @@ class Chamado extends Model
 
     /**
      * Retorna array com anos selecionáveis, em ordem inversa
+     * TODO: precisa ajustar para pegar os anos do BD
      */
     public static function anos()
     {
-        return range(date('Y'), 2018, -1);
+        return range(date('Y'), 2020, -1);
     }
 
     /**
