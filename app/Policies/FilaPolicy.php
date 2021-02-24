@@ -45,8 +45,8 @@ class FilaPolicy
      */
     public function view(User $user, Fila $fila)
     {
-        # gerentes e atendentes da fila
-        foreach ($fila->users as $u) {
+        # gerentes da fila
+        foreach ($fila->users()->wherePivot('funcao', 'Gerente')->get() as $u) {
             if ($user->codpes == $u->codpes) {
                 return true;
             }
@@ -54,7 +54,7 @@ class FilaPolicy
 
         # gerentes do setor
         $setor = $fila->setor;
-        foreach ($setor->users()->wherePivot('funcao','Gerente')->get() as $u) {
+        foreach ($setor->users()->wherePivot('funcao', 'Gerente')->get() as $u) {
             if ($user->codpes == $u->codpes) {
                 return true;
             }
@@ -64,7 +64,7 @@ class FilaPolicy
         # na estrutura do replicado da EESC
         # tem somente 2 níveis abaixo da unidade
         if ($setor = $setor->setor) {
-            foreach ($setor->users()->wherePivot('funcao','Gerente')->get() as $u) {
+            foreach ($setor->users()->wherePivot('funcao', 'Gerente')->get() as $u) {
                 if ($user->codpes == $u->codpes) {
                     return true;
                 }
