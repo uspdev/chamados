@@ -13,7 +13,7 @@ $user_detail_id = 'user-detail-' . Str::random(5);
                 {{ $user->codpes }} - {{ $user->name }}
             </div>
             <div>
-            Setor: {{ $user->setores()->wherePivot('funcao', '!=','Gerente')->first()->sigla ?? 'sem setor'}} - 
+            Setor: {{ $user->setores()->wherePivot('funcao', '!=','Gerente')->first()->sigla ?? 'sem setor' }} - 
             {{ $user->setores()->wherePivot('funcao', '!=','Gerente')->first()->pivot->funcao ?? '' }}
             </div>
             <div>
