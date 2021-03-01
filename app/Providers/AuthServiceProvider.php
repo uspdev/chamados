@@ -77,6 +77,8 @@ class AuthServiceProvider extends ServiceProvider
 
         # policies
         Gate::resource('chamados', 'App\Policies\ChamadoPolicy');
+        Gate::define('chamados.updateFechado', 'App\Policies\ChamadoPolicy@updateFechado');
+
         Gate::resource('filas', 'App\Policies\FilaPolicy');
         Gate::resource('setores', 'App\Policies\SetorPolicy');
         Gate::resource('users', 'App\Policies\UserPolicy');
