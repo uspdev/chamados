@@ -134,6 +134,9 @@ class UserController extends Controller
             # removendo duplicados
             $results = array_map("unserialize", array_unique(array_map("serialize", $results)));
 
+            # vamos regerar o indice. Pode ser que tenha jeito melhor de eliminar duplicados
+            $results = array_values($results);
+
             return response(compact('results'));
         }
     }
