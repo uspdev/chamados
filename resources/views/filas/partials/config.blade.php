@@ -121,107 +121,94 @@
             </div>
         </div>
 
-        <div class="ml-2 mt-3">
+        <div class="ml-2 mt-3" id="config_status">
             <span class="font-weight-bold">Estados</span>
             @include('ajuda.filas.config-status')
-            <button type="button" class="btn btn-sm btn-light text-primary" id="btn_adiciona_select"><i class="fas fa-plus"></i> Adicionar</button>
+            <button type="button" class="btn btn-sm btn-light text-primary" id="btn_add_status"><i class="fas fa-plus"></i> Adicionar</button>
 
-            <div class="ml-2">
-                <div class="form-group form-row">
-                    <div class="col-12" id="options_select">
-                        @foreach ($fila->config->status as $input)
-                        <div class="form-inline mb-2">
-                            <input class="form-control col-5" type="text" name="config[status][select][]" value="{{ $input->label ?? '' }}">
-                            @php
-                            $id = rand();
-                            @endphp
-                            <select name="config[status][select_cor][]" class="form-control col-3 ml-2" id="select_{{ $id }}">
-                                <option value="">Selecione...</option>
-                                <option value="danger" class="bg-danger text-dark" @if ($input->color == 'danger') selected @endif>Danger</option>
-                                <option value="warning" class="bg-warning text-dark" @if ($input->color == 'warning') selected @endif>Warning</option>
-                                <option value="primary" class="bg-primary text-white" @if ($input->color == 'primary') selected @endif>Primary</option>
-                                <option value="secondary" class="bg-secondary text-white" @if ($input->color == 'secondary') selected @endif>Secondary</option>
-                                <option value="success" class="bg-success text-white" @if ($input->color == 'success') selected @endif>Success</option>
-                                <option value="info" class="bg-info text-white" @if ($input->color == 'info') selected @endif>Info</option>
-                                <option value="dark" class="bg-dark text-white" @if ($input->color == 'dark') selected @endif>Dark</option>
-                                <option value="white" class="bg-white text-dark" @if ($input->color == 'white') selected @endif>White</option>
-                            </select>
-                            <div style="flex: 0 0 150px;">
-                                <span class="ml-2 badge badge-{{ $input->color ?? '' }}" id="span_{{ $id }}">Teste</span>
-                                <span class="ml-2 text-{{ $input->color ?? '' }}" id="span2_{{ $id }}"><i class="fas fa-circle"></i></span>
-                                <button type="button" class="btn btn-sm btn-danger ml-2" id="btn_deleta_select" data-toggle="tooltip" title="Remover" style="height: 22px; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; margin-bottom: 0px;">
-                                    <i class="fa fa-minus"></i>
-                                </button>
-                            </div>
+            <div class="form-row">
+                <div class="col-12 form-group ml-2">
+                    @foreach ($fila->config->status as $input)
+                    <div class="form-inline mb-2">
+                        <input class="form-control col-5" type="text" name="config[status][select][]" value="{{ $input->label ?? '' }}">
+                        <select name="config[status][select_cor][]" class="form-control col-3 ml-2">
+                            <option value="">Selecione...</option>
+                            <option value="danger" class="bg-danger text-dark" @if ($input->color == 'danger') selected @endif>Danger</option>
+                            <option value="warning" class="bg-warning text-dark" @if ($input->color == 'warning') selected @endif>Warning</option>
+                            <option value="primary" class="bg-primary text-white" @if ($input->color == 'primary') selected @endif>Primary</option>
+                            <option value="secondary" class="bg-secondary text-white" @if ($input->color == 'secondary') selected @endif>Secondary</option>
+                            <option value="success" class="bg-success text-white" @if ($input->color == 'success') selected @endif>Success</option>
+                            <option value="info" class="bg-info text-white" @if ($input->color == 'info') selected @endif>Info</option>
+                            <option value="dark" class="bg-dark text-white" @if ($input->color == 'dark') selected @endif>Dark</option>
+                            <option value="white" class="bg-white text-dark" @if ($input->color == 'white') selected @endif>White</option>
+                        </select>
+                        <div style="flex: 0 0 150px;">
+                            <span class="ml-2 badge badge-{{ $input->color ?? '' }}">Teste</span>
+                            <span class="ml-2 circulo text-{{ $input->color ?? '' }}"><i class="fas fa-circle"></i></span>
+                            <button type="button" class="btn btn-sm btn-danger btn_del_status ml-2" data-toggle="tooltip" title="Remover">
+                                <i class="fa fa-minus"></i>
+                            </button>
                         </div>
-                        @endforeach
                     </div>
+                    @endforeach
                 </div>
             </div>
         </div>
 
         <div class="mt-3">
-            <input class="btn-sm btn-primary" id="submit" type="submit" name="ok" value="Salvar Configurações">
+            <input class="btn-sm btn-primary" id="config_submit" type="submit" name="ok" value="Salvar Configurações">
         </div>
         {!! Form::close() !!}
     </div>
 </div>
 
+<template id="form-inline">
+    <div class="form-inline mb-2">
+        <input class="form-control col-5" type="text" name="config[status][select][]" value="">
+        <select name="config[status][select_cor][]" class="form-control col-3 ml-2">
+            <option value="">Selecione...</option>
+            <option value="danger" class="bg-danger text-dark">Danger</option>
+            <option value="warning" class="bg-warning text-dark">Warning</option>
+            <option value="primary" class="bg-primary text-white">Primary</option>
+            <option value="secondary" class="bg-secondary text-white">Secondary</option>
+            <option value="success" class="bg-success text-white">Success</option>
+            <option value="info" class="bg-info text-white">Info</option>
+            <option value="dark" class="bg-dark text-white">Dark</option>
+            <option value="white" class="bg-white text-dark">White</option>
+        </select>
+        <div style="flex: 0 0 150px;">
+            <span class="ml-2 badge">Teste</span>
+            <span class="ml-2 circulo"><i class="fas fa-circle"></i></span>
+            <button type="button" class="btn btn-sm btn-danger btn_del_status ml-2" data-toggle="tooltip" title="Remover">
+                <i class="fa fa-minus"></i>
+            </button>
+        </div>
+    </div>
 
+</template>
 
 @section('javascripts_bottom')
 @parent
 <script>
-    $(document).on('click', '#btn_adiciona_select', function() {
-        var id = Math.floor(Math.random() * 1000 + 1);
-        var novoItem = '<div class="form-inline mb-2">';
-        novoItem += '<input class="form-control col-4" type="text" name="config[status][select][]" value="">';
-        novoItem += '<select name="config[status][select_cor][]" class="form-control col-4 ml-2" id="select_' + id + '">';
-        novoItem += '<option value="">Selecione...</option>';
-        novoItem += '<option value="danger" class="bg-danger text-white">Danger</option>';
-        novoItem += '<option value="warning" class="bg-warning text-dark">Warning</option>';
-        novoItem += '<option value="primary" class="bg-primary text-white">Primary</option>';
-        novoItem += '<option value="secondary" class="bg-secondary text-white">Secondary</option>';
-        novoItem += '<option value="success" class="bg-success text-white">Success</option>';
-        novoItem += '<option value="info" class="bg-info text-white">Info</option>';
-        novoItem += '<option value="dark" class="bg-dark text-white">Dark</option>';
-        novoItem += '<option value="white" class="bg-white text-dark">White</option>';
-        novoItem += '</select>';
-        novoItem += '<span class="ml-2 badge" id="span_' + id + '">Teste</span>';
-        novoItem += '<span class="ml-2" data-toggle="tooltip" title="Teste" id="span2_' + id + '"> <i class="fas fa-circle"></i> </span>';
-        novoItem += '<button type="button" class="btn btn-sm btn-danger ml-2" id="btn_deleta_select" style="height: 22px; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; margin-bottom: 0px;"><i class="fa fa-minus"></i></button>';
-        novoItem += '</div>';
-        $("#options_select").append(novoItem);
+    // para config_status
+    $(document).on('click', '#btn_add_status', function() {
+        var form_group = $('#config_status').find('.form-group')
+        form_group.append($('#form-inline').html())
     });
 
-    $(document).on('click', '#btn_deleta_select', function() {
+    $(document).on('click', '.btn_del_status', function() {
         if (confirm("Tem certeza que quer apagar?")) {
-            var item = document.getElementsByName('config[status][select_cor][]');
-            item.forEach(element => {
-                if (element.parentElement == this.parentElement) {
-                    var node = element.parentElement;
-                    node.parentNode.removeChild(node);
-                }
-            });
+            var form = $(this).closest('.form-inline')
+            form.remove();
         }
     });
 
+    // talez tenha de limitar para o select do status
     $(document).on('change', 'select', function(e) {
-
-        var optionSelected, otherOptionSelected, match = 0;
-        if (this.name == 'config[status][select_cor][]') {
-            optionSelected = $("option:selected", this).val();
-            $('#' + 'span_' + this.id.substr(7)).removeClass().addClass('ml-2 badge badge-' + optionSelected);
-            $('#' + 'span2_' + this.id.substr(7)).removeClass().addClass('ml-2 text-' + optionSelected);
-        }
-        $('select').each(function(index, element) {
-            if (this.name == 'config[status][select_cor][]') {
-                otherOptionSelected = $("option:selected", this).val();
-                if (optionSelected == otherOptionSelected) {
-                    match++;
-                }
-            }
-        });
+        console.log('select change to ', this.value);
+        var form = $(this).closest('.form-inline')
+        form.find('.badge').removeClass().addClass('ml-2 badge badge-' + this.value)
+        form.find('.circulo').removeClass().addClass('ml-2 circulo text-' + this.value)
     });
 
 </script>
