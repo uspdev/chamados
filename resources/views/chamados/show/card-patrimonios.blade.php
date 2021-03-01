@@ -15,7 +15,7 @@
         Patrimônios
         <span class="badge badge-pill badge-primary">{{ $chamado->patrimonios->count() }}</span>
         @can('update', $chamado)
-        @include('patrimonios.partials.patrimonio-add-modal')
+        @includewhen($chamado->status != 'Fechado', 'patrimonios.partials.patrimonio-add-modal')
         @endcan
     </div>
     <div class="card-body">
@@ -29,7 +29,7 @@
             @endif
 
             <span class="hidden-btn d-none">
-                @include('common.btn-delete-sm', ['action'=>'chamados/'.$chamado->id.'/patrimonios/'.$patrimonio->id])
+                @includewhen($chamado->status != 'Fechado', 'common.btn-delete-sm', ['action'=>'chamados/'.$chamado->id.'/patrimonios/'.$patrimonio->id])
             </span>
         </div>
         @endforeach

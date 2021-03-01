@@ -102,11 +102,27 @@ class ChamadoPolicy
         /* chamados vinculados -somente um nível */
         # não pode editar
 
+        /* admin */
         if (Gate::allows('admin')) {
             return true;
         }
 
         return false;
+    }
+
+    /**
+     * Nega se chamado estiver fechado, se não usa regra do update
+     *
+     * @param  \App\User  $user
+     * @param  \App\Chamado  $chamado
+     * @return mixed
+     */
+    public function updateFechado(User $user, Chamado $chamado)
+    {
+        if ($chamado->status == 'Fechado') {
+            return false;
+        }
+        return $this->update($user, $chamado);
     }
 
     /**

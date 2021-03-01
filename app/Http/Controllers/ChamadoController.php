@@ -169,7 +169,8 @@ class ChamadoController extends Controller
      */
     public function storeChamadoVinculado(Request $request, Chamado $chamado)
     {
-        $this->authorize('chamados.create');
+        $this->authorize('chamados.updateFechado', $chamado);
+
         if ($request->slct_chamados != $chamado->id) {
             $request->validate([
                 'acesso' => ['in:Leitura'],
@@ -203,10 +204,12 @@ class ChamadoController extends Controller
      */
     public function deleteChamadoVinculado(Request $request, Chamado $chamado, $id)
     {
-        $this->authorize('chamados.create');
+        $this->authorize('chamados.updateFechado', $chamado);
+
         $chamado->vinculadosIda()->detach($id);
         $chamado->vinculadosVolta()->detach($id);
         $vinculado = Chamado::find($id);
+
         //comentário no chamado principal
         Comentario::criar([
             'user_id' => \Auth::user()->id,
@@ -457,7 +460,7 @@ class ChamadoController extends Controller
      */
     public function storePessoa(Request $request, Chamado $chamado)
     {
-        $this->authorize('chamados.view', $chamado);
+        $this->authorize('chamados.updateFechado', $chamado);
 
         $request->validate(
             [
@@ -511,7 +514,7 @@ class ChamadoController extends Controller
      */
     public function destroyPessoa(Request $request, Chamado $chamado, User $user)
     {
-        $this->authorize('chamados.view', $chamado);
+        $this->authorize('chamados.updateFechado', $chamado);
 
         $papel = $chamado->users()->where('users.id', $user->id)->first()->pivot->papel;
 
@@ -581,7 +584,7 @@ class ChamadoController extends Controller
      */
     public function storePatrimonio(Request $request, Chamado $chamado)
     {
-        $this->authorize('chamados.view', $chamado);
+        $this->authorize('chamados.updateFechado', $chamado);
 
         if (config('chamados.usar_replicado') == 'true') {
             $request->validate([
@@ -629,7 +632,7 @@ class ChamadoController extends Controller
      */
     public function destroyPatrimonio(Request $request, Chamado $chamado, Patrimonio $patrimonio)
     {
-        $this->authorize('chamados.view', $chamado);
+        $this->authorize('chamados.updateFechado', $chamado);
 
         $chamado->patrimonios()->detach($patrimonio);
 
