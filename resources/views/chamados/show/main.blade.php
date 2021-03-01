@@ -11,7 +11,7 @@
 <div id="card-principal-conteudo">
     <span class="text-muted">Criado por:</span>
     @if($autor)
-    {{ $autor->name }} ({{ $autor->setores()->wherePivot('funcao', '!=','Gerente')->first()->sigla}})
+    {{ $autor->name }} ({{ $autor->setores()->wherePivot('funcao', '!=','Gerente')->first()->sigla ?? 'sem setor'}})
     @include('chamados.show.user-detail', ['user'=>$autor])<br>
     @else
     <span class="text-danger">** Sem autor **</span>
