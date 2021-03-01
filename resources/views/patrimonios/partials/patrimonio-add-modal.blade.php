@@ -40,28 +40,33 @@
 </div>
 
 @section('javascripts_bottom')
-    @parent
-    <script>
-        $(document).ready(function() {
+@parent
+<script>
+    $(document).ready(function() {
 
-            var patrimoniosForm = $('#PatrimonioModal');
+        var patrimoniosForm = $('#PatrimonioModal');
+        var $oSelectPatrimonio = patrimoniosForm.find(':input[name=numpat]')
 
-            add_modal_form = function() {
-                patrimoniosForm.modal();
+        add_modal_form = function() {
+            patrimoniosForm.modal()
+        }
+
+        $oSelectPatrimonio.select2({
+            ajax: {
+                url: 'chamados/listarPatrimoniosAjax'
+                , dataType: 'json'
             }
-
-            patrimoniosForm.find(':input[name=numpat]').select2({
-                ajax: {
-                    url: 'chamados/listarPatrimoniosAjax',
-                    dataType: 'json'
-                },
-                dropdownParent: patrimoniosForm,
-                minimumInputLength: 9,
-                theme: 'bootstrap4',
-                wdth: 'resolve',
-                language: 'pt_br'
-            })
+            , dropdownParent: patrimoniosForm
+            , minimumInputLength: 9
+            , theme: 'bootstrap4'
+            , wdth: 'resolve'
+            , language: 'pt_br'
         })
 
-    </script>
+        patrimoniosForm.on('shown.bs.modal', function() {
+            $oSelectPatrimonio.select2('open')
+        })
+    })
+
+</script>
 @endsection
