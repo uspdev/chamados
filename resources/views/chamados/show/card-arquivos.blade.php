@@ -7,15 +7,16 @@
         border: 1px solid DarkGoldenRod;
         border-top: 3px solid DarkGoldenRod;
     }
+
 </style>
 @endsection
 
 <div class="card bg-light mb-3" id="card-arquivos">
     <div class="card-header form-inline">
         Arquivos
+        @if($chamado->status != 'Fechado') {{-- desativando quando fechado --}}
         <label for="input_arquivo">
             <span class="btn btn-sm btn-light text-primary ml-2"> <i class="fas fa-plus"></i> Adicionar</span>
-
         </label>
         <span data-toggle="tooltip" data-html="true" title="Tamanho máximo de cada arquivo: {{$max_upload_size}}MB ">
             <i class="fas fa-question-circle text-secondary ml-2"></i>
@@ -34,6 +35,7 @@
 
             </div>
         </form>
+        @endif
     </div>
     <div class="card-body">
         @if (count($chamado->arquivos) > 0)
@@ -41,16 +43,19 @@
 
             @foreach ($chamado->arquivos as $arquivo)
             @if (preg_match('/jpeg|png/i', $arquivo->mimeType))
-            <a onclick="ativar_exclusao()" class="d-inline-block ml-1 mr-1" data-fancybox="arquivo-galeria" href="arquivos/{{$arquivo->id}}" data-caption='
-                        <form action="arquivos/{{$arquivo->id}}" method="post">
+            @if($chamado->status != 'Fechado') {{-- desativando quando fechado --}}
+            <a onclick="ativar_exclusao()" class="d-inline-block ml-1 mr-1" data-fancybox="arquivo-galeria" href="arquivos/{{$arquivo->id}}" data-caption='<form action="arquivos/{{$arquivo->id}}" method="post">
                             @csrf
                             @method("delete")
                             <button type="submit" onclick="return confirm(&#39;Tem certeza que deseja deletar {{ $arquivo->nome_original }}?&#39;);" class="btn btn-outline-danger btn-sm"><i class="far fa-trash-alt"></i></button>
-                        </form>
-                        '>
+                        </form>'>
                 <img class="arquivo-img" width="50px" src="arquivos/{{$arquivo->id}}" alt="{{ $arquivo->nome_original }}" data-toggle="tooltip" data-placement="top" title="{{ $arquivo->nome_original }}">
             </a>
-
+            @else
+            <a class="d-inline-block ml-1 mr-1" data-fancybox="arquivo-galeria" href="arquivos/{{$arquivo->id}}">
+                <img class="arquivo-img" width="50px" src="arquivos/{{$arquivo->id}}" alt="{{ $arquivo->nome_original }}" data-toggle="tooltip" data-placement="top" title="{{ $arquivo->nome_original }}">
+            </a>
+            @endif
             @endif
             @endforeach
         </div>
@@ -60,6 +65,7 @@
                 @foreach ($chamado->arquivos as $arquivo)
                 @if (preg_match('/pdf/i', $arquivo->mimeType))
                 <li class="modo-visualizacao">
+                    @if($chamado->status != 'Fechado')
                     <div class="arquivo-acoes">
                         <form action="arquivos/{{$arquivo->id}}" method="post" class="d-inline-block">
                             @csrf
@@ -70,6 +76,7 @@
                             <button type="button" class="btn btn-outline-warning btn-sm btn-editar btn-arquivo-acao"><i class="far fa-edit"></i></button>
                         </form>
                     </div>
+                    @endif
                     <a href="arquivos/{{$arquivo->id}}" title="{{ $arquivo->nome_original }}" class="nome-arquivo-display">
                         <i class="fas fa-file-pdf"></i>
                         <span>
@@ -89,10 +96,9 @@
                     </form>
                 </li>
                 @endif
-
-
                 @endforeach
             </ul>
+
         </div>
         @else
         Sem arquivos anexados

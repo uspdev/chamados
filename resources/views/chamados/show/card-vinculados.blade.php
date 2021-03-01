@@ -14,7 +14,7 @@
     <div class="card-header">
         Chamados Vinculados
         @can('update',$chamado)
-        @include('chamados.show.vinculados-add-modal')
+        @includewhen($chamado->status != 'Fechado', 'chamados.show.vinculados-add-modal')
         @endcan
         <span title="Você pode permitir o acesso a outros chamados vinculando-os a este." class="ajuda" data-toggle="tooltip">
             <i class="fas fa-question-circle text-secondary"></i>

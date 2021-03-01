@@ -37,7 +37,7 @@
                 <div class="row">
                     <div class="col-md-8">
                         <span class="ml-2 float-right">
-                            @include('chamados.show.editar-formulario-btn')
+                            @includewhen($chamado->status != 'Fechado','chamados.show.editar-formulario-btn')
                         </span>
                         {{-- Informações principais --}}
                         @include('chamados.show.main')

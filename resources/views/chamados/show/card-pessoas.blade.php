@@ -5,6 +5,7 @@
         border: 1px solid brown;
         border-top: 3px solid brown;
     }
+
 </style>
 @endsection
 
@@ -14,7 +15,7 @@
         Pessoas
         <span class="badge badge-pill badge-primary">{{ $chamado->users->count() }}</span>
         @can('update',$chamado)
-        @include('chamados.show.adicionar-pessoa-btn')
+        @includewhen($chamado->status != 'Fechado','chamados.show.adicionar-pessoa-btn')
         @endcan
     </div>
     <div class="card-body">
@@ -27,19 +28,19 @@
                     @case('Atendente') text-danger @break
                     @endswitch
                 ">
-                    {{ $user->name }} ({{ $user->pivot->papel}}) 
+                    {{ $user->name }} ({{ $user->pivot->papel}})
                     @include('chamados.show.user-detail', ['user'=>$user])
                 </span>
                 <span class="hidden-btn d-none">
                     @switch($user->pivot->papel)
                     @case('Autor') @case('Atendente') {{-- libera delete para atendente e admin --}}
-                        @if (Gate::allows('perfilatendente') or Gate::allows('perfiladmin'))
-                        @include('common.btn-delete-sm', ['action'=>'chamados/'.$chamado->id.'/pessoas/'.$user->id])
-                        @endif
-                        @break
+                    @if (Gate::allows('perfilatendente') or Gate::allows('perfiladmin'))
+                    @includewhen($chamado->status != 'Fechado', 'common.btn-delete-sm', ['action'=>'chamados/'.$chamado->id.'/pessoas/'.$user->id])
+                    @endif
+                    @break
                     @case('Observador') {{-- libera delete para todos --}}
-                        @include('common.btn-delete-sm', ['action'=>'chamados/'.$chamado->id.'/pessoas/'.$user->id])
-                        @break
+                    @include('common.btn-delete-sm', ['action'=>'chamados/'.$chamado->id.'/pessoas/'.$user->id])
+                    @break
                     @endswitch
                 </span>
             </li>
@@ -55,11 +56,12 @@
         $('.lista-pessoas li').hover(
             function() {
                 $(this).find('.hidden-btn').removeClass('d-none');
-            },
-            function() {
+            }
+            , function() {
                 $(this).find('.hidden-btn').addClass('d-none');
             }
         )
     });
+
 </script>
 @endsection
