@@ -76,7 +76,9 @@ class ChamadoController extends Controller
     {
         # limitar as filas que o usuario pode criar, somente filas "em produção"
         $this->authorize('chamados.create');
-        $request->validate(JSONForms::buildRules($request, $fila));
+        
+        # na criação não precisa
+        #$request->validate(JSONForms::buildRules($request, $fila));
 
         # transaction para não ter problema de inconsistência do DB
         $chamado = \DB::transaction(function () use ($request, $fila) {
@@ -102,7 +104,7 @@ class ChamadoController extends Controller
 
         $request->session()->flash('alert-info', 'Chamado enviado com sucesso');
 
-        // talvez esa confirmação deva ficar em outro lugar
+        // talvez essa confirmação deva ficar em outro lugar
         if ($chamado->fila->config->patrimonio) {
             if ($chamado->patrimonios->count() < 1) {
                 $request->session()->flash('alert-danger', 'É obrigatório cadastrar um número de patrimônio!');
@@ -126,11 +128,15 @@ class ChamadoController extends Controller
         $extras = json_decode($chamado->extras);
         $atendentes = $chamado->users()->wherePivot('papel', 'Atendente')->get();
         $autor = $chamado->users()->wherePivot('papel', 'Autor')->first();
+
         $status_list = $chamado->fila->getStatusToSelect();
         $color = $chamado->fila->getColortoLabel($chamado->status);
+
         $max_upload_size = config('chamados.upload_max_filesize');
+
         $form = JSONForms::generateForm($chamado->fila, $chamado);
         $formAtendente = JSONForms::generateForm($chamado->fila, $chamado, 'atendente');
+
         return view('chamados/show', compact('atendentes', 'autor', 'chamado', 'extras', 'template', 'status_list', 'color', 'max_upload_size', 'form', 'formAtendente'));
     }
 
@@ -153,8 +159,8 @@ class ChamadoController extends Controller
             $results = [];
             foreach ($chamados as $chamado) {
                 $results[] = [
-                    'text' => $chamado['nro'] . '/' . $chamado['created_at']->year . ' - ' . $chamado['assunto'],
-                    'id' => $chamado['id'],
+                    'text' => $chamado->nro . '/' . $chamado->created_at->year . ' - ' . $chamado->assunto,
+                    'id' => $chamado->id,
                 ];
             }
             return response(compact('results'));
