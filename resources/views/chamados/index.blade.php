@@ -45,9 +45,9 @@
             <td> ({{ $chamado->fila->setor->sigla }}) {{ $chamado->fila->nome }}</td>
             <td class="text-right">
                 @if($chamado->created_at->format('d/m/Y') == date('d/m/Y'))
-                {{ Carbon\Carbon::parse($chamado->created_at)->format('H:i') }}
+                {{ $chamado->created_at->format('H:i') }}
                 @else
-                {{ Carbon\Carbon::parse($chamado->created_at)->format('d \d\e M.') }}
+                {{ $chamado->created_at->format('d \d\e M.') }}
                 @endif
             </td>
         </tr>

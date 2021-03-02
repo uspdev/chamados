@@ -23,7 +23,7 @@
                     @if ($chamado->id != $chamado_pat->id)
                     <div>
                         <a href="chamados/{{ $chamado_pat->id }}">
-                            {{ $chamado_pat->nro }}/{{ Carbon\Carbon::parse($chamado_pat->created_at)->format('Y') }}
+                            {{ $chamado_pat->nro }}/{{ $chamado_pat->created_at->year }}
                             - {{ $chamado_pat->assunto }}
                         </a>
                     </div>

@@ -25,6 +25,16 @@ class Chamado extends Model
     ];
 
     /**
+     * The attributes that should be mutated to dates.
+     * https://laravel.com/docs/5.6/eloquent-mutators#date-mutators
+     *
+     * @var array
+     */
+    protected $dates = [
+        'fechado_em',
+    ];
+
+    /**
      * The "booted" method of the model.
      *
      * @return void

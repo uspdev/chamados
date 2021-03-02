@@ -17,11 +17,11 @@
     <span class="text-danger">** Sem autor **</span>
   @endif
 
-  <span class="text-muted">Criado em:</span> {{ Carbon\Carbon::parse($chamado->created_at)->format('d/m/Y H:i') }}<br>
+  <span class="text-muted">Criado em:</span> {{ $chamado->created_at->format('d/m/Y H:i') }}<br>
 
   @if (!is_null($chamado->fechado_em))
     <span class="text-muted">Fechado em</span>:
-    {{ Carbon\Carbon::parse($chamado->fechado_em)->format('d/m/Y H:i') }}<br>
+    {{ $chamado->fechado_em->format('d/m/Y H:i') }}<br>
   @endif
 
   <span class="text-muted">Assunto:</span> {{ $chamado->assunto }}<br>
