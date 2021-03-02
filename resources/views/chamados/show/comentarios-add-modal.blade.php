@@ -23,13 +23,12 @@
                 </div>
 
                 <div class="form-group">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                     @if($chamado->status != 'Fechado')
                     <button type="submit" class="btn btn-primary" value="">Enviar</button>
-                    <button type="submit" class="btn btn-danger" name="status" value="Fechado">Enviar e fechar chamado</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger float-right" name="status" value="Fechado">Enviar e fechar</button>
                     @else
-                    <button type="submit" class="btn btn-danger" name="status" value="Triagem">Enviar e reabrir chamado</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger float-right" name="status" value="Triagem">Enviar e reabrir</button>
                     @endif
                 </div>
                 {!! Form::close(); !!}
