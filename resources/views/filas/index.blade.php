@@ -14,8 +14,6 @@
     </div>
 </div>
 
-<?php #dd($data); ?>
-
 <table class="table table-striped table-hover datatable-nopagination display responsive" style="width:100%">
     <thead>
         <tr>
