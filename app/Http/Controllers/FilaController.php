@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Gate;
 class FilaController extends Controller
 {
 
+    // crud generico 
     protected $data = [
         'title' => 'Filas',
         'url' => 'filas', // caminho da rota do resource
@@ -27,6 +28,9 @@ class FilaController extends Controller
         $this->middleware('auth');
     }
 
+    /**
+     * Lista as filas
+     */
     public function index()
     {
         $this->authorize('filas.viewAny');
@@ -35,6 +39,9 @@ class FilaController extends Controller
         return view('filas.index')->with(['data' => (object) $this->data, 'filas' => $filas]);
     }
 
+    /** 
+     * Criar nova fila
+     */
     public function store(FilaRequest $request)
     {
         # Para criar uma nova fila precisamos do setor para autorizar
