@@ -67,10 +67,6 @@ class Fila extends Model
                         "color":"info"
                     },
                     {
-                        "label":"Cancelado",
-                        "color":"dark"
-                    },
-                    {
                         "label":"Em Espera",
                         "color":"primary"
                     }
@@ -86,6 +82,7 @@ class Fila extends Model
         'estado',
     ];
 
+    // uso no crud generico
     protected const fields = [
         [
             'name' => 'setor_id',
@@ -104,6 +101,7 @@ class Fila extends Model
         ],
     ];
 
+    // uso no crud generico
     public static function getFields()
     {
         $fields = SELF::fields;
@@ -116,38 +114,34 @@ class Fila extends Model
         return $fields;
     }
 
-    public function getDefaultColumn()
-    {
-        return 'nome';
-    }
+    // uso no crud generico
+    // public function getDefaultColumn()
+    // {
+    //     return 'nome';
+    // }
 
-    public static function getPessoaModel()
-    {
-        return [
-            [
-                'name' => 'nome',
-                'label' => 'Nome',
-            ],
-            [
-                'name' => 'funcao',
-                'label' => 'Função',
-                'type' => 'select',
-                'options' => ['Gerente', 'Atendente'],
-                'data' => [],
-            ],
-        ];
-    }
-
+    /**
+     * template
+     * retorna os campos do template do formulario
+     */
     public static function getTemplateFields()
     {
         return ['label', 'type', 'can', 'help', 'value', 'validate'];
     }
 
+    /**
+     * lista de estados padrão. Usado no factory.
+     * Ainda tem os estados personalizados da fila
+     */
     public static function estados()
     {
         return ['Em elaboração', 'Em produção', 'Desativada'];
     }
 
+    /**
+     * config-status
+     * obtem a lista de estados formatado para select
+     */
     public function getStatusToSelect()
     {
         $status = $this->config->status;
@@ -164,6 +158,10 @@ class Fila extends Model
         }
     }
 
+    /**
+     * config-status
+     * Retorna a cor correspondente para o label do estado
+     */
     public function getColortoLabel($chamado_status)
     {
         $status = $this->config->status;
@@ -232,23 +230,26 @@ class Fila extends Model
         return (empty($value)) ? '{}' : $value;
     }
 
+    /**
+     * Menu Filas, lista as filas que o usuário pode ver
+     *
+     * @return coleção de filas
+     */
     public static function listarFilas()
     {
-        $user = \Auth()->user();
-
         # listando tudo se admin
         if (Gate::allows('perfiladmin')) {
             return SELF::get();
         }
 
         $filas = collect();
+        $user = \Auth()->user();
 
         # listando as filas de todos os setores que o usuário faz parte.
-        foreach (\Auth()->user()->setores()->wherePivot('funcao', 'Gerente')->get() as $setor) {
+        foreach ($user->setores()->wherePivot('funcao', 'Gerente')->get() as $setor) {
             $filas = $filas->merge($setor->filas);
 
-            #listando as filas do setores filhos do usuario
-            # somente 1 nível por enquanto
+            # listando as filas do setores filhos do usuario - somente 1 nível por enquanto
             foreach ($setor->setores as $setor_filho) {
                 $filas = $filas->merge($setor_filho->filas);
             }
@@ -321,10 +322,8 @@ class Fila extends Model
                 # se não houver nenhuma liberação então bloqueia a fila
                 return false;
             });
-
             $setor->filas = $filas;
         }
-
         return $setores;
     }
 
@@ -347,18 +346,37 @@ class Fila extends Model
     }
 
     /**
-     * pivot da tabela user_fila
-     */
-    public static function userFuncoes()
-    {
-        return ['Gerente', 'Atendente'];
-    }
-
-    /**
      * Relacionamento: chamado pertence a fila
      */
     public function chamados()
     {
         return $this->hasMany(Chamado::class);
     }
+
+    /**
+     * pivot da tabela user_fila
+     * acredito que não seja usado mas está aqui para referência
+     */
+    // public static function userFuncoes()
+    // {
+    //     return ['Gerente', 'Atendente'];
+    // }
+
+
+    // public static function getPessoaModel()
+    // {
+    //     return [
+    //         [
+    //             'name' => 'nome',
+    //             'label' => 'Nome',
+    //         ],
+    //         [
+    //             'name' => 'funcao',
+    //             'label' => 'Função',
+    //             'type' => 'select',
+    //             'options' => ['Gerente', 'Atendente'],
+    //             'data' => [],
+    //         ],
+    //     ];
+    // }
 }
