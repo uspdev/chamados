@@ -10,7 +10,7 @@ class Fila extends Model
 {
     use HasFactory;
 
-    # valor default
+    # valores default na criação de nova fila
     # passando um template com select até que seja feito uma melhoria na tela do formulário. Assim é só mudar o texto do json.
     protected $attributes = [
         'estado' => 'Em elaboração',
@@ -181,7 +181,6 @@ class Fila extends Model
     {
         $value = json_decode($value);
 
-        #dd(config('filas.config.visibilidade'));
         $v = new \StdClass;
         foreach (config('filas.config.visibilidade') as $key => $val) {
             $v->$key = isset($value->visibilidade->$key) ? $value->visibilidade->$key : $val;
@@ -361,7 +360,6 @@ class Fila extends Model
     // {
     //     return ['Gerente', 'Atendente'];
     // }
-
 
     // public static function getPessoaModel()
     // {
