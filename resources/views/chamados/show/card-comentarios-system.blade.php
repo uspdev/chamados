@@ -18,7 +18,7 @@
     <div class="card-body">
         @forelse ($chamado->comentarios->where('tipo','system')->sortByDesc('created_at') as $comentario)
         <div class="">
-            <b>{{ $comentario->user->name }}</b> - {{ Carbon\Carbon::parse($comentario->created_at)->format('d/m/Y H:i') }}
+            <b>{{ $comentario->user->name }}</b> - {{ $comentario->created_at->format('d/m/Y H:i') }}
         </div>
         <div class="ml-2">
             <p class="card-text">{!! $comentario->comentario !!}</p>

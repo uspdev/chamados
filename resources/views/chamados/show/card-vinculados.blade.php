@@ -26,7 +26,7 @@
             @forelse($chamado->vinculados as $vinculado)
             <li class="form-inline">
                 <a href="chamados/{{$vinculado->id}}">
-                    {{ $vinculado->nro }}/{{ Carbon\Carbon::parse($vinculado->created_at)->format('Y') }}
+                    {{ $vinculado->nro }}/{{ $vinculado->created_at->format('Y') }}
                     {{ Illuminate\Support\Str::limit($vinculado->assunto, 30, '...') }}
                 </a>
                 <span class="hidden-btn d-none">
