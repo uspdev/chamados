@@ -14,9 +14,7 @@
     <div class="card-header">
         Pessoas
         <span class="badge badge-pill badge-primary">{{ $chamado->users->count() }}</span>
-        @can('update',$chamado)
-        @includewhen($chamado->status != 'Fechado','chamados.show.adicionar-pessoa-btn')
-        @endcan
+        @includewhen(Gate::check('update',$chamado),'chamados.show.adicionar-pessoa-btn')
     </div>
     <div class="card-body">
         <ul class="ml-2 list-unstyled lista-pessoas">

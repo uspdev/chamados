@@ -9,6 +9,7 @@
 @endsection
 
 <div id="card-principal-conteudo">
+
   @if ($chamado->status == 'Fechado')
     <div class="card mb-1">
       @if ($chamado->isFinalizado())
@@ -22,7 +23,16 @@
         </div>
       @endif
     </div>
+  @else
+    @cannot('update',$chamado)
+    <div class="card mb-1">
+      <div class="card-body text-dark bg-warning py-2">
+        Seu acesso a este chamado é somente leitura pois você não consta na lista de pessoas.
+      </div>
+    </div>
+    @endcannot
   @endif
+
   <span class="text-muted">Criado por:</span>
   @if ($autor)
     {{ $autor->name }}

@@ -13,9 +13,7 @@
 <div class="card bg-light mb-3" id="card-vinculados">
     <div class="card-header">
         Chamados Vinculados
-        @can('update',$chamado)
-        @includewhen($chamado->status != 'Fechado', 'chamados.show.vinculados-add-modal')
-        @endcan
+        @includewhen(Gate::check('update',$chamado), 'chamados.show.vinculados-add-modal')
         <span title="Você pode permitir o acesso a outros chamados vinculando-os a este." class="ajuda" data-toggle="tooltip">
             <i class="fas fa-question-circle text-secondary"></i>
         </span>
@@ -30,7 +28,7 @@
                     {{ Illuminate\Support\Str::limit($vinculado->assunto, 30, '...') }}
                 </a>
                 <span class="hidden-btn d-none">
-                    @includewhen($chamado->status != 'Fechado', 'common.btn-delete-sm', ['action'=>'chamados/'.$chamado->id.'/vinculado/'.$vinculado->id])
+                    @includewhen(Gate::check('update', $chamado), 'common.btn-delete-sm', ['action'=>'chamados/'.$chamado->id.'/vinculado/'.$vinculado->id])
                 </span>
             </li>
             @empty
