@@ -13,7 +13,7 @@
         Comentários
         <span class="badge badge-pill badge-primary">{{ $chamado->comentarios->where('tipo','user')->count() }}</span>
         @can('update',$chamado)
-        @include('chamados.show.comentarios-add-modal')
+        @includewhen(!$chamado->isFinalizado(),'chamados.show.comentarios-add-modal')
         @endcan
     </div>
     <div class="card-body">

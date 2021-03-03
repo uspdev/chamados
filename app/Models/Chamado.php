@@ -169,6 +169,28 @@ class Chamado extends Model
     }
 
     /**
+     * Retorna se o chamado está fechado há algum tempo
+     * Nesse caso não poderá mais ser reaberto
+     */
+    public function isFinalizado()
+    {
+        # depois de 10 dias não pode mais ser reaberto
+        if ($this->status == 'Fechado' && $this->fechado_em->addDays(10) < now()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Mostra o prazo para poder reabrir o chamado
+     */
+    public function reabrirEm()
+    {
+        return $this->fechado_em->addDays(10);
+    }
+
+    /**
      * o autorelacionamento n-n está usando um método para ida,
      * outro para a volta e um assessor para juntar os dois
      * tem solução melhor????

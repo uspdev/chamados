@@ -9,9 +9,24 @@
 @endsection
 
 <div id="card-principal-conteudo">
+  @if ($chamado->status == 'Fechado')
+    <div class="card mb-1">
+      @if ($chamado->isFinalizado())
+        <div class="card-body text-white bg-danger py-2">
+          Este chamado está finalizado. Caso seja necessário abra um novo chamado.
+        </div>
+      @else
+        <div class="card-body text-dark bg-warning py-2">
+          Este chamado está fechado. Caso seja necessário ele poderá ser reaberto até
+          {{ $chamado->reabrirEm()->format('d/m/Y') }} adicionando um novo comentário.
+        </div>
+      @endif
+    </div>
+  @endif
   <span class="text-muted">Criado por:</span>
   @if ($autor)
-    {{ $autor->name }} ({{ $autor->setores()->wherePivot('funcao', '!=', 'Gerente')->first()->sigla ?? 'sem setor' }})
+    {{ $autor->name }}
+    ({{ $autor->setores()->wherePivot('funcao', '!=', 'Gerente')->first()->sigla ?? 'sem setor' }})
     @include('chamados.show.user-detail', ['user'=>$autor])<br>
   @else
     <span class="text-danger">** Sem autor **</span>
