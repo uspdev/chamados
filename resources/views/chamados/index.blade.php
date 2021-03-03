@@ -49,7 +49,7 @@
             <td> ({{ $chamado->fila->setor->sigla }}) {{ $chamado->fila->nome }}</td>
             <td class="text-right">
                 @if($chamado->created_at->format('d/m/Y') == date('d/m/Y'))
-                {{ $chamado->created_at->format('H:i') }}
+                Hoje, {{ $chamado->created_at->format('H:i') }}
                 @else
                 {{ $chamado->created_at->format('d \d\e M.') }}
                 @endif
