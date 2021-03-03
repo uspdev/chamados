@@ -39,7 +39,7 @@
                     @endif
                     @break
                     @case('Observador') {{-- libera delete para todos --}}
-                    @include('common.btn-delete-sm', ['action'=>'chamados/'.$chamado->id.'/pessoas/'.$user->id])
+                    @includewhen($chamado->status != 'Fechado', 'common.btn-delete-sm', ['action'=>'chamados/'.$chamado->id.'/pessoas/'.$user->id])
                     @break
                     @endswitch
                 </span>
