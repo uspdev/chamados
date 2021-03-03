@@ -76,7 +76,7 @@ class ChamadoController extends Controller
     {
         # limitar as filas que o usuario pode criar, somente filas "em produção"
         $this->authorize('chamados.create');
-        
+
         # na criação não precisa
         #$request->validate(JSONForms::buildRules($request, $fila));
 
@@ -126,7 +126,6 @@ class ChamadoController extends Controller
 
         $template = json_decode($chamado->fila->template);
         $extras = json_decode($chamado->extras);
-        $atendentes = $chamado->users()->wherePivot('papel', 'Atendente')->get();
         $autor = $chamado->users()->wherePivot('papel', 'Autor')->first();
 
         $status_list = $chamado->fila->getStatusToSelect();
@@ -137,7 +136,7 @@ class ChamadoController extends Controller
         $form = JSONForms::generateForm($chamado->fila, $chamado);
         $formAtendente = JSONForms::generateForm($chamado->fila, $chamado, 'atendente');
 
-        return view('chamados/show', compact('atendentes', 'autor', 'chamado', 'extras', 'template', 'status_list', 'color', 'max_upload_size', 'form', 'formAtendente'));
+        return view('chamados/show', compact('autor', 'chamado', 'extras', 'template', 'status_list', 'color', 'max_upload_size', 'form', 'formAtendente'));
     }
 
     /**
@@ -433,7 +432,7 @@ class ChamadoController extends Controller
             'comentario' => 'O chamado foi atribuído para o(a) atendente ' . $atendente->name,
             'tipo' => 'system',
         ]);
-        
+
         $request->session()->flash('alert-info', 'Atendente adicionado com sucesso');
         return Redirect::to(URL::previous() . "#card_atendente");
     }

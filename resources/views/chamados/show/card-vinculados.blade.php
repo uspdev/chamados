@@ -30,7 +30,7 @@
                     {{ Illuminate\Support\Str::limit($vinculado->assunto, 30, '...') }}
                 </a>
                 <span class="hidden-btn d-none">
-                    @include('common.btn-delete-sm', ['action'=>'chamados/'.$chamado->id.'/vinculado/'.$vinculado->id])
+                    @includewhen($chamado->status != 'Fechado', 'common.btn-delete-sm', ['action'=>'chamados/'.$chamado->id.'/vinculado/'.$vinculado->id])
                 </span>
             </li>
             @empty
