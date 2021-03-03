@@ -10,7 +10,7 @@ O assunto e a descrição são campos obrigatórios. Também podem existir outro
 
 Ao criar o chamado você será notificado por email bem como as pessoas responsáveis pelo atendimento.
 
-#### Meus chamados
+#### Menu "Meus chamados"
 
 Aqui você pode visualizar todos os chamados que você tem acesso. A lista de chamados é organizada por ano que pode ser mudado no botão à direia. 
 
@@ -27,4 +27,4 @@ Em um chamado, além dos comentários, todos os participantes podem:
 - vincular chamados
 - vincular bens patrimoniados
 
-Tenha em mente que ao vincular um chamado a este, você permitirá o acesso ao chamado vinculado a todos os **participantes** desse chamado.
+Tenha em mente que ao vincular um chamado a este, você permitirá que todos os **participantes** desse chamado possam **visualizar** o chamado vinculado.
