@@ -17,6 +17,7 @@
         <tr>
             <th>Nro</th>
             <th>Assunto</th>
+            <th>Atendente</th>
             <th>Autor</th>
             <th>Fila</th>
             <th class="text-right">Aberto em</th>
@@ -36,11 +37,14 @@
                 @include('chamados.partials.status-muted')
             </td>
             <td>
-                @foreach($chamado->users as $user)
-                @if($user->pivot->papel == 'Autor')
-                {{ $user->name }} @include('chamados.show.user-detail', ['user'=>$user])
-                @endif
-                @endforeach
+                @php($user = $chamado->users()->wherePivot('papel', 'Atendente')->first())
+                {{ Str::limit($user->name ?? '-', 20) }}
+                @includewhen($user, 'chamados.show.user-detail', ['user'=>$user])
+            </td>
+            <td>
+                @php($user = $chamado->users()->wherePivot('papel', 'Autor')->first())
+                {{ Str::limit($user->name ?? 'Sem autor !!', 20) }}
+                @includewhen($user, 'chamados.show.user-detail', ['user'=>$user])
             </td>
             <td> ({{ $chamado->fila->setor->sigla }}) {{ $chamado->fila->nome }}</td>
             <td class="text-right">

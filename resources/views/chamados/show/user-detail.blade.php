@@ -1,3 +1,4 @@
+{{-- Mostra o icone do usuário e o respectivo card ao clicar --}}
 <?php
 $user_detail_id = 'user-detail-' . Str::random(5);
 ?>
