@@ -97,7 +97,8 @@ class ChamadoPolicy
     {
         if (
             $this->permitePessoasChamado($user, $chamado) ||
-            $this->permitePessoasFila($user, $chamado)
+            $this->permitePessoasFila($user, $chamado) ||
+            Gate::allows('admin')
         ) {
             # só checa o finalizado depois de autorizar as pessoas
             if (!$chamado->isFinalizado()) {
