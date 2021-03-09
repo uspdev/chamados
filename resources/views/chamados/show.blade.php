@@ -36,7 +36,7 @@
           <div class="row">
             <div class="col-md-8">
               <span class="ml-2 float-right">
-                @includewhen($chamado->status != 'Fechado','chamados.show.editar-formulario-btn')
+                @includewhen(Gate::check('update',$chamado),'chamados.show.editar-formulario-btn')
               </span>
               {{-- Informações principais --}}
               @include('chamados.show.principal')

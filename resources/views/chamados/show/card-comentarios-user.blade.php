@@ -12,9 +12,8 @@
     <div class="card-header">
         Comentários
         <span class="badge badge-pill badge-primary">{{ $chamado->comentarios->where('tipo','user')->count() }}</span>
-        @can('update',$chamado)
-        @includewhen(!$chamado->isFinalizado(),'chamados.show.comentarios-add-modal')
-        @endcan
+        {{-- Aqui vamos usar gate proprio pois poderá comentar se não estiver finalizado --}}
+        @includewhen(Gate::check('updateComentario', $chamado),'chamados.show.comentarios-add-modal')
     </div>
     <div class="card-body">
         @forelse ($chamado->comentarios->where('tipo','user')->sortByDesc('created_at') as $comentario)

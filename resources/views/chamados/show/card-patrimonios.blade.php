@@ -14,9 +14,7 @@
     <div class="card-header">
         Patrimônios
         <span class="badge badge-pill badge-primary">{{ $chamado->patrimonios->count() }}</span>
-        @can('update', $chamado)
-        @includewhen($chamado->status != 'Fechado', 'patrimonios.partials.patrimonio-add-modal')
-        @endcan
+        @includewhen(Gate::check('update',$chamado), 'patrimonios.partials.patrimonio-add-modal')
     </div>
     <div class="card-body">
         @foreach ($chamado->patrimonios as $patrimonio)
@@ -29,7 +27,7 @@
             @endif
 
             <span class="hidden-btn d-none">
-                @includewhen($chamado->status != 'Fechado', 'common.btn-delete-sm', ['action'=>'chamados/'.$chamado->id.'/patrimonios/'.$patrimonio->id])
+                @includewhen(Gate::check('update',$chamado), 'common.btn-delete-sm', ['action'=>'chamados/'.$chamado->id.'/patrimonios/'.$patrimonio->id])
             </span>
         </div>
         @endforeach

@@ -1,25 +1,33 @@
 # Sobre o projeto
 
-Sistema que gerencia o fluxo de chamados técnicos ou solicitações de atendimento. Foi idealizado para chamados de informática e de zeladoria (manutenção predial) mas pode ser estendido a quaisquer outros serviços. Todas as atividades são notificadas por email aos interessados.
+Sistema que gerencia o fluxo de chamados técnicos ou solicitações de atendimento. Foi idealizado para chamados de informática e de zeladoria (manutenção predial) mas pode ser estendido a quaisquer outros serviços.
 
-Características:
+## Características
 
--   Múltiplas filas de atendimentos
+-   Filas de atendimento
+    -   múltiplas filas de atendimentos
+    -   organizado por setores
+    -   cadastro de gerentes e atendentes
     -   com ou sem triagem
     -   controle de visibilidade por categoria de pessoas
-    -   formulário de chamado personalizado
-    -   cadastro de gerentes e atendentes
-    -   organizado por setores
--   Chamado com várias opções
-    -   Suporte a arquivos anexos
-    -   Permite vincular chamados
-    -   Permite cadastrar observadores
-    -   Permite referenciar patrimônios USP
+    -   formulário de chamado personalizado (para usuários e atendentes)
+    -   estados adicionais do chamado
+-   Chamado
+    -   anexar arquivos
+    -   vincular chamados
+    -   cadastrar observadores
+    -   referenciar patrimônios USP
+    -   Painel do atendente
+        -   campo para anotações exclusivo
+        -   campos de formulário exclusivo (por fila)
 -   Autenticação por senha única
+-   Envio de emails
+-   Gerencimento de setores 
 
 ## Prints
 
-### Telas de chamado e de fila
+#### Telas de chamado e de fila
+
 <p float="left">
 <img src="https://github.com/uspdev/chamados/raw/master/docs/tela_chamado.png" width=49%>
 <img src="https://github.com/uspdev/chamados/raw/master/docs/tela_fila.png" width=49%>
@@ -68,7 +76,6 @@ A bibliteca (https://github.com/uspdev/cache) usada no replicado utiliza o servi
 
     /etc/init.d/memcached restart
 
-
 ### Email
 
 Configurar a conta de email para acesso menos seguro pois a conexão é via smtp.
@@ -77,11 +84,11 @@ Configurar a conta de email para acesso menos seguro pois a conexão é via smtp
 
 Deve apontar para a \<pasta do projeto\>/public, assim como qualquer projeto laravel.
 
-No Apache é possivel utilizar a extensão MPM-ITK (http://mpm-itk.sesse.net/) que permite rodar seu *Servidor Virtual* com usuário próprio. Isso facilita rodar o sistema como um usuário comum e não precisa ajustar as permissões da pasta `storage/`.
+No Apache é possivel utilizar a extensão MPM-ITK (http://mpm-itk.sesse.net/) que permite rodar seu _Servidor Virtual_ com usuário próprio. Isso facilita rodar o sistema como um usuário comum e não precisa ajustar as permissões da pasta `storage/`.
 
     sudo apt install libapache2-mpm-itk
     sudo a2enmod mpm_itk
-    sudo service apache2 restart 
+    sudo service apache2 restart
 
 Dentro do seu virtualhost coloque
 
@@ -101,11 +108,12 @@ Há várias opções que precisam ser ajustadas nesse arquivo. Faça com atenç�
 
     php artisan migrate
 
-Os setores e respectivos designados podem ser importados do Replicado.  Para isso rode:
+Os setores e respectivos designados podem ser importados do Replicado. Para isso rode:
 
     php artisan db:seed --class=SetorReplicadoSeeder
 
 Depois de importado faça uma conferência para não haver inconsistências.
+
 ### Instalar e configurar o Supervisor
 
 Para as filas de envio de email o sistema precisa de um gerenciador que mantenha rodando o processo que monitora as filas. O recomendado é o **Supervisor**. No Ubuntu ou Debian instale com:
@@ -151,10 +159,9 @@ Para subir o servidor
 
 **CUIDADO**: você pode enviar emails indesejados para as pessoas.
 
-Para enviar emails é necessário executar as tarefas na fila.   Para isso, em outro terminal rode
+Para enviar emails é necessário executar as tarefas na fila. Para isso, em outro terminal rode
 
     php artisan queue:listen
-
 
 ## Problemas e soluções
 
@@ -168,19 +175,19 @@ Para limpar e recriar todo o DB, rode sempre que necessário:
 
 ## Histórico
 
-* O sistema de chamados foi transferido da FFLCH para o USPDev.
-  * Adaptar para o uso por várias unidades
-  * Expandir para o uso por outros setores como por exemplo o serviço de manutenção
-  * Implementado conceito de filas
+-   O sistema de chamados foi transferido da FFLCH para o USPDev.
+    -   Adaptar para o uso por várias unidades
+    -   Expandir para o uso por outros setores como por exemplo o serviço de manutenção
+    -   Implementado conceito de filas
 
 ## Detalhamento técnico
 
 Foram utilizados vários recursos do laravel que podem não ser muito trivial para todos.
 
-* O monitoramento de novos chamados ou novas mensagens nos chamados é feito usando *observers* (https://laravel.com/docs/8.x/eloquent#observers)
-* Os emails enviados são colocados em filas (jobs) para liberar a execução do php (https://laravel.com/docs/8.x/mail#queueing-mail)
+-   O monitoramento de novos chamados ou novas mensagens nos chamados é feito usando _observers_ (https://laravel.com/docs/8.x/eloquent#observers)
+-   Os emails enviados são colocados em filas (jobs) para liberar a execução do php (https://laravel.com/docs/8.x/mail#queueing-mail)
 
 ## Todo
 
-* Monitorar jobs com falhas
-* Monitorar arquivos de log
+-   Monitorar jobs com falhas
+-   Monitorar arquivos de log

@@ -174,7 +174,7 @@ class ChamadoController extends Controller
      */
     public function storeChamadoVinculado(Request $request, Chamado $chamado)
     {
-        $this->authorize('chamados.updateFechado', $chamado);
+        $this->authorize('chamados.update', $chamado);
 
         if ($request->slct_chamados != $chamado->id) {
             $request->validate([
@@ -209,7 +209,7 @@ class ChamadoController extends Controller
      */
     public function deleteChamadoVinculado(Request $request, Chamado $chamado, $id)
     {
-        $this->authorize('chamados.updateFechado', $chamado);
+        $this->authorize('chamados.update', $chamado);
 
         $chamado->vinculadosIda()->detach($id);
         $chamado->vinculadosVolta()->detach($id);
@@ -465,7 +465,7 @@ class ChamadoController extends Controller
      */
     public function storePessoa(Request $request, Chamado $chamado)
     {
-        $this->authorize('chamados.updateFechado', $chamado);
+        $this->authorize('chamados.update', $chamado);
 
         $request->validate(
             [
@@ -519,7 +519,7 @@ class ChamadoController extends Controller
      */
     public function destroyPessoa(Request $request, Chamado $chamado, User $user)
     {
-        $this->authorize('chamados.updateFechado', $chamado);
+        $this->authorize('chamados.update', $chamado);
 
         $papel = $chamado->users()->where('users.id', $user->id)->first()->pivot->papel;
 
@@ -589,7 +589,7 @@ class ChamadoController extends Controller
      */
     public function storePatrimonio(Request $request, Chamado $chamado)
     {
-        $this->authorize('chamados.updateFechado', $chamado);
+        $this->authorize('chamados.update', $chamado);
 
         if (config('chamados.usar_replicado') == 'true') {
             $request->validate([
@@ -637,7 +637,7 @@ class ChamadoController extends Controller
      */
     public function destroyPatrimonio(Request $request, Chamado $chamado, Patrimonio $patrimonio)
     {
-        $this->authorize('chamados.updateFechado', $chamado);
+        $this->authorize('chamados.update', $chamado);
 
         $chamado->patrimonios()->detach($patrimonio);
 
