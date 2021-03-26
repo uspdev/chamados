@@ -26,10 +26,14 @@ class ComentarioObserver
 
         // enquanto não houver atendente atribuido envia email para todos da fila
         if ($comentario->chamado->users()->wherePivot('papel', 'Atendente')->count() == 0) {
-            foreach ($comentario->chamado->fila->users()->get() as $user) {
-                $papel = $user->pivot->funcao . ' da fila (' . $comentario->chamado->fila->setor->sigla . ') ' . $comentario->chamado->fila->nome;
-                \Mail::to($user->email)
-                    ->queue(new ComentarioMail(compact('papel', 'user', 'comentario')));
+            $fila = $comentario->chamado->fila;
+            foreach ($fila->users()->get() as $user) {
+                // desde que ele aceite receber as notificacoes
+                if (data_get($user->config, 'notifications.email.filas.' . $fila->id, false)) {
+                    $papel = $user->pivot->funcao . ' da fila (' . $fila->setor->sigla . ') ' . $fila->nome;
+                    \Mail::to($user->email)
+                        ->queue(new ComentarioMail(compact('papel', 'user', 'comentario')));
+                }
             }
         }
 
