@@ -20,7 +20,9 @@ Sistema que gerencia o fluxo de chamados técnicos ou solicitações de atendime
     -   Painel do atendente
         -   campo para anotações exclusivo
         -   campos de formulário exclusivo (por fila)
--   Autenticação por senha única
+-    Usuário
+     -   Autenticação por senha única
+     -   Configuração do recebimento de notificações
 -   Envio de emails
 -   Gerencimento de setores 
 
