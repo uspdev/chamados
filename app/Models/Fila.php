@@ -301,6 +301,7 @@ class Fila extends Model
                 }
 
                 # liberando todos os servidores
+                # a pessoa só vai estar cadastrada como servidor depois de logar no sistema !!!
                 $servidor = \Auth::user()->setores()->wherePivot('funcao', 'Servidor')->first();
                 if ($fila->config->visibilidade->servidores && $servidor) {
                     return true;
