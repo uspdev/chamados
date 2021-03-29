@@ -31,7 +31,7 @@
                     <td>{{ $user->last_login_at ? $user->last_login_at->format('d/m/Y H:i:s') : ''}}</td>
                     <td>{{ $user->is_admin }}</td>
 
-                    <td style="width: 40px;">
+                    <td style="width: 42px;">
                         <div class="row">
                             <div class="mr-2 form-inline">
                                 @include('users.partials.btn-change-user') &nbsp; &nbsp;
