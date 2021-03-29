@@ -24,12 +24,23 @@ class Comentario extends Model
         Comentario::observe(ComentarioObserver::class);
     }
 
+    // vamos deixar de usar este
     public static function criar($arr)
     {
         $c = new Comentario();
         foreach ($arr as $key => $val) {
                 $c->$key = $val;
         }
+        $c->save();
+        return $c;
+    }
+
+    public static function criarSystem($chamado, $comentario) {
+        $c = new Comentario();
+        $c->user_id = \Auth::user()->id;
+        $c->chamado_id = $chamado->id;
+        $c->tipo = 'system';
+        $c->comentario = $comentario;
         $c->save();
         return $c;
     }
