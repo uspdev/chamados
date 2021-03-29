@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\URL;
 
 class UserController extends Controller
 {
@@ -82,7 +84,23 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = \Auth::user();
+        $requests = $request->all();
+
+        # vamos atualizar as notificações
+        if (isset($requests['emailNotification'])) {
+            # usar update() não seta o isDirty(), por isso o uso de fill
+            $user->fill(['config->notifications->email' => $requests['emailNotification']]);
+            if ($user->isDirty()) {
+                $user->save();
+                $request->session()->flash('alert-info', 'Notificações atualizadas com sucesso.');
+            } else {
+                $request->session()->flash('alert-info', 'Nada modificado.');
+            }
+        } else {
+            $request->session()->flash('alert-info', 'Nada modificado.');
+        }
+        return Redirect::to(URL::previous() . "#card_notificacoes");
     }
 
     /**
@@ -197,6 +215,11 @@ class UserController extends Controller
         return redirect('/');
     }
 
+    /**
+     * Redireciona para o perfil do usuário.
+     *
+     * Foi criado para poder colocar o link no menu.
+     */
     public function meuperfil()
     {
         return redirect('users/' . \Auth::user()->id);
