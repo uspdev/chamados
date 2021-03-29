@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 
 class UserController extends Controller
@@ -61,7 +62,16 @@ class UserController extends Controller
     public function show(User $user)
     {
         $this->authorize('users.view', $user);
-        return view('users.show', compact('user'));
+
+        $oauth_file = 'debug/oauth/' . $user->codpes . '.json';
+
+        $oauth['data'] = '';
+        $oauth['time'] = '';
+        if (Storage::disk('local')->exists($oauth_file)) {
+            $oauth['data'] = Storage::disk('local')->get($oauth_file);
+            $oauth['time'] = Storage::lastModified($oauth_file);
+        } 
+        return view('users.show', compact('user', 'oauth'));
     }
 
     /**
