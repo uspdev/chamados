@@ -184,19 +184,13 @@ class ChamadoController extends Controller
             $chamado->vinculadosIda()->attach($request->slct_chamados, ['acesso' => $request->acesso]);
             $vinculado = Chamado::find($request->slct_chamados);
             //comentário no chamado principal
-            Comentario::criar([
-                'user_id' => \Auth::user()->id,
-                'chamado_id' => $chamado->id,
-                'comentario' => 'O chamado no. ' . $vinculado->nro . '/' . $vinculado->created_at->year . ' foi vinculado à esse chamado',
-                'tipo' => 'system',
-            ]);
+            Comentario::criarSystem($chamado,
+                'O chamado no. ' . $vinculado->nro . '/' . $vinculado->created_at->year . ' foi vinculado à esse chamado.'
+            );
             // comentário no chamado vinculado
-            Comentario::criar([
-                'user_id' => \Auth::user()->id,
-                'chamado_id' => $vinculado->id,
-                'comentario' => 'Esse chamado foi vinculado ao chamado no. ' . $chamado->nro . '/' . $chamado->created_at->year,
-                'tipo' => 'system',
-            ]);
+            Comentario::criarSystem($vinculado,
+                'Esse chamado foi vinculado ao chamado no. ' . $chamado->nro . '/' . $chamado->created_at->year
+            );
             $request->session()->flash('alert-info', 'Chamado vinculado com sucesso');
         } else {
             $request->session()->flash('alert-warning', 'Não é possível vincular o chamado à ele mesmo');
@@ -216,19 +210,13 @@ class ChamadoController extends Controller
         $vinculado = Chamado::find($id);
 
         //comentário no chamado principal
-        Comentario::criar([
-            'user_id' => \Auth::user()->id,
-            'chamado_id' => $chamado->id,
-            'comentario' => 'O chamado no. ' . $vinculado->nro . '/' . $vinculado->created_at->year . ' foi desvinculado desse chamado',
-            'tipo' => 'system',
-        ]);
+        Comentario::criarSystem($chamado,
+            'O chamado no. ' . $vinculado->nro . '/' . $vinculado->created_at->year . ' foi desvinculado desse chamado.'
+        );
         // comentário no chamado vinculado
-        Comentario::criar([
-            'user_id' => \Auth::user()->id,
-            'chamado_id' => $vinculado->id,
-            'comentario' => 'Esse chamado foi desvinculado do chamado no. ' . $chamado->nro . '/' . $chamado->created_at->year,
-            'tipo' => 'system',
-        ]);
+        Comentario::criarSystem($vinculado,
+            'Esse chamado foi desvinculado do chamado no. ' . $chamado->nro . '/' . $chamado->created_at->year
+        );
         $request->session()->flash('alert-info', 'Chamado desvinculado com sucesso');
         return Redirect::to(URL::previous() . "#card_vinculados");
     }
@@ -348,12 +336,7 @@ class ChamadoController extends Controller
                 $msg .= ' e ' . $atualizacao[count($atualizacao) - 1];
                 $msg .= ' foram atualizados';
             }
-            Comentario::criar([
-                'user_id' => \Auth::user()->id,
-                'chamado_id' => $chamado->id,
-                'comentario' => $msg,
-                'tipo' => 'system',
-            ]);
+            Comentario::criarSystem($chamado, $msg);
         }
 
         $chamado->save();
@@ -389,12 +372,9 @@ class ChamadoController extends Controller
         $chamado->status = 'Em Andamento';
         $chamado->save();
 
-        Comentario::criar([
-            'user_id' => \Auth::user()->id,
-            'chamado_id' => $chamado->id,
-            'comentario' => 'O chamado foi atribuído para o(a) atendente ' . $atendente->name,
-            'tipo' => 'system',
-        ]);
+        Comentario::criarSystem($chamado,
+            'O chamado foi atribuído para o(a) atendente ' . $atendente->name
+        );
 
         $request->session()->flash('alert-info', 'Atendente adicionado com sucesso');
         return Redirect::to(URL::previous() . "#card_atendente");
@@ -461,12 +441,9 @@ class ChamadoController extends Controller
                 $chamado->save();
             }
 
-            Comentario::criar([
-                'user_id' => \Auth::user()->id,
-                'chamado_id' => $chamado->id,
-                'comentario' => 'O ' . strtolower($papel) . ' ' . $user->name . ' foi adicionado ao chamado.',
-                'tipo' => 'system',
-            ]);
+            Comentario::criarSystem($chamado,
+                'O ' . strtolower($papel) . ' ' . $user->name . ' foi adicionado ao chamado.'
+            );
 
             $request->session()->flash('alert-info', $papel . ' adicionado com sucesso.');
         }
@@ -500,12 +477,7 @@ class ChamadoController extends Controller
             $chamado->save();
         }
         $msg = 'O ' . strtolower($papel) . ' ' . $user->name . ' foi removido desse chamado.';
-        Comentario::criar([
-            'user_id' => \Auth::user()->id,
-            'chamado_id' => $chamado->id,
-            'comentario' => $msg,
-            'tipo' => 'system',
-        ]);
+        Comentario::criarSystem($chamado, $msg);
         $request->session()->flash('alert-info', $msg);
         return Redirect::to(URL::previous() . "#card_pessoas");
     }
@@ -577,12 +549,7 @@ class ChamadoController extends Controller
 
         if (!$existia) {
             $msg = 'O patrimônio ' . $patrimonio->numFormatado() . ' foi adicionado a esse chamado.';
-            Comentario::criar([
-                'user_id' => \Auth::user()->id,
-                'chamado_id' => $chamado->id,
-                'comentario' => $msg,
-                'tipo' => 'system',
-            ]);
+            Comentario::criarSystem($chamado, $msg);
 
             $request->session()->flash('alert-info', $msg);
         } else {
@@ -605,12 +572,7 @@ class ChamadoController extends Controller
         $chamado->patrimonios()->detach($patrimonio);
 
         $msg = 'O patrimônio ' . $patrimonio->numFormatado() . ' foi removido desse chamado.';
-        Comentario::criar([
-            'user_id' => \Auth::user()->id,
-            'chamado_id' => $chamado->id,
-            'comentario' => $msg,
-            'tipo' => 'system',
-        ]);
+        Comentario::criarSystem($chamado, $msg);
 
         $request->session()->flash('alert-info', $msg);
 

@@ -25,17 +25,6 @@ class Comentario extends Model
         Comentario::observe(ComentarioObserver::class);
     }
 
-    // vamos deixar de usar este
-    public static function criar($arr)
-    {
-        $c = new Comentario();
-        foreach ($arr as $key => $val) {
-            $c->$key = $val;
-        }
-        $c->save();
-        return $c;
-    }
-
     /**
      * Cria novos comentários do tipo 'system'
      *
