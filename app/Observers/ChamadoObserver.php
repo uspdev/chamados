@@ -34,6 +34,21 @@ class ChamadoObserver
     }
 
     /**
+     * Listen to the Chamado updating event.
+     *
+     * @param  \App\Models\Chamado  $chamado
+     * @return void
+     */
+    public function updating(Chamado $chamado)
+    {
+        if ($chamado->isDirty('status')) {
+            // o status mudou
+            //$new_email = $user->email;
+            //$old_email = $user->getOriginal('email');
+        }
+    }
+
+    /**
      * Handle the Chamado "updated" event.
      *
      * @param  \App\Models\Chamado  $chamado
