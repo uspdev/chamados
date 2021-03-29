@@ -32,12 +32,12 @@ $menu = [
         'can' => 'filas.viewAny',
     ],
     [
-        'text' => '<i class="fas fa-users ml-2"></i> Pessoas',
+        'text' => '<span class="text-danger"><i class="fas fa-users ml-2"></i> Pessoas</span>',
         'url' => 'users',
         'can' => 'users.viewAny',
     ],
     [
-        'text' => '<i class="fas fa-cogs ml-2"></i> Admin',
+        'text' => '<span class="text-danger"><i class="fas fa-tools ml-2"></i> Admin</span>',
         'url' => 'admin',
         'can' => 'perfiladmin',
     ],];
