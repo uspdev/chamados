@@ -69,7 +69,7 @@ Route::post('chamados/create/{fila}/', [ChamadoController::class, 'store'])->nam
 Route::resource('chamados', ChamadoController::class)->except(['create', 'store']);
 
 // COMENTARIOS
-Route::resource('comentarios/{chamado}/', ComentarioController::class);
+Route::post('comentarios/{chamado}/', [ComentarioController::class, 'store']);
 
 // ARQUIVOS
 Route::resource('arquivos', ArquivoController::class);
