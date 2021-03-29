@@ -22,10 +22,14 @@ class ChamadoObserver
             ->queue(new ChamadoMail(compact('papel', 'user', 'chamado')));
 
         // e para as pessoas da fila (atendentes e gerentes)
-        foreach ($chamado->fila->users()->get() as $user) {
-            $papel = $user->pivot->funcao . ' da fila (' . $chamado->fila->setor->sigla . ') ' . $chamado->fila->nome;
-            \Mail::to($user->email)
-                ->queue(new ChamadoMail(compact('papel', 'user', 'chamado')));
+        $fila = $chamado->fila;
+        foreach ($fila->users()->get() as $user) {
+            // vamos verificar se o atendente/gerente quer receber essa notificação
+            if (data_get($user->config, 'notifications.email.filas.' . $fila->id, false)) {
+                $papel = $user->pivot->funcao . ' da fila (' . $fila->setor->sigla . ') ' . $fila->nome;
+                \Mail::to($user->email)
+                    ->queue(new ChamadoMail(compact('papel', 'user', 'chamado')));
+            }
         }
     }
 

@@ -17,7 +17,12 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'codpes', 'telefone', 'last_login_at',
+        'name', 'email', 'password',
+        'codpes', 'telefone', 'last_login_at', 
+        'config',
+        'config->notifications->email',
+        'config->notifications->email->filas',
+        'config->notifications->email->observador',
     ];
 
     # colocando data aqui ele já envia um objeto carbon
@@ -36,13 +41,13 @@ class User extends Authenticatable
      * The attributes that should be cast to native types.
      *
      * O config está com o formato json no BD
-     * referencia: https://nullthoughts.com/development/2019/01/29/laravel-json-column-types/
-     * 
+     * https://laravel.com/docs/8.x/eloquent-mutators#array-and-json-casting
+     *
      * @var array
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'config'=>'json',
+        'config' => 'array',
     ];
 
     public const rules = [
@@ -94,33 +99,35 @@ class User extends Authenticatable
         // return $fields;
     }
 
-    public static function criarPorCodpes($codpes) {
+    public static function criarPorCodpes($codpes)
+    {
         $user = new User;
         $user->codpes = $codpes;
         if (config('chamados.usar_replicado')) {
             $user->email = Pessoa::email($codpes);
             $user->name = Pessoa::dump($codpes)['nompesttd'];
             $user->telefone = Pessoa::obterRamalUsp($codpes);
-        }
-        else {
-            $user->email = $codpes.'@usuarios.usp.br';
+        } else {
+            $user->email = $codpes . '@usuarios.usp.br';
             $user->name = $codpes;
         }
         $user->save();
         return $user;
     }
 
-    public static function obterPorCodpes($codpes) {
-        return User::where('codpes',$codpes)->first();
+    public static function obterPorCodpes($codpes)
+    {
+        return User::where('codpes', $codpes)->first();
     }
 
     /**
      * Obtém se já existir ou cria um novo objeto de usuário
-     * 
+     *
      * @param Int $codpes Número USP a ser procurado ou criado
      * @return Obj $user Objeto do usuário criado
      */
-    public static function obterOuCriarPorCodpes($codpes) {
+    public static function obterOuCriarPorCodpes($codpes)
+    {
         $user = User::obterPorCodpes($codpes);
         if (empty($user)) {
             $user = User::criarPorCodpes($codpes);
@@ -129,7 +136,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Relacionamento n:n com fila, atributo funcao: 
+     * Relacionamento n:n com fila, atributo funcao:
      *  - Gerente, Atendente
      */
     public function filas()
