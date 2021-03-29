@@ -76,3 +76,4 @@ Route::resource('arquivos', ArquivoController::class);
 
 // ADMIN
 Route::get('admin', [AdminController::class, 'index']);
+Route::get('admin/get_oauth_file/{filename}', [AdminController::class, 'getOauthFile']);

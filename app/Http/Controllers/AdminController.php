@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
@@ -16,6 +17,12 @@ class AdminController extends Controller
         //dd($oauth_files);
 
         return view('admin/index', compact('file_upload_max_size', 'oauth_files'));
+
+    }
+
+    public function getOauthFile($filename) {
+        $this->authorize('perfiladmin');
+        return Storage::get('debug/oauth/'.$filename);
 
     }
 

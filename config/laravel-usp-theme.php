@@ -36,7 +36,11 @@ $menu = [
         'url' => 'users',
         'can' => 'users.viewAny',
     ],
-];
+    [
+        'text' => '<i class="fas fa-cogs ml-2"></i> Admin',
+        'url' => 'admin',
+        'can' => 'perfiladmin',
+    ],];
 
 # para menu direito
 $admin = [
