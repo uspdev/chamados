@@ -28,7 +28,7 @@
                     <button type="submit" class="btn btn-primary" value="">Enviar</button>
                     <button type="submit" class="btn btn-danger float-right" name="status" value="Fechado">Enviar e fechar</button>
                     @else
-                    <button type="submit" class="btn btn-danger float-right" name="status" value="Triagem">Enviar e reabrir</button>
+                    <button type="submit" class="btn btn-danger float-right" name="status" value="Reabrir">Enviar e reabrir</button>
                     @endif
                 </div>
                 {!! Form::close(); !!}
