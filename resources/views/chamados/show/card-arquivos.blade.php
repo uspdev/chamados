@@ -11,6 +11,7 @@
   </style>
 @endsection
 
+<a name="card_arquivos"></a>
 <div class="card bg-light mb-3" id="card-arquivos">
   <div class="card-header form-inline">
     Arquivos
@@ -104,7 +105,7 @@
                   @method('patch')
                   <div class="input-wrapper">
                     <input type="text" name="nome_arquivo" class="input-nome-arquivo"
-                      value="{{ $arquivo->nome_original }}">
+                      value="{{ pathinfo($arquivo->nome_original,PATHINFO_FILENAME) }}">
                   </div>
                   <div class="btns-wrapper">
                     <button type="submit" class="btn btn-outline-success btn-sm ml-2 btn-arquivo-acao"><i
