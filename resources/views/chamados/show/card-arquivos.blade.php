@@ -11,6 +11,7 @@
   </style>
 @endsection
 
+<a name="card_arquivos"></a>
 <div class="card bg-light mb-3" id="card-arquivos">
   <div class="card-header form-inline">
     Arquivos
@@ -19,7 +20,7 @@
       <label for="input_arquivo">
         <span class="btn btn-sm btn-light text-primary ml-2"> <i class="fas fa-plus"></i> Adicionar</span>
       </label>
-      <span data-toggle="tooltip" data-html="true" title="Tamanho máximo de cada arquivo: {{ $max_upload_size }}MB ">
+      <span data-toggle="tooltip" data-html="true" title="Tamanho máximo de cada arquivo: {{ $max_upload_size }}KB ">
         <i class="fas fa-question-circle text-secondary ml-2"></i>
       </span>
       <form id="form_arquivo" action="arquivos" method="post" enctype="multipart/form-data"
@@ -104,7 +105,7 @@
                   @method('patch')
                   <div class="input-wrapper">
                     <input type="text" name="nome_arquivo" class="input-nome-arquivo"
-                      value="{{ $arquivo->nome_original }}">
+                      value="{{ pathinfo($arquivo->nome_original,PATHINFO_FILENAME) }}">
                   </div>
                   <div class="btns-wrapper">
                     <button type="submit" class="btn btn-outline-success btn-sm ml-2 btn-arquivo-acao"><i

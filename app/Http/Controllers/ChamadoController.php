@@ -184,19 +184,13 @@ class ChamadoController extends Controller
             $chamado->vinculadosIda()->attach($request->slct_chamados, ['acesso' => $request->acesso]);
             $vinculado = Chamado::find($request->slct_chamados);
             //comentário no chamado principal
-            Comentario::criar([
-                'user_id' => \Auth::user()->id,
-                'chamado_id' => $chamado->id,
-                'comentario' => 'O chamado no. ' . $vinculado->nro . '/' . $vinculado->created_at->year . ' foi vinculado à esse chamado',
-                'tipo' => 'system',
-            ]);
+            Comentario::criarSystem($chamado,
+                'O chamado no. ' . $vinculado->nro . '/' . $vinculado->created_at->year . ' foi vinculado à esse chamado.'
+            );
             // comentário no chamado vinculado
-            Comentario::criar([
-                'user_id' => \Auth::user()->id,
-                'chamado_id' => $vinculado->id,
-                'comentario' => 'Esse chamado foi vinculado ao chamado no. ' . $chamado->nro . '/' . $chamado->created_at->year,
-                'tipo' => 'system',
-            ]);
+            Comentario::criarSystem($vinculado,
+                'Esse chamado foi vinculado ao chamado no. ' . $chamado->nro . '/' . $chamado->created_at->year
+            );
             $request->session()->flash('alert-info', 'Chamado vinculado com sucesso');
         } else {
             $request->session()->flash('alert-warning', 'Não é possível vincular o chamado à ele mesmo');
@@ -216,19 +210,13 @@ class ChamadoController extends Controller
         $vinculado = Chamado::find($id);
 
         //comentário no chamado principal
-        Comentario::criar([
-            'user_id' => \Auth::user()->id,
-            'chamado_id' => $chamado->id,
-            'comentario' => 'O chamado no. ' . $vinculado->nro . '/' . $vinculado->created_at->year . ' foi desvinculado desse chamado',
-            'tipo' => 'system',
-        ]);
+        Comentario::criarSystem($chamado,
+            'O chamado no. ' . $vinculado->nro . '/' . $vinculado->created_at->year . ' foi desvinculado desse chamado.'
+        );
         // comentário no chamado vinculado
-        Comentario::criar([
-            'user_id' => \Auth::user()->id,
-            'chamado_id' => $vinculado->id,
-            'comentario' => 'Esse chamado foi desvinculado do chamado no. ' . $chamado->nro . '/' . $chamado->created_at->year,
-            'tipo' => 'system',
-        ]);
+        Comentario::criarSystem($vinculado,
+            'Esse chamado foi desvinculado do chamado no. ' . $chamado->nro . '/' . $chamado->created_at->year
+        );
         $request->session()->flash('alert-info', 'Chamado desvinculado com sucesso');
         return Redirect::to(URL::previous() . "#card_vinculados");
     }
@@ -261,11 +249,7 @@ class ChamadoController extends Controller
         # está dando erro
         //$request->validate(JSONForms::buildRules($request, $chamado->fila));
         $chamado = $this->grava($chamado, $request);
-        /*
-        if(config('app.env') == 'production')
-        Mail::send(new ChamadoMail($chamado,$user));
-        depois de atualizar, tem de registrar nos comentários
-         */
+
         if ($chamado->fila->config->patrimonio) {
             if ($chamado->patrimonios->count() < 1) {
                 $request->session()->flash('alert-danger', 'É obrigatório cadastrar um número de patrimônio!');
@@ -275,124 +259,86 @@ class ChamadoController extends Controller
         return redirect()->route('chamados.show', $chamado->id);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Chamado  $chamado
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Chamado $chamado)
-    {
-        //
-    }
-
     /* Evita duplicarmos código
     Está sendo usado somente no update, no store foi separado pois
     tem bem pouca coisa daqui.
      */
     private function grava(Chamado $chamado, Request $request)
     {
-        if ($request->status == 'devolver') {
-            $chamado->status = 'Triagem';
-            $user = \Auth::user();
-        } else {
-            $atualizacao = [];
-            $novo_valor = [];
-            if ($chamado->assunto != $request->assunto && !empty($request->assunto)) {
-                /*  guardando os dados antigos em log para auditoria */
-                Log::info(' - Edição de chamado - Usuário: ' . \Auth::user()->codpes . ' - ' . \Auth::user()->name . ' - Id Chamado: ' . $chamado->id . ' - Assunto antigo: ' . $chamado->assunto . ' - Novo Assunto: ' . $request->assunto);
-                array_push($atualizacao, 'assunto');
-                $chamado->assunto = $request->assunto;
-            }
-            if ($chamado->descricao != $request->descricao && !empty($request->descricao)) {
-                /* guardando os dados antigos em log para auditoria */
-                Log::info(' - Edição de chamado - Usuário: ' . \Auth::user()->codpes . ' - ' . \Auth::user()->name . ' - Id Chamado: ' . $chamado->id . ' - Descrição antiga: ' . $chamado->descricao . ' - Nova descrição: ' . $request->descricao);
-                array_push($atualizacao, 'descrição');
-                $chamado->descricao = $request->descricao;
-            }
-            if (json_encode($chamado->extras) != json_encode($request->extras) && !empty($request->extras)) {
-                /* guardando os dados antigos em log para auditoria */
-                Log::info(' - Edição de chamado - Usuário: ' . \Auth::user()->codpes . ' - ' . \Auth::user()->name . ' - Id Chamado: ' . $chamado->id . ' - Extras antigo: ' . $chamado->extras . ' - Novo extras: ' . json_encode($request->extras));
-                $extras_chamados = json_decode($chamado->extras, true);
-                $extras_request = $request->extras;
-                /* se não for um chamado novo */
-                if ($chamado->extras != null) {
-                    /* atualiza todos os campos que não vieram no request para não perder os mesmos */
-                    $atualiza_extras = false;
-                    foreach ($extras_chamados as $campoc => $valuec) {
-                        if (!array_key_exists($campoc, $extras_request)) {
-                            $extras_request[$campoc] = $extras_chamados[$campoc];
-                        } else {
-                            $template = json_decode($chamado->fila->template);
-                            /* não vamos atualizar o registro do sistema quando for campo exclusivo do atendente  */
-                            if (empty($template->$campoc->can)) {
-                                $atualiza_extras = true;
-                            } elseif ($template->$campoc->can != "atendente") {
-                                $atualiza_extras = true;
-                            }
+        $atualizacao = [];
+        $novo_valor = [];
+
+        # assunto
+        if ($chamado->assunto != $request->assunto && !empty($request->assunto)) {
+            /*  guardando os dados antigos em log para auditoria */
+            Log::info(' - Edição de chamado - Usuário: ' . \Auth::user()->codpes . ' - ' . \Auth::user()->name . ' - Id Chamado: ' . $chamado->id . ' - Assunto antigo: ' . $chamado->assunto . ' - Novo Assunto: ' . $request->assunto);
+            array_push($atualizacao, 'assunto');
+            $chamado->assunto = $request->assunto;
+        }
+
+        #descricao
+        if ($chamado->descricao != $request->descricao && !empty($request->descricao)) {
+            /* guardando os dados antigos em log para auditoria */
+            Log::info(' - Edição de chamado - Usuário: ' . \Auth::user()->codpes . ' - ' . \Auth::user()->name . ' - Id Chamado: ' . $chamado->id . ' - Descrição antiga: ' . $chamado->descricao . ' - Nova descrição: ' . $request->descricao);
+            array_push($atualizacao, 'descrição');
+            $chamado->descricao = $request->descricao;
+        }
+
+        # formulario (extras)
+        if (json_encode($chamado->extras) != json_encode($request->extras) && !empty($request->extras)) {
+            /* guardando os dados antigos em log para auditoria */
+            Log::info(' - Edição de chamado - Usuário: ' . \Auth::user()->codpes . ' - ' . \Auth::user()->name . ' - Id Chamado: ' . $chamado->id . ' - Extras antigo: ' . $chamado->extras . ' - Novo extras: ' . json_encode($request->extras));
+            $extras_chamados = json_decode($chamado->extras, true);
+            $extras_request = $request->extras;
+            /* se não for um chamado novo */
+            if ($chamado->extras != null) {
+                /* atualiza todos os campos que não vieram no request para não perder os mesmos */
+                $atualiza_extras = false;
+                foreach ($extras_chamados as $campoc => $valuec) {
+                    if (!array_key_exists($campoc, $extras_request)) {
+                        $extras_request[$campoc] = $extras_chamados[$campoc];
+                    } else {
+                        $template = json_decode($chamado->fila->template);
+                        /* não vamos atualizar o registro do sistema quando for campo exclusivo do atendente  */
+                        if (empty($template->$campoc->can)) {
+                            $atualiza_extras = true;
+                        } elseif ($template->$campoc->can != "atendente") {
+                            $atualiza_extras = true;
                         }
                     }
                 }
-                if ($atualiza_extras) {
-                    array_push($atualizacao, 'formulário');
-                }
-                $chamado->extras = json_encode($extras_request);
             }
-            if (!empty($request->status)) {
-                if ($chamado->status != $request->status) {
-                    array_push($atualizacao, 'status');
-                    array_push($novo_valor, $request->status);
-                    $chamado->status = $request->status;
-                }
+            if ($atualiza_extras) {
+                array_push($atualizacao, 'formulário');
             }
-            /* Caso tenha alguma atualização, guarda nos registros */
-            if (count($atualizacao) > 0) {
-                if (count($atualizacao) == 1) {
-                    $msg = 'O campo ' . $atualizacao[0] . ' foi atualizado';
-                    if ($atualizacao[0] == 'status') {
-                        $msg .= ' para ' . $novo_valor[0];
-                    }
-                } elseif (count($atualizacao) > 1) {
-                    $msg = 'Os campos ';
-                    $msg .= implode(", ", array_slice($atualizacao, 0, -1));
-                    $msg .= ' e ' . $atualizacao[count($atualizacao) - 1];
-                    $msg .= ' foram atualizados';
-                }
-                Comentario::criar([
-                    'user_id' => \Auth::user()->id,
-                    'chamado_id' => $chamado->id,
-                    'comentario' => $msg,
-                    'tipo' => 'system',
-                ]);
-            }
-            /* Administradores */
-            if (Gate::allows('admin')) {
-                /* trocar requisitante */
-                if (!is_null($request->codpes)) {
-                    $user = User::where('codpes', $request->codpes)->first();
-                    if (is_null($user)) {
-                        $user = new User;
-                        $user->codpes = $request->codpes;
-                    }
-                } else {
-                    $user = \Auth::user();
-                }
-                /* Atribuir */
-                if (!empty($request->atribuido_para)) {
-                    die('desativado');
-                    /* acho que o user deveria vir direto pelo form */
-                    $atendente = User::where('codpes', $request->atribuido_para)->first();
-                    $chamado->users()->attach($atendente->id, ['papel' => 'Atendente']);
-                    $chamado->status = 'Em Andamento';
-                }
-            } else {
-                $user = \Auth::user();
-            }
-            /* Atualiza telefone da pessoa */
-            /* para funcionar, precisa mexer no LoginController */
-            $user->telefone = $request->telefone;
-            $user->save();
+            $chamado->extras = json_encode($extras_request);
         }
+
+        # status
+        if (!empty($request->status)) {
+            if ($chamado->status != $request->status) {
+                array_push($atualizacao, 'status');
+                array_push($novo_valor, $request->status);
+                $chamado->status = $request->status;
+            }
+        }
+
+        /* Caso tenha alguma atualização, guarda nos registros */
+        if (count($atualizacao) > 0) {
+            if (count($atualizacao) == 1) {
+                $msg = 'O campo ' . $atualizacao[0] . ' foi atualizado';
+                if ($atualizacao[0] == 'status') {
+                    $msg .= ' para ' . $novo_valor[0];
+                }
+            } elseif (count($atualizacao) > 1) {
+                $msg = 'Os campos ';
+                $msg .= implode(", ", array_slice($atualizacao, 0, -1));
+                $msg .= ' e ' . $atualizacao[count($atualizacao) - 1];
+                $msg .= ' foram atualizados';
+            }
+            Comentario::criarSystem($chamado, $msg);
+        }
+
         $chamado->save();
         if (!count($chamado->users()->wherePivot('papel', 'Autor')->get())) {
             $chamado->users()->attach($user->id, ['papel' => 'Autor']);
@@ -426,12 +372,9 @@ class ChamadoController extends Controller
         $chamado->status = 'Em Andamento';
         $chamado->save();
 
-        Comentario::criar([
-            'user_id' => \Auth::user()->id,
-            'chamado_id' => $chamado->id,
-            'comentario' => 'O chamado foi atribuído para o(a) atendente ' . $atendente->name,
-            'tipo' => 'system',
-        ]);
+        Comentario::criarSystem($chamado,
+            'O chamado foi atribuído para o(a) atendente ' . $atendente->name
+        );
 
         $request->session()->flash('alert-info', 'Atendente adicionado com sucesso');
         return Redirect::to(URL::previous() . "#card_atendente");
@@ -498,12 +441,9 @@ class ChamadoController extends Controller
                 $chamado->save();
             }
 
-            Comentario::criar([
-                'user_id' => \Auth::user()->id,
-                'chamado_id' => $chamado->id,
-                'comentario' => 'O ' . strtolower($papel) . ' ' . $user->name . ' foi adicionado ao chamado.',
-                'tipo' => 'system',
-            ]);
+            Comentario::criarSystem($chamado,
+                'O ' . strtolower($papel) . ' ' . $user->name . ' foi adicionado ao chamado.'
+            );
 
             $request->session()->flash('alert-info', $papel . ' adicionado com sucesso.');
         }
@@ -537,12 +477,7 @@ class ChamadoController extends Controller
             $chamado->save();
         }
         $msg = 'O ' . strtolower($papel) . ' ' . $user->name . ' foi removido desse chamado.';
-        Comentario::criar([
-            'user_id' => \Auth::user()->id,
-            'chamado_id' => $chamado->id,
-            'comentario' => $msg,
-            'tipo' => 'system',
-        ]);
+        Comentario::criarSystem($chamado, $msg);
         $request->session()->flash('alert-info', $msg);
         return Redirect::to(URL::previous() . "#card_pessoas");
     }
@@ -614,12 +549,7 @@ class ChamadoController extends Controller
 
         if (!$existia) {
             $msg = 'O patrimônio ' . $patrimonio->numFormatado() . ' foi adicionado a esse chamado.';
-            Comentario::criar([
-                'user_id' => \Auth::user()->id,
-                'chamado_id' => $chamado->id,
-                'comentario' => $msg,
-                'tipo' => 'system',
-            ]);
+            Comentario::criarSystem($chamado, $msg);
 
             $request->session()->flash('alert-info', $msg);
         } else {
@@ -642,12 +572,7 @@ class ChamadoController extends Controller
         $chamado->patrimonios()->detach($patrimonio);
 
         $msg = 'O patrimônio ' . $patrimonio->numFormatado() . ' foi removido desse chamado.';
-        Comentario::criar([
-            'user_id' => \Auth::user()->id,
-            'chamado_id' => $chamado->id,
-            'comentario' => $msg,
-            'tipo' => 'system',
-        ]);
+        Comentario::criarSystem($chamado, $msg);
 
         $request->session()->flash('alert-info', $msg);
 

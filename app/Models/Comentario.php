@@ -21,15 +21,24 @@ class Comentario extends Model
      */
     protected static function booted()
     {
+        # eventos desta classe são monitorados
         Comentario::observe(ComentarioObserver::class);
     }
 
-    public static function criar($arr)
+    /**
+     * Cria novos comentários do tipo 'system'
+     *
+     * @param \App\Models\Chamado $chamado
+     * @param String $comentario
+     * @return \App\Models\Comentario objeto do novo comentário criado
+     */
+    public static function criarSystem($chamado, $comentario)
     {
         $c = new Comentario();
-        foreach ($arr as $key => $val) {
-                $c->$key = $val;
-        }
+        $c->user_id = \Auth::user()->id;
+        $c->chamado_id = $chamado->id;
+        $c->tipo = 'system';
+        $c->comentario = $comentario;
         $c->save();
         return $c;
     }

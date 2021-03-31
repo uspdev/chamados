@@ -15,7 +15,7 @@
           @endif
           {{ $user->name }}
           @if (Gate::check('perfiladmin'))
-            | @include('users.partials.btn-change-user')
+              | @include('users.partials.btn-change-user')
           @endif
         </div>
         <div class="card-body">
@@ -69,6 +69,12 @@
   <div class="row">
     <div class="col-md-12">
       @include('users.partials.card-notificacoes')
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      @includewhen(Gate::check('perfiladmin'),'users.partials.card-oauth')
     </div>
   </div>
 @endsection
