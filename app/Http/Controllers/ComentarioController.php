@@ -28,19 +28,15 @@ class ComentarioController extends Controller
         $request->validate([
             'comentario' => ['required'],
         ]);
-        $user = \Auth::user();
 
         $comentario = new Comentario;
-        $comentario->comentario = $request->comentario;
-        $comentario->chamado_id = $chamado->id;
-        $comentario->user_id = $user->id;
-        $comentario->tipo = 'user';
-        $comentario->save();
 
         if (isset($request->status)) {
             if ($request->status == 'Fechado') {
                 $chamado->status = 'Fechado';
                 $chamado->fechado_em = Carbon::now();
+                $comentario->comentario = 'O chamado foi fechado.' . PHP_EOL;
+
             } elseif ($request->status == 'Reabrir') {
                 # ao reabrir, se houver atendente, volta para "Em Andamento" se não volta para "Triagem"
                 if ($chamado->users()->wherePivot('papel', 'Atendente')->get()) {
@@ -49,9 +45,16 @@ class ComentarioController extends Controller
                     $chamado->status = 'Triagem';
                 }
                 $chamado->fechado_em = null;
+                $comentario->comentario = 'O chamado foi reaberto.' . PHP_EOL;
             }
+            $chamado->save();
         }
-        $chamado->save();
+
+        $comentario->comentario .= $request->comentario;
+        $comentario->chamado_id = $chamado->id;
+        $comentario->user_id = \Auth::user()->id;
+        $comentario->tipo = 'user';
+        $comentario->save();
 
         $request->session()->flash('alert-info', 'Comentário enviado com sucesso');
         return redirect("chamados/$chamado->id");
