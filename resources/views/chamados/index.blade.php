@@ -4,9 +4,11 @@
 @parent
 <div class="row">
     <div class="col-md-12 form-inline">
-        <div class="d-none d-sm-block h4 mt-2">Meus Chamados <i class="fas fa-search"></i></div>
+        <div class="d-none d-sm-block h4 mt-2">Meus Chamados
+        <span class="badge badge-pill badge-primary datatable-counter">-</span></div>
         <div class="d-block d-sm-none h4 mt-2"><i class="fas fa-search"></i></div>
         @include('partials.datatable-filter-box', ['otable'=>'oTable'])
+        @include('chamados.partials.mostrar_finalizados')
         @include('chamados.partials.mostra-ano')
 
     </div>
@@ -16,6 +18,7 @@
     <thead>
         <tr>
             <th>Nro</th>
+            <th></th>
             <th>Assunto</th>
             <th>Atendente</th>
             <th>Autor</th>
@@ -25,7 +28,7 @@
     </thead>
     <tbody>
 
-        @forelse ($chamados as $chamado)
+        @foreach ($chamados as $chamado)
         @php
             $color = $chamado->fila->getColortoLabel($chamado->status);
         @endphp
@@ -33,6 +36,8 @@
             <td> {{ $chamado->nro }}</td>
             <td>
                 @include('chamados.partials.status-small')
+            </td>
+            <td>
                 <a href="chamados/{{$chamado->id}}"> {!! $chamado->assunto !!} </a>
                 @include('chamados.partials.status-muted')
             </td>
@@ -55,11 +60,7 @@
                 @endif
             </td>
         </tr>
-        @empty
-        <tr>
-            <td colspan="6">Não há chamados</td>
-        </tr>
-        @endforelse
+        @endforeach
 
     </tbody>
 </table>
@@ -67,6 +68,8 @@
 
 @section('javascripts_bottom')
 @parent
+<link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.8/css/fixedHeader.dataTables.min.css">
+<script src="https://cdn.datatables.net/fixedheader/3.1.8/js/dataTables.fixedHeader.min.js"></script>
 <script>
     $(document).ready(function() {
 
@@ -77,7 +80,30 @@
             , "order": [
                 [0, "desc"]
             ]
+            , "fixedHeader": true
+            , columnDefs: [{
+                targets: 1
+                , orderable: false
+            }]
+            , language: {
+                url: '//cdn.datatables.net/plug-ins/1.10.24/i18n/Portuguese-Brasil.json'
+            }
         });
+
+        // recuperando o storage local
+        var datatableFilter = localStorage.getItem('datatableFilter')
+        $('#dt-search').val(datatableFilter);
+
+        // vamos aplicar o filtro
+        oTable.search($('#dt-search').val()).draw()
+
+        // vamos renderizar o contador de linhas
+        $('.datatable-counter').html(oTable.page.info().recordsDisplay)
+
+        // vamos guardar no storage à medida que digita
+        $('#dt-search').keyup(function() {
+            localStorage.setItem('datatableFilter', $(this).val())
+        })
 
     })
 
