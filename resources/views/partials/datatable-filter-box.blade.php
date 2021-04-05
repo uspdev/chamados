@@ -14,10 +14,13 @@
 
         $('#dt-search').focus();
 
+        // vamos filtrar à medida que digita
         $('#dt-search').keyup(function() {
-            {{$otable ?? 'oTable'}}.search($(this).val()).draw();
+            oTable.search($(this).val()).draw()
+            $('.datatable-counter').html(oTable.page.info().recordsDisplay)
         })
 
+        // vamos limpar o filtro de busca
         $('#dt-search-clear').on('click', function() {
             $('#dt-search').val('').trigger('keyup');
             $('#dt-search').focus();
