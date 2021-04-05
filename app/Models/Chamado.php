@@ -129,18 +129,33 @@ class Chamado extends Model
     }
 
     /**
+     * esconde os chamados finalizados, ou seja, aqueles "Encerrados" há mais de 10 dias
+     * https://laravel.com/docs/8.x/eloquent#local-scopes
+     */
+    public function scopeFinalizado($query, $finalizado)
+    {
+        if (!$finalizado) {
+            return $query->where('status', '!=', 'Fechado')
+                ->orWhere('fechado_em','>',now()->subDays(10))->latest();
+        } else {
+            return $query;
+        }
+    }
+
+    /**
      * Lista os chamados autorizados para o usuário
      * considerando o ano e o perfil:
      * Se perfiladmin mostra todos os chamados
      * Se perfilatendente mostra todos os chamados das filas que atende
      * Se perfilusuario mostra os chamados que ele está cadastrado como criador ou observador
-     *
+     * Os filtros por nro e assunto são usados em consultas ajax
+     * 
      * Vamos considerar chamados de filas desativadas
      */
-    public static function listarChamados($ano, $nro = null, $assunto = null)
+    public static function listarChamados($ano, $nro = null, $assunto = null, $finalizado = false)
     {
         if (Gate::allows('perfiladmin')) {
-            $chamados = SELF::ano($ano)->nro($nro)->assunto($assunto)->get();
+            $chamados = SELF::ano($ano)->nro($nro)->assunto($assunto)->finalizado($finalizado)->get();
         } elseif (Gate::allows('perfilatendente')) {
             $chamados = collect();
             $filas = \Auth::user()->filas;
@@ -152,6 +167,8 @@ class Chamado extends Model
         } else {
             $chamados = collect();
         }
+
+        // eliminando repetidos
         $chamados = $chamados->unique('id');
         return $chamados;
     }

@@ -35,7 +35,16 @@ class ChamadoController extends Controller
         if (session('ano') == null) {
             session(['ano' => date('Y')]);
         }
-        $chamados = Chamado::listarChamados(session('ano'));
+
+        if (isset($request->finalizado)) {
+            session(['finalizado' =>$request->finalizado ? 1 : 0]);
+        } elseif (session('ano') != date('Y')) {
+            session(['finalizado' => 1]);
+        } else {
+            session(['finalizado' => 0]);
+        }
+
+        $chamados = Chamado::listarChamados(session('ano'), null, null, session('finalizado'));
         return view('chamados/index', compact('chamados'));
     }
 
