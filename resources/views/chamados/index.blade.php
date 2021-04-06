@@ -4,13 +4,20 @@
 @parent
 <div class="row">
     <div class="col-md-12 form-inline">
-        <div class="d-none d-sm-block h4 mt-2">Meus Chamados
-        <span class="badge badge-pill badge-primary datatable-counter">-</span></div>
-        <div class="d-block d-sm-none h4 mt-2"><i class="fas fa-search"></i></div>
+        <div class="d-none d-sm-block h4 mt-2">
+            {{-- vai mostrar no desktop --}}
+            Meus Chamados
+        </div>
+        <div class="d-block d-sm-none h4 mt-2">
+            {{-- vai mostrar no mobile --}}
+            <i class="fas fa-search"></i>
+        </div>
+        <div class="h4 mt-1 ml-2">
+            <span class="badge badge-pill badge-primary datatable-counter">-</span>
+        </div>
         @include('partials.datatable-filter-box', ['otable'=>'oTable'])
         @include('chamados.partials.mostrar_finalizados')
         @include('chamados.partials.mostra-ano')
-
     </div>
 </div>
 
@@ -30,7 +37,7 @@
 
         @foreach ($chamados as $chamado)
         @php
-            $color = $chamado->fila->getColortoLabel($chamado->status);
+        $color = $chamado->fila->getColortoLabel($chamado->status);
         @endphp
         <tr>
             <td> {{ $chamado->nro }}</td>
