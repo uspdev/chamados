@@ -29,7 +29,7 @@ class ComentarioObserver
             $fila = $comentario->chamado->fila;
             foreach ($fila->users()->get() as $user) {
                 // desde que ele aceite receber as notificacoes
-                if (data_get($user->config, 'notifications.email.filas.' . $fila->id, false)) {
+                if (data_get($user->config, 'notifications.email.filas.' . $fila->id, true)) {
                     $papel = $user->pivot->funcao . ' da fila (' . $fila->setor->sigla . ') ' . $fila->nome;
                     \Mail::to($user->email)
                         ->queue(new ComentarioMail(compact('papel', 'user', 'comentario')));
