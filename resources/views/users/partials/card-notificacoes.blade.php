@@ -10,7 +10,8 @@
       <table class="table table-hover table-bordered table-sm ml-2">
         <tr>
           <th>Objeto</th>
-          <th>Notificar por email</th>
+          {{-- https://stackoverflow.com/questions/26983301/how-to-make-a-table-column-be-a-minimum-width --}}
+          <th style="width:1%; white-space: nowrap;">Notificar por email</th>
         </tr>
         @forelse($user->filas as $fila)
           <tr>
