@@ -1,5 +1,5 @@
 <div class="form-group form-check">
-    <label class="form-check-label">Mostrar finalizados</label>
+    <label class="form-check-label">Mostrar fechados/finalizados</label>
     <input type="checkbox" id="mostrar_finalizados" {{ session('finalizado') ? 'checked':'' }} class="form-check-input ml-1">
 </div>
 
