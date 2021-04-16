@@ -135,8 +135,8 @@ class Chamado extends Model
     public function scopeFinalizado($query, $finalizado)
     {
         if (!$finalizado) {
-            return $query->where('status', '!=', 'Fechado')
-                ->orWhere('fechado_em','>',now()->subDays(10))->latest();
+            return $query->where('status', '!=', 'Fechado');
+                #->orWhere('fechado_em','>',now()->subDays(10))->latest();
         } else {
             return $query;
         }
@@ -160,10 +160,10 @@ class Chamado extends Model
             $chamados = collect();
             $filas = \Auth::user()->filas;
             foreach ($filas as $fila) {
-                $chamados = $chamados->merge($fila->chamados()->ano($ano)->nro($nro)->assunto($assunto)->get());
+                $chamados = $chamados->merge($fila->chamados()->ano($ano)->nro($nro)->assunto($assunto)->finalizado($finalizado)->get());
             }
         } elseif (Gate::allows('perfilusuario')) {
-            $chamados = \Auth::user()->chamados()->ano($ano)->nro($nro)->assunto($assunto)->get();
+            $chamados = \Auth::user()->chamados()->ano($ano)->nro($nro)->assunto($assunto)->finalizado($finalizado)->get();
         } else {
             $chamados = collect();
         }
