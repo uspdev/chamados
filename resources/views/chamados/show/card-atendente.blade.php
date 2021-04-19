@@ -3,7 +3,7 @@
   <div class="card-header bg-warning">
     <div class="form-inline">
       Atendente
-      <span title="Esta região é visível somente para o atendente, para que possa fazer anotações técnicas"
+      <span title="Esta região é visível somente para o atendente, com conteúdo e ações próprios."
         class="ajuda mx-2" data-toggle="tooltip"><i class="fas fa-question-circle"></i></span>
       <span class="status">
         <span class="badge badge-light mr-2"></span>
@@ -11,7 +11,7 @@
       @if ($chamado->fila->config->triagem && Gate::check('filas.update', $chamado->fila))
         @includeWhen($chamado->status != 'Fechado', 'chamados.partials.show-triagem-modal')
       @else
-        @includeWhen($chamado->status != 'Fechado', 'chamados.partials.show-atender-modal')
+        @includeWhen($chamado->status == 'Triagem', 'chamados.partials.show-atender-modal')
       @endif
     </div>
   </div>
@@ -22,8 +22,8 @@
         <form id="anotacoes_form" name="anotacoes_form" method="POST" action="chamados/{{ $chamado->id }}">
           @csrf
           @method('PUT')
-          <b>Anotações:</b>
-          <textarea class="form-control" rows="5" name="anotacoes">{{ $chamado->anotacoes }}</textarea>
+          <b>Anotações técnicas</b>
+          <textarea class="form-control" rows="5" name="anotacoes" placeholder="Esse conteúdo é visível somente para o atendente.">{{ $chamado->anotacoes }}</textarea>
         </form>
       </div>
       <div class="col-md-4">
