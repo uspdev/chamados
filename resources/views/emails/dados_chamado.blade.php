@@ -4,6 +4,6 @@
     Chamado no. {{ $chamado->nro }}/{{ $chamado->created_at->format('Y') }}
     para ({{ $chamado->fila->setor->sigla }}) {{ $chamado->fila->nome }}<br>
     Assunto: {{ $chamado->assunto }}<br>
-    Descrição: {!! nl2br($chamado->descricao) !!}<br>
+    Descrição: {!! $chamado->descricao !!}<br>
     Link direto: <a href="{{config('app.url')}}/chamados/{{$chamado->id}}">{{config('app.url')}}/chamados/{{$chamado->id}}</a><br>
 </div>

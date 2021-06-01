@@ -50,6 +50,6 @@
   @endif
 
   <span class="text-muted">Assunto:</span> {{ $chamado->assunto }}<br>
-  <span class="text-muted">Descrição:</span> {{ $chamado->descricao ?? '' }}<br>
+  <span class="text-muted">Descrição:</span> {!! $chamado->descricao ?? '' !!}<br>
   <br>
 </div>

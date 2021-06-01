@@ -272,4 +272,17 @@ class Chamado extends Model
     {
         return $this->belongsToMany('App\Models\Patrimonio', 'chamado_patrimonio')->withTimestamps();
     }
+
+    # não guardar tags html
+    public function setDescricaoAttribute($value)
+    {
+        $this->attributes['descricao'] = strip_tags($value);
+    }
+
+    # porém mostrar quebras de linhas
+    public function getDescricaoAttribute($value)
+    {
+        return nl2br($value);
+    }
+
 }
