@@ -29,7 +29,7 @@
         <input type="hidden" name="chamado_id" value="{{ $chamado->id }}">
         <input type="hidden" id="max_upload_size" name="max_upload_size" value="{{ $max_upload_size }}">
 
-        <input type="file" name="arquivo[]" id="input_arquivo" accept="image/jpeg,image/png,application/pdf"
+        <input type="file" name="arquivo[]" id="input_arquivo" accept="image/jpeg,image/png,application/pdf,.dwg"
           class="d-none" multiple capture="environment">
 
         <div class="nome-arquivo w-100" id="nome_arquivo">
@@ -75,7 +75,7 @@
 
         <ul class="list-unstyled">
           @foreach ($chamado->arquivos as $arquivo)
-            @if (preg_match('/pdf/i', $arquivo->mimeType))
+            @if (preg_match('/pdf|octet-stream/i', $arquivo->mimeType))
               <li class="modo-visualizacao">
                 @if (Gate::check('update',$chamado))
                   <div class="arquivo-acoes">
@@ -95,7 +95,11 @@
                 @endif
                 <a href="arquivos/{{ $arquivo->id }}" title="{{ $arquivo->nome_original }}"
                   class="nome-arquivo-display">
-                  <i class="fas fa-file-pdf"></i>
+                  @if(preg_match('/pdf/i', $arquivo->mimeType))
+                    <i class="fas fa-file-pdf"></i>
+                  @else
+                    <i class="fas fa-file"></i>
+                  @endif
                   <span>
                     {{ $arquivo->nome_original }}
                   </span>
@@ -115,7 +119,7 @@
                   </div>
                 </form>
               </li>
-            @endif
+            @endif            
           @endforeach
         </ul>
 
