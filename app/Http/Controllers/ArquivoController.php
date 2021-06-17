@@ -119,7 +119,8 @@ class ArquivoController extends Controller
             ['nome_arquivo.required' => 'O nome do arquivo é obrigatório!']
         );
         $nome_antigo = $arquivo->nome_original;
-        $arquivo->nome_original = $request->nome_arquivo . '.pdf';
+        $extensao = pathinfo($nome_antigo, PATHINFO_EXTENSION);
+        $arquivo->nome_original = $request->nome_arquivo . '.' . $extensao;
         $arquivo->update();
 
         Comentario::criarSystem(
