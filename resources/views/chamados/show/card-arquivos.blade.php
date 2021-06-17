@@ -75,7 +75,8 @@
 
         <ul class="list-unstyled">
           @foreach ($chamado->arquivos as $arquivo)
-            @if (preg_match('/pdf|octet-stream/i', $arquivo->mimeType))
+          {{-- checando pela extensão pois os arquivos .dwg (auto cad) podem ter mimeTypes diferentes de acordo com o navagedor/SO/sofwares instalados: https://stackoverflow.com/questions/1201945/how-is-mime-type-of-an-uploaded-file-determined-by-browser --}}
+            @if (preg_match('/pdf/i', $arquivo->mimeType) || strtolower(pathinfo($arquivo->nome_original, PATHINFO_EXTENSION)) == 'dwg')
               <li class="modo-visualizacao">
                 @if (Gate::check('update',$chamado))
                   <div class="arquivo-acoes">
