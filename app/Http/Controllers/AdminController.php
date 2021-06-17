@@ -10,6 +10,7 @@ class AdminController extends Controller
     public function index()
     {
         $this->authorize('perfiladmin');
+        \UspTheme::activeUrl('admin');
 
         $file_upload_max_size = self::file_upload_max_size();
 

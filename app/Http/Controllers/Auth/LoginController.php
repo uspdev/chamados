@@ -9,6 +9,7 @@ use Auth;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Socialite;
+#use Spatie\Permission\Models\Permission;
 
 class LoginController extends Controller
 {
@@ -58,9 +59,34 @@ class LoginController extends Controller
         $user->email = $userSenhaUnica->email;
         $user->name = $userSenhaUnica->nompes;
 
+        // permissions do senhaunica-socialite v3
+        // por enquanto está false pois está dando conflito
+        if (config('senhaunica.permission')) {
+            // garantindo que as permissions existam
+            $permissions = ['admin', 'gerente', 'user'];
+            foreach ($permissions as $permission) {
+                Permission::findOrCreate($permission);
+            }
+
+            // vamos verificar no config se o usuário é admin
+            if (in_array($userSenhaUnica->codpes, config('senhaunica.admins'))) {
+                $user->givePermissionTo('admin');
+            }
+
+            // vamos verificar no config se o usuário é gerente
+            if (in_array($userSenhaUnica->codpes, config('senhaunica.gerentes'))) {
+                $user->givePermissionTo('gerente');
+            }
+
+            // default
+            $user->givePermissionTo('user');
+        }
+
+        // vamos manter a configuracao antiga para compatibilidade retroativa
+        // mas deverá ser ajustado e removido as referências a "is_admin"
         // vamos verificar no config se o usuário é admin
-        $admins_codpes = explode(',', config('chamados.admins'));
-        if (in_array($userSenhaUnica->codpes, $admins_codpes)) {
+        //$admins_codpes = explode(',', config('senhaunica.admins'));
+        if (in_array($userSenhaUnica->codpes, config('senhaunica.admins'))) {
             $user->is_admin = true;
         }
 

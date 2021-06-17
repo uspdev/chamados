@@ -23,7 +23,7 @@
         "uspdev/laravel-usp-theme": "^2.0",
         "uspdev/laravel-usp-validators": "^1.0",
         "uspdev/replicado": "^1.5",
-        "uspdev/senhaunica-socialite": "^2.0"
+        "uspdev/senhaunica-socialite": "^3.0"
     },
     "require-dev": {
         "facade/ignition": "^2.3.6",

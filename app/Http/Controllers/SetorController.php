@@ -22,6 +22,7 @@ class SetorController extends Controller
     public function index(Request $request)
     {
         $this->authorize('setores.viewAny');
+        \UspTheme::activeUrl('setores');
         
         $user = \Auth::user();
 
@@ -58,6 +59,7 @@ class SetorController extends Controller
     {
         #usando no ajax, somente para admin
         $this->authorize('admin');
+        \UspTheme::activeUrl('setores');
 
         if ($request->ajax()) {
             # preenche os dados do form de edição de um setor
