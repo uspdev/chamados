@@ -51,6 +51,15 @@ Bibliotecas necessárias do php:
 
     apt install php-sybase php-mysql php-xml php-intl php-mbstring php-gd php-curl
 
+## Atualização
+
+Caso você já tenha instalado o sistema e aplique uma nova atualização, sempre deve rodar:
+
+    composer install
+    php artisan migrate
+
+Também deve observar no release se tem alguma outra coisa a ser ajustada, por exemplo o arquivo .env 
+
 ## Instalação
 
     git clone git@github.com:uspdev/chamados
