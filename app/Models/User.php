@@ -11,6 +11,9 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    # desativado por enquanto por conta de conflito
+    #use \Spatie\Permission\Traits\HasRoles;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -18,7 +21,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name', 'email', 'password',
-        'codpes', 'telefone', 'last_login_at', 
+        'codpes', 'telefone', 'last_login_at',
         'config',
         'config->notifications->email',
         'config->notifications->email->filas',

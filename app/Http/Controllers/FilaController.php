@@ -34,6 +34,7 @@ class FilaController extends Controller
     public function index()
     {
         $this->authorize('filas.viewAny');
+        \UspTheme::activeUrl('filas');
 
         $filas = Fila::listarFilas();
         return view('filas.index')->with(['data' => (object) $this->data, 'filas' => $filas]);
@@ -116,6 +117,7 @@ class FilaController extends Controller
     public function show(Request $request, Fila $fila)
     {
         $this->authorize('filas.view', $fila);
+        \UspTheme::activeUrl('filas');
 
         if ($request->ajax()) {
             return $fila;

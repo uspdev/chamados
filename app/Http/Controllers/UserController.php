@@ -24,6 +24,8 @@ class UserController extends Controller
     public function index()
     {
         $this->authorize('users.viewAny');
+        \UspTheme::activeUrl('users');
+        
         $users = User::all();
         return view('users.index')->with('users', $users);
     }
@@ -62,6 +64,7 @@ class UserController extends Controller
     public function show(User $user)
     {
         $this->authorize('users.view', $user);
+        \UspTheme::activeUrl('users');
 
         $oauth_file = 'debug/oauth/' . $user->codpes . '.json';
 

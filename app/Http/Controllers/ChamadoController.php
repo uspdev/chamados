@@ -32,6 +32,8 @@ class ChamadoController extends Controller
     public function index(Request $request)
     {
         $this->authorize('chamados.viewAny');
+        \UspTheme::activeUrl('chamados');
+
         if (session('ano') == null) {
             session(['ano' => date('Y')]);
         }
@@ -56,6 +58,8 @@ class ChamadoController extends Controller
     public function create(Fila $fila)
     {
         $this->authorize('chamados.create');
+        \UspTheme::activeUrl('chamados/create');
+
         $chamado = new Chamado;
         $chamado->fila = $fila;
         $form = JSONForms::generateForm($fila);
@@ -71,6 +75,7 @@ class ChamadoController extends Controller
     public function listaFilas()
     {
         $this->authorize('chamados.create');
+        \UspTheme::activeUrl('chamados/create');
         $setores = Fila::listarFilasParaNovoChamado();
         return view('chamados.listafilas', compact('setores'));
     }
@@ -132,6 +137,7 @@ class ChamadoController extends Controller
     public function show(Chamado $chamado)
     {
         $this->authorize('chamados.view', $chamado);
+        \UspTheme::activeUrl('chamados');
 
         $template = json_decode($chamado->fila->template);
         $extras = json_decode($chamado->extras);
