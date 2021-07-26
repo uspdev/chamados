@@ -19,6 +19,7 @@
         "laravel/ui": "^3.0",
         "laravelcollective/html": "^6.2",
         "masakik/supervisor": "dev-master",
+        "rap2hpoutre/laravel-log-viewer": "^1.7",
         "uspdev/laravel-usp-faker": "^1.0",
         "uspdev/laravel-usp-theme": "^2.0",
         "uspdev/laravel-usp-validators": "^1.0",

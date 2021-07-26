@@ -108,6 +108,14 @@ $right_menu = [
         'submenu' => array_merge($admin, $trocarPerfil),
         'align' => 'right',
     ],
+    [
+        'text' => '<i class="fas fa-hard-hat"></i>',
+        'title' => 'Logs',
+        'target' => '_blank',
+        'url' => config('app.url') . '/logs',
+        'align' => 'right',
+        'can' => 'admin',
+    ],
 ];
 
 return [

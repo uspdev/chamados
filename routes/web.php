@@ -77,3 +77,6 @@ Route::resource('arquivos', ArquivoController::class);
 // ADMIN
 Route::get('admin', [AdminController::class, 'index']);
 Route::get('admin/get_oauth_file/{filename}', [AdminController::class, 'getOauthFile']);
+
+# Logs  
+Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')->middleware('can:admin');
