@@ -146,7 +146,7 @@ class Fila extends Model
     {
         $status = $this->config->status;
         if ($status) {
-            $out = [];
+            $out = ['Em Andamento' => 'Em andamento (sistema)'];
             foreach ($status as $item) {
                 foreach ($item as $key => $value) {
                     if ($key == "label") {
