@@ -64,7 +64,7 @@
             , dropdownParent: pessoasForm
             , minimumInputLength: 4
             , theme: 'bootstrap4'
-            , wdth: 'resolve'
+            , width: '100%'
             , language: 'pt_br'
         })
 

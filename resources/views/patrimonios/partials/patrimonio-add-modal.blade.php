@@ -59,7 +59,7 @@
             , dropdownParent: patrimoniosForm
             , minimumInputLength: 9
             , theme: 'bootstrap4'
-            , wdth: 'resolve'
+            , width: '100%'
             , language: 'pt_br'
         })
 
