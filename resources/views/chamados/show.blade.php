@@ -29,8 +29,13 @@
       <span class="text-muted">Chamado no.</span> {{ $chamado->nro }}/{{ $chamado->created_at->year }}
       <span class="text-muted">para</span> ({{ $chamado->fila->setor->sigla }}) {{ $chamado->fila->nome }}
       @include('chamados.partials.status')
+      @include('chamados.partials.instrucoes-da-fila-badge')
+      @include('chamados.partials.patrimonio-pendente-badge')
     </div>
     <div class="card-body">
+
+      @include('chamados.partials.instrucoes-da-fila', ['hide' => false])
+
       <div class="row">
         <div class="col-md-12">
           <div class="row">

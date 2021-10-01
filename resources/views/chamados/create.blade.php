@@ -15,8 +15,13 @@
   <div class="card bg-light mb-3">
     <div class="card-header h5">
       <span class="text-muted">Novo chamado para</span> ({{ $fila->setor->sigla }}) {{ $fila->nome }}
+      @include('chamados.partials.instrucoes-da-fila-badge')
+
     </div>
     <div class="card-body">
+
+      @include('chamados.partials.instrucoes-da-fila')
+
       <form method="POST" role="form" action="{{ route('chamados.store', $fila->id) }}">
         @csrf
         <div class="row">

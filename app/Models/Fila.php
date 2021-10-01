@@ -10,6 +10,17 @@ class Fila extends Model
 {
     use HasFactory;
 
+    use \Glorand\Model\Settings\Traits\HasSettingsField;
+
+    //define only if you select a different name from the default
+    //public $settingsFieldName = 'settings';
+
+    public $defaultSettings = [
+        'instrucoes' => '',
+    ];
+
+    // protected $persistSettings = true; //boolean
+
     # valores default na criação de nova fila
     # passando um template com select até que seja feito uma melhoria na tela do formulário. Assim é só mudar o texto do json.
     protected $attributes = [
@@ -209,14 +220,7 @@ class Fila extends Model
         $config->patrimonio = $value['patrimonio'];
         $config->visibilidade = $v;
 
-        $status = [];
-        for ($i = 0; $i < count($value['status']['select']); $i++) {
-            $s = new \StdClass;
-            $s->label = $value['status']['select'][$i];
-            $s->color = $value['status']['select_cor'][$i];
-            array_push($status, $s);
-        }
-        $config->status = $status;
+        $config->status = $value['status'];
 
         $this->attributes['config'] = json_encode($config);
     }

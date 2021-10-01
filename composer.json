@@ -11,6 +11,7 @@
         "php": "^7.3",
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^1.0",
+        "glorand/laravel-model-settings": "^4.2",
         "graham-campbell/markdown": "^13.1",
         "guzzlehttp/guzzle": "^7.0",
         "haruncpi/laravel-log-reader": "^1.0",
@@ -54,7 +55,10 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
