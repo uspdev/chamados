@@ -4,15 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\FilaRequest;
 use App\Models\Fila;
-use App\Models\User;
 use App\Models\Setor;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 
 class FilaController extends Controller
 {
 
-    // crud generico 
+    // crud generico
     protected $data = [
         'title' => 'Filas',
         'url' => 'filas', // caminho da rota do resource
@@ -40,7 +39,7 @@ class FilaController extends Controller
         return view('filas.index')->with(['data' => (object) $this->data, 'filas' => $filas]);
     }
 
-    /** 
+    /**
      * Criar nova fila
      */
     public function store(FilaRequest $request)
@@ -74,7 +73,22 @@ class FilaController extends Controller
 
         $fila->fill($request->all());
 
-        if ($request->config) {
+        if ($request->settings) {
+            $settings = $request->settings;
+
+            $fila->settings()->setMultiple([
+                'instrucoes' => $settings['instrucoes'],
+            ]);
+        }
+
+        // migrar para settings ??????????????????
+        if (!isset($request->config['status'])) {
+            // se nao tiver status então é o form com outros dados
+            // temos de mergear com o config antigo para preservar os dados
+            $fila->config = array_merge(json_decode(json_encode($fila->config), true),$request->config);
+
+        } else {
+
             $qtd_select = count(array_filter($request->config['status']['select'], function ($x) {
                 return !empty($x);
             }));
@@ -87,7 +101,19 @@ class FilaController extends Controller
                 if (count(array_unique($request->config['status']['select'])) == count($request->config['status']['select'])) {
                     # se não for usado status reservados pelo sistema
                     if (!array_intersect(array_map('strtolower', $request->config['status']['select']), array_map('strtolower', ["Fechado", "Em andamento", "Triagem", "Novo"]))) {
-                        $fila->config = $request->config;
+
+                        // vamos atribuir aqui o status
+                        $value = $request->config['status'];
+                        $status = [];
+                        for ($i = 0; $i < count($value['select']); $i++) {
+                            $s = new \StdClass;
+                            $s->label = $value['select'][$i];
+                            $s->color = $value['select_cor'][$i];
+                            array_push($status, $s);
+                        }
+                        // temos de mergear com o config antigo para preservar os dados
+                        $fila->config = array_merge(json_decode(json_encode($fila->config), true), ['status' => $status]);
+
                     } else {
                         $request->session()->flash('alert-danger', 'Não é possível utilizar status iguais aos do sistema ("Fechado", "Em andamento", "Novo", "Triagem")!');
                         return back()->withInput();

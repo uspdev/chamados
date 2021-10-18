@@ -31,18 +31,16 @@
             <div class="card-body {{ $fila->estado == 'Desativada' ? 'disable-links': '' }}">
                 <div class="row">
                     <div class="col-md-7">
-                        {{-- Principal --}}
-                        @include('filas.partials.principal')
+                        @include('filas.partials.principal-card') {{-- Principal --}}
                         <br>
-                        {{-- Config --}}
-                        @include('filas.partials.config')
+                        @include('filas.partials.config-card') {{-- Config --}}
                         <br>
-                        {{-- Formulario --}}
-                        @include('filas.partials.formulario')
+                        @include('filas.partials.estados-card') {{-- Estados --}}
+                        <br>
+                        @include('filas.partials.formulario-card') {{-- Formulario --}}
                     </div>
                     <div class="col-md-5">
-                        {{-- Secundário --}}
-                        @include('filas.partials.pessoas')
+                        @include('filas.partials.pessoas-card') {{-- Secundário --}}
                     </div>
                 </div>
             </div>
