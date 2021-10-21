@@ -85,7 +85,12 @@ class FilaController extends Controller
         if (!isset($request->config['status'])) {
             // se nao tiver status então é o form com outros dados
             // temos de mergear com o config antigo para preservar os dados
-            $fila->config = array_merge(json_decode(json_encode($fila->config), true),$request->config);
+            if($request->config){
+                $fila->config = array_merge(json_decode(json_encode($fila->config), true),$request->config);
+            } else {
+                json_decode(json_encode($fila->config), true);
+            }
+                
 
         } else {
 
