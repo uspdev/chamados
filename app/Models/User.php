@@ -109,8 +109,9 @@ class User extends Authenticatable
         if (config('chamados.usar_replicado')) {
             //caso utilize o replicado, porém a pessoa não apareça, insere um usuário fake e atualiza o mesmo com dados da senha única no login
             $user->email = (Pessoa::email($codpes)) ?: $codpes . '@usuarios.usp.br';
-            if (Pessoa::dump($codpes)) {
-                $user->name = (Pessoa::dump($codpes)['nompesttd']);
+            $pessoa = Pessoa::dump($codpes);
+            if ($pessoa) {
+                $user->name = ($pessoa['nompesttd']);
             }else{
                 $user->name = $codpes;
             }
