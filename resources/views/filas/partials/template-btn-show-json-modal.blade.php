@@ -19,6 +19,12 @@
                     @method('POST')
                     @csrf
 
+                    <style>
+                        #template {
+                            height: auto !important;
+                            overflow-y: auto !important;
+                        }
+                    </style>
                     <div class="form-group row">
                         {{ Form::label('template', 'Json', ['class' => 'col-form-label col-sm-2']) }}
                         <div class="col-sm-10">
