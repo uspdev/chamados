@@ -6,7 +6,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalChamadoEdit">Chamado</h5>
+                <h5 class="modal-title" id="modalChamadoEdit">Chamado TESTE</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -43,11 +43,26 @@
 </div>
 
 @section('javascripts_bottom')
-@parent
-<script type="text/javascript">
-    function mostraModal() {
+    @parent
+    {{ Html::script('js/functions.js') }}
+    <script type="text/javascript">
+      function mostraModal() {
         $('#chamadoModal').modal('show');
-    }
+      }
 
-</script>
-@stop
+      /* @autor uspdev/alecosta 10/02/2022
+       * Ao carregar a página ordena todos os campos caixa de seleção adicionados na fila
+      */
+      $(document).ready(function() {
+        // Pega todos os campos extras que são caixa de seleção
+        $('select[name^="extras"]').each(function () {
+          var nameField = $(this).prop('name');
+          // Considerando que todo campo adicionado na fila tenha o nome padrão extras[alguma-coisa]
+          var start = 7;
+          var end = nameField.length - 1;
+          // Ordena as opções do campo caixa de seleção
+          $(ordenarOpcoes(nameField.substring(start, end)));
+        });
+      });
+  </script>
+@endsection

@@ -59,3 +59,24 @@
     </div>
   </div>
 @endsection
+
+@section('javascripts_bottom')
+    @parent
+    {{ Html::script('js/functions.js') }}
+    <script type="text/javascript">
+      /* @autor uspdev/alecosta 10/02/2022
+       * Ao carregar a página ordena todos os campos caixa de seleção adicionados na fila
+      */
+      $(document).ready(function() {
+        // Pega todos os campos extras que são caixa de seleção
+        $('select[name^="extras"]').each(function () {
+          var nameField = $(this).prop('name');
+          // Considerando que todo campo adicionado na fila tenha o nome padrão extras[alguma-coisa]
+          var start = 7;
+          var end = nameField.length - 1;
+          // Ordena as opções do campo caixa de seleção
+          $(ordenarOpcoes(nameField.substring(start, end)));
+        });
+      });
+  </script>
+@endsection
