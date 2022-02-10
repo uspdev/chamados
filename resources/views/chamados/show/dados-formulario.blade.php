@@ -8,11 +8,19 @@
                 <span>{{ Carbon\Carbon::parse($extras->$field)->format('d/m/Y') ?? '' }}</span>
                 @break
                 @default
-                <span>{{ $extras->$field ?? '' }}</span>
+                @php
+                    $keyOption = $extras->$field;
+                @endphp
+                <span>
+                @if ($val->type == 'select')
+                    {{ $val->value->$keyOption ?? '' }}
+                @else
+                    {{ $extras->$field ?? '' }}
+                @endif
+                </span>
             @endswitch
             <br>
         @endif
-       
 
         @if (!empty($val->can) && $val->can == 'admin')
             Este campo so deve aparecer para admin
