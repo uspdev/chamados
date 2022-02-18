@@ -13,10 +13,10 @@
   @parent
 
   <div class="card bg-light mb-3">
-    <div class="card-header h5">
+    <div class="card-header">
       <span class="text-muted">Novo chamado para</span> ({{ $fila->setor->sigla }}) {{ $fila->nome }}
       @include('chamados.partials.instrucoes-da-fila-badge')
-
+      <div class="small ml-3">{{ $fila->descricao }}</div>
     </div>
     <div class="card-body">
 
@@ -52,7 +52,8 @@
 
         </div>
         <div class="form-group card-header">
-          <button type="button" class="btn btn-secondary" onclick="window.history.back();"><i class="fas fa-times-circle"></i> Cancelar</button>
+          <button type="button" class="btn btn-secondary" onclick="window.history.back();"><i
+              class="fas fa-times-circle"></i> Cancelar</button>
           <button type="submit" class="btn btn-primary">Enviar <i class="fas fa-check-circle"></i></button>
         </div>
       </form>
