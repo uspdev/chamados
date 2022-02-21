@@ -31,6 +31,7 @@
       @include('chamados.partials.status')
       @include('chamados.partials.instrucoes-da-fila-badge')
       @include('chamados.partials.patrimonio-pendente-badge')
+      <div class="small ml-3">{{ $chamado->fila->descricao }}</div>
     </div>
     <div class="card-body">
 
