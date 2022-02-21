@@ -37,7 +37,7 @@
                                                         @isset($tvalue[$field])
                                                             @switch($field)
                                                                 @case('type')
-                                                                <select class="form-control" name="template[{{ $tkey }}][{{ $field }}]">
+                                                                <select class="form-control" name="template[{{ $tkey }}][{{ $field }}]" onchange="javascript: mudarCampoInputTextarea(this.name);">
                                                                     <option value='text' {{ $tvalue[$field] == 'text' ? 'selected' : '' }}>Texto</option>
                                                                     <option value='select' {{ $tvalue[$field] == 'select' ? 'selected' : '' }}>Caixa de Seleção</option>
                                                                     <option value='date' {{ $tvalue[$field] == 'date' ? 'selected' : '' }}>Data</option>
@@ -107,6 +107,7 @@
 
 @section('javascripts_bottom')
     @parent
+    {{ Html::script('js/functions.js') }}
     <script>
         function apaga_campo(r) {
             if (confirm('Tem certeza que deseja deletar?')) {
@@ -136,6 +137,16 @@
                 }
             }
         }
+
+        // Ao carregar a página
+        $(document).ready(function() {
+            // Pega todos os campos extras que são caixa de seleção
+            $('select[name$="][type]"]').each(function () {
+                var nameField = $(this).prop('name');
+                // muda o campo de input para caixa de texto
+                $(mudarCampoInputTextarea(nameField));
+            });
+        });
 
     </script>
 @endsection
