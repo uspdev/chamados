@@ -29,7 +29,7 @@
       <div class="col-12 form-group ml-2">
         @foreach ($fila->config->status as $input)
           <div class="form-inline mb-2">
-            <input class="form-control col-5" type="text" name="config[status][select][]"
+            <input class="form-control col-5" type="text" name="config[status][select][]" maxlength="30"
               value="{{ $input->label ?? '' }}">
 
             <select name="config[status][select_cor][]" class="form-control col-3 ml-2">
@@ -68,7 +68,7 @@
 {{-- usado no add estado, iagual ao estado já existente --}}
 <template id="form-inline">
   <div class="form-inline mb-2">
-    <input class="form-control col-5" type="text" name="config[status][select][]" value="">
+    <input class="form-control col-5" type="text" name="config[status][select][]" value="" maxlength="30">
     <select name="config[status][select_cor][]" class="form-control col-3 ml-2">
       <option value="">Selecione...</option>
       <option value="danger" class="bg-danger text-dark">Danger</option>
