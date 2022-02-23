@@ -78,6 +78,12 @@
         pessoasForm.on('shown.bs.modal', function() {
             $oSelect2.select2('open')
         })
+
+        // coloca o focus no select2
+        // https://stackoverflow.com/questions/25882999/set-focus-to-search-text-field-when-we-click-on-select-2-drop-down
+        $(document).on('select2:open', () => {
+            document.querySelector('.select2-search__field').focus();
+        });
     })
 
 </script>
