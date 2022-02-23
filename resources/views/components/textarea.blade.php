@@ -9,6 +9,8 @@
     'id' => mt_rand(1000000, 1999999),
 ])
 
+{{-- 23/2/2022 - Em uso no config e na criacao de chamados --}}
+
 <div class="form-group {{ $class }}">
   @if ($label)
     <label for="{{ $id }}">{!! $label !!}</label>
