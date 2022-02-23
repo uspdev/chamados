@@ -33,8 +33,7 @@
               <label for="assunto" class="control-label">Assunto</label>
               <input class="form-control" type="text" name="assunto" value="{{ old('assunto') }}">
               <br>
-              <label for="descricao" class="control-label">Descrição</label>
-              <textarea class="form-control" name="descricao">{{ old('descricao') }}</textarea>
+              <x-textarea class="" label="Descrição" name="descricao" />
             </div>
           </div>
 
