@@ -9,6 +9,11 @@ class ComentarioObserver
 {
     /**
      * Handle the Comentario "created" event.
+     * 
+     * Ao criar um comentário ele deve ser enviado para pessoas listadas no chamado.
+     * Caso não tenha atendente atribuído deve verificar triagem:
+     * se triagem=1, deve enviar para os gerentes;
+     * se triagem=0, deve enviar para todos da fila;
      *
      * @param  \App\Models\Comentario  $comentario
      * @return void
@@ -27,7 +32,12 @@ class ComentarioObserver
         // enquanto não houver atendente atribuido envia email para todos da fila
         if ($comentario->chamado->users()->wherePivot('papel', 'Atendente')->count() == 0) {
             $fila = $comentario->chamado->fila;
-            foreach ($fila->users()->get() as $user) {
+            if ($fila->config->triagem == 1) {
+                $users = $fila->users()->wherePivot('funcao', 'Gerente')->get();
+            } else {
+                $users = $fila->users()->get();
+            }
+            foreach ($users as $user) {
                 // desde que ele aceite receber as notificacoes
                 if (data_get($user->config, 'notifications.email.filas.' . $fila->id, true)) {
                     $papel = $user->pivot->funcao . ' da fila (' . $fila->setor->sigla . ') ' . $fila->nome;
@@ -36,18 +46,6 @@ class ComentarioObserver
                 }
             }
         }
-
-        // rodar a fila
-        /*
-    Atendentes e gerentes
-    novo chamado - pessoas da fila (s)
-    atualização de outros chamados (pessoas da fila)(s)
-
-    Usuário comum
-    atualizacao de chamados que participa (s)
-
-    guardar log de tudo
-     */
 
     }
 

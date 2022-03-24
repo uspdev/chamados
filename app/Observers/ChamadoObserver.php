@@ -10,6 +10,11 @@ class ChamadoObserver
     /**
      * Handle the Chamado "created" event.
      *
+     * Ao criar um chamado ele deve ser enviado para o autor.
+     * deve verificar triagem:
+     * se triagem=1, deve enviar para os gerentes;
+     * se triagem=0, deve enviar para todos da fila;
+     * 
      * @param  \App\Models\Chamado  $chamado
      * @return void
      */
@@ -23,7 +28,12 @@ class ChamadoObserver
 
         // e para as pessoas da fila (atendentes e gerentes)
         $fila = $chamado->fila;
-        foreach ($fila->users()->get() as $user) {
+        if ($fila->config->triagem == 1) {
+            $users = $fila->users()->wherePivot('funcao', 'Gerente')->get();
+        } else {
+            $users = $fila->users()->get();
+        }
+        foreach ($users as $user) {
             // vamos verificar se o atendente/gerente quer receber essa notificação, padrão é sim
             if (data_get($user->config, 'notifications.email.filas.' . $fila->id, true)) {
                 $papel = $user->pivot->funcao . ' da fila (' . $fila->setor->sigla . ') ' . $fila->nome;
