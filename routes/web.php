@@ -1,14 +1,16 @@
 <?php
 
-use App\Http\Controllers\ArquivoController;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\ChamadoController;
-use App\Http\Controllers\ComentarioController;
+
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FilaController;
-use App\Http\Controllers\IndexController;
-use App\Http\Controllers\SetorController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\IndexController;
+use App\Http\Controllers\SetorController;
+use App\Http\Controllers\ArquivoController;
+use App\Http\Controllers\ChamadoController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\ComentarioController;
 
 Route::get('/', [IndexController::class, 'index'])->name('home');
 Route::get('ajuda', [IndexController::class, 'ajuda']);
