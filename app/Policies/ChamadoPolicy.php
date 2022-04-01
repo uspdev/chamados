@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Chamado;
+use App\Models\Fila;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Support\Facades\Gate;
@@ -54,17 +55,25 @@ class ChamadoPolicy
      * @param  \App\User  $user
      * @return mixed
      */
-    public function create(User $user)
+    public function create(User $user, Fila $fila)
     {
-        # qualquer usuário pode criar chamados
-        return $user;
+        // usa a mesma regra da listagem
+        $setores = Fila::listarFilasParaNovoChamado();
+        foreach ($setores as $setor) {
+            foreach ($setor->filas as $f) {
+                if ($f->id == $fila->id) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
      * Determine whether the user can update the chamado.
      *
-     * @param  \App\User  $user
-     * @param  \App\Chamado  $chamado
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\Chamado  $chamado
      * @return mixed
      */
     public function update(User $user, Chamado $chamado)
@@ -89,8 +98,8 @@ class ChamadoPolicy
      * Determina se user pode atualizar comentarios
      * em especial quando o chamado está fechado mas não finalizado
      *
-     * @param  \App\User  $user
-     * @param  \App\Chamado  $chamado
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\Chamado  $chamado
      * @return mixed
      */
     public function updateComentario(User $user, Chamado $chamado)
