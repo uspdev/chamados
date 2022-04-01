@@ -24,6 +24,7 @@
 
     {!! Form::open(['url' => 'filas/' . $fila->id, 'name' => 'form_config']) !!}
     @method('put')
+    <input type="hidden" name="card" value="estados">
 
     <div class="form-row">
       <div class="col-12 form-group ml-2">

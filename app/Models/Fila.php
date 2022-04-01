@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Fila extends Model
 {
@@ -17,6 +17,12 @@ class Fila extends Model
 
     public $defaultSettings = [
         'instrucoes' => '',
+        'visibilidade.customCodpes' => '',
+    ];
+
+    public $settingsRules = [
+        'instrucoes' => 'nullable',
+        'visibilidade.customCodpes' => 'nullable',
     ];
 
     // protected $persistSettings = true; //boolean
@@ -246,7 +252,7 @@ class Fila extends Model
         }
 
         $filas = collect();
-        $user = \Auth()->user();
+        $user = \Auth::user();
 
         # listando as filas de todos os setores que o usuário faz parte.
         foreach ($user->setores()->wherePivot('funcao', 'Gerente')->get() as $setor) {
@@ -281,6 +287,7 @@ class Fila extends Model
             $filas = $setor->filas;
 
             # agora vamos remover as filas onde não se pode abrir chamados
+            # a ordem de liberação é relevante !!!!
             $filas = $filas->filter(function ($fila, $key) {
 
                 # bloqueia as filas que não estão em produção
@@ -295,7 +302,7 @@ class Fila extends Model
 
                 # liberando pessoas (gerentes, servidores, etc) do proprio setor (interno)
                 $interno = \Auth::user()->setores->contains($fila->setor);
-                if ($fila->config->visibilidade->setores == 'interno' && $interno) {
+                if ($fila->config->visibilidade->setores == 'interno') {
                     return true;
                 }
 
@@ -304,7 +311,7 @@ class Fila extends Model
                     return true;
                 }
 
-                # liberando todos os servidores
+                # liberando todos os servidores da unidade
                 # a pessoa só vai estar cadastrada como servidor depois de logar no sistema !!!
                 $servidor = \Auth::user()->setores()->wherePivot('funcao', 'Servidor')->first();
                 if ($fila->config->visibilidade->servidores && $servidor) {
@@ -323,12 +330,29 @@ class Fila extends Model
                     return true;
                 }
 
+                # liberando pessoas específicas listadas na fila
+                $customCodpes = explode(PHP_EOL,$fila->settings()->get('visibilidade.customCodpes'));
+                if(in_array(\Auth::user()->codpes, $customCodpes)) {
+                    return true;
+                }
+
                 # se não houver nenhuma liberação então bloqueia a fila
                 return false;
             });
             $setor->filas = $filas;
         }
         return $setores;
+    }
+
+    /**
+     * Retorna a quantidade de codpes existente em customCodpes
+     * 
+     * @return Int
+     */
+    public function contarCustomCodpes() {
+        $customCodpes = $this->settings()->get('visibilidade.customCodpes');
+        $customCodpes = explode(PHP_EOL,$customCodpes);
+        return count($customCodpes);
     }
 
     /**

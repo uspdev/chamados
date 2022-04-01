@@ -4,7 +4,7 @@ $menu = [
     [
         'text' => '<i class="far fa-plus-square"></i> Novo Chamado',
         'url' => 'chamados/create',
-        'can' => 'chamados.create',
+        'can' => 'usuario',
     ],
     [
         'text' => '<i class="far fa-list-alt"></i> Meus Chamados',
