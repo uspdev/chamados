@@ -80,7 +80,7 @@
 
             <div class="overflow-auto custom-codpes-list" style="height: 215px; margin-top:15px">
               @foreach (explode(PHP_EOL, $fila->settings()->get('visibilidade.customCodpes')) as $codpes)
-                {{ $codpes }} - {{ \Uspdev\Replicado\Pessoa::obterNome($codpes) }}<br />
+                {{ $codpes }} - {{ \Uspdev\Replicado\Pessoa::retornarNome($codpes) }}<br />
               @endforeach
             </div>
 
