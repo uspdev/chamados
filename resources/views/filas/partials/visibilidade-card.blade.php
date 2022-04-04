@@ -22,7 +22,7 @@
 
     <div class="card-header">
       <i class="fas fa-eye"></i> Visibilidade
-      @include('ajuda.filas.config-visibilidade')
+      <span class="small">@include('ajuda.filas.config-visibilidade')</span>
 
       <button type="submit" class="btn btn-sm btn-light text-primary d-none visibilidade-salvar-btn">
         <i class="fas fa-save"></i> Salvar
