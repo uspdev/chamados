@@ -58,8 +58,9 @@
       <div class="mt-3">
         <span class="text-muted">Adicionar pessoas por setor</span>
         <div class="ml-3">
-          <x-checkbox name="config[visibilidade][setores]" value="interno" label="{{ $fila->setor->sigla }}" class="form-check-inline"
-          checked="{{ $fila->config->visibilidade->setores == 'interno' ? true : false }}" />
+          <x-checkbox name="config[visibilidade][setores]" value="interno" label="{{ $fila->setor->sigla }}"
+            class="form-check-inline"
+            checked="{{ $fila->config->visibilidade->setores == 'interno' ? true : false }}" />
         </div>
       </div>
 
@@ -70,8 +71,7 @@
         <div class="row">
           <div class="col-md-3">
 
-            <x-textarea class="mt-2 visibilidade-show-save custom-codpes-textarea" rows="9" autoLine="0" 
-              label=""
+            <x-textarea class="mt-2 visibilidade-show-save custom-codpes-textarea" rows="9" autoLine="0" label=""
               name="settings[visibilidade][customCodpes]"
               value="{{ $fila->settings()->get('visibilidade.customCodpes') }}" />
 
@@ -79,9 +79,11 @@
           <div class="col-md-9">
 
             <div class="overflow-auto custom-codpes-list" style="height: 215px; margin-top:15px">
-              @foreach (explode(PHP_EOL, $fila->settings()->get('visibilidade.customCodpes')) as $codpes)
-                {{ $codpes }} - {{ \Uspdev\Replicado\Pessoa::retornarNome($codpes) }}<br />
-              @endforeach
+              @if ($fila->contarCustomCodpes() != 0)
+                @foreach (explode(PHP_EOL, $fila->settings()->get('visibilidade.customCodpes')) as $codpes)
+                  {{ $codpes }} - {{ \Uspdev\Replicado\Pessoa::retornarNome($codpes) }}<br />
+                @endforeach
+              @endif
             </div>
 
           </div>

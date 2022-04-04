@@ -77,7 +77,7 @@ class FilaController extends Controller
 
             $visibilidade = $request->settings['visibilidade'];
             if (isset($visibilidade['customCodpes']) && !is_null($visibilidade['customCodpes'])) {
-                $customCodpes = $visibilidade['customCodpes'];
+                $customCodpes = trim($visibilidade['customCodpes']);
 
                 // remove caracteres não numéricos, mantém linhas, remove linhas vazias
                 $customCodpes = preg_replace(['/[^0-9\n]/', '/\n\n+/'], ['', PHP_EOL], $customCodpes);

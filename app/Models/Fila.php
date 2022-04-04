@@ -351,8 +351,12 @@ class Fila extends Model
      */
     public function contarCustomCodpes() {
         $customCodpes = $this->settings()->get('visibilidade.customCodpes');
-        $customCodpes = explode(PHP_EOL,$customCodpes);
-        return count($customCodpes);
+        if (empty($customCodpes)) {
+            return 0;
+        } else {
+            $customCodpes = explode(PHP_EOL,$customCodpes);
+            return count($customCodpes);
+        }
     }
 
     /**
