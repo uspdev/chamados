@@ -33,8 +33,8 @@
       <div class="mt-3">
         <span class="text-muted mr-2">Adicionar pessoas por categoria</span>
         <div class="ml-3">
-          <x-checkbox name="config[visibilidade][alunos]" label="alunos" disabled
-            checked="{{ $fila->config->visibilidade->alunos ? true : false }}" class="form-check-inline" />
+          {{-- <x-checkbox name="config[visibilidade][alunos]" label="alunos" disabled
+            checked="{{ $fila->config->visibilidade->alunos ? true : false }}" class="form-check-inline" /> --}}
 
           <x-checkbox name="config[visibilidade][servidores]" label="servidores"
             checked="{{ $fila->config->visibilidade->servidores ? true : false }}" class="form-check-inline" />

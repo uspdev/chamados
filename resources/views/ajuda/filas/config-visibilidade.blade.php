@@ -15,8 +15,4 @@
         <b>SETOR *</b> - qualquer pessoa que esteja vinculada ao setor onde foi criada a fila<br>
         <b>lista personalizada</b> - lista de "números USP" das pessoas autorizadas<br>
     </div>
-
-        <br>
-        OBS.: A liberação para alunos ainda não está disponível.
-    </div>
 </div>
