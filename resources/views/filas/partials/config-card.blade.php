@@ -17,6 +17,7 @@
 
     {!! Form::open(['url' => 'filas/' . $fila->id, 'name' => 'form_config']) !!}
     @method('put')
+    <input type="hidden" name="card" value="config">
 
     <div class="ml-2 mt-2">
       <span class="font-weight-bold">Triagem</span>
@@ -38,72 +39,6 @@
               {{ $fila->config->triagem ? '' : 'checked' }}>
             Não
           </label>
-        </div>
-      </div>
-    </div>
-
-    <div class="ml-2 mt-3">
-      <span class="font-weight-bold">Visibilidade</span>
-      @include('ajuda.filas.config-visibilidade')
-
-      <div class="ml-2">
-        <span class="text-muted mr-2">pessoas:</span>
-        <div class="ml-3">
-          <div class="form-check form-check-inline">
-            <label class="form-check-label">
-              <input disabled class="form-check-input" type="checkbox" name="config[visibilidade][alunos]" value="1"
-                {{ $fila->config->visibilidade->alunos ? 'checked' : '' }}>
-              alunos
-            </label>
-          </div>
-          <div class="form-check form-check-inline">
-            <label class="form-check-label">
-              <input class="form-check-input" type="checkbox" name="config[visibilidade][servidores]" value="1"
-                {{ $fila->config->visibilidade->servidores ? 'checked' : '' }}>
-              servidores
-            </label>
-          </div>
-          <div class="form-check form-check-inline">
-            <label class="form-check-label">
-              <input class="form-check-input" type="checkbox" name="config[visibilidade][todos]" value="1"
-                {{ $fila->config->visibilidade->todos ? 'checked' : '' }}>
-              todos (USP)
-            </label>
-          </div>
-          <br>
-          <div class="form-check form-check-inline">
-            <label class="form-check-label">
-              <input class="form-check-input" type="checkbox" name="config[visibilidade][setor_gerentes]" value="1"
-                {{ $fila->config->visibilidade->setor_gerentes ? 'checked' : '' }}>
-              gerentes de setor
-            </label>
-          </div>
-          <div class="form-check form-check-inline">
-            <label class="form-check-label">
-              <input class="form-check-input" type="checkbox" name="config[visibilidade][fila_gerentes]" value="1"
-                {{ $fila->config->visibilidade->fila_gerentes ? 'checked' : '' }}>
-              gerentes de fila
-            </label>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="btn-group ml-2">
-          <span class="text-muted mr-2">setores:</span>
-          <div class="form-check form-check-inline">
-            <label class="form-check-label">
-              <input class="form-check-input" type="radio" name="config[visibilidade][setores]" value="interno"
-                {{ $fila->config->visibilidade->setores == 'interno' ? 'checked' : '' }}>
-              interno ({{ $fila->setor->sigla }})
-            </label>
-          </div>
-          <div class="form-check form-check-inline">
-            <label class="form-check-label">
-              <input class="form-check-input" type="radio" name="config[visibilidade][setores]" value="todos"
-                {{ $fila->config->visibilidade->setores == 'todos' ? 'checked' : '' }}>
-              todos
-            </label>
-          </div>
         </div>
       </div>
     </div>

@@ -32,15 +32,13 @@
                 <div class="row">
                     <div class="col-md-7">
                         @include('filas.partials.principal-card') {{-- Principal --}}
-                        <br>
                         @include('filas.partials.config-card') {{-- Config --}}
-                        <br>
                         @include('filas.partials.estados-card') {{-- Estados --}}
-                        <br>
                         @include('filas.partials.formulario-card') {{-- Formulario --}}
                     </div>
                     <div class="col-md-5">
                         @include('filas.partials.pessoas-card') {{-- Secundário --}}
+                        @include('filas.partials.visibilidade-card') {{-- Secundário --}}
                     </div>
                 </div>
             </div>

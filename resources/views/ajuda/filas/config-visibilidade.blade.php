@@ -4,18 +4,15 @@
 <div class="collapse" id="ajuda_visibilidade">
     <div class="card-body card-ajuda">
         <b>Ajuda para visibilidade</b><br>
-        Controla quem pode criar chamados nessa fila.<br>
-        No grupo pessoas, selecione a categoria de pessoas que deseja liberar.<br>
-        No grupo setores, escolha entre interno (somente pessoas vinculadas ao setor),
-        ou todos.<br>
-        <br>
-        <b>Exemplo 1</b>: Criar fila para uso interno em um departamento acadêmico:
-        selecione <b>servidores</b> e <b>interno</b>.<br>
-        <b>Exemplo 2</b>: Criar fila em um setor administrativo que ficará disponível
-        aos chefes e secretários da Unidade: selecione <b>gerentes de setor</b> e <b>todos</b>.<br>
-        <b>Exemplo 3</b>: Criar fila para uso somente das pessoas cadastradas na fila:
-        selecione <b>interno</b>.<br>
-        <br>
-        OBS.: A liberação para alunos estará disponível em breve.
+        Em princípio somente os atendentes e gerentes da própria fila podem abrir chamados nela.
+        As opções de visibilidade controlam quem mais pode criar chamados nessa fila.<br>
+        Selecione os grupos que você quer autorizar.<br>
+        <div class="ml-3">
+        <b>servidores</b> - todos os servidores da unidade<br>
+        <b>todos (USP)</b> - qualquer pessoa que tenha senha única, de qualquer unidade<br>
+        <b>gerentes de setor</b> -  qualquer pessoa que esteja listada como gerente de um setor<br>
+        <b>gerentes de fila</b> -  qualquer pessoa que esteja listada como gerente de uma fila<br>
+        <b>SETOR *</b> - qualquer pessoa que esteja vinculada ao setor onde foi criada a fila<br>
+        <b>lista personalizada</b> - lista de "números USP" das pessoas autorizadas<br>
     </div>
 </div>

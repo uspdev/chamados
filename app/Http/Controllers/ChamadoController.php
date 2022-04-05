@@ -57,8 +57,8 @@ class ChamadoController extends Controller
      */
     public function create(Fila $fila)
     {
-        $this->authorize('chamados.create');
         \UspTheme::activeUrl('chamados/create');
+        $this->authorize('chamados.create', $fila);
 
         $chamado = new Chamado;
         $chamado->fila = $fila;
@@ -74,8 +74,9 @@ class ChamadoController extends Controller
      */
     public function listaFilas()
     {
-        $this->authorize('chamados.create');
         \UspTheme::activeUrl('chamados/create');
+        $this->authorize('usuario');
+        
         $setores = Fila::listarFilasParaNovoChamado();
         return view('chamados.listafilas', compact('setores'));
     }
@@ -88,8 +89,7 @@ class ChamadoController extends Controller
      */
     public function store(ChamadoRequest $request, Fila $fila)
     {
-        # limitar as filas que o usuario pode criar, somente filas "em produção"
-        $this->authorize('chamados.create');
+        $this->authorize('chamados.create', $fila);
 
         # na criação não precisa
         #$request->validate(JSONForms::buildRules($request, $fila));
@@ -136,8 +136,8 @@ class ChamadoController extends Controller
      */
     public function show(Chamado $chamado)
     {
-        $this->authorize('chamados.view', $chamado);
         \UspTheme::activeUrl('chamados');
+        $this->authorize('chamados.view', $chamado);
 
         $template = json_decode($chamado->fila->template);
         $extras = json_decode($chamado->extras);
@@ -240,7 +240,7 @@ class ChamadoController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Chamado  $chamado
+     * @param  \App\Models\Chamado  $chamado
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Chamado $chamado)

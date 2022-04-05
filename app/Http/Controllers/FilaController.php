@@ -73,26 +73,43 @@ class FilaController extends Controller
 
         $fila->fill($request->all());
 
-        if ($request->settings) {
-            $settings = $request->settings;
+        if ($request->card == 'visibilidade') {
 
-            $fila->settings()->setMultiple([
-                'instrucoes' => $settings['instrucoes'],
-            ]);
+            $visibilidade = $request->settings['visibilidade'];
+            if (isset($visibilidade['customCodpes']) && !is_null($visibilidade['customCodpes'])) {
+                $customCodpes = trim($visibilidade['customCodpes']);
+
+                // remove caracteres não numéricos, mantém linhas, remove linhas vazias
+                $customCodpes = preg_replace(['/[^0-9\n]/', '/\n\n+/'], ['', PHP_EOL], $customCodpes);
+                //remove repetidos
+                $customCodpes = implode(PHP_EOL, array_unique(explode(PHP_EOL, $customCodpes)));
+
+                $visibilidade['customCodpes'] = $customCodpes;
+            }
+            $fila->settings()->set('visibilidade', $visibilidade);
+
+            // está no config mas temos de migrar para settings
+            $config = $request->config ?? [];
+
+            // vamos tratar setores pois mudou para checkbox e não usa valor 0/1 e sim local/todos
+            // porém "todos" não é utilizado no sistema
+            if (!isset($config['visibilidade']['setores'])) {
+                $config['visibilidade']['setores'] = 'todos';
+            }
+
+            // temos de mergear com o config antigo para preservar os dados
+            $fila->config = array_merge(json_decode(json_encode($fila->config), true), $config);
         }
 
-        // migrar para settings ??????????????????
-        if (!isset($request->config['status'])) {
-            // se nao tiver status então é o form com outros dados
-            // temos de mergear com o config antigo para preservar os dados
-            if($request->config){
-                $fila->config = array_merge(json_decode(json_encode($fila->config), true),$request->config);
-            } else {
-                json_decode(json_encode($fila->config), true);
-            }
-                
+        if ($request->card == 'config') {
+            $settings = $request->settings;
+            $fila->settings()->set('instrucoes', $settings['instrucoes']);
+            
+            $config = $request->config;
+            $fila->config = array_merge(json_decode(json_encode($fila->config), true), $config);
+        }
 
-        } else {
+        if ($request->card == 'estados') {
 
             $qtd_select = count(array_filter($request->config['status']['select'], function ($x) {
                 return !empty($x);
