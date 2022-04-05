@@ -24,6 +24,7 @@
                             <label class="control-label" for="descricao">Descrição</label>
                             <textarea class="form-control" id="descricao" name="descricao" rows="4">{{ $chamado->descricao ?? old('descricao') }}</textarea>
                         </div>
+                        <hr />
                         @foreach ($form as $input)
                         <div class="form-group">
                             @foreach ($input as $element)
