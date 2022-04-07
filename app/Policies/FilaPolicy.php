@@ -13,6 +13,24 @@ class FilaPolicy
     use HandlesAuthorization;
 
     /**
+     * Verifica se o usuário é atendente ou gerente de uma fila
+     * 
+     * Permitido se o usuário está no perfiladmin também
+     * 
+     * @param Fila $fila Fila a ser
+     */
+    public function atendente(User $user, Fila $fila)
+    {
+        if ($fila->users->contains($user)) {
+            return true;
+        }
+
+        if (Gate::check('perfiladmin')) {
+            return true;
+        }
+    }
+
+    /**
      * Determine whether the user can view any models.
      *
      * @param  \App\Models\User  $user
