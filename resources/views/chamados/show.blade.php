@@ -50,12 +50,16 @@
           @includewhen(!empty($template), 'chamados.show.dados-formulario')
         </div>
       </div>
+
       {{-- card do atendente --}}
-      <div class="row">
-        <div class="col-md-12">
-          @includewhen(Gate::check('perfilatendente') || Gate::check('perfiladmin'), 'chamados.show.card-atendente')
+      @if (Gate::check('filas.atendente', $chamado->fila))
+        <div class="row">
+          <div class="col-md-12">
+            @includewhen(Gate::check('perfilatendente') || Gate::check('perfiladmin'), 'chamados.show.card-atendente')
+          </div>
         </div>
-      </div>
+      @endif
+
       {{-- demais cards --}}
       <div class="row">
         <div class="col-md-8">
