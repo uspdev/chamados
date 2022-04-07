@@ -12,19 +12,18 @@
       @if ($chamado->fila->config->triagem == false && $chamado->status == 'Triagem')
         @include('chamados.partials.show-atender-modal')
       @endif
-
+      <span class="mx-5 small">
+      @includewhen($chamado->status != 'Fechado', 'chamados.show.mudar-status')
+    </span>
     </div>
   </div>
   <div class="card-body">
     <div class="row">
-      <div class="col-md-4">
-        @includewhen($chamado->status != 'Fechado', 'chamados.show.mudar-status')
-      </div>
-      <div class="col-md-4">
+      <div class="col-md-6">
         @includewhen($chamado->status == 'Fechado', 'chamados.show.formulario-dados-atendente')
         @includewhen($chamado->status != 'Fechado', 'chamados.show.formulario-form-atendente')
       </div>
-      <div class="col-md-4">
+      <div class="col-md-6">
         @include('chamados.show.anotacoes-tecnicas')
       </div>
 

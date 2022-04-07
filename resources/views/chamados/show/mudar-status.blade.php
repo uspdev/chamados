@@ -12,9 +12,13 @@
   @csrf
   @method('PUT')
   <div class="form-group form-inline ml-2">
-    <b>{{ Form::label('status', 'Status') }}</b>
-    {{ Form::select('status', $status_list, $chamado->status, ['id' => 'estado','class' => 'form-control mx-2','placeholder' => 'Escolha um..']) }}
-    {{ Form::submit('OK', ['id' => 'btn_salvar_status', 'class' => 'btn btn-primary mx-2']) }}
+    <div class="input-group input-group-sm">
+      <div class="input-group-prepend">
+        <div class="input-group-text font-weight-bold">Mudar status</div>
+      </div>
+      {{ Form::select('status', $status_list, $chamado->status, ['id' => 'estado','class' => 'custom-select','placeholder' => 'Escolha um..']) }}
+    </div>
+    {{ Form::submit('OK', ['id' => 'btn_salvar_status', 'class' => 'btn btn-sm btn-primary mx-2']) }}
   </div>
 </form>
 
