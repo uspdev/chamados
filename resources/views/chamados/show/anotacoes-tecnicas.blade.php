@@ -1,7 +1,7 @@
 <form id="anotacoes_form" name="anotacoes_form" method="POST" action="chamados/{{ $chamado->id }}">
   @csrf
   @method('PUT')
-  <b>Anotações técnicas</b> <span class="status"></span>
+  Anotações técnicas <span class="status"></span>
   <textarea class="form-control" rows="5" name="anotacoes" {{ $chamado->status == 'Fechado' ? 'disabled' : '' }}
     placeholder="Esse conteúdo é visível somente para o atendente.">{{ $chamado->anotacoes }}</textarea>
 </form>
