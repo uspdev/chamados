@@ -9,9 +9,7 @@
         @endforeach
         <br>
       @endforeach
-      @if ($formAtendente)
-        {{ Form::submit('OK', ['id' => 'btn_salvar_form_atendente', 'class' => 'btn btn-primary d-none']) }}
-      @endif
+      {{ Form::submit('OK', ['id' => 'btn_salvar_form_atendente', 'class' => 'btn btn-primary d-none']) }}
     </form>
   </div>
 </div>

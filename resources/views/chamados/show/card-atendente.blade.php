@@ -25,10 +25,14 @@
           </button>
         </div>
       </div>
-      <div class="col-md-6">
-        @includewhen($chamado->status == 'Fechado', 'chamados.show.formulario-dados-atendente')
-        @includewhen($chamado->status != 'Fechado', 'chamados.show.formulario-form-atendente')
-      </div>
+      @if ($formAtendente)
+        {{-- potencialmente pode haver dados-atendente orfaos se em algum momento havia 
+        um campo no form, foi preenchido e depois o campo foi eemovido da fila #319 --}}
+        <div class="col-md-6">
+          @includewhen($chamado->status == 'Fechado', 'chamados.show.formulario-dados-atendente')
+          @includewhen($chamado->status != 'Fechado', 'chamados.show.formulario-form-atendente')
+        </div>
+      @endif
       <div class="col-md-6">
         @include('chamados.show.anotacoes-tecnicas')
       </div>
