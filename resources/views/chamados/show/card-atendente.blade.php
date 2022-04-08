@@ -2,9 +2,7 @@
 <div class="card bg-light border-warning mb-3" id="card-atendente">
   <div class="card-header bg-warning">
     <div class="form-inline">
-      Atendente
-      <span title="Esta região é visível somente para o atendente, com conteúdo e ações próprios." class="ajuda mx-2"
-        data-toggle="tooltip"><i class="fas fa-question-circle"></i></span>
+      Atendente<span class="ml-3"></span>
 
       @if (Gate::check('filas.update', $chamado->fila))
         @includeWhen($chamado->status != 'Fechado', 'chamados.partials.show-triagem-modal')
@@ -13,12 +11,20 @@
         @include('chamados.partials.show-atender-modal')
       @endif
       <span class="mx-5 small">
-      @includewhen($chamado->status != 'Fechado', 'chamados.show.mudar-status')
-    </span>
+        @includewhen($chamado->status != 'Fechado', 'chamados.show.mudar-status')
+      </span>
     </div>
   </div>
   <div class="card-body">
     <div class="row">
+      <div class="col-md-12">
+        <div class="alert alert-primary alert-dismissible show" role="alert">
+          Ações e anotações do atendente. Caso seja relevante para o solicitante, utilize o card <b>Comentários</b>.
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      </div>
       <div class="col-md-6">
         @includewhen($chamado->status == 'Fechado', 'chamados.show.formulario-dados-atendente')
         @includewhen($chamado->status != 'Fechado', 'chamados.show.formulario-form-atendente')
