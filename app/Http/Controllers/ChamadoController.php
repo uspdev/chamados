@@ -31,15 +31,25 @@ class ChamadoController extends Controller
      */
     public function index(Request $request)
     {
+        \UspTheme::activeUrl('chamados?perfil=' . session('perfil'));
         $this->authorize('chamados.viewAny');
-        \UspTheme::activeUrl('chamados');
+
+        $request->validate([
+            'perfil' => 'nullable|string',
+        ]);
+
+        if ($request->perfil) {
+            \Auth::user()->trocarPerfil($request->perfil);
+            // vamos limpar
+            return Redirect::to('chamados');
+        }
 
         if (session('ano') == null) {
             session(['ano' => date('Y')]);
         }
 
         if (isset($request->finalizado)) {
-            session(['finalizado' =>$request->finalizado ? 1 : 0]);
+            session(['finalizado' => $request->finalizado ? 1 : 0]);
         } elseif (session('ano') != date('Y')) {
             session(['finalizado' => 1]);
         } else {
@@ -76,7 +86,7 @@ class ChamadoController extends Controller
     {
         \UspTheme::activeUrl('chamados/create');
         $this->authorize('usuario');
-        
+
         $setores = Fila::listarFilasParaNovoChamado();
         return view('chamados.listafilas', compact('setores'));
     }
@@ -136,7 +146,7 @@ class ChamadoController extends Controller
      */
     public function show(Chamado $chamado)
     {
-        \UspTheme::activeUrl('chamados');
+        \UspTheme::activeUrl('chamados?perfil=' . session('perfil'));
         $this->authorize('chamados.view', $chamado);
 
         $template = json_decode($chamado->fila->template);

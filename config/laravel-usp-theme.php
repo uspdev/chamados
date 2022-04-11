@@ -8,16 +8,16 @@ $menu = [
     ],
     [
         'text' => '<i class="far fa-list-alt"></i> Meus Chamados',
-        'url' => 'chamados',
-        'can' => 'perfilusuario',
+        'url' => 'chamados?perfil=usuario',
+        'can' => 'usuario',
     ],
     [
         'text' => '<i class="far fa-list-alt"></i> Meus Atendimentos',
-        'url' => 'chamados',
-        'can' => 'perfilatendente',
+        'url' => 'chamados?perfil=atendente',
+        'can' => 'atendente',
     ],
     [
-        'text' => '<i class="far fa-list-alt"></i> Chamados Admin',
+        'text' => '<span class="text-danger"><i class="far fa-list-alt"></i> Chamados Admin</span>',
         'url' => 'chamados',
         'can' => 'perfiladmin',
     ],

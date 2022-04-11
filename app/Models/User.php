@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Gate;
 use Uspdev\Replicado\Pessoa;
 
 class User extends Authenticatable
@@ -112,7 +113,7 @@ class User extends Authenticatable
             $pessoa = Pessoa::dump($codpes);
             if ($pessoa) {
                 $user->name = ($pessoa['nompesttd']);
-            }else{
+            } else {
                 $user->name = $codpes;
             }
             $user->telefone = (Pessoa::obterRamalUsp($codpes)) ?: '';
@@ -142,6 +143,44 @@ class User extends Authenticatable
             $user = User::criarPorCodpes($codpes);
         }
         return $user;
+    }
+
+    /**
+     * Troca o perfil do usuário
+     * 
+     * @param String $perfil [usuario, atendente ou admin]
+     * @return Array [success=>[true||false], msg=>mensagem de sucesso]
+     */
+    public function trocarPerfil($perfil)
+    {
+        $ret = [
+            'success' => false,
+            'msg' => '',
+        ];
+        switch ($perfil) {
+            case 'usuario':
+                session(['perfil' => 'usuario']);
+                $ret['success'] = true;
+                $ret['msg'] = 'Perfil mudado para Usuário com sucesso.';
+                break;
+
+            case 'atendente':
+                if (Gate::allows('atendente')) {
+                    session(['perfil' => 'atendente']);
+                    $ret['success'] = true;
+                    $ret['msg'] = 'Perfil mudado para Atendente com sucesso.';
+                }
+                break;
+
+            case 'admin':
+                if (Gate::allows('admin')) {
+                    session(['perfil' => 'admin']);
+                    $ret['success'] = true;
+                    $ret['msg'] = 'Perfil mudado para Admin com sucesso.';
+                }
+                break;
+        }
+        return $ret;
     }
 
     /**
