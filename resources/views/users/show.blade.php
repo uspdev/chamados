@@ -15,7 +15,7 @@
           @endif
           {{ $user->name }}
           @if (Gate::check('perfiladmin'))
-              | @include('users.partials.btn-change-user')
+            | @include('users.partials.btn-change-user')
           @endif
         </div>
         <div class="card-body">
@@ -47,13 +47,15 @@
                   Sem setores
                 @endforelse
               </div>
-              <div class="h5 mt-2">Chamados que observo</div>
+              <div class="h5 mt-2">Chamados que observo (não finalizados)</div>
               <div class="ml-2">
-                @forelse($user->chamados()->wherePivot('papel', 'Observador')->get() as $chamado)
+                @forelse($user->chamados()->wherePivot('papel', 'Observador')->finalizado(false)->get() as $chamado)
                   <div>
-                    <a href="chamados/{{ $chamado->id }}">{{ $chamado->nro }}/{{ $chamado->created_at->year }}</a>
-                    -
-                    {{ $chamado->assunto }}
+                    <a href="chamados/{{ $chamado->id }}">
+                      {{ $chamado->nro }}/{{ $chamado->created_at->year }}
+                    </a>
+                    - {{ $chamado->assunto }}
+                    @include('chamados.partials.status')
                   </div>
                 @empty
                   Nada sendo observado
@@ -74,7 +76,7 @@
 
   <div class="row">
     <div class="col-md-12">
-      @includewhen(Gate::check('perfiladmin'),'users.partials.card-oauth')
+      @includewhen(Gate::check('perfiladmin'), 'users.partials.card-oauth')
     </div>
   </div>
 @endsection
