@@ -26,7 +26,7 @@
             </div>
           </div>
 
-          @can('perfilatendente')
+          @if(Gate::check('filas.atendente', $chamado->fila) && Gate::check('perfilatendente'))
             <div class="form-group row">
               {{ Form::label('papel', 'Papel', ['class' => 'col-form-label col-sm-2']) }}
               <div class="col-sm-10">
@@ -35,7 +35,7 @@
             </div>
           @else
             <input type="hidden" name="papel" value="Observador">
-          @endcan
+          @endif
 
           <div class="text-right">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>

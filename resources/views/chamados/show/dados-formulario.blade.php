@@ -9,7 +9,7 @@
                 @break
                 @default
                 @php
-                    $keyOption = $extras->$field;
+                    $keyOption = $extras ? $extras->$field : null;
                 @endphp
                 <span>
                 @if ($val->type == 'select')

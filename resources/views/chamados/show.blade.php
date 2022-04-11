@@ -38,28 +38,28 @@
       @include('chamados.partials.instrucoes-da-fila', ['hide' => false])
 
       <div class="row">
-        <div class="col-md-12">
-          <div class="row">
-            <div class="col-md-8">
-              <span class="ml-2 float-right">
-                @includewhen(Gate::check('update',$chamado),'chamados.show.editar-formulario-btn')
-              </span>
-              {{-- Informações principais --}}
-              @include('chamados.show.principal')
-            </div>
-            <div class="col-md-4">
-              {{-- formulario --}}
-              @includewhen(!empty($template),'chamados.show.dados-formulario')
-            </div>
+        <div class="col-md-8">
+          <span class="ml-2 float-right">
+            @includewhen(Gate::check('update', $chamado), 'chamados.show.editar-formulario-btn')
+          </span>
+          {{-- Informações principais --}}
+          @include('chamados.show.principal')
+        </div>
+        <div class="col-md-4">
+          {{-- formulario --}}
+          @includewhen(!empty($template), 'chamados.show.dados-formulario')
+        </div>
+      </div>
+
+      {{-- card do atendente --}}
+      @if (Gate::check('filas.atendente', $chamado->fila))
+        <div class="row">
+          <div class="col-md-12">
+            @includewhen(Gate::check('perfilatendente') || Gate::check('perfiladmin'), 'chamados.show.card-atendente')
           </div>
         </div>
-      </div>
-      {{-- card do atendente --}}
-      <div class="row">
-        <div class="col-md-12">
-          @includewhen(Gate::check('perfilatendente') || Gate::check('perfiladmin'),'chamados.show.card-atendente')
-        </div>
-      </div>
+      @endif
+
       {{-- demais cards --}}
       <div class="row">
         <div class="col-md-8">

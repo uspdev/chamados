@@ -2,93 +2,41 @@
 <div class="card bg-light border-warning mb-3" id="card-atendente">
   <div class="card-header bg-warning">
     <div class="form-inline">
-      Atendente
-      <span title="Esta região é visível somente para o atendente, com conteúdo e ações próprios."
-        class="ajuda mx-2" data-toggle="tooltip"><i class="fas fa-question-circle"></i></span>
-      <span class="status">
-        <span class="badge badge-light mr-2"></span>
-      </span>
-      @if ($chamado->fila->config->triagem && Gate::check('filas.update', $chamado->fila))
+      Atendente<span class="ml-3"></span>
+
+      @if (Gate::check('filas.update', $chamado->fila))
         @includeWhen($chamado->status != 'Fechado', 'chamados.partials.show-triagem-modal')
-      @else
-        @includeWhen($chamado->status == 'Triagem', 'chamados.partials.show-atender-modal')
       @endif
+      @if ($chamado->fila->config->triagem == false && $chamado->status == 'Triagem')
+        @include('chamados.partials.show-atender-modal')
+      @endif
+      <span class="mx-5 small">
+        @includewhen($chamado->status != 'Fechado', 'chamados.show.mudar-status')
+      </span>
     </div>
   </div>
   <div class="card-body">
     <div class="row">
+      <div class="col-md-12">
+        <div class="alert alert-primary alert-dismissible show" role="alert">
+          Ações e anotações do atendente. Caso seja relevante para o solicitante, utilize o card <b>Comentários</b>.
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      </div>
 
-      <div class="col-md-8">
-        <form id="anotacoes_form" name="anotacoes_form" method="POST" action="chamados/{{ $chamado->id }}">
-          @csrf
-          @method('PUT')
-          <b>Anotações técnicas</b>
-          <textarea class="form-control" rows="5" name="anotacoes" placeholder="Esse conteúdo é visível somente para o atendente.">{{ $chamado->anotacoes }}</textarea>
-        </form>
+      {{-- potencialmente pode haver dados-atendente orfaos se em algum momento havia 
+        um campo no form, foi preenchido e depois o campo foi eemovido da fila #319 --}}
+      <div class="{{ $formAtendente ? 'col-md-6' : 'col-md-12' }}">
+        @if ($formAtendente)
+          @includewhen($chamado->status == 'Fechado', 'chamados.show.formulario-dados-atendente')
+          @includewhen($chamado->status != 'Fechado', 'chamados.show.formulario-form-atendente')
+          {!! '</div><div class="col-md-6">' !!}
+        @endif
+        @include('chamados.show.anotacoes-tecnicas')
       </div>
-      <div class="col-md-4">
-        @includewhen(Gate::check('atendente') && $chamado->status != 'Fechado', 'chamados.show.mudar-status')
-        @includewhen(Gate::check('atendente') && $chamado->status == 'Fechado', 'chamados.show.formulario-form-atendente')
-        @includewhen(Gate::check('atendente') && $chamado->status != 'Fechado', 'chamados.show.formulario-dados-atendente')
-      </div>
+
     </div>
   </div>
 </div>
-
-@section('javascripts_bottom')
-  @parent
-  <script>
-    $(function() {
-      // {{-- https://stackoverflow.com/questions/931252/ajax-autosave-functionality --}}
-      var $status = $('#card-atendente').find('.status'),
-        $anotacoes = $('#anotacoes_form').find('textarea'),
-        timeoutId, timeout = 1500
-
-      $anotacoes.keyup(function() { // keypress or keyup to detect backspaces
-        $status.show()
-        $status.attr('class', 'badge badge-warning text-light').html(
-          '<i class="fas fa-sync-alt fa-spin"></i> Pendente');
-
-        // If a timer was already started, clear it.
-        if (timeoutId) clearTimeout(timeoutId)
-
-        // Set timer that will save comment when it fires.
-        timeoutId = setTimeout(function() {
-          $form = $('#anotacoes_form')
-          // Make ajax call to save data.
-          $.ajax({
-            url: $form.attr('action'),
-            type: 'put',
-            dataType: 'json',
-            data: $form.serialize(),
-            success: function(data) {
-              console.log($('#anotacoes_form').find('textarea').val())
-              if (data.message == 'success') {
-                $status.attr('class', 'badge badge-secondary').html(
-                '<i class="fas fa-save"></i> Salvo');
-                // vamos ocultar depois de 5s
-                setTimeout(function() {
-                  $status.hide('blind', {}, 500)
-                }, 5000)
-              } else {
-                alert(data.message)
-              }
-            }
-          });
-        }, timeout);
-      });
-
-      var $estado = $('#status_form').find('#estado'),
-        $form_atendente = $("input, textarea, select", '#form_atendente');
-
-      $estado.change(function() {
-        $('#status_form').find('#btn_salvar_status').show();
-      });
-
-      $form_atendente.change(function() {
-        $('#form_atendente').find('#btn_salvar_form_atendente').show();
-      });
-    });
-
-  </script>
-@stop

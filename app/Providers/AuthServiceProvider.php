@@ -80,6 +80,8 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('chamados.updateComentario', 'App\Policies\ChamadoPolicy@updateComentario');
 
         Gate::resource('filas', 'App\Policies\FilaPolicy');
+        Gate::define('filas.atendente', 'App\Policies\FilaPolicy@atendente');
+
         Gate::resource('setores', 'App\Policies\SetorPolicy');
         Gate::resource('users', 'App\Policies\UserPolicy');
     }
