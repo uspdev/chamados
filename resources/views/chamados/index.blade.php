@@ -36,9 +36,6 @@
     <tbody>
 
         @foreach ($chamados as $chamado)
-        @php
-        $color = $chamado->fila->getColortoLabel($chamado->status);
-        @endphp
         <tr>
             <td> {{ $chamado->nro }}</td>
             <td>
