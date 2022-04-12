@@ -55,14 +55,26 @@ class Chamado extends Model
     }
 
     /**
-     * Retorna a cor para os labels.
-     *
+     * config-status: Retorna a cor correspondente para o label do estado do chamado
+     * 
+     * Se não encontrado retorna 'secondary'
+     * Estava anterirmente em fila, mas faz mais sentido aqui
+     * 
+     * @return String
      */
-    public static function color($chamado)
+    public function retornarCor()
     {
-        return $chamado->fila->getColortoLabel($chamado->status);
+        $status = $this->fila->config->status;
+        if ($status) {
+            foreach ($status as $item) {
+                if (strtolower($item->label) == $this->status) {
+                    return $item->color;
+                }
+            }
+        }
+        return 'secondary';
     }
-
+    
     /**
      * Retorna array com anos selecionáveis, em ordem inversa
      * TODO: precisa ajustar para pegar os anos do BD

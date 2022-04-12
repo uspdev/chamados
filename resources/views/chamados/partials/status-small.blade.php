@@ -8,6 +8,6 @@
     <span class="text-dark"> <i class="fas fa-circle"></i> </span>
     <span class="d-none">fechado</span>
 @else
-    <span class="text-{{ $color ? $color : 'secondary' }}"> <i class="fas fa-circle"></i> </span>
+    <span class="text-{{ $chamado->retornarCor() }}"> <i class="fas fa-circle"></i> </span>
     <span class="d-none">em andamento</span>
 @endif

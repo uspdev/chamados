@@ -8,5 +8,5 @@
     {!! $chamado->isFinalizado() ? 'Finalizado &nbsp;<i class="fas fa-lock"></i>' : 'Fechado' !!}
   </span>
 @else
-  <span class="badge badge-{{ $color ? $color : 'secondary' }}"> {{ ucwords($chamado->status) }} </span>
+  <span class="badge badge-{{ $chamado->retornarCor() }}"> {{ ucwords($chamado->status) }} </span>
 @endif

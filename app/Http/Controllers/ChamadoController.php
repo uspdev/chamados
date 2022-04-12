@@ -154,14 +154,13 @@ class ChamadoController extends Controller
         $autor = $chamado->users()->wherePivot('papel', 'Autor')->first();
 
         $status_list = $chamado->fila->getStatusToSelect();
-        $color = $chamado->fila->getColortoLabel($chamado->status);
 
         $max_upload_size = config('chamados.upload_max_filesize');
 
         $form = JSONForms::generateForm($chamado->fila, $chamado);
         $formAtendente = JSONForms::generateForm($chamado->fila, $chamado, 'atendente');
 
-        return view('chamados/show', compact('autor', 'chamado', 'extras', 'template', 'status_list', 'color', 'max_upload_size', 'form', 'formAtendente'));
+        return view('chamados/show', compact('autor', 'chamado', 'extras', 'template', 'status_list', 'max_upload_size', 'form', 'formAtendente'));
     }
 
     /**
