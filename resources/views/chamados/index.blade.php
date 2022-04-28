@@ -42,12 +42,10 @@
             @include('chamados.partials.status-small')
           </td>
           <td>
-            <a href="chamados/{{ $chamado->id }}"> {!! $chamado->assunto !!} </a>
-            @if ($chamado->patrimonios->isNotEmpty())
-              <span class="badge badge-light" title="Patrimonios: {{ $chamado->patrimonios->pluck('numpat') }}">
-                <i class="fas fa-landmark"></i>
-              </span>
-            @endif
+            <a href="chamados/{{ $chamado->id }}" style="{{ $chamado->formatarFechado() }}">
+              {!! $chamado->assunto !!}
+            </a>
+            @includeWhen($chamado->patrimonios->isNotEmpty(), 'patrimonios.partials.patrimonio-badge')
             @include('chamados.partials.status-muted')
           </td>
           <td>
