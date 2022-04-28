@@ -43,6 +43,11 @@
           </td>
           <td>
             <a href="chamados/{{ $chamado->id }}"> {!! $chamado->assunto !!} </a>
+            @if ($chamado->patrimonios->isNotEmpty())
+              <span class="badge badge-light" title="Patrimonios: {{ $chamado->patrimonios->pluck('numpat') }}">
+                <i class="fas fa-landmark"></i>
+              </span>
+            @endif
             @include('chamados.partials.status-muted')
           </td>
           <td>
