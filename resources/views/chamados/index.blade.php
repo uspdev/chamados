@@ -6,11 +6,11 @@
     <div class="col-md-12 form-inline">
         <div class="d-none d-sm-block h4 mt-2">
             {{-- vai mostrar no desktop --}}
-            Meus Chamados
+            {{ session('perfil') == 'atendente' ? 'Meus Atendimentos' : 'Meus Chamados' }}
         </div>
         <div class="d-block d-sm-none h4 mt-2">
             {{-- vai mostrar no mobile --}}
-            <i class="fas fa-search"></i>
+            <i class="fas fa-filter"></i>
         </div>
         <div class="h4 mt-1 ml-2">
             <span class="badge badge-pill badge-primary datatable-counter">-</span>
