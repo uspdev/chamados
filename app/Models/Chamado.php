@@ -74,7 +74,7 @@ class Chamado extends Model
         }
         return 'secondary';
     }
-    
+
     /**
      * Retorna array com anos selecionáveis, em ordem inversa
      * TODO: precisa ajustar para pegar os anos do BD
@@ -228,6 +228,23 @@ class Chamado extends Model
     }
 
     /**
+     * Mostra as pessoas que tem vonculo com o chamado.
+     * 
+     * Se informado $pivot, retorna somente o 1o. User, se não, retorna a lista completa 
+     * 
+     * @param $pivot Papel da pessoa no chamado (autor, observador, atendente, null = todos) 
+     * @return App\Models\User|Collection
+     */
+    public function pessoas($pivot = null)
+    {
+        if ($pivot) {
+            return $this->users()->wherePivot('papel', $pivot)->first();
+        } else {
+            return $this->users()->withPivot('papel');
+        }
+    }
+
+    /**
      * o autorelacionamento n-n está usando um método para ida,
      * outro para a volta e um assessor para juntar os dois
      * tem solução melhor????
@@ -304,5 +321,4 @@ class Chamado extends Model
     {
         return nl2br($value);
     }
-
 }
