@@ -1,13 +1,12 @@
-@if (config('chamados.usar_replicado') == 'true')
+@if (config('chamados.usar_replicado') == true)
   <div>
-    Responsável: <b>{{ $patrimonio->responsavel() }}</b>
+    Resp.: <b>{{ $patrimonio->responsavel() }}</b>
   </div>
   <div>
-    Sala:
-    <b>{{ $patrimonio->replicado()->codlocusp ?? '' }} -
-      {{ $patrimonio->replicado()->sglcendsp ?? '' }}
-    </b>
+    Local: <b>{{ $patrimonio->replicado()->codlocusp ?? '' }}</b> - {{ $patrimonio->replicado()->sglcendsp ?? '' }}
   </div>
+@else
+  <span class="text-muted">Sem dados USP</span>
 @endif
 @if (count($chamadoPats = $patrimonio->chamados()->wherePivot('chamado_id', '!=', $chamado->id)->get()))
   <div>

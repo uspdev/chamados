@@ -53,6 +53,15 @@ class Patrimonio extends Model
     }
 
     /**
+     * Retorna marca, modelo e tipo separados por vírgula
+     */
+    public function marcaModeloTipo()
+    {
+        $ret = [$this->replicado()->epfmarpat, $this->replicado()->tippat, $this->replicado()->modpat];
+        return implode(',', array_filter($ret));
+    }
+
+    /**
      * Relacionamento com chamados
      */
     public function chamados()
