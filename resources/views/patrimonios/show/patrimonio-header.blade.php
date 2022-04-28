@@ -1,15 +1,12 @@
 <div class="d-flex">
   <a class="text-decoration-none d-block text-truncate" type="button" data-toggle="collapse"
     data-target="#patrimonio_{{ $patrimonio->numpat }}" aria-expanded="true" aria-controls="collapseOne"
-    title="{{ $patrimonio->replicado()->epfmarpat ?? '-' }}; {{ $patrimonio->replicado()->tippat ?? '-' }}; {{ $patrimonio->replicado()->modpat ?? '-' }}">
-    <b>{{ $patrimonio->numFormatado() }}</b>
-    {{ ($epfmarpat = $patrimonio->replicado()->epfmarpat) ? "| $epfmarpat;" : '' }}
-    {{ ($tippat = $patrimonio->replicado()->tippat) ? " $tippat;" : '' }}
-    {{ ($modpat = $patrimonio->replicado()->modpat) ? " $modpat" : '' }}
+    title="{{ $patrimonio->marcaModeloTipo() }}">
+    <b>{{ $patrimonio->numFormatado() }}</b> {{ ($mar = $patrimonio->marcaModeloTipo()) ? "| $mar" : '' }}
   </a>
   <div class="hidden-btn d-none ml-auto">
     @includewhen(Gate::check('update', $chamado), 'common.btn-delete-sm', [
-        'action' => 'chamados/' . $chamado->id . '/patrimonios/' . $patrimonio->id,
+        'action' => "chamados/{$chamado->id}/patrimonios/{$patrimonio->id}",
     ])
   </div>
 </div>
