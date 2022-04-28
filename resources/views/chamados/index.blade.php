@@ -57,6 +57,7 @@
             </td>
             <td> ({{ $chamado->fila->setor->sigla }}) {{ $chamado->fila->nome }}</td>
             <td class="text-right">
+                <span class="d-none">{{ $chamado->created_at }}</span>
                 @if($chamado->created_at->format('d/m/Y') == date('d/m/Y'))
                 Hoje, {{ $chamado->created_at->format('H:i') }}
                 @else
