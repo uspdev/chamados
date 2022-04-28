@@ -1,6 +1,7 @@
 <div class="d-flex">
-  <a class="text-decoration-none" type="button" data-toggle="collapse"
-    data-target="#patrimonio_{{ $patrimonio->numpat }}" aria-expanded="true" aria-controls="collapseOne">
+  <a class="text-decoration-none d-block text-truncate" type="button" data-toggle="collapse"
+    data-target="#patrimonio_{{ $patrimonio->numpat }}" aria-expanded="true" aria-controls="collapseOne"
+    title="{{ $patrimonio->replicado()->epfmarpat }}; {{ $patrimonio->replicado()->tippat ?? '-' }}; {{ $patrimonio->replicado()->modpat ?? '-' }}">
     <b>{{ $patrimonio->numFormatado() }}</b>
     {{-- se tiver replicado mostra descrição --}}
     @if ($patrimonio->replicado()->epfmarpat)
