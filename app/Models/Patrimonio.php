@@ -14,12 +14,20 @@ class Patrimonio extends Model
     protected $replicado = '';
 
     /**
-     * Obtém dados do replicado, retorna e guarda no objeto
+     * Obtém dados do replicado, guarda no objeto e retorna
      */
     public function replicado()
     {
-        if (empty($this->replicado)) {
-            $this->replicado = (object) Bempatrimoniado::dump($this->numpat);
+        if (config('chamados.usar_replicado') == true) {
+            if (empty($this->replicado)) {
+                $this->replicado = (object) Bempatrimoniado::dump($this->numpat);
+            }
+        } else {
+            $this->replicado = new \StdClass;
+            $this->replicado->epfmarpat = '';
+            $this->replicado->tippat = '';
+            $this->replicado->modpat = '';
+            $this->replicado->codpes = '';
         }
         return $this->replicado;
     }
@@ -35,9 +43,13 @@ class Patrimonio extends Model
     /**
      * Obtém o nome completo (nompesttd) do responsável pelo patrimonio
      */
-    public function responsavel($codpes)
+    public function responsavel($codpes = null)
     {
-        return Pessoa::nomeCompleto($codpes);
+        if (config('chamados.usar_replicado') == true) {
+            return Pessoa::obterNome($this->replicado()->codpes);
+        } else {
+            return '';
+        }
     }
 
     /**
