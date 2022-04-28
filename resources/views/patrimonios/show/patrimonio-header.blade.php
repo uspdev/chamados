@@ -1,14 +1,11 @@
 <div class="d-flex">
   <a class="text-decoration-none d-block text-truncate" type="button" data-toggle="collapse"
     data-target="#patrimonio_{{ $patrimonio->numpat }}" aria-expanded="true" aria-controls="collapseOne"
-    title="{{ $patrimonio->replicado()->epfmarpat }}; {{ $patrimonio->replicado()->tippat ?? '-' }}; {{ $patrimonio->replicado()->modpat ?? '-' }}">
+    title="{{ $patrimonio->replicado()->epfmarpat ?? '-' }}; {{ $patrimonio->replicado()->tippat ?? '-' }}; {{ $patrimonio->replicado()->modpat ?? '-' }}">
     <b>{{ $patrimonio->numFormatado() }}</b>
-    {{-- se tiver replicado mostra descrição --}}
-    @if ($patrimonio->replicado()->epfmarpat)
-      | {{ $patrimonio->replicado()->epfmarpat }};
-      {{ $patrimonio->replicado()->tippat ?? '-' }};
-      {{ $patrimonio->replicado()->modpat ?? '-' }}
-    @endif
+    {{ ($epfmarpat = $patrimonio->replicado()->epfmarpat) ? "| $epfmarpat;" : '' }}
+    {{ ($tippat = $patrimonio->replicado()->tippat) ? " $tippat;" : '' }}
+    {{ ($modpat = $patrimonio->replicado()->modpat) ? " $modpat" : '' }}
   </a>
   <div class="hidden-btn d-none ml-auto">
     @includewhen(Gate::check('update', $chamado), 'common.btn-delete-sm', [
