@@ -220,6 +220,15 @@ class Chamado extends Model
     }
 
     /**
+     * Retorna estilo css para chamados fechados e finalizados
+     */
+    public function formatarFechado() {
+        $ret = $this->status == 'Fechado' ? 'text-decoration: line-through; ' : '';
+        $ret .= $this->isFinalizado() ? ' color: gray; ' : '';
+        return $ret;
+    }
+
+    /**
      * Mostra o prazo para poder reabrir o chamado
      */
     public function reabrirEm()
