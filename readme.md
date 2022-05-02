@@ -131,14 +131,26 @@ Para as filas de envio de email o sistema precisa de um gerenciador que mantenha
 
     sudo apt install supervisor
 
-Para gerar o arquivo de configuração e colocar na pasta apropriada (`/etc/supervisor/conf.d/`) rode como **`root`**
+Modelo de arquivo de configuração. Como **`root`**, crie o arquivo `/etc/supervisor/conf.d/chamados_queue_worker_default.conf` com o conteúdo abaixo:
 
-    sudo php artisan supervisor:queue
+    [program:chamados_queue_worker_default]
+    command=/usr/bin/php /home/sistemas/chamados/artisan queue:listen --queue=default --tries=3 --timeout=60
+    process_num=1
+    username=www-data
+    numprocs=1
+    process_name=%(process_num)s
+    priority=999
+    autostart=true
+    autorestart=unexpected
+    startretries=3
+    stopsignal=QUIT
+    stderr_logfile=/var/log/supervisor/chamados_queue_worker_default.log
 
-Ajustes necessários: por enquanto é necessário ajustar no arquivo gerado:
+Ajustes necessários:
 
-    user=<username>
-    redirecionar stderr_logfile = <aplicacao>/storage/logs/<seu arquivo de log>
+    command=<ajuste o caminho da aplicação>
+    username=<nome do usuário do processo do chamados>
+    stderr_logfile = <aplicacao>/storage/logs/<seu arquivo de log>
 
 Reinicie o **Supervisor**
 
