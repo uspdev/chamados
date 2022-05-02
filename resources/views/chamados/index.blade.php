@@ -46,6 +46,7 @@
               {!! $chamado->assunto !!}
             </a>
             @includeWhen($chamado->patrimonios->isNotEmpty(), 'patrimonios.partials.patrimonio-badge')
+            @includeWhen($chamado->arquivos->isNotEmpty(), 'chamados.partials.arquivo-badge')
             @include('chamados.partials.status-muted')
           </td>
           <td>
