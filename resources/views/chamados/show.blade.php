@@ -29,6 +29,8 @@
       <div class="mr-auto">
         <span class="text-muted">Chamado no.</span> {{ $chamado->nro }}/{{ $chamado->created_at->year }}
         <span class="text-muted">para</span> ({{ $chamado->fila->setor->sigla }}) {{ $chamado->fila->nome }}
+        @includeWhen($chamado->patrimonios->isNotEmpty(), 'patrimonios.partials.patrimonio-badge')
+        @includeWhen($chamado->arquivos->isNotEmpty(), 'chamados.partials.arquivo-badge')
         @include('chamados.partials.status')
         @include('chamados.partials.instrucoes-da-fila-badge')
         @include('chamados.partials.patrimonio-pendente-badge')
