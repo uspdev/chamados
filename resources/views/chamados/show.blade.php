@@ -25,13 +25,17 @@
   @parent
 
   <div class="card bg-light mb-3" id="card-principal">
-    <div class="card-header bg-principal">
-      <span class="text-muted">Chamado no.</span> {{ $chamado->nro }}/{{ $chamado->created_at->year }}
-      <span class="text-muted">para</span> ({{ $chamado->fila->setor->sigla }}) {{ $chamado->fila->nome }}
-      @include('chamados.partials.status')
-      @include('chamados.partials.instrucoes-da-fila-badge')
-      @include('chamados.partials.patrimonio-pendente-badge')
-      <div class="small ml-3">{{ $chamado->fila->descricao }}</div>
+    <div class="card-header bg-principal form-inline">
+      <div class="mr-auto">
+        <span class="text-muted">Chamado no.</span> {{ $chamado->nro }}/{{ $chamado->created_at->year }}
+        <span class="text-muted">para</span> ({{ $chamado->fila->setor->sigla }}) {{ $chamado->fila->nome }}
+        @include('chamados.partials.status')
+        @include('chamados.partials.instrucoes-da-fila-badge')
+        @include('chamados.partials.patrimonio-pendente-badge')
+        <div class="small ml-3">{{ $chamado->fila->descricao }}</div>
+      </div>
+
+      {{-- <div class="text-right"><button class="btn btn-sm btn-warning">Trocar para perfil atendente</button></div> --}}
     </div>
     <div class="card-body">
 
@@ -55,7 +59,10 @@
       @if (Gate::check('filas.atendente', $chamado->fila))
         <div class="row">
           <div class="col-md-12">
-            @includewhen(Gate::check('perfilatendente') || Gate::check('perfiladmin'), 'chamados.show.card-atendente')
+            @includewhen(
+                Gate::check('perfilatendente') || Gate::check('perfiladmin'),
+                'chamados.show.card-atendente'
+            )
           </div>
         </div>
       @endif

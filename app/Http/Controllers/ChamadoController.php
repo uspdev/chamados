@@ -149,6 +149,10 @@ class ChamadoController extends Controller
         \UspTheme::activeUrl('chamados?perfil=' . session('perfil'));
         $this->authorize('chamados.view', $chamado);
 
+        // if (Gate::allows('chamados.permitePessoasFila', $chamado) == true) {
+        //     \Auth::user()->trocarPerfil('atendente');
+        // }
+
         $template = json_decode($chamado->fila->template);
         $extras = json_decode($chamado->extras);
         $autor = $chamado->users()->wherePivot('papel', 'Autor')->first();

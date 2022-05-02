@@ -128,7 +128,7 @@ class ChamadoPolicy
         }
     }
 
-    protected function permitePessoasFila(User $user, Chamado $chamado)
+    public function permitePessoasFila(User $user, Chamado $chamado)
     {
         # atendentes que estão na fila.
         # NÃO está diferenciando gerente e atendente.
