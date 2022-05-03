@@ -8,7 +8,7 @@
 @else
   <span class="text-muted">Sem dados USP</span>
 @endif
-@if (count($chamadoPats = $patrimonio->chamados()->wherePivot('chamado_id', '!=', $chamado->id)->get()))
+@if (count($chamadoPats = $patrimonio->outrosChamados($chamado->id)))
   <div>
     Outros chamados:
     <div class="ml-3">

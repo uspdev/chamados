@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Uspdev\Replicado\Bempatrimoniado;
 use Uspdev\Replicado\Pessoa;
+use Uspdev\Replicado\Bempatrimoniado;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Patrimonio extends Model
 {
@@ -54,11 +54,26 @@ class Patrimonio extends Model
 
     /**
      * Retorna marca, modelo e tipo separados por vírgula
+     * 
+     * @return String
      */
     public function marcaModeloTipo()
     {
         $ret = [$this->replicado()->epfmarpat, $this->replicado()->tippat, $this->replicado()->modpat];
         return implode(',', array_filter($ret));
+    }
+
+    /** 
+     * Retorna lista de chamados de um dado patrimônio
+     * 
+     * O $chamadoIgnoradoId é o próprio chamado no qual 
+     * vai ser listado os demais, por isso deve ser ignorado
+     * 
+     * @param Int $chamadoIgnoradoId
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public function outrosChamados($chamadoIgnoradoId) {
+        return $this->chamados()->wherePivot('chamado_id', '!=', $chamadoIgnoradoId)->get();
     }
 
     /**
