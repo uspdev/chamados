@@ -35,6 +35,10 @@ Sistema que gerencia o fluxo de chamados técnicos ou solicitações de atendime
 <img src="https://github.com/uspdev/chamados/raw/master/docs/tela_fila.png" width=49%>
 </p>
 
+## Changelog
+
+Veja o [histórico de atualizações](docs/changelog.md).
+
 ## Requisitos
 
 Esse sistema foi projetado para rodar em servidores linux (Ubuntu e Debian).
@@ -55,10 +59,10 @@ Bibliotecas necessárias do php:
 
 Caso você já tenha instalado o sistema e aplique uma nova atualização, sempre deve rodar:
 
-    composer install
+    composer install --no-dev
     php artisan migrate
 
-Também deve observar no release se tem alguma outra coisa a ser ajustada, por exemplo o arquivo .env 
+Também deve observar no release se tem alguma outra coisa a ser ajustada, por exemplo o arquivo .env
 
 ## Instalação
 
@@ -104,12 +108,12 @@ No Apache é possivel utilizar a extensão MPM-ITK (http://mpm-itk.sesse.net/) q
 Dentro do seu virtualhost coloque
 
     <IfModule mpm_itk_module>
-    AssignUserId nome_do_usuario nome_do_usuario
+    AssignUserId nome_do_usuario nome_do_grupo
     </IfModule>
 
 ### Configurar senha única
 
-Cadastre uma nova URL no configurador de senha única utilizando o caminho `/callback`. Guarde o callback_id para colocar no arquivo `.env`.
+Cadastre uma nova URL no configurador de senha única utilizando o caminho `https://seu_app/callback`. Guarde o callback_id para colocar no arquivo `.env`.
 
 ### Edite o arquivo .env
 
@@ -163,7 +167,7 @@ Reinicie o **Supervisor**
 Para receber as últimas atualizações do sistema rode:
 
     git pull
-    composer install
+    composer install --no-dev
     php artisan migrate
 
 Caso tenha alguma atualização, não deixe de conferir o readme.md quanto a outras providências que podem ser necessárias.

@@ -5,6 +5,7 @@
   <div>
     Local: <b>{{ $patrimonio->replicado()->codlocusp ?? '' }}</b> - {{ $patrimonio->replicado()->sglcendsp ?? '' }}
   </div>
+  @includeWhen(config('chamados.sistemaPatrimonio'), 'patrimonios.partials.sistema-patrimonio-complementar')
 @else
   <span class="text-muted">Sem dados USP</span>
 @endif
