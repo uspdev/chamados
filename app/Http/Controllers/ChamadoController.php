@@ -511,12 +511,16 @@ class ChamadoController extends Controller
     }
 
     /**
-     * Retornando patrimônio para inserção em chamados
+     * Retornando patrimônio para inserção em chamados, formatado para select2
+     * 
      * @param Request $request - numpat
      * @return json
      */
     public function listarPatrimoniosAjax(Request $request)
     {
+        // colocando autorização minima mas precisa rever
+        $this->authorize('chamados.viewAny');
+        
         if ($request->term) {
             if (config('chamados.usar_replicado') == 'true') {
                 $patrimonio = new Patrimonio();
