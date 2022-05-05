@@ -31,15 +31,25 @@ class ChamadoController extends Controller
      */
     public function index(Request $request)
     {
+        \UspTheme::activeUrl('chamados?perfil=' . session('perfil'));
         $this->authorize('chamados.viewAny');
-        \UspTheme::activeUrl('chamados');
+
+        $request->validate([
+            'perfil' => 'nullable|string',
+        ]);
+
+        if ($request->perfil) {
+            \Auth::user()->trocarPerfil($request->perfil);
+            // vamos limpar
+            return Redirect::to('chamados');
+        }
 
         if (session('ano') == null) {
             session(['ano' => date('Y')]);
         }
 
         if (isset($request->finalizado)) {
-            session(['finalizado' =>$request->finalizado ? 1 : 0]);
+            session(['finalizado' => $request->finalizado ? 1 : 0]);
         } elseif (session('ano') != date('Y')) {
             session(['finalizado' => 1]);
         } else {
@@ -76,7 +86,7 @@ class ChamadoController extends Controller
     {
         \UspTheme::activeUrl('chamados/create');
         $this->authorize('usuario');
-        
+
         $setores = Fila::listarFilasParaNovoChamado();
         return view('chamados.listafilas', compact('setores'));
     }
@@ -136,22 +146,25 @@ class ChamadoController extends Controller
      */
     public function show(Chamado $chamado)
     {
-        \UspTheme::activeUrl('chamados');
+        \UspTheme::activeUrl('chamados?perfil=' . session('perfil'));
         $this->authorize('chamados.view', $chamado);
+
+        // if (Gate::allows('chamados.permitePessoasFila', $chamado) == true) {
+        //     \Auth::user()->trocarPerfil('atendente');
+        // }
 
         $template = json_decode($chamado->fila->template);
         $extras = json_decode($chamado->extras);
         $autor = $chamado->users()->wherePivot('papel', 'Autor')->first();
 
         $status_list = $chamado->fila->getStatusToSelect();
-        $color = $chamado->fila->getColortoLabel($chamado->status);
 
         $max_upload_size = config('chamados.upload_max_filesize');
 
         $form = JSONForms::generateForm($chamado->fila, $chamado);
         $formAtendente = JSONForms::generateForm($chamado->fila, $chamado, 'atendente');
 
-        return view('chamados/show', compact('autor', 'chamado', 'extras', 'template', 'status_list', 'color', 'max_upload_size', 'form', 'formAtendente'));
+        return view('chamados/show', compact('autor', 'chamado', 'extras', 'template', 'status_list', 'max_upload_size', 'form', 'formAtendente'));
     }
 
     /**
@@ -498,12 +511,16 @@ class ChamadoController extends Controller
     }
 
     /**
-     * Retornando patrimônio para inserção em chamados
+     * Retornando patrimônio para inserção em chamados, formatado para select2
+     * 
      * @param Request $request - numpat
      * @return json
      */
     public function listarPatrimoniosAjax(Request $request)
     {
+        // colocando autorização minima mas precisa rever
+        $this->authorize('chamados.viewAny');
+        
         if ($request->term) {
             if (config('chamados.usar_replicado') == 'true') {
                 $patrimonio = new Patrimonio();

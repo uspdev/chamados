@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Uspdev\Replicado\Bempatrimoniado;
 use Uspdev\Replicado\Pessoa;
+use Uspdev\Replicado\Bempatrimoniado;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Patrimonio extends Model
 {
@@ -14,12 +14,20 @@ class Patrimonio extends Model
     protected $replicado = '';
 
     /**
-     * Obtém dados do replicado, retorna e guarda no objeto
+     * Obtém dados do replicado, guarda no objeto e retorna
      */
     public function replicado()
     {
-        if (empty($this->replicado)) {
-            $this->replicado = (object) Bempatrimoniado::dump($this->numpat);
+        if (config('chamados.usar_replicado') == true) {
+            if (empty($this->replicado)) {
+                $this->replicado = (object) Bempatrimoniado::dump($this->numpat);
+            }
+        } else {
+            $this->replicado = new \StdClass;
+            $this->replicado->epfmarpat = '';
+            $this->replicado->tippat = '';
+            $this->replicado->modpat = '';
+            $this->replicado->codpes = '';
         }
         return $this->replicado;
     }
@@ -35,9 +43,37 @@ class Patrimonio extends Model
     /**
      * Obtém o nome completo (nompesttd) do responsável pelo patrimonio
      */
-    public function responsavel($codpes)
+    public function responsavel($codpes = null)
     {
-        return Pessoa::nomeCompleto($codpes);
+        if (config('chamados.usar_replicado') == true) {
+            return Pessoa::obterNome($this->replicado()->codpes);
+        } else {
+            return '';
+        }
+    }
+
+    /**
+     * Retorna marca, modelo e tipo separados por vírgula
+     * 
+     * @return String
+     */
+    public function marcaModeloTipo()
+    {
+        $ret = [$this->replicado()->epfmarpat, $this->replicado()->tippat, $this->replicado()->modpat];
+        return implode(',', array_filter($ret));
+    }
+
+    /** 
+     * Retorna lista de chamados de um dado patrimônio
+     * 
+     * O $chamadoIgnoradoId é o próprio chamado no qual 
+     * vai ser listado os demais, por isso deve ser ignorado
+     * 
+     * @param Int $chamadoIgnoradoId
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public function outrosChamados($chamadoIgnoradoId) {
+        return $this->chamados()->wherePivot('chamado_id', '!=', $chamadoIgnoradoId)->get();
     }
 
     /**

@@ -176,22 +176,6 @@ class Fila extends Model
     }
 
     /**
-     * config-status
-     * Retorna a cor correspondente para o label do estado
-     */
-    public function getColortoLabel($chamado_status)
-    {
-        $status = $this->config->status;
-        if ($status) {
-            foreach ($status as $item) {
-                if (strtolower($item->label) == $chamado_status) {
-                    return $item->color;
-                }
-            }
-        }
-    }
-
-    /**
      * Accessor getter para $config
      */
     public function getConfigAttribute($value)

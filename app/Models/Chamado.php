@@ -7,6 +7,7 @@ use App\Models\Fila;
 use App\Observers\ChamadoObserver;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class Chamado extends Model
@@ -54,12 +55,24 @@ class Chamado extends Model
     }
 
     /**
-     * Retorna a cor para os labels.
-     *
+     * config-status: Retorna a cor correspondente para o label do estado do chamado
+     * 
+     * Se não encontrado retorna 'secondary'
+     * Estava anterirmente em fila, mas faz mais sentido aqui
+     * 
+     * @return String
      */
-    public static function color($chamado)
+    public function retornarCor()
     {
-        return $chamado->fila->getColortoLabel($chamado->status);
+        $status = $this->fila->config->status;
+        if ($status) {
+            foreach ($status as $item) {
+                if (strtolower($item->label) == $this->status) {
+                    return $item->color;
+                }
+            }
+        }
+        return 'secondary';
     }
 
     /**
@@ -129,14 +142,19 @@ class Chamado extends Model
     }
 
     /**
-     * esconde os chamados finalizados, ou seja, aqueles "Encerrados" há mais de 10 dias
+     * Esconde/mostra os chamados finalizados, ou seja, aqueles "Encerrados" há mais de 10 dias
+     *
      * https://laravel.com/docs/8.x/eloquent#local-scopes
+     *
+     * @param \Illuminate\Database\Eloquent\Builder
+     * @param Bool $finalizado true: mostra finalizados, false: esconde
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeFinalizado($query, $finalizado)
+    public function scopeFinalizado($query, Bool $finalizado)
     {
         if (!$finalizado) {
-            return $query->where('status', '!=', 'Fechado');
-                #->orWhere('fechado_em','>',now()->subDays(10))->latest();
+            return $query->where('status', '!=', 'Fechado')
+                ->orWhere('fechado_em', '>', now()->subDays(10));
         } else {
             return $query;
         }
@@ -144,12 +162,13 @@ class Chamado extends Model
 
     /**
      * Lista os chamados autorizados para o usuário
+     *
      * considerando o ano e o perfil:
      * Se perfiladmin mostra todos os chamados
      * Se perfilatendente mostra todos os chamados das filas que atende
      * Se perfilusuario mostra os chamados que ele está cadastrado como criador ou observador
      * Os filtros por nro e assunto são usados em consultas ajax
-     * 
+     *
      * Vamos considerar chamados de filas desativadas
      */
     public static function listarChamados($ano, $nro = null, $assunto = null, $finalizado = false)
@@ -158,12 +177,13 @@ class Chamado extends Model
             $chamados = SELF::ano($ano)->nro($nro)->assunto($assunto)->finalizado($finalizado)->get();
         } elseif (Gate::allows('perfilatendente')) {
             $chamados = collect();
-            $filas = \Auth::user()->filas;
-            foreach ($filas as $fila) {
+            foreach (Auth::user()->filas as $fila) {
                 $chamados = $chamados->merge($fila->chamados()->ano($ano)->nro($nro)->assunto($assunto)->finalizado($finalizado)->get());
             }
         } elseif (Gate::allows('perfilusuario')) {
-            $chamados = \Auth::user()->chamados()->ano($ano)->nro($nro)->assunto($assunto)->finalizado($finalizado)->get();
+            $chamados = Auth::user()->chamados()
+                ->wherePivotIn('papel', ['Autor', 'Observador'])
+                ->ano($ano)->nro($nro)->assunto($assunto)->finalizado($finalizado)->get();
         } else {
             $chamados = collect();
         }
@@ -200,11 +220,37 @@ class Chamado extends Model
     }
 
     /**
+     * Retorna estilo css para chamados fechados e finalizados
+     */
+    public function formatarFechado() {
+        $ret = $this->status == 'Fechado' ? 'text-decoration: line-through; ' : '';
+        $ret .= $this->isFinalizado() ? ' color: gray; ' : '';
+        return $ret;
+    }
+
+    /**
      * Mostra o prazo para poder reabrir o chamado
      */
     public function reabrirEm()
     {
         return $this->fechado_em->addDays(10);
+    }
+
+    /**
+     * Mostra as pessoas que tem vonculo com o chamado.
+     * 
+     * Se informado $pivot, retorna somente o 1o. User, se não, retorna a lista completa 
+     * 
+     * @param $pivot Papel da pessoa no chamado (autor, observador, atendente, null = todos) 
+     * @return App\Models\User|Collection
+     */
+    public function pessoas($pivot = null)
+    {
+        if ($pivot) {
+            return $this->users()->wherePivot('papel', $pivot)->first();
+        } else {
+            return $this->users()->withPivot('papel');
+        }
     }
 
     /**
@@ -284,5 +330,4 @@ class Chamado extends Model
     {
         return nl2br($value);
     }
-
 }

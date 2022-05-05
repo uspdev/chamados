@@ -25,7 +25,7 @@ class UserController extends Controller
     {
         $this->authorize('users.viewAny');
         \UspTheme::activeUrl('users');
-        
+
         $users = User::all();
         return view('users.index')->with('users', $users);
     }
@@ -73,7 +73,7 @@ class UserController extends Controller
         if (Storage::disk('local')->exists($oauth_file)) {
             $oauth['data'] = Storage::disk('local')->get($oauth_file);
             $oauth['time'] = Storage::lastModified($oauth_file);
-        } 
+        }
         return view('users.show', compact('user', 'oauth'));
     }
 
@@ -178,23 +178,9 @@ class UserController extends Controller
     public function trocarPerfil(Request $request, $perfil)
     {
         $this->authorize('trocarPerfil');
-        switch ($perfil) {
-            case 'usuario':
-                session(['perfil' => 'usuario']);
-                $request->session()->flash('alert-info', 'Perfil mudado para Usuário com sucesso.');
-                break;
-
-            case 'atendente':
-                $this->authorize('atendente');
-                session(['perfil' => 'atendente']);
-                $request->session()->flash('alert-info', 'Perfil mudado para Atendente com sucesso.');
-                break;
-
-            case 'admin':
-                $this->authorize('admin');
-                session(['perfil' => 'admin']);
-                $request->session()->flash('alert-info', 'Perfil mudado para Admin com sucesso.');
-                break;
+        $ret = Auth::user()->trocarPerfil($perfil);
+        if ($ret['success']) {
+            $request->session()->flash('alert-info', $ret['msg']);
         }
         return back();
     }
