@@ -31,6 +31,7 @@
         <th>Autor</th>
         <th>Fila</th>
         <th class="text-right">Aberto em</th>
+        <th class="text-right">Atualização</th>
       </tr>
     </thead>
     <tbody>
@@ -69,6 +70,10 @@
           <td class="text-right">
             <span class="d-none">{{ $chamado->created_at }}</span>
             {{ formatarData($chamado->created_at) }}
+          </td>
+          <td class="text-right">
+            <span class="d-none">{{ $chamado->comentarios()->latest()->first()->created_at ?? $chamado->created_at}}</span>
+            {{ formatarData($chamado->comentarios()->latest()->first()->created_at ?? $chamado->created_at) }}
           </td>
         </tr>
       @endforeach
