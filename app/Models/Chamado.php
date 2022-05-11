@@ -36,6 +36,13 @@ class Chamado extends Model
     ];
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['atualizadoEm'];
+
+    /**
      * The "booted" method of the model.
      *
      * @return void
@@ -251,6 +258,17 @@ class Chamado extends Model
         } else {
             return $this->users()->withPivot('papel');
         }
+    }
+
+    /**
+     * Accessor: retorna a data da última atualização do chamado
+     * 
+     * A data do último comentário (user ou system), ou a data de criação do chamado
+     * 
+     * @since 1.4.4 em 11/5/2022
+     */
+    public function getAtualizadoEmAttribute() {
+        return $this->comentarios()->latest()->first()->created_at ?? $this->created_at;
     }
 
     /**

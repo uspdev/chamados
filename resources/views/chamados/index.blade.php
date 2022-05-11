@@ -66,14 +66,17 @@
               Sem autor !!
             @endif
           </td>
-          <td> ({{ $chamado->fila->setor->sigla }}) {{ $chamado->fila->nome }}</td>
+          <td>
+            ({{ $chamado->fila->setor->sigla }})
+            {{ $chamado->fila->nome }}
+          </td>
           <td class="text-right">
             <span class="d-none">{{ $chamado->created_at }}</span>
             {{ formatarData($chamado->created_at) }}
           </td>
           <td class="text-right">
-            <span class="d-none">{{ $chamado->comentarios()->latest()->first()->created_at ?? $chamado->created_at}}</span>
-            {{ formatarData($chamado->comentarios()->latest()->first()->created_at ?? $chamado->created_at) }}
+            <span class="d-none">{{ $chamado->atualizadoEm }}</span>
+            {{ formatarData($chamado->atualizadoEm) }}
           </td>
         </tr>
       @endforeach
