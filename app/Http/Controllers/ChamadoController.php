@@ -465,7 +465,7 @@ class ChamadoController extends Controller
             // vamos mudar o status para Em andamento
             // Este trecho pode substituir o triagemStore. TODO
             if (('Atendente' == $papel) && ('Triagem' == $chamado->status)) {
-                $chamado->status = 'Em andamento';
+                $chamado->status = 'Em Andamento';
                 $chamado->save();
             }
 
