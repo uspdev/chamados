@@ -80,15 +80,22 @@ class ChamadoController extends Controller
      * Mostra lista de filas e respectivos setores
      * para selecionar e criar novo chamado
      *
+     * @param Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function listaFilas()
+    public function listaFilas(Request $request)
     {
         \UspTheme::activeUrl('chamados/create');
         $this->authorize('usuario');
 
+        $request->validate([
+            'filtro' => 'nullable|string'
+        ]);
+
+        $dtSearch = $request->filtro ?? '';
+
         $setores = Fila::listarFilasParaNovoChamado();
-        return view('chamados.listafilas', compact('setores'));
+        return view('chamados.listafilas', compact('setores', 'dtSearch'));
     }
 
     /**

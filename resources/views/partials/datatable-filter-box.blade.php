@@ -1,5 +1,5 @@
 <div class="input-group col-6 col-sm-4 col-md-2">
-    <input class="form-control form-control-sm" type="text" id="dt-search" placeholder="Filtrar...">
+    <input class="form-control form-control-sm" type="text" id="dt-search" value="{{ $dtSearch ?? '' }}" placeholder="Filtrar...">
     <div class="input-group-append">
         <button class="btn btn-sm btn-outline-secondary" id="dt-search-clear">
             <i class="fas fa-times"></i>
@@ -25,6 +25,8 @@
             $('#dt-search').val('').trigger('keyup');
             $('#dt-search').focus();
         })
+
+        $('#dt-search').trigger('keyup');
 
     })
 </script>
