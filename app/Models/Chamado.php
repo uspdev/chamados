@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
-use App\Models\Comentario;
 use App\Models\Fila;
+use App\Models\Comentario;
 use App\Observers\ChamadoObserver;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Chamado extends Model
 {
@@ -168,6 +169,27 @@ class Chamado extends Model
     }
 
     /**
+     * Esconde/mostra os chamados de outros atendentes
+     *
+     * @param \Illuminate\Database\Eloquent\Builder
+     * @param Bool $atendentes true: mostra de todos, false: somente os do atendente corrente e sem atendentes
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeAtendentes($query, Bool $atendentes)
+    {
+        if (!$atendentes) {
+            $user_id = Auth::user()->id;
+            $q = $query->join('user_chamado', 'chamados.id', '=', 'user_chamado.chamado_id')->where(
+                DB::raw("user_chamado.user_id = $user_id  and user_chamado.papel"), '=', 'Atendente');
+                // dd($q->toSql());
+                return $q;
+        } else {
+            // dd($query->toSql());
+            return $query;
+        }
+    }
+
+    /**
      * Lista os chamados autorizados para o usuário
      *
      * considerando o ano e o perfil:
@@ -178,14 +200,14 @@ class Chamado extends Model
      *
      * Vamos considerar chamados de filas desativadas
      */
-    public static function listarChamados($ano, $nro = null, $assunto = null, $finalizado = false)
+    public static function listarChamados($ano, $nro = null, $assunto = null, $finalizado = false, $atendentes = false)
     {
         if (Gate::allows('perfiladmin')) {
             $chamados = SELF::ano($ano)->nro($nro)->assunto($assunto)->finalizado($finalizado)->get();
         } elseif (Gate::allows('perfilatendente')) {
             $chamados = collect();
             foreach (Auth::user()->filas as $fila) {
-                $chamados = $chamados->merge($fila->chamados()->ano($ano)->nro($nro)->assunto($assunto)->finalizado($finalizado)->get());
+                $chamados = $chamados->merge($fila->chamados()->ano($ano)->nro($nro)->assunto($assunto)->finalizado($finalizado)->atendentes($atendentes)->get());
             }
         } elseif (Gate::allows('perfilusuario')) {
             $chamados = Auth::user()->chamados()
@@ -229,7 +251,8 @@ class Chamado extends Model
     /**
      * Retorna estilo css para chamados fechados e finalizados
      */
-    public function formatarFechado() {
+    public function formatarFechado()
+    {
         $ret = $this->status == 'Fechado' ? 'text-decoration: line-through; ' : '';
         $ret .= $this->isFinalizado() ? ' color: gray; ' : '';
         return $ret;
@@ -267,7 +290,8 @@ class Chamado extends Model
      * 
      * @since 1.4.4 em 11/5/2022
      */
-    public function getAtualizadoEmAttribute() {
+    public function getAtualizadoEmAttribute()
+    {
         return $this->comentarios()->latest()->first()->created_at ?? $this->created_at;
     }
 

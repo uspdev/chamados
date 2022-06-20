@@ -17,6 +17,7 @@
       </div>
       @include('partials.datatable-filter-box', ['otable' => 'oTable'])
       @include('chamados.partials.mostrar_finalizados')
+      @include('chamados.partials.mostrar_atendentes')
       @include('chamados.partials.mostra-ano')
     </div>
   </div>

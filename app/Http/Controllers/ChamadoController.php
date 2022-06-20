@@ -48,6 +48,7 @@ class ChamadoController extends Controller
             session(['ano' => date('Y')]);
         }
 
+        // mostrando/ocultando finalizados
         if (isset($request->finalizado)) {
             session(['finalizado' => $request->finalizado ? 1 : 0]);
         } elseif (session('ano') != date('Y')) {
@@ -56,7 +57,16 @@ class ChamadoController extends Controller
             session(['finalizado' => 0]);
         }
 
-        $chamados = Chamado::listarChamados(session('ano'), null, null, session('finalizado'));
+        // mostrando/ocultando finalizados
+        if (isset($request->atendentes)) {
+            session(['atendentes' => $request->atendentes ? 1 : 0]);
+        } elseif (session('ano') != date('Y')) {
+            session(['atendentes' => 1]);
+        } else {
+            session(['atendentes' => 0]);
+        }
+
+        $chamados = Chamado::listarChamados(session('ano'), null, null, session('finalizado'), session('atendentes'));
         return view('chamados/index', compact('chamados'));
     }
 
@@ -219,11 +229,13 @@ class ChamadoController extends Controller
             $chamado->vinculadosIda()->attach($request->slct_chamados, ['acesso' => $request->acesso]);
             $vinculado = Chamado::find($request->slct_chamados);
             //comentário no chamado principal
-            Comentario::criarSystem($chamado,
+            Comentario::criarSystem(
+                $chamado,
                 'O chamado no. ' . $vinculado->nro . '/' . $vinculado->created_at->year . ' foi vinculado à esse chamado.'
             );
             // comentário no chamado vinculado
-            Comentario::criarSystem($vinculado,
+            Comentario::criarSystem(
+                $vinculado,
                 'Esse chamado foi vinculado ao chamado no. ' . $chamado->nro . '/' . $chamado->created_at->year
             );
             $request->session()->flash('alert-info', 'Chamado vinculado com sucesso');
@@ -245,11 +257,13 @@ class ChamadoController extends Controller
         $vinculado = Chamado::find($id);
 
         //comentário no chamado principal
-        Comentario::criarSystem($chamado,
+        Comentario::criarSystem(
+            $chamado,
             'O chamado no. ' . $vinculado->nro . '/' . $vinculado->created_at->year . ' foi desvinculado desse chamado.'
         );
         // comentário no chamado vinculado
-        Comentario::criarSystem($vinculado,
+        Comentario::criarSystem(
+            $vinculado,
             'Esse chamado foi desvinculado do chamado no. ' . $chamado->nro . '/' . $chamado->created_at->year
         );
         $request->session()->flash('alert-info', 'Chamado desvinculado com sucesso');
@@ -407,7 +421,8 @@ class ChamadoController extends Controller
         $chamado->status = 'Em Andamento';
         $chamado->save();
 
-        Comentario::criarSystem($chamado,
+        Comentario::criarSystem(
+            $chamado,
             'O chamado foi atribuído para o(a) atendente ' . $atendente->name
         );
 
@@ -476,7 +491,8 @@ class ChamadoController extends Controller
                 $chamado->save();
             }
 
-            Comentario::criarSystem($chamado,
+            Comentario::criarSystem(
+                $chamado,
                 'O ' . strtolower($papel) . ' ' . $user->name . ' foi adicionado ao chamado.'
             );
 
@@ -527,7 +543,7 @@ class ChamadoController extends Controller
     {
         // colocando autorização minima mas precisa rever
         $this->authorize('chamados.viewAny');
-        
+
         if ($request->term) {
             if (config('chamados.usar_replicado') == 'true') {
                 $patrimonio = new Patrimonio();
