@@ -64,10 +64,10 @@ class Chamado extends Model
 
     /**
      * config-status: Retorna a cor correspondente para o label do estado do chamado
-     * 
+     *
      * Se não encontrado retorna 'secondary'
      * Estava anterirmente em fila, mas faz mais sentido aqui
-     * 
+     *
      * @return String
      */
     public function retornarCor()
@@ -179,12 +179,11 @@ class Chamado extends Model
     {
         if (!$atendentes) {
             $user_id = Auth::user()->id;
-            $q = $query->join('user_chamado', 'chamados.id', '=', 'user_chamado.chamado_id')->where(
-                DB::raw("user_chamado.user_id = $user_id  and user_chamado.papel"), '=', 'Atendente');
-                // dd($q->toSql());
-                return $q;
+            return $query
+                ->join('user_chamado', 'chamados.id', '=', 'user_chamado.chamado_id')
+                ->selectRaw('chamados.*')
+                ->whereRaw("user_chamado.user_id = $user_id AND user_chamado.papel = 'Atendente'");
         } else {
-            // dd($query->toSql());
             return $query;
         }
     }
@@ -268,10 +267,10 @@ class Chamado extends Model
 
     /**
      * Mostra as pessoas que tem vonculo com o chamado.
-     * 
-     * Se informado $pivot, retorna somente o 1o. User, se não, retorna a lista completa 
-     * 
-     * @param $pivot Papel da pessoa no chamado (autor, observador, atendente, null = todos) 
+     *
+     * Se informado $pivot, retorna somente o 1o. User, se não, retorna a lista completa
+     *
+     * @param $pivot Papel da pessoa no chamado (autor, observador, atendente, null = todos)
      * @return App\Models\User|Collection
      */
     public function pessoas($pivot = null)
@@ -285,9 +284,9 @@ class Chamado extends Model
 
     /**
      * Accessor: retorna a data da última atualização do chamado
-     * 
+     *
      * A data do último comentário (user ou system), ou a data de criação do chamado
-     * 
+     *
      * @since 1.4.4 em 11/5/2022
      */
     public function getAtualizadoEmAttribute()
