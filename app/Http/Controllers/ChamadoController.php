@@ -69,7 +69,7 @@ class ChamadoController extends Controller
         } else {
             // ano corrente
             if (session('atendentes') == null) {
-                session(['atendentes' => 0]);
+                session(['atendentes' => 1]);
             }
         }
 
