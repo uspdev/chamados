@@ -30,7 +30,7 @@
                                     <select class="form-control col-9" name="new[{{ $field }}]">
                                         <option value='text'>Texto</option>
                                         <option value='select'>Caixa de Seleção</option>
-                                        <option value='data'>Dia</option>
+                                        <option value='date'>Data</option>
                                         <option value='number'>Número</option>
                                     </select>
                                     @break
