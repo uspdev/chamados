@@ -52,6 +52,7 @@ class ChamadoController extends Controller
         if (isset($request->finalizado)) {
             session(['finalizado' => $request->finalizado ? 1 : 0]);
         } elseif (session('ano') != date('Y')) {
+            // anos anteriores
             session(['finalizado' => 1]);
         } else {
             session(['finalizado' => 0]);
@@ -61,9 +62,15 @@ class ChamadoController extends Controller
         if (isset($request->atendentes)) {
             session(['atendentes' => $request->atendentes ? 1 : 0]);
         } elseif (session('ano') != date('Y')) {
-            session(['atendentes' => 1]);
+            // anos anteriores
+            if (session('atendentes') == null) {
+                session(['atendentes' => 1]);
+            }
         } else {
-            session(['atendentes' => 0]);
+            // ano corrente
+            if (session('atendentes') == null) {
+                session(['atendentes' => 0]);
+            }
         }
 
         $chamados = Chamado::listarChamados(session('ano'), null, null, session('finalizado'), session('atendentes'));
