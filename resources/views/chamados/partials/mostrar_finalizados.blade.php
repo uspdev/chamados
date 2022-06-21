@@ -1,7 +1,7 @@
 <div class="btn-group ml-3" role="group" aria-label="Basic example">
 
   <button class="btn btn-sm btn-{{ session('finalizado') ? 'dark' : 'outline-dark' }}"
-    title="Mostrar finalizados (fechados há mais de 10 dias)" id="finalizado_1">
+    title="Incluir finalizados (fechados há mais de 10 dias)" id="finalizado_1">
     <i class="fas fa-lock"></i>
   </button>
 
