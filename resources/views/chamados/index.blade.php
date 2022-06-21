@@ -17,7 +17,7 @@
       </div>
       @include('partials.datatable-filter-box', ['otable' => 'oTable'])
       @include('chamados.partials.mostrar_finalizados')
-      @include('chamados.partials.mostrar_atendentes')
+      @includeWhen(session('perfil') == 'atendente', 'chamados.partials.mostrar_atendentes')
       @include('chamados.partials.mostra-ano')
     </div>
   </div>
@@ -55,6 +55,7 @@
             @if ($user = $chamado->pessoas('Atendente'))
               {{ Str::limit($user->name ?? '-', 20) }}
               @include('chamados.show.user-detail', ['user' => $user])
+              {{-- @include('chamados.partials.user-', ['user' => $user]) --}}
             @else
               -
             @endif
