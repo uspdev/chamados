@@ -1,11 +1,15 @@
-<div class="form-group form-check">
-  <div class="custom-control custom-switch">
-    <input type="checkbox" class="custom-control-input" id="mostrar_finalizados"
-      {{ session('finalizado') ? 'checked' : '' }}>
-    <label class="custom-control-label" for="mostrar_finalizados">
-      Mostrar fechados há mais de 10 dias (finalizados)
-    </label>
-  </div>
+<div class="btn-group ml-3" role="group" aria-label="Basic example">
+
+  <button class="btn btn-sm btn-{{ session('finalizado') ? 'dark' : 'outline-dark' }}"
+    title="Mostrar finalizados (fechados há mais de 10 dias)" id="finalizado_1">
+    <i class="fas fa-lock"></i>
+  </button>
+
+  <button class="btn btn-sm btn-{{ session('finalizado') ? 'outline-dark' : 'dark' }}" title="Mostrar recentes"
+    id="finalizado_0">
+    <i class="fas fa-circle"></i>
+  </button>
+
 </div>
 
 @section('javascripts_bottom')
@@ -13,10 +17,14 @@
   <script>
     $(document).ready(function() {
 
-      $('#mostrar_finalizados').change(function() {
-        if (this.checked) {
+      $('#finalizado_1').on('click', function() {
+        if ($(this).hasClass('btn-outline-dark')) {
           window.location.href = 'chamados?finalizado=1'
-        } else {
+        }
+      })
+
+      $('#finalizado_0').on('click', function() {
+        if ($(this).hasClass('btn-outline-dark')) {
           window.location.href = 'chamados?finalizado=0'
         }
       })
