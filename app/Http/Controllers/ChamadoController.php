@@ -58,19 +58,13 @@ class ChamadoController extends Controller
             session(['finalizado' => 0]);
         }
 
-        // mostrando/ocultando finalizados
+        // mostrando/ocultando atendentes
         if (isset($request->atendentes)) {
             session(['atendentes' => $request->atendentes ? 1 : 0]);
-        } elseif (session('ano') != date('Y')) {
-            // anos anteriores
-            if (session('atendentes') == null) {
-                session(['atendentes' => 1]);
-            }
-        } else {
-            // ano corrente
-            if (session('atendentes') == null) {
-                session(['atendentes' => 1]);
-            }
+        } 
+                
+        if (session('atendentes') === null) {
+            session(['atendentes' => 1]);
         }
 
         $chamados = Chamado::listarChamados(session('ano'), null, null, session('finalizado'), session('atendentes'));
