@@ -21,7 +21,8 @@
         @if($setor->filas->count())
         <tr>
             <td>
-                {{$setor->sigla}}
+                {{ \Uspdev\Replicado\Estrutura::dump($setor->cod_set_replicado)['nomareatcset'] }} -
+                {{ $setor->nome }} - {{ $setor->sigla }}
                 @foreach ($setor->filas as $fila)
                 <div class="ml-3">
                     <a href="chamados/create/{{$fila['id']}}">{{$fila->nome}}</a> - {{$fila->descricao}}

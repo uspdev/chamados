@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "999a7891e071ab8784285a7e17389545",
+    "content-hash": "29efb069326a54372d25529b2e5eb986",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2308,6 +2308,61 @@
                 "source": "https://github.com/thephpleague/oauth1-client/tree/v1.10.0"
             },
             "time": "2021-08-15T23:05:49+00:00"
+        },
+        {
+            "name": "masakik/supervisor",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/masakik/laravel-supervisor-config-generator.git",
+                "reference": "c9d615003114428e2694526e52aa09e35193eb2f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/masakik/laravel-supervisor-config-generator/zipball/c9d615003114428e2694526e52aa09e35193eb2f",
+                "reference": "c9d615003114428e2694526e52aa09e35193eb2f",
+                "shasum": ""
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Matriphe\\Supervisor\\ServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Matriphe\\Supervisor\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Matriphe\\Tests\\Supervisor\\": "tests/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Muhammad Zamroni",
+                    "email": "halo@matriphe.com"
+                }
+            ],
+            "description": "Generate Supervisor config for monitoring Laravel worker process",
+            "keywords": [
+                "command",
+                "config",
+                "generator",
+                "laravel",
+                "supervisor"
+            ],
+            "support": {
+                "source": "https://github.com/masakik/laravel-supervisor-config-generator/tree/master"
+            },
+            "time": "2021-02-08T20:38:09+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -6024,16 +6079,16 @@
         },
         {
             "name": "uspdev/replicado",
-            "version": "1.12.0",
+            "version": "1.13.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/uspdev/replicado.git",
-                "reference": "781813b38e7259c233672910933a282447365c09"
+                "reference": "b6d1dcf685c42d6d328e85b623dcc49da24219d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/uspdev/replicado/zipball/781813b38e7259c233672910933a282447365c09",
-                "reference": "781813b38e7259c233672910933a282447365c09",
+                "url": "https://api.github.com/repos/uspdev/replicado/zipball/b6d1dcf685c42d6d328e85b623dcc49da24219d4",
+                "reference": "b6d1dcf685c42d6d328e85b623dcc49da24219d4",
                 "shasum": ""
             },
             "require": {
@@ -6068,9 +6123,9 @@
             "homepage": "https://github.com/uspdev/replicado",
             "support": {
                 "issues": "https://github.com/uspdev/replicado/issues",
-                "source": "https://github.com/uspdev/replicado/tree/1.12.0"
+                "source": "https://github.com/uspdev/replicado/tree/1.13.2"
             },
-            "time": "2022-04-04T11:10:40+00:00"
+            "time": "2022-06-10T00:46:59+00:00"
         },
         {
             "name": "uspdev/senhaunica-socialite",
@@ -8882,12 +8937,14 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "masakik/supervisor": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "^7.3"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.3.0"
 }
