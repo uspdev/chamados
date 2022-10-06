@@ -167,6 +167,13 @@ class ChamadoController extends Controller
         \UspTheme::activeUrl('chamados?perfil=' . session('perfil'));
         $this->authorize('chamados.view', $chamado);
 
+        // Caso usuário seja gerente ou atendente da fila muda o perfil para atendente
+        foreach ($chamado->fila->users as $key => $value) {
+            if ($value->codpes == \Auth::user()->codpes && session('perfil') != 'admin') {
+                \Auth::user()->trocarPerfil('atendente');
+            }
+        }
+
         // if (Gate::allows('chamados.permitePessoasFila', $chamado) == true) {
         //     \Auth::user()->trocarPerfil('atendente');
         // }
