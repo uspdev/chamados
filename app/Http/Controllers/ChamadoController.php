@@ -61,8 +61,8 @@ class ChamadoController extends Controller
         // mostrando/ocultando atendentes
         if (isset($request->atendentes)) {
             session(['atendentes' => $request->atendentes ? 1 : 0]);
-        } 
-                
+        }
+
         if (session('atendentes') === null) {
             session(['atendentes' => 1]);
         }
@@ -164,19 +164,20 @@ class ChamadoController extends Controller
      */
     public function show(Chamado $chamado)
     {
-        \UspTheme::activeUrl('chamados?perfil=' . session('perfil'));
         $this->authorize('chamados.view', $chamado);
 
         // Caso usuário seja gerente ou atendente da fila muda o perfil para atendente
-        foreach ($chamado->fila->users as $key => $value) {
-            if ($value->codpes == \Auth::user()->codpes && session('perfil') != 'admin') {
-                \Auth::user()->trocarPerfil('atendente');
-            }
+        // foreach ($chamado->fila->users as $key => $value) {
+        //     if ($value->codpes == \Auth::user()->codpes && session('perfil') != 'admin') {
+        //         \Auth::user()->trocarPerfil('atendente');
+        //     }
+        // }
+
+        if (Gate::allows('chamados.permitePessoasFila', $chamado) == true) {
+            \Auth::user()->trocarPerfil('atendente');
         }
 
-        // if (Gate::allows('chamados.permitePessoasFila', $chamado) == true) {
-        //     \Auth::user()->trocarPerfil('atendente');
-        // }
+        \UspTheme::activeUrl('chamados?perfil=' . session('perfil'));
 
         $template = json_decode($chamado->fila->template);
         $extras = json_decode($chamado->extras);
@@ -543,7 +544,7 @@ class ChamadoController extends Controller
 
     /**
      * Retornando patrimônio para inserção em chamados, formatado para select2
-     * 
+     *
      * @param Request $request - numpat
      * @return json
      */

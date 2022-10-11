@@ -132,9 +132,8 @@ class ChamadoPolicy
     {
         # atendentes que estão na fila.
         # NÃO está diferenciando gerente e atendente.
-        $fila = $chamado->fila;
-        foreach ($fila->users as $u) {
-            if ($user->codpes == $u->codpes) {
+        foreach ($chamado->fila->users as $userFila) {
+            if ($user->codpes == $userFila->codpes  && session('perfil') != 'admin') {
                 return true;
             }
         }
