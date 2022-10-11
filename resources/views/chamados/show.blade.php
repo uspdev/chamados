@@ -41,7 +41,7 @@
     </div>
     <div class="card-body">
 
-      @include('chamados.partials.instrucoes-da-fila', ['hide' => false])
+      @include('chamados.partials.instrucoes-da-fila', ['hide' => $chamado->status == 'Fechado'])
 
       <div class="row">
         <div class="col-md-8">
