@@ -15,7 +15,7 @@
       <div class="h4 mt-1 ml-2">
         <span class="badge badge-pill badge-primary datatable-counter">-</span>
       </div>
-      @include('chamados.partials.pendentes-button')
+      @includeWhen($pendentes, 'chamados.partials.pendentes-button')
       @include('partials.datatable-filter-box', ['otable' => 'oTable'])
       @include('chamados.partials.mostrar_finalizados')
       @includeWhen(session('perfil') == 'atendente', 'chamados.partials.mostrar_atendentes')
