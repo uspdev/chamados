@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-use App\Models\Fila;
 use App\Models\Comentario;
+use App\Models\Fila;
 use App\Observers\ChamadoObserver;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Chamado extends Model
 {
@@ -113,10 +112,10 @@ class Chamado extends Model
      * Se passado $ano, filtra por ele
      * https://laravel.com/docs/8.x/eloquent#local-scopes
      */
-    public function scopeAno($query, $ano)
+    public function scopeAno($query, $ano, $regra = '=')
     {
         if ($ano) {
-            return $query->whereYear('chamados.created_at', $ano);
+            return $query->whereYear('chamados.created_at', $regra, $ano);
         } else {
             return $query;
         }
@@ -198,20 +197,44 @@ class Chamado extends Model
      * Os filtros por nro e assunto são usados em consultas ajax
      *
      * Vamos considerar chamados de filas desativadas
+     *
+     * @param $ano Filtra a lista por ano do chamado
+     * @param $nro Filtra pelo número do chamado
+     * @param $assunto Filtra pelo assunto, pega no máximo 30 registros
+     * @param $finalizado Filtra somente os finalizados (fechadoa há mais de 10 dias)
+     * @param $atendentes Filtra somente os chamados do atendente logado
+     * @param $pendentes Mostra chamados pendentes de anos anteriores
+     * @return Collection
      */
-    public static function listarChamados($ano, $nro = null, $assunto = null, $finalizado = false, $atendentes = false)
+    public static function listarChamados($ano, $nro = null, $assunto = null, $finalizado = false, $atendentes = false, $pendentes = false)
     {
         if (Gate::allows('perfiladmin')) {
             $chamados = SELF::ano($ano)->nro($nro)->assunto($assunto)->finalizado($finalizado)->get();
         } elseif (Gate::allows('perfilatendente')) {
             $chamados = collect();
             foreach (Auth::user()->filas as $fila) {
-                $chamados = $chamados->merge($fila->chamados()->ano($ano)->nro($nro)->assunto($assunto)->finalizado($finalizado)->atendentes($atendentes)->get());
+                if ($pendentes) {
+                    $chamados = $chamados->merge(
+                        $fila->chamados()->ano(date('Y'), '!=')->atendentes($atendentes)
+                            ->where('status', '!=', 'Fechado')->get()
+                    );
+                } else {
+                    $chamados = $chamados->merge(
+                        $fila->chamados()->ano($ano)->nro($nro)->assunto($assunto)
+                            ->finalizado($finalizado)->atendentes($atendentes)->get()
+                    );
+                }
             }
         } elseif (Gate::allows('perfilusuario')) {
-            $chamados = Auth::user()->chamados()
-                ->wherePivotIn('papel', ['Autor', 'Observador'])
-                ->ano($ano)->nro($nro)->assunto($assunto)->finalizado($finalizado)->get();
+            if ($pendentes) {
+                $chamados = Auth::user()->chamados()
+                    ->wherePivotIn('papel', ['Autor', 'Observador'])
+                    ->ano(date('Y'), '!=')->where('status', '!=', 'Fechado')->get();
+            } else {
+                $chamados = Auth::user()->chamados()
+                    ->wherePivotIn('papel', ['Autor', 'Observador'])
+                    ->ano($ano)->nro($nro)->assunto($assunto)->finalizado($finalizado)->get();
+            }
         } else {
             $chamados = collect();
         }
@@ -266,7 +289,7 @@ class Chamado extends Model
     }
 
     /**
-     * Mostra as pessoas que tem vonculo com o chamado.
+     * Mostra as pessoas que tem vínculo com o chamado.
      *
      * Se informado $pivot, retorna somente o 1o. User, se não, retorna a lista completa
      *
