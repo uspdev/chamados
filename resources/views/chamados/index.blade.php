@@ -15,6 +15,7 @@
       <div class="h4 mt-1 ml-2">
         <span class="badge badge-pill badge-primary datatable-counter">-</span>
       </div>
+      @includeWhen($pendentes, 'chamados.partials.pendentes-button')
       @include('partials.datatable-filter-box', ['otable' => 'oTable'])
       @include('chamados.partials.mostrar_finalizados')
       @includeWhen(session('perfil') == 'atendente', 'chamados.partials.mostrar_atendentes')
@@ -22,7 +23,9 @@
     </div>
   </div>
 
-  <table class="table table-striped meus-chamados display responsive" style="width:100%">
+  @includeWhen($pendentes, 'chamados.partials.pendentes-card')
+
+  <table class="table table-striped tabela-chamados display responsive" style="width:100%">
     <thead>
       <tr>
         <th>Nro</th>
@@ -94,7 +97,7 @@
   <script>
     $(document).ready(function() {
 
-      oTable = $('.meus-chamados').DataTable({
+      oTable = $('.tabela-chamados').DataTable({
         dom: 't',
         "paging": false,
         "sort": true,

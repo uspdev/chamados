@@ -67,8 +67,15 @@ class ChamadoController extends Controller
             session(['atendentes' => 1]);
         }
 
+        // verificando se tem chamados pendentes de anos anteriores
+        if (session('perfil') == 'admin') {
+            $pendentes = collect();
+        } else {
+            $pendentes = Chamado::listarChamados(null, null, null, false, session('atendentes'), true);
+        }
+
         $chamados = Chamado::listarChamados(session('ano'), null, null, session('finalizado'), session('atendentes'));
-        return view('chamados/index', compact('chamados'));
+        return view('chamados/index', compact('chamados', 'pendentes'));
     }
 
     /**
@@ -100,7 +107,7 @@ class ChamadoController extends Controller
         $this->authorize('usuario');
 
         $request->validate([
-            'filtro' => 'nullable|string'
+            'filtro' => 'nullable|string',
         ]);
 
         $dtSearch = $request->filtro ?? '';
