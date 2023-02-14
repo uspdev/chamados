@@ -11,6 +11,7 @@ use Uspdev\Replicado\Pessoa;
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
+    use \Uspdev\SenhaunicaSocialite\Traits\HasSenhaunica;
 
     # desativado por enquanto por conta de conflito
     #use \Spatie\Permission\Traits\HasRoles;
@@ -147,7 +148,7 @@ class User extends Authenticatable
 
     /**
      * Troca o perfil do usuário
-     * 
+     *
      * @param String $perfil [usuario, atendente ou admin]
      * @return Array [success=>[true||false], msg=>mensagem de sucesso]
      */

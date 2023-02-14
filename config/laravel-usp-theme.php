@@ -40,14 +40,11 @@ $menu = [
         'text' => '<span class="text-danger"><i class="fas fa-tools ml-2"></i> Admin</span>',
         'url' => 'admin',
         'can' => 'perfiladmin',
-    ],];
+    ]];
 
 # para menu direito
 $admin = [
-    [
-        'type' => 'header',
-        'text' => '<b><i class="fas fa-cogs"></i>  Configurações</b>',
-    ],
+
     [
         'text' => '<i class="fas fa-users ml-2"></i> Meu Perfil',
         'url' => 'users/meuperfil',
@@ -84,10 +81,17 @@ $trocarPerfil = [
 
 $right_menu = [
     [
+        'key' => 'laravel-tools',
+    ],
+    // [
+    //     // menu utilizado para views da biblioteca senhaunica-socialite.
+    //     'key' => 'senhaunica-socialite',
+    // ],
+    [
         'text' => '<span class="badge badge-danger">Admin</span>',
         'url' => '#',
         'can' => 'perfiladmin',
-    ],   
+    ],
     [
         'text' => '<span class="badge badge-danger">Desassumir identidade</span>',
         'url' => 'users/desassumir',
@@ -115,7 +119,7 @@ return [
     # valor pode ser substituido pela aplicação.
     'title' => config('app.name'),
 
-    # USP_THEME_SKIN deve ser colocado no .env da aplicação 
+    # USP_THEME_SKIN deve ser colocado no .env da aplicação
     'skin' => env('USP_THEME_SKIN', 'uspdev'),
 
     # chave da sessão. Troque em caso de colisão com outra variável de sessão.
@@ -133,4 +137,10 @@ return [
     # menus
     'menu' => $menu,
     'right_menu' => $right_menu,
+
+    # mensagens flash - https://uspdev.github.io/laravel#31-mensagens-flash
+    'mensagensFlash' => false,
+
+    # container ou container-fluid
+    'container' => 'container-fluid',
 ];
