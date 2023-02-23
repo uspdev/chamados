@@ -49,7 +49,7 @@ Esse sistema foi projetado para rodar em servidores linux (Ubuntu e Debian).
 -   Git
 -   Composer
 -   Credenciais para senha única
--   Acesso ao replicado
+-   Acesso ao replicado (visão Pessoa - VUps, Estrutura - VUes e Financeiro - VUfi)
 
 Bibliotecas necessárias do php:
 
@@ -62,7 +62,7 @@ Caso você já tenha instalado o sistema e aplique uma nova atualização, sempr
     composer install --no-dev
     php artisan migrate
 
-Também deve observar no release se tem alguma outra coisa a ser ajustada, por exemplo o arquivo .env
+Também deve observar no [changelog](docs/changelog.md) se tem alguma outra coisa a ser ajustada, por exemplo o arquivo .env
 
 ## Instalação
 
@@ -217,4 +217,4 @@ Foram utilizados vários recursos do laravel que podem não ser muito trivial pa
 ## Todo
 
 -   Monitorar jobs com falhas
--   Monitorar arquivos de log
+-   Monitorar arquivos de log (implementado v 1.5)

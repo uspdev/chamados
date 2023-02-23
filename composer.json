@@ -1,7 +1,7 @@
 {
     "name": "uspdev/chamados",
     "type": "project",
-    "description": "Chamados",
+    "description": "Sistema de Chamados/Atendimentos",
     "keywords": [
         "chamado",
         "atendimento"
@@ -20,6 +20,8 @@
         "laravel/ui": "^3.0",
         "laravelcollective/html": "^6.2",
         "masakik/supervisor": "dev-master",
+        "uspdev/laravel-replicado": "^1.0",
+        "uspdev/laravel-tools": "^1.2",
         "uspdev/laravel-usp-theme": "^2.0",
         "uspdev/laravel-usp-validators": "^1.0",
         "uspdev/replicado": "^1.5",

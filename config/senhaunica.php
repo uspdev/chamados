@@ -2,7 +2,7 @@
 
 return [
     // para rotas internas
-    'routes' => false, // usa rotas e controller internos
+    'routes' => true, // usa rotas e controller internos
 
     // coloque um prefixo em caso de colisão de rotas
     // para todas as rotas internas da biblioteca (login, loginas, callback, logout e users).
@@ -21,7 +21,7 @@ return [
 
     // define as rotas para o gerenciador de usuários interno, dentro de prefix
     // se vazio, desabilita a rota de gerenciamento de usuários interna
-    'userRoutes' => 'users',
+    'userRoutes' => 'senhaunica-users',
 
     // se true, habilita botão para remover usuário (destroy)
     'destroyUser' => false,
