@@ -15,7 +15,7 @@
       <div class="h4 mt-1 ml-2">
         <span class="badge badge-pill badge-primary datatable-counter">-</span>
       </div>
-      @includeWhen($pendentes, 'chamados.partials.pendentes-button')
+      @includeWhen(count($pendentes), 'chamados.partials.pendentes-button')
       @include('partials.datatable-filter-box', ['otable' => 'oTable'])
       @include('chamados.partials.mostrar_finalizados')
       @includeWhen(session('perfil') == 'atendente', 'chamados.partials.mostrar_atendentes')
@@ -23,7 +23,7 @@
     </div>
   </div>
 
-  @includeWhen($pendentes, 'chamados.partials.pendentes-card')
+  @includeWhen(count($pendentes), 'chamados.partials.pendentes-card')
 
   <table class="table table-striped tabela-chamados display responsive" style="width:100%">
     <thead>
