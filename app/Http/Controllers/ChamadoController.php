@@ -564,7 +564,7 @@ class ChamadoController extends Controller
             if (config('chamados.usar_replicado') == 'true') {
                 $patrimonio = new Patrimonio();
                 $patrimonio->numpat = str_replace('.', '', $request->term);
-                if ($patrimonio->replicado()->anoorc != null) {
+                if (isset($patrimonio->replicado()->anoorc)) {
                     $results[] = [
                         'text' => $patrimonio->numFormatado() . ' - ' . $patrimonio->replicado()->epfmarpat . ' - ' . $patrimonio->replicado()->tippat . ' - ' . $patrimonio->replicado()->modpat,
                         'id' => $patrimonio->numpat,
