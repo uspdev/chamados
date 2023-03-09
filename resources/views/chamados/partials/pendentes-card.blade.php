@@ -5,7 +5,7 @@
     </div>
     <div class="card-body">
 
-        <table class="table table-striped tabela-chamados display responsive" style="width:100%">
+        <table class="table table-striped tabela-pendentes display responsive" style="width:100%">
         <thead>
           <tr>
             <th>Nro</th>
@@ -71,3 +71,31 @@
 
     </div>
   </div>
+
+  @section('javascripts_bottom')
+  @parent
+  {{-- já carregado na lista principal --}}
+  {{-- <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.8/css/fixedHeader.dataTables.min.css"> --}}
+  {{-- <script src="https://cdn.datatables.net/fixedheader/3.1.8/js/dataTables.fixedHeader.min.js"></script> --}}
+  <script>
+    $(document).ready(function() {
+
+      oTablePendentes = $('.tabela-pendentes').DataTable({
+        dom: 't',
+        "paging": false,
+        "sort": true,
+        "order": [
+          [0, "desc"]
+        ],
+        "fixedHeader": true,
+        columnDefs: [{
+          targets: 1,
+          orderable: false
+        }],
+        language: {
+          url: '//cdn.datatables.net/plug-ins/1.10.24/i18n/Portuguese-Brasil.json'
+        }
+      });
+    })
+  </script>
+@endsection
