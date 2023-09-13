@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Gate;
 
 class Fila extends Model
 {
@@ -315,8 +315,8 @@ class Fila extends Model
                 }
 
                 # liberando pessoas específicas listadas na fila
-                $customCodpes = explode(PHP_EOL,$fila->settings()->get('visibilidade.customCodpes'));
-                if(in_array(\Auth::user()->codpes, $customCodpes)) {
+                $customCodpes = explode(PHP_EOL, $fila->settings()->get('visibilidade.customCodpes'));
+                if (in_array(\Auth::user()->codpes, $customCodpes)) {
                     return true;
                 }
 
@@ -333,14 +333,25 @@ class Fila extends Model
      *
      * @return Int
      */
-    public function contarCustomCodpes() {
+    public function contarCustomCodpes()
+    {
         $customCodpes = $this->settings()->get('visibilidade.customCodpes');
         if (empty($customCodpes)) {
             return 0;
         } else {
-            $customCodpes = explode(PHP_EOL,$customCodpes);
+            $customCodpes = explode(PHP_EOL, $customCodpes);
             return count($customCodpes);
         }
+    }
+
+    public function contarChamadosPorAno()
+    {
+        return Chamado::contarChamadosPorAno($this);
+    }
+
+    public function contarChamadosPorMes($ano)
+    {
+        return Chamado::contarChamadosPorMes($ano, $this);
     }
 
     /**

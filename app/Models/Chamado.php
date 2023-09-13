@@ -27,12 +27,15 @@ class Chamado extends Model
 
     /**
      * The attributes that should be mutated to dates.
-     * https://laravel.com/docs/5.6/eloquent-mutators#date-mutators
+     * https://laravel.com/docs/8.x/eloquent-mutators#date-casting
      *
      * @var array
      */
-    protected $dates = [
-        'fechado_em',
+    protected $casts = [
+        'created_at' => 'date:d/m/Y',
+        'updated_at' => 'date:d/m/Y',
+        'fechado_em' => 'date:d/m/Y',
+        'atualizadoEm' => 'date:d/m/Y',
     ];
 
     /**
@@ -89,6 +92,51 @@ class Chamado extends Model
     public static function anos()
     {
         return range(date('Y'), 2020, -1);
+    }
+
+    /**
+     * Retorna a contagem de chamados por ano
+     *
+     * Se passar $fila a contagem é somente da fila, se não é de todo o sistema
+     *
+     * @param \App\Models\Fila $fila
+     * @return Int
+     */
+    public static function contarChamadosPorAno($fila = null)
+    {
+        $contagem = Chamado::selectRaw('year(created_at) ano, count(*) count')
+            ->where('fila_id', $fila->id)
+            ->whereYear('created_at', '>=', date('Y') - 5) // ultimos 5 anos
+            ->groupBy('ano')->get();
+        return $contagem;
+    }
+
+    /**
+     * Retorna a contagem de chamados por mês de determinado ano
+     *
+     * Se passar $fila a contagem é somente da fila, se não é de todo o sistema
+     *
+     * Retorno em array sendo o 1o elemento correspondente à contagem de janeiro,
+     * o segundo elemento é a contagem de fevereiro, e assim por diante.
+     * o array de retorno, portanto, possui 12 elementos
+     *
+     * @param Int $ano
+     * @param \App\Models\Fila $fila
+     * @return Array
+     */
+    public static function contarChamadosPorMes($ano, $fila = null)
+    {
+        $contagem = Chamado::selectRaw('month(created_at) mes, count(*) count')
+            ->where('fila_id', $fila->id)
+            ->whereYear('created_at', $ano)
+            ->groupBy('mes')->get();
+
+        // vamos organizar em array por mês para facilitar a apresentação
+        $ret = [];
+        for ($i = 0; $i < 12; $i++) {
+            $ret[] = $contagem->where('mes', $i + 1)->first()->count ?? '';
+        }
+        return $ret;
     }
 
     /**
@@ -241,6 +289,12 @@ class Chamado extends Model
 
         // eliminando repetidos
         $chamados = $chamados->unique('id');
+        return $chamados;
+    }
+
+    public static function listarChamadosPorFila($fila, $ano)
+    {
+        $chamados = Chamado::where('fila_id', $fila->id)->whereYear('created_at', $ano)->get();
         return $chamados;
     }
 

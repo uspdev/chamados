@@ -18,9 +18,9 @@ Route::get('ajuda/manual_usuario', [IndexController::class, 'manual_usuario']);
 Route::get('ajuda/manual_atendente', [IndexController::class, 'manual_atendente']);
 
 /* Senha única */
-Route::get('login', [LoginController::class, 'redirectToProvider'])->name('login');
-Route::get('callback', [LoginController::class, 'handleProviderCallback']);
-Route::post('logout', [LoginController::class, 'logout'])->name('logout');
+// Route::get('login', [LoginController::class, 'redirectToProvider'])->name('login');
+// Route::get('callback', [LoginController::class, 'handleProviderCallback']);
+// Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
 // SETORES
 Route::post('setores/{setor}/pessoas', [SetorController::class, 'storePessoa']);
@@ -35,6 +35,7 @@ Route::delete('filas/{fila}/pessoas/{id}', [FilaController::class, 'destroyPesso
 Route::post('filas/{fila}/template_json', [FilaController::class, 'storeTemplateJson']);
 Route::get('filas/{fila}/template', [FilaController::class, 'createTemplate'])->name('filas.createtemplate');
 Route::post('filas/{fila}/template', [FilaController::class, 'storeTemplate'])->name('filas.storetemplate');
+Route::get('filas/{fila}/download', [FilaController::class, 'download'])->name('filas.download');
 
 // USERS
 Route::get('search/partenome', [UserController::class, 'partenome']);
