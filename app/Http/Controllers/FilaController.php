@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\FilaRequest;
+use App\Models\Chamado;
 use App\Models\Fila;
 use App\Models\Setor;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Spatie\SimpleExcel\SimpleExcelWriter;
 
 class FilaController extends Controller
 {
@@ -104,7 +106,7 @@ class FilaController extends Controller
         if ($request->card == 'config') {
             $settings = $request->settings;
             $fila->settings()->set('instrucoes', $settings['instrucoes']);
-            
+
             $config = $request->config;
             $fila->config = array_merge(json_decode(json_encode($fila->config), true), $config);
         }
@@ -258,5 +260,53 @@ class FilaController extends Controller
         $fila->save();
         $request->session()->flash('alert-info', 'Template salvo com sucesso');
         return back();
+    }
+
+    /**
+     * Baixa os chamados especificados
+     *
+     * @param $request->ano
+     * @param $fila
+     * @return Stream
+     */
+    public function download(Request $request, Fila $fila)
+    {
+        $this->authorize('filas.view', $fila);
+        $request->validate([
+            'ano' => 'required|between:1970,2050',
+        ]);
+        $ano = $request->ano;
+
+        $chamados = Chamado::listarChamadosPorFila($fila, $ano);
+
+        // vamos pegar o template da fila para saber quais são os campos extras
+        $template = array_keys(json_decode($fila->template, true));
+
+        $arr = [];
+        foreach ($chamados as $chamado) {
+            $i = [];
+            $i['nro'] = $chamado->nro . '/' . $ano;
+            $i['status'] = $chamado->status;
+            $i['assunto'] = $chamado->assunto;
+            $i['descricao'] = str_replace('<br />', '', $chamado->descricao);
+
+            $autor = $chamado->users()->wherePivot('papel', 'Autor')->first();
+            $i['autor'] = $autor ? $autor->name : '';
+
+            $i['extras'] = $chamado->extras;
+            $extras = json_decode($chamado->extras, true) ?? [];
+            foreach ($template as $field) {
+                $i['extra_' . $field] = isset($extras[$field]) ? $extras[$field] : '';
+            }
+
+            $i['criado_em'] = $chamado->created_at->format('d/m/Y');
+            $i['fechado_em'] = $chamado->fechado_em ? $chamado->fechado_em->format('d/m/Y') : '';
+            $i['atualizado_em'] = $chamado->atualizadoEm ? $chamado->atualizadoEm->format('d/m/Y') : '';
+
+            $arr[] = $i;
+        }
+
+        $writer = SimpleExcelWriter::streamDownload('chamados_' . $ano . '_fila' . $fila->id . '.xlsx')
+            ->addRows($arr);
     }
 }

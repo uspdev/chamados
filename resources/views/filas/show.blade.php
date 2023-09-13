@@ -38,6 +38,7 @@
                     </div>
                     <div class="col-md-5">
                         @include('filas.partials.pessoas-card') {{-- Secundário --}}
+                        @include('filas.partials.card-relatorio') {{-- Secundário --}}
                         @include('filas.partials.visibilidade-card') {{-- Secundário --}}
                     </div>
                 </div>
