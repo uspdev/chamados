@@ -273,7 +273,7 @@ class FilaController extends Controller
     {
         $this->authorize('filas.view', $fila);
         $request->validate([
-            'ano' => 'required|between:1970,2050',
+            'ano' => 'required|integer|min:2000|max:' . (date('Y') + 1),
         ]);
         $ano = $request->ano;
 
