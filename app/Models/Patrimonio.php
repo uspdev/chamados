@@ -54,7 +54,7 @@ class Patrimonio extends Model
 
     /**
      * Retorna marca, modelo e tipo separados por vírgula
-     * 
+     *
      * @return String
      */
     public function marcaModeloTipo()
@@ -63,12 +63,12 @@ class Patrimonio extends Model
         return implode(',', array_filter($ret));
     }
 
-    /** 
+    /**
      * Retorna lista de chamados de um dado patrimônio
-     * 
-     * O $chamadoIgnoradoId é o próprio chamado no qual 
+     *
+     * O $chamadoIgnoradoId é o próprio chamado no qual
      * vai ser listado os demais, por isso deve ser ignorado
-     * 
+     *
      * @param Int $chamadoIgnoradoId
      * @return Illuminate\Database\Eloquent\Collection
      */

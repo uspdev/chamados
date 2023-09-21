@@ -11,6 +11,7 @@ use App\Http\Controllers\ArquivoController;
 use App\Http\Controllers\ChamadoController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ComentarioController;
+use App\Http\Controllers\PatrimonioController;
 
 Route::get('/', [IndexController::class, 'index'])->name('home');
 Route::get('ajuda', [IndexController::class, 'ajuda']);
@@ -80,3 +81,6 @@ Route::resource('arquivos', ArquivoController::class);
 // ADMIN
 Route::get('admin', [AdminController::class, 'index']);
 Route::get('admin/get_oauth_file/{filename}', [AdminController::class, 'getOauthFile']);
+
+// PATRIMONIOS
+Route::resource('patrimonios', PatrimonioController::class);

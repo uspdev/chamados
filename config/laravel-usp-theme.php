@@ -37,6 +37,11 @@ $menu = [
         'can' => 'users.viewAny',
     ],
     [
+        'text' => '<span class="text-danger">Patrimônios</span>',
+        'url' => 'patrimonios',
+        'can' => 'perfiladmin',
+    ],
+    [
         'text' => '<span class="text-danger"><i class="fas fa-tools ml-2"></i> Admin</span>',
         'url' => 'admin',
         'can' => 'perfiladmin',
