@@ -39,12 +39,6 @@
         </div>
       </div>
       <br>
-      <div>
-        <span class="h5">Arquivos de log</span><br>
-        <div class="ml-3">
-          <a href="admin/log-reader">Log reader</a>
-        </div>
-      </div>
     </div>
     <div class="col-md-6">
       <pre id="oauth-viewer"></pre>

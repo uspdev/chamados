@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "26a4386d777e7d66f05fa4cedd1510fe",
+    "content-hash": "bbffb6da573021a3440b1805c0d1ab5f",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1511,58 +1511,6 @@
                 }
             ],
             "time": "2023-08-27T10:13:57+00:00"
-        },
-        {
-            "name": "haruncpi/laravel-log-reader",
-            "version": "v1.0.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/haruncpi/laravel-log-reader.git",
-                "reference": "60ec565207906d448c4c8ccd36ce9dc6ad5bc4e1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/haruncpi/laravel-log-reader/zipball/60ec565207906d448c4c8ccd36ce9dc6ad5bc4e1",
-                "reference": "60ec565207906d448c4c8ccd36ce9dc6ad5bc4e1",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.6"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Haruncpi\\LaravelLogReader\\ServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Haruncpi\\LaravelLogReader\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "cc-by-4.0"
-            ],
-            "authors": [
-                {
-                    "name": "MD.HARUN-UR-RASHID",
-                    "email": "harun.cox@gmail.com"
-                }
-            ],
-            "description": "A simple and beautiful laravel log reader",
-            "keywords": [
-                "laravel",
-                "log",
-                "reader"
-            ],
-            "support": {
-                "issues": "https://github.com/haruncpi/laravel-log-reader/issues",
-                "source": "https://github.com/haruncpi/laravel-log-reader/tree/v1.0.6"
-            },
-            "time": "2020-11-07T06:06:33+00:00"
         },
         {
             "name": "laravel/framework",
@@ -3306,16 +3254,16 @@
         },
         {
             "name": "psy/psysh",
-            "version": "v0.11.20",
+            "version": "v0.11.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bobthecow/psysh.git",
-                "reference": "0fa27040553d1d280a67a4393194df5228afea5b"
+                "reference": "bcb22101107f3bf770523b65630c9d547f60c540"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/0fa27040553d1d280a67a4393194df5228afea5b",
-                "reference": "0fa27040553d1d280a67a4393194df5228afea5b",
+                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/bcb22101107f3bf770523b65630c9d547f60c540",
+                "reference": "bcb22101107f3bf770523b65630c9d547f60c540",
                 "shasum": ""
             },
             "require": {
@@ -3345,6 +3293,10 @@
             "extra": {
                 "branch-alias": {
                     "dev-main": "0.11.x-dev"
+                },
+                "bamarni-bin": {
+                    "bin-links": false,
+                    "forward-command": false
                 }
             },
             "autoload": {
@@ -3376,9 +3328,9 @@
             ],
             "support": {
                 "issues": "https://github.com/bobthecow/psysh/issues",
-                "source": "https://github.com/bobthecow/psysh/tree/v0.11.20"
+                "source": "https://github.com/bobthecow/psysh/tree/v0.11.21"
             },
-            "time": "2023-07-31T14:32:22+00:00"
+            "time": "2023-09-17T21:15:54+00:00"
         },
         {
             "name": "ralouphie/getallheaders",
@@ -6267,16 +6219,16 @@
         },
         {
             "name": "uspdev/laravel-replicado",
-            "version": "1.0.3",
+            "version": "1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/uspdev/laravel-replicado.git",
-                "reference": "ece1603a2520d7ee3aef40784ce2cd6099a74975"
+                "reference": "151c9c82c4009174309c5663d2edd275d801e10a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/uspdev/laravel-replicado/zipball/ece1603a2520d7ee3aef40784ce2cd6099a74975",
-                "reference": "ece1603a2520d7ee3aef40784ce2cd6099a74975",
+                "url": "https://api.github.com/repos/uspdev/laravel-replicado/zipball/151c9c82c4009174309c5663d2edd275d801e10a",
+                "reference": "151c9c82c4009174309c5663d2edd275d801e10a",
                 "shasum": ""
             },
             "require": {
@@ -6308,9 +6260,9 @@
             "description": "Wrapper laravel para uspdev/replicado",
             "support": {
                 "issues": "https://github.com/uspdev/laravel-replicado/issues",
-                "source": "https://github.com/uspdev/laravel-replicado/tree/1.0.3"
+                "source": "https://github.com/uspdev/laravel-replicado/tree/1.0.4"
             },
-            "time": "2022-12-14T18:29:40+00:00"
+            "time": "2023-09-18T19:36:53+00:00"
         },
         {
             "name": "uspdev/laravel-tools",
@@ -6366,16 +6318,16 @@
         },
         {
             "name": "uspdev/laravel-usp-theme",
-            "version": "2.8.0",
+            "version": "2.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/uspdev/laravel-usp-theme.git",
-                "reference": "5c6caeb99e9a83701286e81a71aaa153ffe9c20b"
+                "reference": "bcf1c38c5c4282f09a203978a51c7e82929a5d3a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/uspdev/laravel-usp-theme/zipball/5c6caeb99e9a83701286e81a71aaa153ffe9c20b",
-                "reference": "5c6caeb99e9a83701286e81a71aaa153ffe9c20b",
+                "url": "https://api.github.com/repos/uspdev/laravel-usp-theme/zipball/bcf1c38c5c4282f09a203978a51c7e82929a5d3a",
+                "reference": "bcf1c38c5c4282f09a203978a51c7e82929a5d3a",
                 "shasum": ""
             },
             "type": "library",
@@ -6410,9 +6362,9 @@
             "description": "usp theme for laravel",
             "support": {
                 "issues": "https://github.com/uspdev/laravel-usp-theme/issues",
-                "source": "https://github.com/uspdev/laravel-usp-theme/tree/2.8.0"
+                "source": "https://github.com/uspdev/laravel-usp-theme/tree/2.8.1"
             },
-            "time": "2023-04-25T12:30:40+00:00"
+            "time": "2023-09-21T16:53:04+00:00"
         },
         {
             "name": "uspdev/laravel-usp-validators",
@@ -6463,16 +6415,16 @@
         },
         {
             "name": "uspdev/replicado",
-            "version": "1.18.0",
+            "version": "1.19.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/uspdev/replicado.git",
-                "reference": "64f9bac68647ead390457c40519e07b5a7586e89"
+                "reference": "28b545a1fe4c2a0f796d9747f4a08f9b4c1e7642"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/uspdev/replicado/zipball/64f9bac68647ead390457c40519e07b5a7586e89",
-                "reference": "64f9bac68647ead390457c40519e07b5a7586e89",
+                "url": "https://api.github.com/repos/uspdev/replicado/zipball/28b545a1fe4c2a0f796d9747f4a08f9b4c1e7642",
+                "reference": "28b545a1fe4c2a0f796d9747f4a08f9b4c1e7642",
                 "shasum": ""
             },
             "require": {
@@ -6509,9 +6461,9 @@
             "homepage": "https://github.com/uspdev/replicado",
             "support": {
                 "issues": "https://github.com/uspdev/replicado/issues",
-                "source": "https://github.com/uspdev/replicado/tree/1.18.0"
+                "source": "https://github.com/uspdev/replicado/tree/1.19.2"
             },
-            "time": "2023-06-14T18:28:12+00:00"
+            "time": "2023-09-19T13:07:56+00:00"
         },
         {
             "name": "uspdev/senhaunica-socialite",
@@ -7684,16 +7636,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "9.2.28",
+            "version": "9.2.29",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "7134a5ccaaf0f1c92a4f5501a6c9f98ac4dcc0ef"
+                "reference": "6a3a87ac2bbe33b25042753df8195ba4aa534c76"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/7134a5ccaaf0f1c92a4f5501a6c9f98ac4dcc0ef",
-                "reference": "7134a5ccaaf0f1c92a4f5501a6c9f98ac4dcc0ef",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/6a3a87ac2bbe33b25042753df8195ba4aa534c76",
+                "reference": "6a3a87ac2bbe33b25042753df8195ba4aa534c76",
                 "shasum": ""
             },
             "require": {
@@ -7750,7 +7702,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/php-code-coverage/issues",
                 "security": "https://github.com/sebastianbergmann/php-code-coverage/security/policy",
-                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/9.2.28"
+                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/9.2.29"
             },
             "funding": [
                 {
@@ -7758,7 +7710,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-09-12T14:36:20+00:00"
+            "time": "2023-09-19T04:57:46+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -8003,16 +7955,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.6.12",
+            "version": "9.6.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "a122c2ebd469b751d774aa0f613dc0d67697653f"
+                "reference": "f3d767f7f9e191eab4189abe41ab37797e30b1be"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/a122c2ebd469b751d774aa0f613dc0d67697653f",
-                "reference": "a122c2ebd469b751d774aa0f613dc0d67697653f",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/f3d767f7f9e191eab4189abe41ab37797e30b1be",
+                "reference": "f3d767f7f9e191eab4189abe41ab37797e30b1be",
                 "shasum": ""
             },
             "require": {
@@ -8086,7 +8038,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.6.12"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.6.13"
             },
             "funding": [
                 {
@@ -8102,7 +8054,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-09-12T14:39:31+00:00"
+            "time": "2023-09-19T05:39:22+00:00"
         },
         {
             "name": "sebastian/cli-parser",
