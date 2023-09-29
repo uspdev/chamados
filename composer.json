@@ -81,7 +81,7 @@
             "@php artisan key:generate --ansi"
         ],
         "post-update-cmd": [
-            "[ $COMPOSER_DEV_MODE -eq 0 ] || php artisan vendor:publish --tag=laravel-pt-br-localization"
+            "[ $COMPOSER_DEV_MODE -eq 0 ] || php artisan vendor:publish --tag=laravel-pt-br-localization --force"
         ]
     }
 }
