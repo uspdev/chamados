@@ -249,9 +249,9 @@ class Chamado extends Model
      * @param $ano Filtra a lista por ano do chamado
      * @param $nro Filtra pelo número do chamado
      * @param $assunto Filtra pelo assunto, pega no máximo 30 registros
-     * @param $finalizado Filtra somente os finalizados (fechadoa há mais de 10 dias)
-     * @param $atendentes Filtra somente os chamados do atendente logado
-     * @param $pendentes Mostra chamados pendentes de anos anteriores
+     * @param $finalizado Se false esconde os finalizados (fechado há mais de 10 dias)
+     * @param $atendentes Se false mostra somente os chamados do atendente logado ou sem atendente
+     * @param $pendentes  Se false não mostra chamados pendentes de anos anteriores
      * @return Collection
      */
     public static function listarChamados($ano, $nro = null, $assunto = null, $finalizado = false, $atendentes = false, $pendentes = false)
@@ -263,13 +263,15 @@ class Chamado extends Model
             foreach (Auth::user()->filas as $fila) {
                 if ($pendentes) {
                     $chamados = $chamados->merge(
-                        $fila->chamados()->ano(date('Y'), '!=')->atendentes($atendentes)
+                        $fila->chamados()->ano(date('Y'), '!=')
+                            ->atendentes($atendentes)
                             ->where('status', '!=', 'Fechado')->get()
                     );
                 } else {
                     $chamados = $chamados->merge(
                         $fila->chamados()->ano($ano)->nro($nro)->assunto($assunto)
-                            ->finalizado($finalizado)->atendentes($atendentes)->get()
+                            ->atendentes($atendentes)
+                            ->finalizado($finalizado)->get()
                     );
                 }
             }
@@ -279,9 +281,9 @@ class Chamado extends Model
                     ->wherePivotIn('papel', ['Autor', 'Observador'])
                     ->ano(date('Y'), '!=')->where('status', '!=', 'Fechado')->get();
             } else {
-                $chamados = Auth::user()->chamados()
+                $chamados = Auth::user()->chamados()->ano($ano)->nro($nro)->assunto($assunto)
                     ->wherePivotIn('papel', ['Autor', 'Observador'])
-                    ->ano($ano)->nro($nro)->assunto($assunto)->finalizado($finalizado)->get();
+                    ->finalizado($finalizado)->get();
             }
         } else {
             $chamados = collect();

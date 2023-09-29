@@ -18,7 +18,7 @@
                     {!! Form::open(['url'=>'chamados/'.$chamado->id.'/vinculado']) !!}
                     @method('post')
                     @csrf
-    
+
                     <div class="form-group row">
                         {{ Form::label('slct_chamados', 'Chamados', ['class' => 'col-form-label col-sm-2']) }}
                         <div class="col-sm-10">
@@ -29,7 +29,7 @@
 {{--                     <div class="form-group row">
                         {{ Form::label('tipo', 'Tipo de Acesso', ['class' => 'col-form-label col-sm-2']) }}
                         <div class="col-sm-10">
-                            {{ Form::select('tipo',['leitura'=>'Leitura', 'escrita'=>'Escrita'], 'Leitura', 
+                            {{ Form::select('tipo',['leitura'=>'Leitura', 'escrita'=>'Escrita'], 'Leitura',
                             ['class' => 'form-control col-3']) }}
                         </div>
                     </div> --}}
@@ -54,21 +54,27 @@
     $(document).ready(function() {
 
         var chamadosForm = $('#VinculadoModal');
+        var $oSelectChamados = chamadosForm.find(':input[name=slct_chamados]')
 
         add_modal_form = function() {
             chamadosForm.modal();
         }
 
-        chamadosForm.find(':input[name=slct_chamados]').select2({
+        $oSelectChamados.select2({
             ajax: {
                 url: 'chamados/listarChamadosAjax'
                 , dataType: 'json'
+                , delay: 1000
             }
             , dropdownParent: chamadosForm
             , minimumInputLength: 3
             , theme: 'bootstrap4'
             , width: '100%'
             , language: 'pt_br'
+        })
+
+        chamadosForm.on('shown.bs.modal', function() {
+            $oSelectChamados.select2('open')
         })
 
     })

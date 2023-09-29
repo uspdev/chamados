@@ -201,20 +201,23 @@ class ChamadoController extends Controller
     }
 
     /**
-     * Retornando os chamados para criar vinculo entre eles
+     * Retornando os chamados para criar vínculo entre eles
+     *
      * @param Request $request - assunto ou número do chamado
      * @return json
      */
     public function listarChamadosAjax(Request $request)
     {
         if ($request->term) {
+            //busca independente do ano, inclui finalizados, de todos os atendentes
             if (is_numeric($request->term)) {
-                //busca pelo nro, independete do ano
-                $chamados = Chamado::listarChamados(null, $request->term, null);
+                //busca pelo nro
+                $chamados = Chamado::listarChamados(null, $request->term, null, true, true);
             } else {
-                //busca pelo assunto, independete do ano
-                $chamados = Chamado::listarChamados(null, null, $request->term);
+                //busca pelo assunto
+                $chamados = Chamado::listarChamados(null, null, $request->term, true, true);
             }
+
             # vamos formatar para datatables
             $results = [];
             foreach ($chamados as $chamado) {
@@ -230,8 +233,10 @@ class ChamadoController extends Controller
 
     /**
      * Vincula chamados
-     * @param $request->slct_chamados - nrp do chamado a ser vinculado
-     * @param $request->tipo - tipo de acesso (leitura??)
+     *
+     * @param $request->slct_chamados Número do chamado a ser vinculado
+     * @param $request->tipo Tipo de acesso (leitura??)
+     * @param $chamado Chamado no qual vai ser vinculado
      */
     public function storeChamadoVinculado(Request $request, Chamado $chamado)
     {
