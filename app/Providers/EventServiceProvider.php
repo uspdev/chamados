@@ -18,8 +18,8 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-        \SocialiteProviders\Manager\SocialiteWasCalled::class => [
-            'Uspdev\SenhaunicaSocialite\SenhaunicaExtendSocialite@handle',
+        \Illuminate\Auth\Events\Login::class => [
+            \App\Listeners\LoginListener::class,
         ],
     ];
 
