@@ -37,7 +37,7 @@
                         <b>Pessoas</b><br>
                         <div class="ml-2">
                             @if(count($setor->users))
-                            @foreach($setor->users()->wherePivot('funcao','!=','Gerente')->get() as $user)
+                            @foreach($setor->users()->wherePivot('funcao','!=','Gerente')->orderBy('name')->get() as $user)
                             <div class="form-inline">
                                 {{$user->name}} ({{ $user->pivot->funcao }})&nbsp;
                                 @include('chamados.show.user-detail')
