@@ -24,6 +24,13 @@ $user_detail_id = 'user-detail-' . Str::random(5);
       <div>
         <i class="fas fa-phone mr-2"></i> {{ $user->telefone ?? 'não disponível' }}
       </div>
+      @if (config('chamados.sistemaPessoas'))
+        <div>
+          <a href="{{ config('chamados.sistemaPessoas') }}/pessoas/{{ $user->codpes }}" target="_PESSOAS">
+            Ver mais em Pessoas <i class="fas fa-share"></i>
+          </a>
+        </div>
+      @endif
     </span>
   </div>
 </div>
