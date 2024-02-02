@@ -22,8 +22,8 @@ class LoginListener
         # vincular a pessoa e o vinculo ao setor
         foreach ($vinculos as $vinculo) {
             if ($setor = Setor::where('cod_set_replicado', $vinculo['codset'])->first()) {
-                Setor::vincularPessoa($setor, $user, ucfirst($vinculo['tipvin']));
-                $log .= 'codpes=' . $user->codpes . ',setor=' . $setor->sigla . ',vínculo=' . ucfirst($vinculo['tipvin']) . ';';
+                Setor::vincularPessoa($setor, $user, mb_convert_case($vinculo['tipvin'], MB_CASE_TITLE));
+                $log .= 'codpes=' . $user->codpes . ',setor=' . $setor->sigla . ',vínculo=' . $vinculo['tipvin'] . ';';
             }
         }
 

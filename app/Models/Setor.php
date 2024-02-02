@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Setor extends Model
 {
@@ -89,8 +90,15 @@ class Setor extends Model
 
     public static function vincularPessoa($setor, $user, $funcao)
     {
-        $setor->users()->wherePivot('funcao', $funcao)->detach($user);
-        $user->setores()->attach($setor, ['funcao' => $funcao]);
+        $u = $setor->users()->where('user_id', $user->id)->wherePivot('funcao', $funcao)->withPivot('funcao')->first();
+
+        // vamos cadastrar ou atualizar o setor somente se mudou de setor
+        if(empty($u) || $u->pivot->funcao != $funcao) {
+            config('app.debug') && Log::info("Atualizado setor de $user->codpes em $setor->sigla na função $funcao");
+            $setor->users()->wherePivot('funcao', $funcao)->detach($user);
+            $user->setores()->attach($setor, ['funcao' => $funcao]);
+        }
+
     }
 
     /**
