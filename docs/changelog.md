@@ -1,5 +1,13 @@
 # Changelog
 
+### 2/2/2024 Versão 1.6.4
+
+* Link para sistema patrimônio e sistema pessoas
+  * Permite colocar link para esses 2 sistemas USPdev a fim de facilitar a consulta de informações.
+* Relatório de chamados por mês nos detalhes da fila.
+* Integrado com uspdev/laravel-tools
+* Correção de bugs
+
 ### 14/2/2023 Versão 1.5 
 
 * Atualizado as bibliotecas do USPdev e do composer
