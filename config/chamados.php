@@ -11,4 +11,5 @@ return [
     'forcar_https' => env('FORCAR_HTTPS', false),
 
     'sistemaPatrimonio' => env('SISTEMA_PATRIMONIO', null),
+    'sistemaPessoas' => env('SISTEMA_PESSOAS', null),
 ];
