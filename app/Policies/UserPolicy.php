@@ -39,7 +39,7 @@ class UserPolicy
         }
 
         /* admin */
-        if (Gate::allows('perfiladmin')) {
+        if (Gate::allows('perfiladmin') || $user->is_admin) {
             return true;
         }
     }

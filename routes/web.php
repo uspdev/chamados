@@ -41,8 +41,8 @@ Route::get('filas/{fila}/download', [FilaController::class, 'download'])->name('
 // USERS
 Route::get('search/partenome', [UserController::class, 'partenome']);
 Route::get('users/perfil/{perfil}', [UserController::class, 'trocarPerfil']);
-Route::get('users/desassumir', [UserController::class, 'desassumir']);
-Route::get('users/{user}/assumir', [UserController::class, 'assumir']);
+// Route::get('users/desassumir', [UserController::class, 'desassumir']);
+// Route::get('users/{user}/assumir', [UserController::class, 'assumir']);
 Route::get('users/meuperfil', [UserController::class, 'meuperfil']);
 Route::resource('users', UserController::class);
 

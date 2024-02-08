@@ -10,6 +10,11 @@
     <i class="fas fa-circle"></i>
   </button>
 
+  <button class="btn btn-sm btn-{{ session('finalizado') ? 'outline-dark' : 'outline-dark' }}" title="Mostrar abertos"
+    id="finalizado_0">
+    <i class="fas fa-lock-open"></i>
+  </button>
+
 </div>
 
 @section('javascripts_bottom')

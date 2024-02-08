@@ -11,7 +11,11 @@
           @if (Gate::check('perfiladmin'))
             <a href="users">Usuários</a> <i class="fas fa-angle-right"></i>
           @else
-            Meu perfil <i class="fas fa-angle-right"></i>
+            @if (Auth()->user()->is_admin)
+              <a href="{{ route('senhaunica-users.index') }}">Users</a> <i class="fas fa-angle-right"></i>
+            @else
+              Meu perfil <i class="fas fa-angle-right"></i>
+            @endif
           @endif
           {{ $user->name }}
           @if (Gate::check('perfiladmin'))

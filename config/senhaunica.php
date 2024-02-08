@@ -26,10 +26,12 @@ return [
     // se true, habilita botão para remover usuário (destroy)
     'destroyUser' => false,
 
-    // view para editar campo de usuário personalizado
+    // view para editar campo de usuário personalizado. Pode ser mais de uma coluna
+    // 'key' é opcional e se estiver setado permite ordenar por esta coluna, passando o nome da coluna do DB
     // é passado $user para a view
     'customUserField' => [
-        ['view' => '', 'label' => '', 'width' => ''],
+        ['view' => 'users.partials.cuf-ultimo-login', 'key' => 'last_login_at', 'label' => 'Último login', 'width' => ''],
+        ['view' => 'users.partials.cuf-perfil', 'label' => '', 'width' => ''],
     ],
 
     // Define o gate para a rota de busca de pessoas
@@ -63,6 +65,10 @@ return [
 
     'dev' => env('SENHAUNICA_DEV', 'no'),
     'callback_id' => env('SENHAUNICA_CALLBACK_ID'),
+
+    // codigo da unidade para identificar logins proprios
+    // relevante se permission=true
+    'codigoUnidade' => env('SENHAUNICA_CODIGO_UNIDADE'),
 
     // SENHAUNICA_KEY e SENHAUNICA_SECRET são carregados em services.php da biblioteca
 ];

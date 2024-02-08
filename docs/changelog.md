@@ -1,5 +1,9 @@
 # Changelog
 
+### 2/2/2024 Versão 1.6.5
+
+* Trocando o gerenciamento de usuários local para o do senhaunica-socialite
+
 ### 2/2/2024 Versão 1.6.4
 
 * Link para sistema patrimônio e sistema pessoas

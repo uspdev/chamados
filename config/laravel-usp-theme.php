@@ -31,11 +31,11 @@ $menu = [
         'url' => 'filas',
         'can' => 'filas.viewAny',
     ],
-    [
-        'text' => '<span class="text-danger"><i class="fas fa-users ml-2"></i> Pessoas</span>',
-        'url' => 'users',
-        'can' => 'users.viewAny',
-    ],
+    // [
+    //     'text' => '<span class="text-danger"><i class="fas fa-users ml-2"></i> Pessoas</span>',
+    //     'url' => 'users',
+    //     'can' => 'users.viewAny',
+    // ],
     [
         'text' => '<span class="text-danger">Patrimônios</span>',
         'url' => 'patrimonios',
@@ -88,20 +88,19 @@ $right_menu = [
     [
         'key' => 'laravel-tools',
     ],
-    // [
-    //     // menu utilizado para views da biblioteca senhaunica-socialite.
-    //     'key' => 'senhaunica-socialite',
-    // ],
+    [
+        'key' => 'senhaunica-socialite',
+    ],
     [
         'text' => '<span class="badge badge-danger">Admin</span>',
         'url' => '#',
         'can' => 'perfiladmin',
     ],
-    [
-        'text' => '<span class="badge badge-danger">Desassumir identidade</span>',
-        'url' => 'users/desassumir',
-        'can' => 'desassumir',
-    ],
+    // [
+    //     'text' => '<span class="badge badge-danger">Desassumir identidade</span>',
+    //     'url' => 'users/desassumir',
+    //     'can' => 'desassumir',
+    // ],
     [
         'text' => '<span class="badge badge-warning">Atendente</span>',
         'url' => '#',
