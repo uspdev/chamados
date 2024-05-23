@@ -48,7 +48,7 @@
                                                                 <select class="form-control" name="template[{{ $tkey }}][{{ $field }}]">
                                                                     <option value='' {{ $tvalue[$field] == '' ? 'selected' : '' }}>Sem validação</option>
                                                                     <option value='required' {{ $tvalue[$field] == 'required' ? 'selected' : '' }}>Obrigatório</option>
-                                                                    <option value='required|integer' {{ $tvalue[$field] == 'required|integer' ? 'selected' : '' }}>Obrigatório - Somente números</option>
+                                                                    {{-- <option value='required|integer' {{ $tvalue[$field] == 'required|integer' ? 'selected' : '' }}>Obrigatório - Somente números</option> --}}
                                                                 </select>
                                                                 @break
                                                                 @case('can')
