@@ -10,7 +10,7 @@ class JSONForms
     /**
      * Valida os campos do formulário
      *
-     * @param $request Campos do do formulário a serem validados
+     * @param $request Campos do formulário a serem validados
      * @param $fila Fila de onde vai pegar as regras de validação
      *
      * @return Array Contendo a validação
@@ -22,7 +22,7 @@ class JSONForms
         if ($template) {
             foreach ($template as $key => $json) {
                 if (isset($json->validate)) {
-                    $field = "extras." . $key;
+                    $field = 'extras.' . $key;
                     $validate[$field] = $json->validate;
                 }
             }
@@ -39,8 +39,11 @@ class JSONForms
         foreach ($template as $key => $json) {
             $input = [];
             $type = $json->type;
-
-            $input[] = Form::label("extras[$key]", $template->$key->label, ['class' => 'control-label']);
+            $label = $template->$key->label;
+            if (isset($json->validate) && strpos($json->validate, 'required') !== false) {
+                $label = '<i class="fas fa-star-of-life fa-sm text-danger"></i> ' . $label;
+            }
+            $input[] = Form::label("extras[$key]", $label, ['class' => 'control-label']);
 
             # valores preenchidos
             # aqui temos de usar "or" pois "||" não preenche corretamente
@@ -49,11 +52,19 @@ class JSONForms
             switch ($type) {
                 //caso seja um select passa o valor padrao
                 case 'select':
-                    $input[] = Form::$type("extras[$key]", $json->value, $value, ['class' => 'form-control', 'placeholder' => 'Selecione...']);
+                    $attrib = ['class' => 'form-control', 'placeholder' => 'Selecione...'];
+                    if (isset($json->validate) && strpos($json->validate, 'required') !== false) {
+                        $attrib['required'] = '';
+                    }
+                    $input[] = Form::$type("extras[$key]", $json->value, $value, $attrib);
                     break;
 
                 default:
-                    $input[] = Form::$type("extras[$key]", $value, ['class' => 'form-control', 'rows' => '3']);
+                    $attrib = ['class' => 'form-control', 'rows' => '3'];
+                    if (isset($json->validate) && strpos($json->validate, 'required') !== false) {
+                        $attrib['required'] = '';
+                    }
+                    $input[] = Form::$type("extras[$key]", $value, $attrib);
                     break;
             }
 
@@ -77,7 +88,7 @@ class JSONForms
         $template = json_decode($fila->template);
         $form = [];
         if ($template) {
-            $data = ($chamado) ? json_decode($chamado->extras) : null;
+            $data = $chamado ? json_decode($chamado->extras) : null;
             $form = JSONForms::JSON2Form($template, $data, $perfil);
         }
         return $form;
