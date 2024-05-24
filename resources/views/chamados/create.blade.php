@@ -30,10 +30,10 @@
               <label for="autor" class="control-label">Por</label>
               <input class="form-control" type="text" name="autor" value="{{ \Auth::user()->name }}" disabled>
               <br>
-              <label for="assunto" class="control-label">Assunto</label>
-              <input class="form-control" type="text" name="assunto" value="{{ old('assunto') }}">
+              <label for="assunto" class="control-label"><i class="fas fa-star-of-life fa-sm text-danger"></i> Assunto</label>
+              <input class="form-control" type="text" name="assunto" value="{{ old('assunto') }}" required>
               <br>
-              <x-textarea class="" label="Descrição" name="descricao" />
+              <x-textarea class="" label='<i class="fas fa-star-of-life fa-sm text-danger"></i> Descrição' name="descricao" />
             </div>
           </div>
 
@@ -42,7 +42,7 @@
             <div class="form-group">
               @foreach ($form as $input)
                 @foreach ($input as $element)
-                  {{ $element }}
+                  {!! Html::decode($element) !!}
                 @endforeach
                 <br>
               @endforeach
