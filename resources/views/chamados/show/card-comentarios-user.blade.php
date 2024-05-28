@@ -48,15 +48,19 @@
             '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
         return !!pattern.test(str);
     }
-    /* Procura palavra por palavra formato de url e converte em tag html */
+    /* Procura palavra por palavra formato de url e converte em tag html 
+       Precisa considerar as quebras de linha
+    */
     $(function() {
         $("#comentario").on("blur", function() {
             var text = $(this).val();
-            text = text.replace(/(?:\r\n|\r|\n)/g, "<br />");
             var array = text.trim().split(/\s+/);
             var html = '';
             for (var i = 0; i < array.length; i++) {
                 if (validURL(array[i])) {
+                    if (array[i].search("http://") === -1) {
+                        array[i] = "http://" + array[i];
+                    }
                     array[i] = "<a href='" + array[i] + "' target='_blank'>" + array[i] + "</a>"; 
                 }
                 html += array[i] + " ";
