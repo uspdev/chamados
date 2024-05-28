@@ -48,12 +48,11 @@
             '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
         return !!pattern.test(str);
     }
-    /* Procura palavra por palavra formato de url e converte em tag html
-       TODO: Considerar as quebras de linha 
-    */
+    /* Procura palavra por palavra formato de url e converte em tag html */
     $(function() {
         $("#comentario").on("blur", function() {
             var text = $(this).val();
+            text = text.replace(/(?:\r\n|\r|\n)/g, "<br />");
             var array = text.trim().split(/\s+/);
             var html = '';
             for (var i = 0; i < array.length; i++) {
