@@ -33,16 +33,38 @@
 @section('javascripts_bottom')
 @parent
 <script>
-    /* Permitir links nos comentários
-       https://stackoverflow.com/questions/60716750/textarea-in-laravel-view-should-show-link-if-given
+    /* Permitir links nos comentários */
+    
+    /* Função que retorna true se o texto for em formato url
+       Retorna false se o texto começar com a tag a '<a href...'
+       https://stackoverflow.com/questions/5717093/check-if-a-javascript-string-is-a-url/5717133#5717133
     */
+    function validURL(str) {
+        var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+            '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+            '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+            '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+            '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+            '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+        return !!pattern.test(str);
+    }
+    /* Procura palavra por palavra formato de url e converte em tag html */
     $(function() {
         $("#comentario").on("blur", function() {
             var text = $(this).val();
-            var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
-            var text1 = text.replace(exp, "<a href='$1'>$1</a>");
-            var exp2 = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
-            $(this).val(text1.replace(exp2, '$1<a target="_blank" href="http://$2">$2</a>'));
+            var text1 = text.replace(/(?:\r\n|\r|\n)/g, ' <br> ');
+            var array = text1.trim().split(/\s+/);
+            var html = '';
+            for (var i = 0; i < array.length; i++) {
+                if (validURL(array[i])) {
+                    if (array[i].search('http://') === -1 && array[i].search('https://') === -1) {
+                        array[i] = "http://" + array[i];
+                    }
+                    array[i] = "<a href='" + array[i] + "' target='_blank'>" + array[i] + "</a>"; 
+                }
+                html += array[i] + " ";
+            }
+            $(this).val(html);
         })
     })
 </script>
