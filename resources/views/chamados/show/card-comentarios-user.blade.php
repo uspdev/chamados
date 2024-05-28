@@ -58,7 +58,7 @@
             var html = '';
             for (var i = 0; i < array.length; i++) {
                 if (validURL(array[i])) {
-                    if (array[i].search("http://") === -1) {
+                    if (array[i].search('http://') === -1 && array[i].search('https://') === -1) {
                         array[i] = "http://" + array[i];
                     }
                     array[i] = "<a href='" + array[i] + "' target='_blank'>" + array[i] + "</a>"; 
