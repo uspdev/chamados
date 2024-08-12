@@ -286,7 +286,7 @@ class Fila extends Model
 
                 # liberando pessoas (gerentes, servidores, etc) do proprio setor (interno)
                 $interno = \Auth::user()->setores->contains($fila->setor);
-                if ($fila->config->visibilidade->setores == $interno) {
+                if ($interno == true && $fila->config->visibilidade->setores == 'interno') {
                     return true;
                 }
 
