@@ -30,6 +30,17 @@
               <label for="autor" class="control-label">Por</label>
               <input class="form-control" type="text" name="autor" value="{{ \Auth::user()->name }}" disabled>
               <br>
+              @foreach ($form as $input)
+                @if (is_array($input))
+                  @if (stringContains(strval($input[0]), config('chamados.chamadoCamposAEsquerda')))
+                    @foreach ($input as $element)
+                      {!! Html::decode($element) !!}
+                    @endforeach
+                    <br>
+                
+                  @endif
+                @endif
+              @endforeach
               <label for="assunto" class="control-label"><i class="fas fa-star-of-life fa-sm text-danger"></i> Assunto</label>
               <input class="form-control" type="text" name="assunto" value="{{ old('assunto') }}" required>
               <br>
@@ -41,10 +52,14 @@
           <div class="col-md-6">
             <div class="form-group">
               @foreach ($form as $input)
-                @foreach ($input as $element)
-                  {!! Html::decode($element) !!}
-                @endforeach
-                <br>
+                @if (is_array($input))
+                  @if (!stringContains(strval($input[0]), config('chamados.chamadoCamposAEsquerda')))
+                    @foreach ($input as $element)
+                      {!! Html::decode($element) !!}
+                    @endforeach
+                    <br>
+                  @endif
+                @endif
               @endforeach
             </div>
           </div>

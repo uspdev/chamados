@@ -12,4 +12,7 @@ return [
 
     'sistemaPatrimonio' => env('SISTEMA_PATRIMONIO', null),
     'sistemaPessoas' => env('SISTEMA_PESSOAS', null),
+
+    // campos de chamado a serem exibidos na coluna da esquerda quando da criação de um novo chamado
+    'chamadoCamposAEsquerda' => explode(',', env('CHAMADO_CAMPOS_A_ESQUERDA', null)),
 ];
