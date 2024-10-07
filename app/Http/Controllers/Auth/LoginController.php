@@ -93,10 +93,11 @@ class LoginController extends Controller
         $user->last_login_at = now();
         $user->save();
 
-        # vincular a pessoa e o vinculo ao setor
+        // vincular a pessoa e o vinculo ao setor
         foreach ($userSenhaUnica->vinculo as $vinculo) {
             if ($setor = Setor::where('cod_set_replicado', $vinculo['codigoSetor'])->first()) {
                 Setor::vincularPessoa($setor, $user, $vinculo['nomeVinculo']);
+                session(['setor_id' => $setor->id]);    // guarda em sessão o setor do usuário
             }
         }
 
