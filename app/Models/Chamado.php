@@ -261,21 +261,18 @@ class Chamado extends Model
         } elseif (Gate::allows('perfilatendente')) {
             $chamados = collect();
             foreach (Auth::user()->filas as $fila) {
-                // considera somente chamados do setor (e subsetores) ao qual o usuário está vinculado, conforme está no Replicado
-                if (($fila->setor->id == session('setor_id')) || ($fila->setor->setor_id == session('setor_id'))) {
-                    if ($pendentes) {
-                        $chamados = $chamados->merge(
-                            $fila->chamados()->ano(date('Y'), '!=')
-                                ->atendentes($atendentes)
-                                ->where('status', '!=', 'Fechado')->get()
-                        );
-                    } else {
-                        $chamados = $chamados->merge(
-                            $fila->chamados()->ano($ano)->nro($nro)->assunto($assunto)
-                                ->atendentes($atendentes)
-                                ->finalizado($finalizado)->get()
-                        );
-                    }
+                if ($pendentes) {
+                    $chamados = $chamados->merge(
+                        $fila->chamados()->ano(date('Y'), '!=')
+                            ->atendentes($atendentes)
+                            ->where('status', '!=', 'Fechado')->get()
+                    );
+                } else {
+                    $chamados = $chamados->merge(
+                        $fila->chamados()->ano($ano)->nro($nro)->assunto($assunto)
+                            ->atendentes($atendentes)
+                            ->finalizado($finalizado)->get()
+                    );
                 }
             }
         } elseif (Gate::allows('perfilusuario')) {
