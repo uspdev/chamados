@@ -200,6 +200,17 @@ class Fila extends Model
      */
     public function setConfigAttribute($value)
     {
+        // quando este método é invocado pelo seeder, $value vem como string JSON
+        // quando este método é invocado pelo MVC, $value vem como array
+
+        if (is_string($value)) {
+            $value_decoded = json_decode($value, true); // Decodifica como array associativo
+            if (is_array($value_decoded) && (json_last_error() == JSON_ERROR_NONE)) {
+                // se $value veio como string JSON, vamos utilizar $value_decoded, de modo a poder acessá-lo mais abaixo como array
+                $value = $value_decoded;
+            }
+        }
+
         $v = new \StdClass;
         foreach (config('filas.config.visibilidade') as $key => $val) {
             $v->$key = $value['visibilidade'][$key] ?? 0;
