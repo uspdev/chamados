@@ -14,6 +14,7 @@ class PatrimonioController extends Controller
      */
     public function index()
     {
+        \UspTheme::activeUrl('patrimonios');
         $this->authorize('perfiladmin');
         $patrimonios = Patrimonio::all();
 
@@ -49,6 +50,7 @@ class PatrimonioController extends Controller
      */
     public function show($numpat)
     {
+        \UspTheme::activeUrl('patrimonios');
         $this->authorize('perfiladmin');
 
         $patrimonio = Patrimonio::where('numpat', $numpat)->first();
