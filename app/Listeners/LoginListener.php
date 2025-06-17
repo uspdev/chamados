@@ -1,22 +1,29 @@
 <?php
-
 namespace App\Listeners;
 
 use App\Models\Setor;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Log;
+use Laravel\Socialite\Facades\Socialite;
 use Uspdev\Replicado\Pessoa;
 
 class LoginListener
 {
     public function __construct()
-    {
-    }
+    {}
 
     public function handle(Login $event)
     {
         $user = $event->user;
         $vinculos = Pessoa::listarVinculosAtivos($user->codpes, false);
+
+        // atualizando base local (email e telefone com dados do oauth)
+        if ($userSenhaUnica = Socialite::driver('senhaunica')->user()) {
+            $userSenhaUnica = $userSenhaUnica->attributes;
+            $user->telefone = $userSenhaUnica['telefone'];
+            $user->email = $userSenhaUnica['email'];
+        }
+
         $log = 'login listener:';
 
         // vincular a pessoa e o vinculo ao setor
