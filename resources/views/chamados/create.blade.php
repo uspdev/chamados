@@ -32,12 +32,12 @@
               <br>
               @foreach ($form as $input)
                 @if (is_array($input))
-                  @if (stringContains(strval($input[0]), config('chamados.chamadoCamposAEsquerda')))
+                  @if (in_array(strval($input[0]), config('chamados.chamadoCamposAEsquerda')))
                     @foreach ($input as $element)
                       {!! Html::decode($element) !!}
                     @endforeach
                     <br>
-                
+
                   @endif
                 @endif
               @endforeach
@@ -53,7 +53,7 @@
             <div class="form-group">
               @foreach ($form as $input)
                 @if (is_array($input))
-                  @if (!stringContains(strval($input[0]), config('chamados.chamadoCamposAEsquerda')))
+                  @if (!in_array(strval($input[0]), config('chamados.chamadoCamposAEsquerda')))
                     @foreach ($input as $element)
                       {!! Html::decode($element) !!}
                     @endforeach
