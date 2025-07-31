@@ -31,7 +31,8 @@ class LoginListener
         // vincular a pessoa e o vinculo ao setor
         $vinculos = Pessoa::listarVinculosAtivos($user->codpes, false);
         foreach ($vinculos as $vinculo) {
-            if ($setor = Setor::where('cod_set_replicado', $vinculo['codset'])->first()) {
+            $setor = Setor::where('cod_set_replicado', $vinculo['codset'])->first();
+            if ($setor) {
                 Setor::vincularPessoa($setor, $user, mb_convert_case($vinculo['tipvin'], MB_CASE_TITLE));
                 $log .= 'update vinculo codpes=' . $user->codpes . ',setor=' . $setor->sigla . ',vínculo=' . $vinculo['tipvin'] . ';';
             }
