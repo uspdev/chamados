@@ -1,5 +1,10 @@
 # Changelog
 
+### 31/7/2025 Versão 1.6.6
+
+* Algumas correções de bugs
+* Criado o comando `artisan setores:sync` para sincronizar os setores com o replicado
+
 ### 2/2/2024 Versão 1.6.5
 
 * Trocando o gerenciamento de usuários local para o do senhaunica-socialite

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Foundation\Inspiring;
+use App\Models\Setor;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +17,9 @@ use Illuminate\Foundation\Inspiring;
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->describe('Display an inspiring quote');
+
+Artisan::command('setores:sync', function () {
+    $mensagem = Setor::sincronizarComReplicado();
+
+    $this->info($mensagem);
+})->describe('Sincroniza setores e chefias com o Replicado');
