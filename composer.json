@@ -13,9 +13,9 @@
         "glorand/laravel-model-settings": "^4.2",
         "graham-campbell/markdown": "^13.1",
         "guzzlehttp/guzzle": "^7.0",
-        "laravel/framework": "^9.0",
+        "laravel/framework": "^10.0",
         "laravel/tinker": "^2.0",
-        "laravel/ui": "^3.0",
+        "laravel/ui": "^4.0",
         "laravelcollective/html": "^6.2",
         "masakik/supervisor": "dev-master",
         "spatie/simple-excel": "^1.13",
@@ -26,12 +26,12 @@
         "uspdev/senhaunica-socialite": "^4.3"
     },
     "require-dev": {
-        "spatie/laravel-ignition": "^1.0",
+        "spatie/laravel-ignition": "^2.0",
         "fakerphp/faker": "^1.10",
         "lucascudo/laravel-pt-br-localization": "^1.1",
         "mockery/mockery": "^1.3.1",
-        "nunomaduro/collision": "^6.1",
-        "phpunit/phpunit": "^9.0",
+        "nunomaduro/collision": "^7.0",
+        "phpunit/phpunit": "^10.0",
         "uspdev/laravel-usp-faker": "^1.0"
     },
     "repositories": [
@@ -65,7 +65,7 @@
             "Tests\\": "tests/"
         }
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true,
     "scripts": {
         "post-autoload-dump": [
