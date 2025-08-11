@@ -26,7 +26,7 @@ class LoginListener
             // mitigando erro do auth verifier fora do fluxo de login
         }
 
-        $log = 'login listener:';
+        // $log = 'login listener:';
 
         // vincular a pessoa e o vinculo ao setor
         $vinculos = Pessoa::listarVinculosAtivos($user->codpes, false);
@@ -34,7 +34,7 @@ class LoginListener
             $setor = Setor::where('cod_set_replicado', $vinculo['codset'])->first();
             if ($setor) {
                 Setor::vincularPessoa($setor, $user, mb_convert_case($vinculo['tipvin'], MB_CASE_TITLE));
-                $log .= 'update vinculo codpes=' . $user->codpes . ',setor=' . $setor->sigla . ',vínculo=' . $vinculo['tipvin'] . ';';
+                // $log .= 'update vinculo codpes=' . $user->codpes . ',setor=' . $setor->sigla . ',vínculo=' . $vinculo['tipvin'] . ';';
             }
         }
 
@@ -53,6 +53,6 @@ class LoginListener
         // será que precisa disso?
         //session(['perfil' => 'usuario']);
 
-        config('app.debug') && Log::info($log);
+        // config('app.debug') && Log::info($log);
     }
 }

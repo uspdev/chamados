@@ -89,15 +89,41 @@ class Setor extends Model
         return 'sigla';
     }
 
+    /**
+     * Vincula um usuário a um setor com uma função específica.
+     *
+     * Vinculo Servidor é único e atualizado a cada login
+     * Demais vinculos (p.ex. Gerente) pode ser com mais de um setor
+     *
+     * @param  \App\Models\Setor $setor O setor ao qual o usuário será vinculado.
+     * @param  \App\Models\User  $user  O usuário a ser vinculado.
+     * @param  string $funcao A função que o usuário exercerá no setor (ex: "Servidor", "Gerente").
+     *
+     * @return void
+     */
     public static function vincularPessoa($setor, $user, $funcao)
     {
-        $u = $setor->users()->where('user_id', $user->id)->wherePivot('funcao', $funcao)->withPivot('funcao')->first();
+        $setoresServidor = $user->setores()
+            ->wherePivot('funcao', $funcao)
+            ->get();
 
-        // vamos cadastrar ou atualizar o setor somente se mudou de setor
-        if (empty($u) || $u->pivot->funcao != $funcao) {
-            config('app.debug') && Log::info("Atualizado setor de $user->codpes em $setor->sigla na função $funcao");
-            $setor->users()->wherePivot('funcao', $funcao)->detach($user);
-            $user->setores()->attach($setor, ['funcao' => $funcao]);
+        // usuário pode ter somente 1 vinculo de Servidor
+        if ($funcao == 'Servidor' && ($setoresServidor->count() > 1 || $setoresServidor->doesntContain($setor))) {
+            $user->setores()->wherePivot('funcao', 'Servidor')->detach();
+            $setor->users()->attach($user->id, ['funcao' => 'Servidor']);
+            config('app.debug') && Log::info("Atualizado setor de $user->codpes para $setor->sigla na função $funcao");
+        }
+
+        // para demais vinculos
+        if ($funcao != 'Servidor') {
+            $u = $setor->users()->where('user_id', $user->id)->wherePivot('funcao', $funcao)->withPivot('funcao')->first();
+
+            // vamos cadastrar ou atualizar o setor somente se mudou de setor
+            if (empty($u) || $u->pivot->funcao != $funcao) {
+                $setor->users()->wherePivot('funcao', $funcao)->detach($user);
+                $user->setores()->attach($setor, ['funcao' => $funcao]);
+                config('app.debug') && Log::info("Atualizado setor de $user->codpes para $setor->sigla na função $funcao");
+            }
         }
     }
 

@@ -40,7 +40,7 @@
               @endif
             </div>
             <div class="col-md-6">
-              <div class="h5 mt-2">Setores</div>
+              <div class="h5 mt-2">Gerente de Setores</div>
               <div class="ml-2">
                 @forelse($user->setores()->wherePivot('funcao', 'Gerente')->get() as $setor)
                   <div>
