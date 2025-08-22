@@ -2,7 +2,7 @@
 
 namespace App\Utils;
 
-use Form;
+/* use Form; */
 use Illuminate\Support\HtmlString;
 
 class JSONForms
@@ -43,7 +43,7 @@ class JSONForms
             if (isset($json->validate) && strpos($json->validate, 'required') !== false) {
                 $label = '<i class="fas fa-star-of-life fa-sm text-danger"></i> ' . $label;
             }
-            $input[] = Form::label("extras[$key]", $label, ['class' => 'control-label']);
+            $input[] = html()->label($label)->for("extras[$key]")->attribute('class','control-label');
 
             # valores preenchidos
             # aqui temos de usar "or" pois "||" não preenche corretamente
@@ -56,7 +56,8 @@ class JSONForms
                     if (isset($json->validate) && strpos($json->validate, 'required') !== false) {
                         $attrib['required'] = '';
                     }
-                    $input[] = Form::$type("extras[$key]", $json->value, $value, $attrib);
+                    $input[] = html()->$type("extras[$key]", json_decode(json_encode($json->value), true))
+                                     ->attributes($attrib);
                     break;
 
                 default:
@@ -64,7 +65,7 @@ class JSONForms
                     if (isset($json->validate) && strpos($json->validate, 'required') !== false) {
                         $attrib['required'] = '';
                     }
-                    $input[] = Form::$type("extras[$key]", $value, $attrib);
+                    $input[] = html()->$type("extras[$key]", $value, $attrib);
                     break;
             }
 

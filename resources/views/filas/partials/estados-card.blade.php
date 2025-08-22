@@ -19,11 +19,10 @@
     </button>
   </div>
   <div class="card-body">
-      
+
     @include('ajuda.filas.config-status')
 
-    {!! Form::open(['url' => 'filas/' . $fila->id, 'name' => 'form_config']) !!}
-    @method('put')
+    {{ html()->form('PUT', 'filas/' . $fila->id)->open() }}
     <input type="hidden" name="card" value="estados">
 
     <div class="form-row">
@@ -62,7 +61,7 @@
     <div class="mt-3">
       <input class="btn-sm btn-primary" id="config_submit" type="submit" name="ok" value="Salvar Configurações">
     </div>
-    {!! Form::close() !!}
+    {{ html()->form()->close() }}
   </div>
 </div>
 

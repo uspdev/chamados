@@ -1,5 +1,5 @@
 <!-- Modal para adicionar pessoas ao setor -->
-{{-- é necessário passar 
+{{-- é necessário passar
     $modal['url']
     $modal['title']
 --}}
@@ -15,13 +15,12 @@
             <div class="modal-body">
 
                 <div class="list_table_div_form">
-                    {!! Form::open(['url'=>$modal['url']]) !!}
-                    @method('POST')
+                    {{ html()->form('POST', $modal['url'])->open() }}
 
                     <div class="form-group row">
-                        {{ Form::label('codpes','Nome', ['class' => 'col-form-label col-sm-2']) }}
+                        {{ html()->label('Nome', 'codpes')->class(['col-form-label', 'col-sm-2']) }}
                         <div class="col-sm-10">
-                            {{ Form::select('codpes',[], null, ['class' => 'form-control']) }}
+                            {{ html()->select('codpes', [], null)->class(['form-control']) }}
                         </div>
                     </div>
 
@@ -29,7 +28,7 @@
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn btn-primary">Salvar</button>
                     </div>
-                    {!! Form::close(); !!}
+                    {{ html()->form()->close() }}
                 </div>
             </div>
         </div>

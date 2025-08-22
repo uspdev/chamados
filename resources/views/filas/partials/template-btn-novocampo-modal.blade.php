@@ -15,8 +15,7 @@
             </div>
             <div class="modal-body">
                 <div class="list_table_div_form">
-                    {!! Form::open(['route' => ['filas.storetemplate', $fila->id], 'id' => 'template-form', 'method' => 'POST']) !!}
-                    {!! Form::token() !!}
+                    {{ html()->form('POST')->route('filas.storetemplate', $fila->id)->attributes(['id' => 'template-form'])->open() }}
                     <div id="template-new" class="form-group row mt-2">
                         <div class="col-2"><strong>Campo</strong></div>
                         <input class="form-control col-9" name="campo">
@@ -24,7 +23,7 @@
                     @foreach ($fila->getTemplateFields() as $field)
                         <div class="form-group row mt-2">
                             <div class="col-2"><strong>{{ ucfirst($field) }}</strong></div>
-                            
+
                                 @switch($field)
                                     @case('type')
                                     <select class="form-control col-9" name="new[{{ $field }}]">
@@ -50,14 +49,13 @@
                                     @default
                                     <input class="form-control col-9" name="new[{{ $field }}]">
                                 @endswitch
-                            
                         </div>
                     @endforeach
                     <div class="text-right mt-2">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
                         <button class="btn btn-primary ml-1" type="submit">Salvar</button>
                     </div>
-                    {!! Form::close() !!}
+                    {{ html()->form()->close() }}
                 </div>
             </div>
         </div>

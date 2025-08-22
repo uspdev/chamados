@@ -20,8 +20,7 @@
         </div>
         <div class="modal-body">
 
-          {!! Form::open(['url' => 'comentarios/' . $chamado->id]) !!}
-          @method('post')
+          {{ html()->form('POST', 'comentarios/' . $chamado->id)->open() }}
           @csrf
 
           <div class="form-group">
@@ -48,7 +47,7 @@
               </button>
             @endif
           </div>
-          {!! Form::close() !!}
+          {{ html()->form()->close() }}
 
         </div>
       </div>
