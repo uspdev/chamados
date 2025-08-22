@@ -26,7 +26,7 @@
         </div>
       </div>
 
-      {{-- potencialmente pode haver dados-atendente orfaos se em algum momento havia 
+      {{-- potencialmente pode haver dados-atendente orfaos se em algum momento havia
         um campo no form, foi preenchido e depois o campo foi eemovido da fila #319 --}}
       <div class="{{ $formAtendente ? 'col-md-6' : 'col-md-12' }}">
         @if ($formAtendente)

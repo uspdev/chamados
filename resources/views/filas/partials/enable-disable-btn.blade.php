@@ -10,9 +10,7 @@
 </style>
 @endsection
 
-{!! Form::open(['url'=>'filas/'.$fila->id, 'name' => 'form_estado']) !!}
-@method('put')
-@csrf
+{{ html()->form('PUT', 'filas/'.$fila->id)->open() }}
 <div class="btn-group enable-disable-btn">
     <button type="submit" class="btn btn-sm {{($fila->estado == 'Em elaboração') ? 'btn-warning' : 'btn-secondary'}}" {{($fila->estado == 'Em elaboração') ? 'disabled' : ''}} name="estado" value="Em elaboração">
         Em elaboração
@@ -24,4 +22,4 @@
         Desativada
     </button>
 </div>
-{!! Form::close(); !!}
+{{ html()->form()->close() }}
