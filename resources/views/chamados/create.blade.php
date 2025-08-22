@@ -34,7 +34,7 @@
                 @if (is_array($input))
                   @if (in_array(strval($input[0]), config('chamados.chamadoCamposAEsquerda')))
                     @foreach ($input as $element)
-                      {!! Html::decode($element) !!}
+                    {{ html()->decode($element) }}
                     @endforeach
                     <br>
 
@@ -55,7 +55,7 @@
                 @if (is_array($input))
                   @if (!in_array(strval($input[0]), config('chamados.chamadoCamposAEsquerda')))
                     @foreach ($input as $element)
-                      {!! Html::decode($element) !!}
+                    {{ $element }}
                     @endforeach
                     <br>
                   @endif
@@ -77,7 +77,9 @@
 
 @section('javascripts_bottom')
     @parent
-    {{ Html::script('js/functions.js') }}
+    @push('scripts')
+      <script src="js/functions.js"></script>
+    @endpush
     <script type="text/javascript">
       /* @autor uspdev/alecosta 10/02/2022
        * Ao carregar a página ordena todos os campos caixa de seleção adicionados na fila

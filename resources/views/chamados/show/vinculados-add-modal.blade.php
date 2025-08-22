@@ -15,21 +15,21 @@
             <div class="modal-body">
                 <div class="list_table_div_form">
 
-                    {!! Form::open(['url'=>'chamados/'.$chamado->id.'/vinculado']) !!}
+                  {{ html()->form('POST', 'chamados/'.$chamado->id.'/vinculado')->open() }}
                     @method('post')
                     @csrf
 
                     <div class="form-group row">
-                        {{ Form::label('slct_chamados', 'Chamados', ['class' => 'col-form-label col-sm-2']) }}
+                      {{ html()->label('Chamados', 'slct_chamados',['class' => 'col-form-label col-sm-2']) }}
                         <div class="col-sm-10">
-                            {{ Form::select('slct_chamados',[], null,['class' => 'form-control', 'placeholder'=>'Digite o número do chamado ou assunto..']) }}
+                          {{ html()->select('slct_chamados',[], null,['class' => 'form-control', 'placeholder'=>'Digite o número do chamado ou assunto..']) }}
                         </div>
                     </div>
 
 {{--                     <div class="form-group row">
-                        {{ Form::label('tipo', 'Tipo de Acesso', ['class' => 'col-form-label col-sm-2']) }}
+                            {{ html()->label('tipo', 'Tipo de Acesso', ['class' => 'col-form-label col-sm-2']) }}
                         <div class="col-sm-10">
-                            {{ Form::select('tipo',['leitura'=>'Leitura', 'escrita'=>'Escrita'], 'Leitura',
+                            {{ html()->select('tipo',['leitura'=>'Leitura', 'escrita'=>'Escrita'], 'Leitura',
                             ['class' => 'form-control col-3']) }}
                         </div>
                     </div> --}}
@@ -40,7 +40,7 @@
                         <button type="submit" class="btn btn-primary">Salvar</button>
                     </div>
 
-                    {!! Form::close(); !!}
+                    {{ html()->form()->close() }}
 
                 </div>
             </div>

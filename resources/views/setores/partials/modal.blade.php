@@ -11,9 +11,8 @@
             <div class="modal-body">
 
                 <div class="list_table_div_form">
-                    {!! Form::open(['url'=>'']) !!}
-                    @method('POST')
-                    {{ Form::hidden('id') }}
+                    {{ html()->form('POST', '')->open() }}
+                    {{ html()->hidden('id') }}
 
                     @foreach ($fields as $col)
                     @if (empty($col['type']) || $col['type'] == 'text')
@@ -30,7 +29,7 @@
 
                         <button type="submit" class="btn btn-primary">Salvar</button>
                     </div>
-                    {!! Form::close(); !!}
+                    {{ html()->form()->close() }}
                 </div>
 
             </div>
@@ -87,7 +86,7 @@
             $('#modalForm :input').filter("input[name='_method']").val('POST');
 
             $("#modalForm").modal();
-            
+
         }
 
     })
