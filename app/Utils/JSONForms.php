@@ -52,20 +52,24 @@ class JSONForms
             switch ($type) {
                 //caso seja um select passa o valor padrao
                 case 'select':
-                    $attrib = ['class' => 'form-control', 'placeholder' => 'Selecione...'];
+                    $fieldInput = html()->$type("extras[$key]", json_decode(json_encode($json->value), true))
+                        ->class('form-control')->placeholder('Selecione...');;
+
                     if (isset($json->validate) && strpos($json->validate, 'required') !== false) {
-                        $attrib['required'] = '';
+                        $fieldInput  = $fieldInput ->required();
                     }
-                    $input[] = html()->$type("extras[$key]", json_decode(json_encode($json->value), true))
-                                     ->attributes($attrib);
+
+                    $input[] = $fieldInput;
                     break;
 
                 default:
-                    $attrib = ['class' => 'form-control', 'rows' => '3'];
+                    $fieldInput = html()->textarea("extras[$key]", $value)->class('form-control')->rows(3);
+
                     if (isset($json->validate) && strpos($json->validate, 'required') !== false) {
-                        $attrib['required'] = '';
+                        $fieldInput  = $fieldInput ->required();
                     }
-                    $input[] = html()->$type("extras[$key]", $value, $attrib);
+
+                    $input[] = $fieldInput;
                     break;
             }
 

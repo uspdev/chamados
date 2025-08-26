@@ -20,9 +20,9 @@
                     @csrf
 
                     <div class="form-group row">
-                      {{ html()->label('Patrimônio', 'numpat', ['class' => 'col-form-label col-sm-2']) }}
+                      {{ html()->label('Patrimônio', 'numpat')->class('col-form-label col-sm-2') }}
                         <div class="col-sm-10">
-                          {{ html()->select('numpat', [], null, ['class' => 'form-control', 'placeholder' => 'Digite um número de patrimônio..']) }}
+                          {{ html()->select('numpat', [], null)->class('form-control')->placeholder('Digite um número de patrimônio..') }}
                         </div>
                     </div>
 

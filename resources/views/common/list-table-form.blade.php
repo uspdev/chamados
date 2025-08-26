@@ -1,5 +1,5 @@
 <div class="list_table_div_form">
-  {{ html()->form('PUT', $data->url)->open() }}
+  {{ html()->form('POST', $data->url)->open() }}
   {{ html()->hidden('id') }}
 
     @foreach ($data->model::getFields() as $col)

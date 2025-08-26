@@ -20,9 +20,9 @@
                     @csrf
 
                     <div class="form-group row">
-                      {{ html()->label('Chamados', 'slct_chamados',['class' => 'col-form-label col-sm-2']) }}
+                      {{ html()->label('Chamados', 'slct_chamados')->class('col-form-label col-sm-2') }}
                         <div class="col-sm-10">
-                          {{ html()->select('slct_chamados',[], null,['class' => 'form-control', 'placeholder'=>'Digite o número do chamado ou assunto..']) }}
+                          {{ html()->select('slct_chamados',[], null)->class('form-control')->placeholder('Digite o número do chamado ou assunto..') }}
                         </div>
                     </div>
 

@@ -20,17 +20,17 @@
           @method('POST')
 
           <div class="form-group row">
-            {{ html()->label('Nome', 'codpes', ['class' => 'col-form-label col-sm-2']) }}
+            {{ html()->label('Nome', 'codpes')->class('col-form-label col-sm-2') }}
             <div class="col-sm-10">
-              {{ html()->select('codpes', [], null, ['class' => 'form-control']) }}
+              {{ html()->select('codpes', [], null)->class('form-control') }}
             </div>
           </div>
 
           @if(Gate::check('filas.atendente', $chamado->fila) && Gate::check('perfilatendente'))
             <div class="form-group row">
-              {{ html()->label('Papel', 'papel', ['class' => 'col-form-label col-sm-2']) }}
+              {{ html()->label('Papel', 'papel')->class('col-form-label col-sm-2') }}
               <div class="col-sm-10">
-                {{ html()->select('papel', \app\Models\Chamado::pessoaPapeis(true), null, ['class' => 'form-control']) }}
+                {{ html()->select('papel', \app\Models\Chamado::pessoaPapeis(true), null)->class('form-control') }}
               </div>
             </div>
           @else

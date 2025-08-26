@@ -9,7 +9,7 @@
         @endforeach
         <br>
       @endforeach
-      {{ html()->submit('OK', ['id' => 'btn_salvar_form_atendente', 'class' => 'btn btn-primary d-none']) }}
+      {{ html()->submit('OK')->class('btn btn-primary d-none')->id('btn_salvar_form_atendente') }}
     </form>
   </div>
 </div>

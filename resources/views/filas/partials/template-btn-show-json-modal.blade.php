@@ -27,12 +27,10 @@
                         <div class="col-sm-10">
                             @if($fila->template == null)
                             {{ html()->textarea('template', $fila->template)
-                            ->attributes(['id' => 'template', 'rows' => '15'])
-                            ->class(['form-control']) }}
+                            ->class(['form-control'])->id('template')->rows(15) }}
                             @else
                             {{ html()->textarea('template', json_encode(json_decode($fila->template), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE))
-                            ->attributes(['id' => 'template', 'rows' => '15'])
-                            ->class(['form-control']) }}
+                            ->class(['form-control'])->id('template')->rows(15) }}
                             @endif
                         </div>
                     </div>
