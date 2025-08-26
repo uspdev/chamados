@@ -50,6 +50,8 @@ Veja o [histórico de atualizações](docs/changelog.md).
 
 ## Atualização
 
+### O sistema recebeu seu release 2.0 ao ser atualizado para laravel 12
+
 Caso você já tenha instalado o sistema e aplique uma nova atualização, sempre deve rodar:
 
     git pull

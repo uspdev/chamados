@@ -1,5 +1,10 @@
 # Changelog
 
+### 26/08/2025 Versão 2.0
+
+* Atualização para laravel 12
+* Migrado da biblioteca laravelcollective/html (abandonada) para spatie/laravel-html
+
 ### 31/7/2025 Versão 1.6.6
 
 * Algumas correções de bugs
