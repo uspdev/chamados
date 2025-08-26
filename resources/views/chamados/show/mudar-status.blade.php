@@ -16,9 +16,9 @@
       <div class="input-group-prepend">
         <div class="input-group-text font-weight-bold">Mudar status</div>
       </div>
-      {{ Form::select('status', $status_list, $chamado->status, ['id' => 'estado','class' => 'custom-select','placeholder' => 'Escolha um..']) }}
+      {{ html()->select('status', $status_list, $chamado->status)->id('estado')->class('custom-select')->placeholder('Escolha um..') }}
     </div>
-    {{ Form::submit('OK', ['id' => 'btn_salvar_status', 'class' => 'btn btn-sm btn-primary mx-2']) }}
+    {{ html()->submit('OK')->id('btn_salvar_status')->class('btn btn-sm btn-primary mx-2') }}
   </div>
 </form>
 

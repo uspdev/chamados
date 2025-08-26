@@ -45,7 +45,10 @@
 
 @section('javascripts_bottom')
     @parent
-    {{ Html::script('js/functions.js') }}
+    @push('scripts')
+      <script src="js/functions.js"></script>
+    @endpush
+
     <script type="text/javascript">
       function mostraModal() {
         $('#chamadoModal').modal('show');

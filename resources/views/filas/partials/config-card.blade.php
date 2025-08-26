@@ -15,8 +15,7 @@
   </div>
   <div class="card-body">
 
-    {!! Form::open(['url' => 'filas/' . $fila->id, 'name' => 'form_config']) !!}
-    @method('put')
+    {{ html()->form('PUT', 'filas/' . $fila->id)->open() }}
     <input type="hidden" name="card" value="config">
 
     <div class="ml-2 mt-2">
@@ -73,6 +72,6 @@
     <div class="mt-3">
       <input class="btn-sm btn-primary" id="config_submit" type="submit" name="ok" value="Salvar Configurações">
     </div>
-    {!! Form::close() !!}
+    {{ html()->form()->close() }}
   </div>
 </div>
