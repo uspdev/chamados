@@ -157,7 +157,7 @@ Há várias opções que precisam ser ajustadas nesse arquivo. Faça com atenç�
 
 Os setores e respectivos designados podem ser importados do Replicado. Para isso rode:
 
-    php artisan db:seed --class=SetorReplicadoSeeder
+    php artisan setores:sync
 
 Depois de importado faça uma conferência para não haver inconsistências.
 
