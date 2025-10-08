@@ -6,4 +6,3 @@ chmod -R 775 storage bootstrap/cache
 
 composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
 php artisan migrate --force
-php artisan setores:sync
