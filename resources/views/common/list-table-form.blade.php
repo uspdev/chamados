@@ -1,6 +1,9 @@
 <div class="list_table_div_form">
+
   {{ html()->form('POST', $data->url)->open() }}
-  @method('put')
+  
+  @if (App\Models\Fila::find($data->showId)) @method('put') @else @method('post') @endif
+
   {{ html()->hidden('id') }}
 
     @foreach ($data->model::getFields() as $col)
