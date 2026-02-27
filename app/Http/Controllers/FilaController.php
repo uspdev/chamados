@@ -294,6 +294,9 @@ class FilaController extends Controller
             $autor = $chamado->users()->wherePivot('papel', 'Autor')->first();
             $i['autor'] = $autor ? $autor->name : '';
 
+            $atendentes = $chamado->users()->wherePivot('papel', 'Atendente')->get()->pluck('name');
+            $i['atendentes'] = $atendentes->implode('; ');
+
             $i['extras'] = $chamado->extras;
             $extras = json_decode($chamado->extras, true) ?? [];
             foreach ($template as $field) {
