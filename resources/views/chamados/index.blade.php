@@ -55,10 +55,23 @@
             @include('chamados.partials.status-muted')
           </td>
           <td>
-            @if ($user = $chamado->pessoas('Atendente'))
-              {{ Str::limit($user->name ?? '-', 20) }}
-              @include('chamados.show.user-detail', ['user' => $user])
-              {{-- @include('chamados.partials.user-', ['user' => $user]) --}}
+            @php
+              $atendentes = $chamado->pessoas()->wherePivot('papel', 'Atendente')->get();
+              $primeiroAtendente = $atendentes->first();
+              $nomesAtendentes = $atendentes->pluck('name')->map(function ($nome) {
+                  return e($nome);
+              })->implode('<br>');
+            @endphp
+            @if ($primeiroAtendente)
+              <span class="d-none">{{ $atendentes->pluck('name')->implode(' ') }}</span>
+              {{ Str::limit($primeiroAtendente->name ?? '-', 20) }}
+              @include('chamados.show.user-detail', ['user' => $primeiroAtendente])
+              @if ($atendentes->count() > 1)
+                <button type="button" class="btn btn-sm btn-light text-primary py-0 px-1 ml-1" data-toggle="tooltip"
+                  data-placement="top" title="{!! $nomesAtendentes !!}">
+                  +{{ $atendentes->count() - 1 }}
+                </button>
+              @endif
             @else
               -
             @endif
