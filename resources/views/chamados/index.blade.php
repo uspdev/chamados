@@ -56,7 +56,7 @@
           </td>
           <td>
             @php
-              $atendentes = $chamado->pessoas()->wherePivot('papel', 'Atendente')->get();
+              $atendentes = $chamado->pessoas('Atendente', 'get');
               $primeiroAtendente = $atendentes->first();
               $nomesAtendentes = $atendentes->pluck('name')->map(function ($nome) {
                   return e($nome);
