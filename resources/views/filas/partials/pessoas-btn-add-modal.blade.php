@@ -18,9 +18,9 @@
         <div class="list_table_div_form">
           {{ html()->form('POST', $data->url . '/' . $fila->id . '/pessoas')->open() }}
           <div class="form-group row">
-            {{ html()->label('Nome', 'codpes')->class(['col-form-label', 'col-sm-2']) }}
+            {{ html()->label('Nome', 'codpes_id')->class(['col-form-label', 'col-sm-2']) }}
             <div class="col-sm-10">
-              {{ html()->select('codpes', [], null)->class(['form-control'])->placeholder('Digite nome ..') }}
+              {{ html()->select('codpes_id', [], null)->class(['form-control'])->placeholder('Digite nome ..') }}
             </div>
           </div>
 
@@ -55,7 +55,7 @@
         pessoasForm.modal();
       }
 
-      var $oSelect2 = pessoasForm.find(':input[name=codpes]')
+      var $oSelect2 = pessoasForm.find(':input[name=codpes_id]')
 
       $oSelect2.select2({
         ajax: {

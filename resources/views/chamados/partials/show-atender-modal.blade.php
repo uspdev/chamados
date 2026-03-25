@@ -1,6 +1,6 @@
 <form method="post" action="chamados/{{ $chamado->id }}/triagem">
   @csrf
-  <input type="hidden" name="codpes" value="{{ \Auth::user()->codpes }}">
+  <input type="hidden" name="id" value="{{ \Auth::user()->id }}">
 
   <button type="submit" class="btn btn-sm btn-light text-success ml-3">
     <i class="fas fa-check"></i> Atender
