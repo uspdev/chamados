@@ -31,6 +31,7 @@ class ChamadoController extends Controller
      */
     public function index(Request $request)
     {
+
         \UspTheme::activeUrl('chamados?perfil=' . session('perfil'));
         $this->authorize('chamados.viewAny');
 
@@ -427,11 +428,11 @@ class ChamadoController extends Controller
         $this->authorize('chamados.view', $chamado);
 
         $request->validate(
-            ['codpes' => 'required|codpes'],
-            ['codpes.required' => 'Necessário informar atendente'],
+            ['id' => 'required'],
+            ['id.required' => 'Necessário informar atendente'],
         );
 
-        $atendente = User::obterPorCodpes($request->codpes);
+        $atendente = User::find($request->id);
 
         # Se atendente já existe não vamos adicionar novamente
         if ($chamado->users()->where(['user_id' => $atendente->id, 'papel' => 'Atendente'])->exists()) {

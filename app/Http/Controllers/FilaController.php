@@ -183,7 +183,11 @@ class FilaController extends Controller
     {
         $this->authorize('filas.update', $fila);
 
-        $user = User::obterOuCriarPorCodpes($request->codpes);
+        [$searchField, $valueField] = explode('-', $request->codpes_id);
+
+        $user = $searchField === 'codpes' ?
+            User::obterOuCriarPorCodpes($valueField) :
+            User::find($valueField);
         $fila->users()->detach($user->id);
         $fila->users()->attach($user->id, ['funcao' => $request->funcao]);
 

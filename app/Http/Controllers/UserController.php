@@ -148,7 +148,7 @@ class UserController extends Controller
                 foreach ($pessoas as $pessoa) {
                     $results[] = [
                         'text' => $pessoa['codpes'] . ' ' . $pessoa['nompesttd'],
-                        'id' => $pessoa['codpes'],
+                        'id' => 'codpes-' . $pessoa['codpes'],
                     ];
                 }
             }
@@ -157,8 +157,8 @@ class UserController extends Controller
             $pessoas = User::where('name', 'like', '%' . $request->term . '%')->get()->take(1);
             foreach ($pessoas as $pessoa) {
                 $results[] = [
-                    'text' => $pessoa->codpes . ' ' . $pessoa->name,
-                    'id' => "$pessoa->codpes",
+                    'text' => $pessoa->id . ' ' . $pessoa->name,
+                    'id' => 'id-' . $pessoa->id,
                 ];
             }
 
