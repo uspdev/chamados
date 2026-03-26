@@ -24,7 +24,15 @@ Sistema que gerencia o fluxo de chamados técnicos ou solicitações de atendime
      -   Autenticação por senha única
      -   Configuração do recebimento de notificações
 -   Envio de emails
--   Gerencimento de setores 
+-   Gerencimento de setores
+
+## Funcionamento
+
+O gerenciamento das filas é feito pelo próprio usuário: os chefes de cada setor possuem o privilégio de criar filas em seus setores e setores abaixo de sua hierarquia. Cada fial criada fica disponível em `/chamados/create/<id>` para que possa ser referenciada diretamente em portais ou outros sistemas.
+
+Os setores e sua hierarquia são importados do replicado sendo a Unidade o pai inicial. Sempre que houver alteração na estrutura de setores, é necessário sincronizar com o comando abaixo que também sincronizará as informações de chefias:
+
+    php artisan setores:sync
 
 ## Prints
 
@@ -39,11 +47,27 @@ Sistema que gerencia o fluxo de chamados técnicos ou solicitações de atendime
 
 Veja o [histórico de atualizações](docs/changelog.md).
 
+
+## Atualização
+
+### O sistema recebeu seu release 2.0 ao ser atualizado para laravel 12
+
+Caso você já tenha instalado o sistema e aplique uma nova atualização, sempre deve rodar:
+
+    git pull
+    composer install --no-dev
+    php artisan migrate
+    
+Caso tenha alguma atualização, não deixe de conferir o readme.md quanto a outras providências que podem ser necessárias.
+
+Também deve observar no [changelog](docs/changelog.md) se tem alguma outra coisa a ser ajustada, por exemplo o arquivo .env
+
+
 ## Requisitos
 
 Esse sistema foi projetado para rodar em servidores linux (Ubuntu e Debian).
 
--   PHP 7.3
+-   PHP 8.1
 -   Apache ou Nginx
 -   Banco de dados local (MariaDB mas pode ser qualquer um suportado pelo Laravel)
 -   Git
@@ -53,20 +77,13 @@ Esse sistema foi projetado para rodar em servidores linux (Ubuntu e Debian).
 
 Bibliotecas necessárias do php:
 
-    apt install php-sybase php-mysql php-xml php-intl php-mbstring php-gd php-curl
-
-## Atualização
-
-Caso você já tenha instalado o sistema e aplique uma nova atualização, sempre deve rodar:
-
-    composer install --no-dev
-    php artisan migrate
-
-Também deve observar no [changelog](docs/changelog.md) se tem alguma outra coisa a ser ajustada, por exemplo o arquivo .env
+    apt install php-sybase php-mysql php-xml php-intl php-mbstring php-gd php-curl php-zip
 
 ## Instalação
 
+    cd /var/www/html
     git clone git@github.com:uspdev/chamados
+    cd chamados
     composer install
     cp .env.example .env
     php artisan key:generate
@@ -75,17 +92,23 @@ Criar user e banco de dados (em mysql):
 
     sudo mysql
     create database chamados;
-    grant all privileges on chamados.* to chamados@'%' identified by 'chamados';
+    create user 'chamados'@'%' identified by '<<password here>>';
+    grant all privileges on chamados.* to 'chamados'@'%';
     flush privileges;
+    
+Rodar a importação/atualização de setores e chefes de setores
+
+    php artisan setores:sync
+
 
 ## Configuração em ambiente de produção
 
 ### Configurar o cache
 
-A bibliteca (https://github.com/uspdev/cache) usada no replicado utiliza o servidor memcached. Se você pretende utilizá-lo instale e configure ele:
+A biblioteca (https://github.com/uspdev/cache) usada no replicado utiliza o servidor memcached. Se você pretende utilizá-lo instale e configure ele:
 
-    apt install memcached
-    vim /etc/memcached.conf
+    sudo apt install memcached
+    sudo vim /etc/memcached.conf
         I = 5M
         -m 128
 
@@ -97,18 +120,27 @@ Configurar a conta de email para acesso menos seguro pois a conexão é via smtp
 
 ### Configurar o apache ou nginx
 
-Deve apontar para a \<pasta do projeto\>/public, assim como qualquer projeto laravel.
+Criar novo arquivo chamados.conf em /etc/apache2/sites-available; nele, dentro da tag VirtualHost, o DocumentRoot deve apontar para /var/www/html/chamados/public. E para que as rotas funcionem, adicionar, ainda dentro dessa tag, a seguinte configuração:
+
+    <Directory /var/www/html/chamados/public>
+        AllowOverride All
+    </Directory>
+
+E, em seguida, executar:
+
+    sudo a2enmod rewrite
+    sudo service apache2 restart
 
 No Apache é possivel utilizar a extensão MPM-ITK (http://mpm-itk.sesse.net/) que permite rodar seu _Servidor Virtual_ com usuário próprio. Isso facilita rodar o sistema como um usuário comum e não precisa ajustar as permissões da pasta `storage/`.
 
     sudo apt install libapache2-mpm-itk
-    sudo a2enmod mpm_itk
+    sudo a2enmod mpm_itk                        # habilita o módulo
     sudo service apache2 restart
 
-Dentro do seu virtualhost coloque
+Dentro do chamados.conf, dentro da tag VirtualHost coloque:
 
     <IfModule mpm_itk_module>
-    AssignUserId nome_do_usuario nome_do_grupo
+        AssignUserId nome_do_usuario nome_do_grupo
     </IfModule>
 
 ### Configurar senha única
@@ -125,7 +157,7 @@ Há várias opções que precisam ser ajustadas nesse arquivo. Faça com atenç�
 
 Os setores e respectivos designados podem ser importados do Replicado. Para isso rode:
 
-    php artisan db:seed --class=SetorReplicadoSeeder
+    php artisan setores:sync
 
 Depois de importado faça uma conferência para não haver inconsistências.
 
@@ -138,7 +170,7 @@ Para as filas de envio de email o sistema precisa de um gerenciador que mantenha
 Modelo de arquivo de configuração. Como **`root`**, crie o arquivo `/etc/supervisor/conf.d/chamados_queue_worker_default.conf` com o conteúdo abaixo:
 
     [program:chamados_queue_worker_default]
-    command=/usr/bin/php /home/sistemas/chamados/artisan queue:listen --queue=default --tries=3 --timeout=60
+    command=/usr/bin/php /var/www/html/chamados/artisan queue:listen --queue=default --tries=3 --timeout=60
     process_num=1
     username=www-data
     numprocs=1
@@ -148,7 +180,7 @@ Modelo de arquivo de configuração. Como **`root`**, crie o arquivo `/etc/super
     autorestart=unexpected
     startretries=3
     stopsignal=QUIT
-    stderr_logfile=/var/log/supervisor/chamados_queue_worker_default.log
+    stderr_logfile=/var/www/html/chamados/storage/logs/chamados_queue_worker_default.log
 
 Ajustes necessários:
 
@@ -162,15 +194,14 @@ Reinicie o **Supervisor**
     sudo supervisorctl update
     sudo supervisorctl restart all
 
-### Atualização em produção
+### Permissão de escrita na pasta 'storage' ao usuário do browser:
 
-Para receber as últimas atualizações do sistema rode:
+É necessária essa permissão, pois o site utiliza sessões, que são gravadas em storage/framework/sessions.
+E se ligarmos o modo debug, o site também quer gravar em storage/logs.
 
-    git pull
-    composer install --no-dev
-    php artisan migrate
-
-Caso tenha alguma atualização, não deixe de conferir o readme.md quanto a outras providências que podem ser necessárias.
+    sudo chown -R www-data:www-data /var/www/html/chamados/storage
+    sudo chmod -R 755               /var/www/html/chamados/storage
+    sudo service apache2 restart
 
 ## Configuração em ambiente de desenvolvimento
 

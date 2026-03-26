@@ -219,6 +219,7 @@ class FilaController extends Controller
     public function createTemplate(Fila $fila)
     {
         $this->authorize('filas.update', $fila);
+        \UspTheme::activeUrl('filas');
 
         $template = json_decode($fila->template, true);
         return view('filas.template', compact('fila', 'template'));

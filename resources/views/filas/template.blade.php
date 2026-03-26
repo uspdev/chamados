@@ -4,8 +4,7 @@
 
     <div class="row">
         <div class="col-md-12">
-            {!! Form::open(['route' => ['filas.storetemplate', $fila->id], 'id' => 'template-form', 'method' => 'POST']) !!}
-            {!! Form::token() !!}
+            {{ html()->form('POST')->route('filas.storetemplate', $fila->id)->attributes(['id' => 'template-form'])->open() }}
             <div class="card card-outline card-primary">
                 <div class="card-header">
                     <div class="card-title form-inline my-0">
@@ -96,7 +95,7 @@
                                 </div>
                             </div>
                         </div>
-                        {!! Form::close() !!}
+                        {{ html()->form()->close() }}
                     </div>
                 </div>
             </div>
@@ -107,7 +106,9 @@
 
 @section('javascripts_bottom')
     @parent
-    {{ Html::script('js/functions.js') }}
+    @push('scripts')
+      <script src="js/functions.js"></script>
+    @endpush
     <script>
         function apaga_campo(r) {
             if (confirm('Tem certeza que deseja deletar?')) {

@@ -3,27 +3,38 @@
 namespace App\Listeners;
 
 use App\Models\Setor;
+use Uspdev\Replicado\Pessoa;
+use Uspdev\Replicado\Estrutura;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Log;
-use Uspdev\Replicado\Pessoa;
+use Laravel\Socialite\Facades\Socialite;
 
 class LoginListener
 {
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public function handle(Login $event)
     {
         $user = $event->user;
-        $vinculos = Pessoa::listarVinculosAtivos($user->codpes, false);
-        $log = 'login listener:';
 
-        # vincular a pessoa e o vinculo ao setor
+        try {
+            $userSenhaUnica = Socialite::driver('senhaunica')->user();
+            $userSenhaUnica = $userSenhaUnica->attributes;
+            $user->telefone = $userSenhaUnica['telefone'];
+            $user->email = $userSenhaUnica['email'];
+        } catch (\Exception $e) {
+            // mitigando erro do auth verifier fora do fluxo de login
+        }
+
+        // $log = 'login listener:';
+
+        // vincular a pessoa e o vinculo ao setor
+        $vinculos = Pessoa::listarVinculosAtivos($user->codpes, false);
         foreach ($vinculos as $vinculo) {
-            if ($setor = Setor::where('cod_set_replicado', $vinculo['codset'])->first()) {
+            $setor = Setor::where('cod_set_replicado', $vinculo['codset'])->first();
+            if ($setor) {
                 Setor::vincularPessoa($setor, $user, mb_convert_case($vinculo['tipvin'], MB_CASE_TITLE));
-                $log .= 'update vinculo codpes=' . $user->codpes . ',setor=' . $setor->sigla . ',vínculo=' . $vinculo['tipvin'] . ';';
+                // $log .= 'update vinculo codpes=' . $user->codpes . ',setor=' . $setor->sigla . ',vínculo=' . $vinculo['tipvin'] . ';';
             }
         }
 
@@ -42,6 +53,6 @@ class LoginListener
         // será que precisa disso?
         //session(['perfil' => 'usuario']);
 
-        config('app.debug') && Log::info($log);
+        // config('app.debug') && Log::info($log);
     }
 }

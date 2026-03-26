@@ -17,16 +17,19 @@ class IndexController extends Controller
 
     public function ajuda()
     {
+        \UspTheme::activeUrl('ajuda');
         return view('ajuda/index');
     }
 
     public function manual_usuario()
     {
+        \UspTheme::activeUrl('ajuda');
         return view('ajuda/manual-usuario');
     }
 
     public function manual_atendente()
     {
+        \UspTheme::activeUrl('ajuda');
         return view('ajuda/manual-atendente');
     }
 }

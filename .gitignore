@@ -24,3 +24,6 @@ php.ini
 
 # vim bkp
 *.*~
+
+# DDEV
+.ddev

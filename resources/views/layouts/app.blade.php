@@ -26,6 +26,7 @@
 
 @section('javascripts_bottom')
   @parent
+  @stack('scripts')
   <script>
     $(function() {
 

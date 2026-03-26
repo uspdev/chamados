@@ -16,23 +16,18 @@
       <div class="modal-body">
 
         <div class="list_table_div_form">
-          {!! Form::open(['url' => $data->url . '/' . $fila->id . '/pessoas']) !!}
-          @method('POST')
-          @csrf
-
+          {{ html()->form('POST', $data->url . '/' . $fila->id . '/pessoas')->open() }}
           <div class="form-group row">
-            {{ Form::label('codpes', 'Nome', ['class' => 'col-form-label col-sm-2']) }}
+            {{ html()->label('Nome', 'codpes')->class(['col-form-label', 'col-sm-2']) }}
             <div class="col-sm-10">
-              {{ Form::select('codpes', [], null, ['class' => 'form-control', 'placeholder' => 'Digite nome ..']) }}
+              {{ html()->select('codpes', [], null)->class(['form-control'])->placeholder('Digite nome ..') }}
             </div>
           </div>
 
           <div class="form-group row">
-            {{ Form::label('funcao', 'Função', ['class' => 'col-form-label col-sm-2']) }}
+            {{ html()->label('Função', 'funcao')->class(['col-form-label', 'col-sm-2']) }}
             <div class="col-sm-10">
-              {{ Form::select('funcao', ['Gerente' => 'Gerente', 'Atendente' => 'Atendente'], 'Atendente', [
-                  'class' => 'form-control col-3',
-              ]) }}
+              {{ html()->select('funcao', ['Gerente' => 'Gerente', 'Atendente' => 'Atendente'], 'Atendente')->class(['form-control', 'col-3']) }}
             </div>
           </div>
 
@@ -40,7 +35,7 @@
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
             <button type="submit" class="btn btn-primary">Salvar</button>
           </div>
-          {!! Form::close() !!}
+          {{ html()->form()->close() }}
         </div>
 
       </div>

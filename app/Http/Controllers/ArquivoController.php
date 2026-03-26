@@ -31,13 +31,15 @@ class ArquivoController extends Controller
     /**
      * Store a newly created resource in storage.
      *
+     * Estamos aceitando vários formatos mas talvez pudesse ser configurável por fila
+     *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         $request->validate([
-            'arquivo.*' => 'required|mimes:jpeg,jpg,png,pdf,dwg|max:' . config('chamados.upload_max_filesize'),
+            'arquivo.*' => 'required|mimes:jpeg,jpg,png,pdf,dwg,doc,docx,tex,xml,zip|max:' . config('chamados.upload_max_filesize'),
             'chamado_id' => 'required|integer|exists:chamados,id',
         ]);
 

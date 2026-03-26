@@ -30,9 +30,6 @@ class User extends Authenticatable
         'config->notifications->email->observador',
     ];
 
-    # colocando data aqui ele já envia um objeto carbon
-    protected $dates = ['last_login_at'];
-
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -52,6 +49,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'last_login_at' => 'datetime',
         'config' => 'array',
     ];
 

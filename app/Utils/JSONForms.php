@@ -2,7 +2,7 @@
 
 namespace App\Utils;
 
-use Form;
+/* use Form; */
 use Illuminate\Support\HtmlString;
 
 class JSONForms
@@ -43,7 +43,7 @@ class JSONForms
             if (isset($json->validate) && strpos($json->validate, 'required') !== false) {
                 $label = '<i class="fas fa-star-of-life fa-sm text-danger"></i> ' . $label;
             }
-            $input[] = Form::label("extras[$key]", $label, ['class' => 'control-label']);
+            $input[] = html()->label($label)->for("extras[$key]")->attribute('class','control-label');
 
             # valores preenchidos
             # aqui temos de usar "or" pois "||" não preenche corretamente
@@ -52,19 +52,24 @@ class JSONForms
             switch ($type) {
                 //caso seja um select passa o valor padrao
                 case 'select':
-                    $attrib = ['class' => 'form-control', 'placeholder' => 'Selecione...'];
+                    $fieldInput = html()->$type("extras[$key]", json_decode(json_encode($json->value), true))
+                        ->class('form-control')->placeholder('Selecione...');;
+
                     if (isset($json->validate) && strpos($json->validate, 'required') !== false) {
-                        $attrib['required'] = '';
+                        $fieldInput  = $fieldInput ->required();
                     }
-                    $input[] = Form::$type("extras[$key]", $json->value, $value, $attrib);
+
+                    $input[] = $fieldInput;
                     break;
 
                 default:
-                    $attrib = ['class' => 'form-control', 'rows' => '3'];
+                    $fieldInput = html()->textarea("extras[$key]", $value)->class('form-control')->rows(3);
+
                     if (isset($json->validate) && strpos($json->validate, 'required') !== false) {
-                        $attrib['required'] = '';
+                        $fieldInput  = $fieldInput ->required();
                     }
-                    $input[] = Form::$type("extras[$key]", $value, $attrib);
+
+                    $input[] = $fieldInput;
                     break;
             }
 

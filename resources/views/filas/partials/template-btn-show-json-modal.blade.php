@@ -15,10 +15,7 @@
             <div class="modal-body">
 
                 <div class="list_table_div_form">
-                    {!! Form::open( ['url'=>$data->url.'/'.$fila->id.'/template_json', 'id' => 'jsonForm']) !!}
-                    @method('POST')
-                    @csrf
-
+                  {{ html()->form('POST', $data->url.'/'.$fila->id.'/template_json')->attributes(['id' => 'JsonForm'])->open() }}
                     <style>
                         #template {
                             height: auto !important;
@@ -26,12 +23,14 @@
                         }
                     </style>
                     <div class="form-group row">
-                        {{ Form::label('template', 'Json', ['class' => 'col-form-label col-sm-2']) }}
+                        {{ html()->label('Json', 'template')->class(['col-form-label', 'col-sm-2']) }}
                         <div class="col-sm-10">
                             @if($fila->template == null)
-                            {{ Form::textarea('template', $fila->template,['id' => 'template', 'class' => 'form-control', 'rows' => '15'] ) }}
+                            {{ html()->textarea('template', $fila->template)
+                            ->class(['form-control'])->id('template')->rows(15) }}
                             @else
-                            {{ Form::textarea('template', json_encode(json_decode($fila->template), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE),['id' => 'template', 'class' => 'form-control', 'rows' => '15'] ) }}
+                            {{ html()->textarea('template', json_encode(json_decode($fila->template), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE))
+                            ->class(['form-control'])->id('template')->rows(15) }}
                             @endif
                         </div>
                     </div>
@@ -40,7 +39,7 @@
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
                         <button type="button" onclick="validaJson()" class="btn btn-primary">Salvar</button>
                     </div>
-                    {!! Form::close(); !!}
+                    {{ html()->form()->close() }}
                 </div>
 
             </div>
