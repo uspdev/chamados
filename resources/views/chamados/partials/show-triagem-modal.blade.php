@@ -17,12 +17,12 @@
         <form method="post" action="chamados/{{ $chamado->id }}/triagem">
           @csrf
           <div class="form-group row">
-            <label class="col-form-label col-sm-2" for="codpes-triagem"><b>Atendente</b></label>
+            <label class="col-form-label col-sm-2" for="id-triagem"><b>Atendente</b></label>
             <div class="col-sm-10">
-              <select name="codpes" class="form-control" id="codpes-triagem" required>
+              <select name="id" class="form-control" id="id-triagem" required>
                 <option value="">Escolher ..</option>
                 @foreach ($chamado->fila->users as $atend)
-                  <option value="{{ $atend->codpes }}" {{ old('codpes') == $atend->codpes ? 'selected' : '' }}>
+                  <option value="{{ $atend->id }}" {{ old('id') == $atend->id ? 'selected' : '' }}>
                     {{ $atend->name }}
                   </option>
                 @endforeach
