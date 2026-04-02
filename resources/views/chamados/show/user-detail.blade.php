@@ -1,6 +1,11 @@
 {{-- Mostra o icone do usuário e o respectivo card ao clicar --}}
 <?php
 $user_detail_id = 'user-detail-' . Str::random(5);
+$usar_foto = config('chamados.usar_foto');
+if ($usar_foto == 'true') {
+  $foto_base64 = \Uspdev\Wsfoto::obter((int) $user->codpes);
+  $foto_src = 'data:image/png;base64,' . $foto_base64;
+}
 ?>
 
 <a class="btn btn-sm btn-light text-primary py-0" data-toggle="collapse" href="#{{ $user_detail_id }}" role="button"
@@ -11,6 +16,11 @@ $user_detail_id = 'user-detail-' . Str::random(5);
 <div class="collapse" id="{{ $user_detail_id }}">
   <div class="card card-body">
     <span class="text-dark">
+      @if ($usar_foto)
+        <div class="mb-2">
+          <img src="{{ $foto_src }}" alt="Foto de {{ $user->name }}" class="img-thumbnail" style="max-width: 120px;">
+        </div>
+      @endif
       <div>
         {{ $user->codpes }} - {{ $user->name }}
       </div>
