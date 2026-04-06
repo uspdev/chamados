@@ -347,18 +347,26 @@ class Chamado extends Model
     /**
      * Mostra as pessoas que tem vínculo com o chamado.
      *
-     * Se informado $pivot, retorna somente o 1o. User, se não, retorna a lista completa
+     * Se informado $pivot, retorna somente o 1o. User por padrão.
+     * Para retornar todos, use $retorno = 'get'.
      *
      * @param $pivot Papel da pessoa no chamado (autor, observador, atendente, null = todos)
+     * @param string $retorno first|get
      * @return App\Models\User|Collection
      */
-    public function pessoas($pivot = null)
+    public function pessoas($pivot = null, $retorno = 'first')
     {
+        $query = $this->users()->withPivot('papel');
+
         if ($pivot) {
-            return $this->users()->wherePivot('papel', $pivot)->first();
-        } else {
-            return $this->users()->withPivot('papel');
+            $query->wherePivot('papel', $pivot);
         }
+
+        if ($retorno === 'get') {
+            return $query->get();
+        }
+
+        return $query->first();
     }
 
     /**
