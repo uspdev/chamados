@@ -5,6 +5,7 @@ return [
     'admins' => env('ADMINS'),
 
     'usar_replicado' => env('USAR_REPLICADO', true),
+    'usar_foto' => env('USAR_FOTO', false),
     'upload_max_filesize' => (int) env('UPLOAD_MAX_FILESIZE', '16') * 1024,
 
     // deprecado em 2/23. Remover no próximo release

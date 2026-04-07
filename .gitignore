@@ -27,3 +27,5 @@ php.ini
 
 # DDEV
 .ddev
+
+.codex

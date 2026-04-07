@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "78281382ee36b0d3f440114fcd3ec0f8",
+    "content-hash": "471250d3b2fa0343f647a708805fcd46",
     "packages": [
         {
             "name": "brick/math",
@@ -7670,6 +7670,91 @@
             "time": "2025-12-02T11:56:42+00:00"
         },
         {
+            "name": "uspdev/cache",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/uspdev/cache.git",
+                "reference": "5ac05e7c2913ddb1e35f5652b0930f19b5fb283c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/uspdev/cache/zipball/5ac05e7c2913ddb1e35f5652b0930f19b5fb283c",
+                "reference": "5ac05e7c2913ddb1e35f5652b0930f19b5fb283c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Uspdev\\Cache\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Masaki Kawabata Neto",
+                    "email": "masaki.kawabata@gmail.com"
+                }
+            ],
+            "description": "Library to connect to cache server",
+            "homepage": "https://github.com/uspdev/cache",
+            "support": {
+                "issues": "https://github.com/uspdev/cache/issues",
+                "source": "https://github.com/uspdev/cache/tree/1.0.0"
+            },
+            "time": "2021-04-07T23:14:52+00:00"
+        },
+        {
+            "name": "uspdev/cadastros-auxiliares-client",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/uspdev/cadastros-auxiliares-client.git",
+                "reference": "d0c8d057b73cb48ff483c24982996a7d201ceeaa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/uspdev/cadastros-auxiliares-client/zipball/d0c8d057b73cb48ff483c24982996a7d201ceeaa",
+                "reference": "d0c8d057b73cb48ff483c24982996a7d201ceeaa",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/cache": "^11.0|^12.0",
+                "illuminate/http": "^11.0|^12.0",
+                "illuminate/support": "^11.0|^12.0",
+                "php": "^8.2"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Uspdev\\CadastrosAuxiliaresClient\\CadastrosAuxiliaresClientServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Uspdev\\CadastrosAuxiliaresClient\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Laravel client for cadastros-auxiliares webservice endpoints",
+            "support": {
+                "issues": "https://github.com/uspdev/cadastros-auxiliares-client/issues",
+                "source": "https://github.com/uspdev/cadastros-auxiliares-client/tree/1.0.2"
+            },
+            "time": "2026-03-25T19:47:58+00:00"
+        },
+        {
             "name": "uspdev/laravel-replicado",
             "version": "1.1.0",
             "source": {
@@ -7771,17 +7856,20 @@
         },
         {
             "name": "uspdev/laravel-usp-theme",
-            "version": "2.8.23",
+            "version": "2.8.27",
             "source": {
                 "type": "git",
                 "url": "https://github.com/uspdev/laravel-usp-theme.git",
-                "reference": "c84716cb02ef568fd557ff7b8b99d027021e0abb"
+                "reference": "75f09e02929d5588bd26f9ccad8f7b5300cb7162"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/uspdev/laravel-usp-theme/zipball/c84716cb02ef568fd557ff7b8b99d027021e0abb",
-                "reference": "c84716cb02ef568fd557ff7b8b99d027021e0abb",
+                "url": "https://api.github.com/repos/uspdev/laravel-usp-theme/zipball/75f09e02929d5588bd26f9ccad8f7b5300cb7162",
+                "reference": "75f09e02929d5588bd26f9ccad8f7b5300cb7162",
                 "shasum": ""
+            },
+            "require": {
+                "uspdev/cadastros-auxiliares-client": "^1.0"
             },
             "type": "library",
             "extra": {
@@ -7815,9 +7903,9 @@
             "description": "usp theme for laravel",
             "support": {
                 "issues": "https://github.com/uspdev/laravel-usp-theme/issues",
-                "source": "https://github.com/uspdev/laravel-usp-theme/tree/2.8.23"
+                "source": "https://github.com/uspdev/laravel-usp-theme/tree/2.8.27"
             },
-            "time": "2025-12-04T17:51:35+00:00"
+            "time": "2026-03-27T14:35:42+00:00"
         },
         {
             "name": "uspdev/laravel-usp-validators",
@@ -7868,23 +7956,24 @@
         },
         {
             "name": "uspdev/replicado",
-            "version": "1.27.4",
+            "version": "1.27.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/uspdev/replicado.git",
-                "reference": "860c3928642c98902b2c7d04e49e807ae2a020c0"
+                "reference": "1818668a2cb38963123b28da0c120848c84e5ff3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/uspdev/replicado/zipball/860c3928642c98902b2c7d04e49e807ae2a020c0",
-                "reference": "860c3928642c98902b2c7d04e49e807ae2a020c0",
+                "url": "https://api.github.com/repos/uspdev/replicado/zipball/1818668a2cb38963123b28da0c120848c84e5ff3",
+                "reference": "1818668a2cb38963123b28da0c120848c84e5ff3",
                 "shasum": ""
             },
             "require": {
                 "ext-pdo_dblib": "*",
-                "illuminate/collections": "^8 || ^9 || ^10 || ^11 || ^12",
+                "illuminate/collections": "^8 || ^9 || ^10 || ^11 || ^12 || ^13",
                 "monolog/monolog": "^2 || ^3",
-                "php": "^7 || ^8"
+                "php": "^7 || ^8",
+                "uspdev/cache": "^1"
             },
             "type": "library",
             "autoload": {
@@ -7910,9 +7999,9 @@
             "homepage": "https://github.com/uspdev/replicado",
             "support": {
                 "issues": "https://github.com/uspdev/replicado/issues",
-                "source": "https://github.com/uspdev/replicado/tree/1.27.4"
+                "source": "https://github.com/uspdev/replicado/tree/1.27.7"
             },
-            "time": "2026-03-24T12:42:52+00:00"
+            "time": "2026-03-28T14:47:47+00:00"
         },
         {
             "name": "uspdev/senhaunica-socialite",
@@ -7970,6 +8059,45 @@
                 "source": "https://github.com/uspdev/senhaunica-socialite/tree/4.5.8"
             },
             "time": "2026-03-20T14:12:15+00:00"
+        },
+        {
+            "name": "uspdev/wsfoto",
+            "version": "2.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/uspdev/wsfoto.git",
+                "reference": "22d1719979d68adcef46eab0823c09a58b5871f4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/uspdev/wsfoto/zipball/22d1719979d68adcef46eab0823c09a58b5871f4",
+                "reference": "22d1719979d68adcef46eab0823c09a58b5871f4",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Uspdev\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Thiago Gomes Verissimo",
+                    "email": "thiago.verissimo@usp.br",
+                    "homepage": "https://github.com/thiagogomesverissimo"
+                }
+            ],
+            "description": "Classe PHP que abstrai requisições SOAP do wsfoto USP",
+            "homepage": "https://github.com/uspdev/wsfoto",
+            "support": {
+                "issues": "https://github.com/uspdev/wsfoto/issues",
+                "source": "https://github.com/uspdev/wsfoto/tree/2.0.3"
+            },
+            "time": "2025-10-30T22:27:53+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
@@ -10705,6 +10833,6 @@
     "platform": {
         "php": "^8.2"
     },
-    "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "platform-dev": {},
+    "plugin-api-version": "2.9.0"
 }
