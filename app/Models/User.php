@@ -53,15 +53,6 @@ class User extends Authenticatable
         'config' => 'array',
     ];
 
-    protected static function booted()
-    {
-        static::creating(function ($user) {
-            if ($user->local && is_null($user->codpes)) {
-                $user->codpes = 0;
-            }
-        });
-    }
-
     public const rules = [
         'codpes' => 'required',
         'name' => 'required',
