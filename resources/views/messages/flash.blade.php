@@ -7,3 +7,15 @@
     @endif
     @endforeach
 </div>
+
+@section('javascripts_bottom')
+@parent
+<script>
+    $(function() {
+        $(".flash-message").fadeTo(5000, 500).slideUp(500, function() {
+            $(".flash-message").slideUp(500);
+        });
+    })
+
+</script>
+@endsection
