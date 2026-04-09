@@ -15,7 +15,10 @@
       <span class="text-muted">{{ $val->label }}:</span>
       @switch($val->type)
         @case('date')
-        <span>{{ Carbon\Carbon::parse($extras->$field)->format('d/m/Y') ?? '' }}</span>
+        @php
+          $dateValue = !empty($extras->$field) ? Carbon\Carbon::parse($extras->$field) : null;
+        @endphp
+        <span>{{ $dateValue ? ucfirst($dateValue->locale('pt_BR')->translatedFormat('l')) . ', ' . $dateValue->format('d/m/Y') : '' }}</span>
         @break
         @default
         <span>{{ $extras->$field ?? '' }}</span>
