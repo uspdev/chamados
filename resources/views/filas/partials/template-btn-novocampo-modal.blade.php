@@ -47,7 +47,10 @@
                                     </select>
                                     @break
                                     @default
-                                    <input class="form-control col-9" name="new[{{ $field }}]">
+                                    <input class="form-control col-9"
+                                        name="new[{{ $field }}]"
+                                        @if ($field === 'maxlength') type="number" min="1" placeholder="Apenas para Texto" @endif
+                                        @if ($field === 'maxlength') disabled @endif>
                                 @endswitch
                         </div>
                     @endforeach
@@ -70,6 +73,12 @@
             json_modal_form = function() {
                 jsonForm.modal();
             }
+
+            toggleCampoMaxlength('new[type]');
+
+            $('select[name="new[type]"]').on('change', function() {
+                toggleCampoMaxlength(this.name);
+            });
         });
 
     </script>

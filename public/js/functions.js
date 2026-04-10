@@ -62,3 +62,22 @@ function mudarCampoInputTextarea(campo) {
     });
   }
 }
+
+/* @autor uspdev/alecosta 10/04/2026
+* Habilita o campo de limite de caracteres apenas quando tipo é texto
+*/
+function toggleCampoMaxlength(campo) {
+  var fieldTypeSelect = $('select[name="' + campo + '"]').find(':selected').val();
+  var maxlengthField = $('input[name="' + campo.replace('][type]', '][maxlength]') + '"]');
+
+  maxlengthField.each(function () {
+    if (fieldTypeSelect == 'text') {
+      $(this).prop('disabled', false);
+      $(this).attr('placeholder', 'Opcional');
+    } else {
+      $(this).val('');
+      $(this).prop('disabled', true);
+      $(this).attr('placeholder', 'Apenas para Texto');
+    }
+  });
+}

@@ -236,11 +236,13 @@ class FilaController extends Controller
         $request->validate([
             'template.*.label' => 'required',
             'template.*.type' => 'required',
+            'template.*.maxlength' => 'nullable|integer|min:1',
         ]);
         if (isset($request->campo)) {
             $request->validate([
                 'new.label' => 'required',
                 'new.type' => 'required',
+                'new.maxlength' => 'nullable|integer|min:1',
             ]);
         }
         $template = [];
@@ -255,9 +257,16 @@ class FilaController extends Controller
             if ($atributo['type'] == 'select') {
                 $template[$campo]['value'] = json_decode($atributo['value'], true);
             }
+
+            if (($atributo['type'] ?? '') != 'text') {
+                unset($template[$campo]['maxlength']);
+            }
         }
         # adiciona o campo novo
         $new = array_filter($request->new, 'strlen');
+        if (($new['type'] ?? '') != 'text') {
+            unset($new['maxlength']);
+        }
         if (isset($request->campo)) {
             $template[$request->campo] = $new;
         }

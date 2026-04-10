@@ -127,6 +127,8 @@ class ChamadoController extends Controller
     {
         $this->authorize('chamados.create', $fila);
 
+        $request->validate(JSONForms::buildTextMaxLengthRules($request->extras, $fila));
+
         # na criação não precisa
         #$request->validate(JSONForms::buildRules($request, $fila));
 
@@ -302,6 +304,8 @@ class ChamadoController extends Controller
     public function update(Request $request, Chamado $chamado)
     {
         $this->authorize('chamados.update', $chamado);
+
+        $request->validate(JSONForms::buildTextMaxLengthRules($request->extras, $chamado->fila));
 
         # inicialmente atende a atualização do campo anotacoes via ajax
         if ($request->ajax()) {
