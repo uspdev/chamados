@@ -62,3 +62,20 @@ function mudarCampoInputTextarea(campo) {
     });
   }
 }
+
+/* @autor uspdev/alecosta 09/04/2026
+* Aplica máscara de data no formato dd/mm/aaaa.
+*/
+function aplicarMascaraData() {
+  $('.date-mask').each(function () {
+    $(this).on('input', function () {
+      var valor = $(this).val().replace(/\D/g, '').slice(0, 8);
+      if (valor.length > 4) {
+        valor = valor.replace(/(\d{2})(\d{2})(\d{1,4})/, '$1/$2/$3');
+      } else if (valor.length > 2) {
+        valor = valor.replace(/(\d{2})(\d{1,2})/, '$1/$2');
+      }
+      $(this).val(valor);
+    });
+  });
+}

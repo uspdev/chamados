@@ -61,6 +61,24 @@ class JSONFormsTest extends TestCase
         $this->assertStringContainsString("extras[predio]", $form[0][1]->toHtml());
     }
 
+    public function testGenerateFormTextFieldRendersTextInput()
+    {
+        $template = json_encode($this->template);
+        $fila = Fila::factory()->make(['template' => $template]);
+        $form = JSONForms::generateForm($fila);
+        $this->assertStringContainsString('type="text"', $form[0][1]->toHtml());
+    }
+
+    public function testGenerateFormTextareaFieldRendersTextarea()
+    {
+        $tmp = $this->template;
+        $tmp["predio"]["type"] = "textarea";
+        $template = json_encode($tmp);
+        $fila = Fila::factory()->make(['template' => $template]);
+        $form = JSONForms::generateForm($fila);
+        $this->assertStringContainsString("<textarea", $form[0][1]->toHtml());
+    }
+
     public function testGenerateFormChamado()
     {
         $template = json_encode($this->template);
@@ -126,6 +144,41 @@ class JSONFormsTest extends TestCase
         ]);
         $form = JSONForms::generateForm($fila, $chamado);
         $this->assertStringContainsString('selected">Admin', $form[0][1]->toHtml());
+    }
+
+    public function testGenerateFormDateFieldUsesMask()
+    {
+        $tmp = $this->template;
+        $tmp["predio"]["type"] = "date";
+        $template = json_encode($tmp);
+        $fila = Fila::factory()->make(['template' => $template]);
+        $form = JSONForms::generateForm($fila);
+        $this->assertStringContainsString('class="form-control datepicker date-mask"', $form[0][1]->toHtml());
+    }
+
+    public function testGenerateFormDateFieldUsesCurrentDateByDefault()
+    {
+        $tmp = $this->template;
+        $tmp["predio"]["type"] = "date";
+        $template = json_encode($tmp);
+        $fila = Fila::factory()->make(['template' => $template]);
+        $form = JSONForms::generateForm($fila);
+        $this->assertStringContainsString('value="' . date('d/m/Y') . '"', $form[0][1]->toHtml());
+    }
+
+    public function testGenerateFormDateFieldFormatsValue()
+    {
+        $tmp = $this->template;
+        $tmp["predio"]["type"] = "date";
+        $template = json_encode($tmp);
+        $fila = Fila::factory()->create(['template' => $template]);
+        $chamado = Chamado::factory()->make([
+            'fila_id' => $fila->id,
+            'extras' => '{"predio": "2026-04-09"}'
+        ]);
+
+        $form = JSONForms::generateForm($fila, $chamado);
+        $this->assertStringContainsString('value="09/04/2026"', $form[0][1]->toHtml());
     }
 
     public function testGenerateFormHelp()

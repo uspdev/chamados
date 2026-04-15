@@ -58,6 +58,7 @@
        * Ao carregar a página ordena todos os campos caixa de seleção adicionados na fila
       */
       $(document).ready(function() {
+        aplicarMascaraData();
         // Pega todos os campos extras que são caixa de seleção
         $('select[name^="extras"]').each(function () {
           var nameField = $(this).prop('name');
