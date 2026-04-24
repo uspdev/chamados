@@ -539,20 +539,32 @@ class ChamadoController extends Controller
 
         $request->validate(
             [
-                'codpes' => 'required|integer',
+                'codpes' => ['required', 'regex:/^((codpes|id)-)?\d+$/'],
                 'papel' => 'required|in:' . implode(',', Chamado::pessoaPapeis()),
             ]
         );
 
         $papel = $request->papel;
-        $codpes = $request->codpes;
+        $codpesField = (string) $request->codpes;
 
         # para cadastrar autor e atendente, vamos negar se usuário não for atendente
         if ('Autor' == $papel || 'Atendente' == $papel) {
             $this->authorize('atendente');
         }
 
-        $user = User::obterOuCriarPorCodpes($codpes);
+        if (is_numeric($codpesField)) {
+            $user = User::obterOuCriarPorCodpes((int) $codpesField);
+        } else {
+            [$searchField, $valueField] = explode('-', $codpesField, 2);
+
+            $user = $searchField === 'codpes'
+                ? User::obterOuCriarPorCodpes((int) $valueField)
+                : User::find((int) $valueField);
+        }
+
+        if (empty($user)) {
+            return back()->withErrors(['codpes' => 'Usuário não encontrado.'])->withInput();
+        }
 
         # O usuário já existe nesse papel?
         if ($chamado->users()->where('users.id', $user->id)->wherePivot('papel', $papel)->first()) {
