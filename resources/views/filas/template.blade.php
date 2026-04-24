@@ -36,7 +36,7 @@
                                                         @isset($tvalue[$field])
                                                             @switch($field)
                                                                 @case('type')
-                                                                <select class="form-control" name="template[{{ $tkey }}][{{ $field }}]" onchange="javascript: mudarCampoInputTextarea(this.name);">
+                                                                <select class="form-control" name="template[{{ $tkey }}][{{ $field }}]" onchange="javascript: mudarCampoInputTextarea(this.name); toggleCampoMaxlength(this.name);">
                                                                     <option value='text' {{ $tvalue[$field] == 'text' ? 'selected' : '' }}>Texto</option>
                                                                     <option value='textarea' {{ $tvalue[$field] == 'textarea' ? 'selected' : '' }}>Caixa de texto</option>
                                                                     <option value='select' {{ $tvalue[$field] == 'select' ? 'selected' : '' }}>Caixa de Seleção</option>
@@ -58,7 +58,14 @@
                                                                 </select>
                                                                 @break
                                                                 @default
-                                                                <input class="form-control" name="template[{{ $tkey }}][{{ $field }}]" value="{{ is_array($tvalue[$field]) ? json_encode($tvalue[$field], JSON_UNESCAPED_UNICODE) : $tvalue[$field] ?? '' }}">
+                                                                @php
+                                                                    $maxLengthDisabled = $field === 'maxlength' && (($tvalue['type'] ?? '') !== 'text');
+                                                                @endphp
+                                                                <input class="form-control"
+                                                                    name="template[{{ $tkey }}][{{ $field }}]"
+                                                                    value="{{ is_array($tvalue[$field]) ? json_encode($tvalue[$field], JSON_UNESCAPED_UNICODE) : $tvalue[$field] ?? '' }}"
+                                                                    @if ($field === 'maxlength') type="number" min="1" placeholder="Apenas para Texto" @endif
+                                                                    @if ($maxLengthDisabled) disabled @endif>
                                                             @endswitch
                                                         @endisset
                                                         @empty($tvalue[$field])
@@ -77,7 +84,10 @@
                                                                 </select>
                                                                 @break
                                                                 @default
-                                                                <input class="form-control" name="template[{{ $tkey }}][{{ $field }}]" value="">
+                                                                <input class="form-control"
+                                                                    name="template[{{ $tkey }}][{{ $field }}]"
+                                                                    value=""
+                                                                    @if ($field === 'maxlength') type="number" min="1" placeholder="Apenas para Texto" @endif>
                                                             @endswitch
                                                         @endempty
                                                     </div>
@@ -147,6 +157,7 @@
                 var nameField = $(this).prop('name');
                 // muda o campo de input para caixa de texto
                 $(mudarCampoInputTextarea(nameField));
+                $(toggleCampoMaxlength(nameField));
             });
         });
 

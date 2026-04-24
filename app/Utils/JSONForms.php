@@ -49,6 +49,39 @@ class JSONForms
     }
 
     /**
+     * Monta regras de limite de caracteres para campos extras do tipo texto.
+     */
+    public static function buildTextMaxLengthRules($extras, $fila)
+    {
+        $template = json_decode($fila->template);
+        $validate = [];
+
+        if (!$template || !is_array($extras)) {
+            return $validate;
+        }
+
+        foreach ($template as $key => $json) {
+            if (($json->type ?? null) != 'text' || !isset($json->maxlength)) {
+                continue;
+            }
+
+            if (!array_key_exists($key, $extras)) {
+                continue;
+            }
+
+            $maxlength = filter_var($json->maxlength, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
+            if ($maxlength === false) {
+                continue;
+            }
+
+            $field = 'extras.' . $key;
+            $validate[$field] = 'nullable|string|max:' . $maxlength;
+        }
+
+        return $validate;
+    }
+
+    /**
      * Renderiza o formulário como array contendo html
      */
     protected static function JSON2Form($template, $data, $perfil)
@@ -128,6 +161,13 @@ class JSONForms
 
                 default:
                     $fieldInput = html()->textarea("extras[$key]", $value)->class('form-control')->rows(3);
+
+                    if ($type == 'text' && isset($json->maxlength)) {
+                        $maxlength = filter_var($json->maxlength, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
+                        if ($maxlength !== false) {
+                            $fieldInput = $fieldInput->attribute('maxlength', strval($maxlength));
+                        }
+                    }
 
                     if (isset($json->validate) && strpos($json->validate, 'required') !== false) {
                         $fieldInput  = $fieldInput ->required();

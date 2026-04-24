@@ -143,7 +143,7 @@ class Fila extends Model
      */
     public static function getTemplateFields()
     {
-        return ['label', 'type', 'can', 'help', 'value', 'validate'];
+        return ['label', 'type', 'can', 'help', 'value', 'validate', 'maxlength'];
     }
 
     /**

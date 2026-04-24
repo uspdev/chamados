@@ -192,6 +192,16 @@ class JSONFormsTest extends TestCase
         $this->assertStringContainsString("Local de atendimento", $form[0][2]->toHtml());
     }
 
+    public function testGenerateFormTextMaxlength()
+    {
+        $tmp = $this->template;
+        $tmp["predio"]["maxlength"] = 10;
+        $template = json_encode($tmp);
+        $fila = Fila::factory()->make(['template' => $template]);
+        $form = JSONForms::generateForm($fila);
+        $this->assertStringContainsString('maxlength="10"', $form[0][1]->toHtml());
+    }
+
     public function testBuildRules()
     {
         $tmp = $this->template;
@@ -201,5 +211,15 @@ class JSONFormsTest extends TestCase
         $request = new Request([], ["extras" => ["predio" => "required"]]);
         $validate = JSONForms::buildRules($request, $fila);
         $this->assertEquals($validate, ["extras.predio" => "required"]);
+    }
+
+    public function testBuildTextMaxLengthRules()
+    {
+        $tmp = $this->template;
+        $tmp["predio"]["maxlength"] = 10;
+        $template = json_encode($tmp);
+        $fila = Fila::factory()->make(['template' => $template]);
+        $validate = JSONForms::buildTextMaxLengthRules(["predio" => "Administracao"], $fila);
+        $this->assertEquals($validate, ["extras.predio" => "nullable|string|max:10"]);
     }
 }

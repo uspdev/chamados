@@ -63,19 +63,21 @@ function mudarCampoInputTextarea(campo) {
   }
 }
 
-/* @autor uspdev/alecosta 09/04/2026
-* Aplica máscara de data no formato dd/mm/aaaa.
+/* @autor uspdev/alecosta 10/04/2026
+* Habilita o campo de limite de caracteres apenas quando tipo é texto
 */
-function aplicarMascaraData() {
-  $('.date-mask').each(function () {
-    $(this).on('input', function () {
-      var valor = $(this).val().replace(/\D/g, '').slice(0, 8);
-      if (valor.length > 4) {
-        valor = valor.replace(/(\d{2})(\d{2})(\d{1,4})/, '$1/$2/$3');
-      } else if (valor.length > 2) {
-        valor = valor.replace(/(\d{2})(\d{1,2})/, '$1/$2');
-      }
-      $(this).val(valor);
-    });
+function toggleCampoMaxlength(campo) {
+  var fieldTypeSelect = $('select[name="' + campo + '"]').find(':selected').val();
+  var maxlengthField = $('input[name="' + campo.replace('][type]', '][maxlength]') + '"]');
+
+  maxlengthField.each(function () {
+    if (fieldTypeSelect == 'text') {
+      $(this).prop('disabled', false);
+      $(this).attr('placeholder', 'Opcional');
+    } else {
+      $(this).val('');
+      $(this).prop('disabled', true);
+      $(this).attr('placeholder', 'Apenas para Texto');
+    }
   });
 }
