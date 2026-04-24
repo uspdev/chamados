@@ -132,8 +132,10 @@ class ChamadoController extends Controller
         # na criação não precisa
         #$request->validate(JSONForms::buildRules($request, $fila));
 
+        $extras = $this->normalizeExtrasForStorage($request->extras, $fila);
+
         # transaction para não ter problema de inconsistência do DB
-        $chamado = \DB::transaction(function () use ($request, $fila) {
+        $chamado = \DB::transaction(function () use ($request, $fila, $extras) {
             $chamado = new Chamado;
             $chamado->nro = Chamado::obterProximoNumero();
             $chamado->fila_id = $fila->id;
@@ -141,7 +143,7 @@ class ChamadoController extends Controller
             $chamado->status = 'Triagem';
 
             $chamado->descricao = $request->descricao;
-            $chamado->extras = json_encode($request->extras);
+            $chamado->extras = json_encode($extras);
 
             // vamos salvar sem evento pois o autor ainda não está cadastrado
             $chamado->saveQuietly();
@@ -342,6 +344,7 @@ class ChamadoController extends Controller
     {
         $atualizacao = [];
         $novo_valor = [];
+        $extras_request = $this->normalizeExtrasForStorage($request->extras, $chamado->fila);
 
         # assunto
         if ($chamado->assunto != $request->assunto && !empty($request->assunto)) {
@@ -360,11 +363,10 @@ class ChamadoController extends Controller
         }
 
         # formulario (extras)
-        if ($chamado->extras != json_encode($request->extras) && !empty($request->extras)) {
+        if ($chamado->extras != json_encode($extras_request) && !empty($extras_request)) {
             /* guardando os dados antigos em log para auditoria */
-            Log::info(' - Edição de chamado - Usuário: ' . \Auth::user()->codpes . ' - ' . \Auth::user()->name . ' - Id Chamado: ' . $chamado->id . ' - Extras antigo: ' . $chamado->extras . ' - Novo extras: ' . json_encode($request->extras));
+            Log::info(' - Edição de chamado - Usuário: ' . \Auth::user()->codpes . ' - ' . \Auth::user()->name . ' - Id Chamado: ' . $chamado->id . ' - Extras antigo: ' . $chamado->extras . ' - Novo extras: ' . json_encode($extras_request));
             $extras_chamados = json_decode($chamado->extras, true);
-            $extras_request = $request->extras;
             /* se não for um chamado novo */
             $atualiza_extras = false;
             if ($chamado->extras != "null") {
@@ -419,6 +421,55 @@ class ChamadoController extends Controller
             $chamado->users()->attach($user->id, ['papel' => 'Autor']);
         }
         return $chamado;
+    }
+
+    private function normalizeExtrasForStorage($extras, Fila $fila)
+    {
+        if (!is_array($extras)) {
+            return $extras;
+        }
+
+        $template = json_decode($fila->template);
+        if (!$template) {
+            return $extras;
+        }
+
+        foreach ($template as $key => $field) {
+            if (!isset($field->type) || $field->type !== 'date') {
+                continue;
+            }
+
+            if (!array_key_exists($key, $extras)) {
+                continue;
+            }
+
+            $extras[$key] = $this->normalizeDateToStorage($extras[$key]);
+        }
+
+        return $extras;
+    }
+
+    private function normalizeDateToStorage($value)
+    {
+        if (!is_string($value) || trim($value) === '') {
+            return $value;
+        }
+
+        $value = trim($value);
+
+        if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $value)) {
+            return $value;
+        }
+
+        if (preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $value)) {
+            try {
+                return \Carbon\Carbon::createFromFormat('d/m/Y', $value)->format('Y-m-d');
+            } catch (\Exception $e) {
+                return $value;
+            }
+        }
+
+        return $value;
     }
 
     /**

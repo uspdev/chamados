@@ -7,6 +7,24 @@ use Illuminate\Support\HtmlString;
 
 class JSONForms
 {
+    private static function formatDateToBrazilian($value)
+    {
+        if (empty($value) || !is_string($value)) {
+            return $value;
+        }
+
+        if (preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $value)) {
+            return $value;
+        }
+
+        if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $value)) {
+            [$year, $month, $day] = explode('-', $value);
+            return $day . '/' . $month . '/' . $year;
+        }
+
+        return $value;
+    }
+
     /**
      * Valida os campos do formulário
      *
@@ -87,6 +105,52 @@ class JSONForms
                 case 'select':
                     $fieldInput = html()->$type("extras[$key]", json_decode(json_encode($json->value), true))
                         ->class('form-control')->placeholder('Selecione...');;
+
+                    if (isset($json->validate) && strpos($json->validate, 'required') !== false) {
+                        $fieldInput  = $fieldInput ->required();
+                    }
+
+                    $input[] = $fieldInput;
+                    break;
+                case 'date':
+                    $dateValue = self::formatDateToBrazilian($value);
+                    if (empty($dateValue)) {
+                        $dateValue = date('d/m/Y');
+                    }
+
+                    $fieldInput = html()->text("extras[$key]", $dateValue)
+                        ->class('form-control datepicker date-mask')
+                        ->attribute('placeholder', 'dd/mm/aaaa')
+                        ->attribute('maxlength', '10')
+                        ->attribute('inputmode', 'numeric')
+                        ->attribute('autocomplete', 'off');
+
+                    if (isset($json->validate) && strpos($json->validate, 'required') !== false) {
+                        $fieldInput = $fieldInput->required();
+                    }
+
+                    $input[] = $fieldInput;
+                    break;
+                case 'text':
+                    $fieldInput = html()->text("extras[$key]", $value)->class('form-control');
+
+                    if (isset($json->validate) && strpos($json->validate, 'required') !== false) {
+                        $fieldInput = $fieldInput->required();
+                    }
+
+                    $input[] = $fieldInput;
+                    break;
+                case 'number':
+                    $fieldInput = html()->number("extras[$key]", $value)->class('form-control');
+
+                    if (isset($json->validate) && strpos($json->validate, 'required') !== false) {
+                        $fieldInput = $fieldInput->required();
+                    }
+
+                    $input[] = $fieldInput;
+                    break;
+                case 'textarea':
+                    $fieldInput = html()->textarea("extras[$key]", $value)->class('form-control')->rows(3);
 
                     if (isset($json->validate) && strpos($json->validate, 'required') !== false) {
                         $fieldInput  = $fieldInput ->required();
