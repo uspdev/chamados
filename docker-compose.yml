@@ -1,0 +1,51 @@
+services:
+  chamados:
+    build: .
+    container_name: chamados
+    ports:
+      - "8000:80"
+    depends_on:
+      - mariadb
+    networks:
+      - chamados-network
+    volumes:
+      - ./:/var/www/html
+    environment:
+      HOME: /tmp
+    user: "${UID:-1000}:${GID:-1000}"
+
+  mariadb:
+    image: mariadb:11
+    container_name: chamados_mariadb
+    restart: always
+    environment:
+      MYSQL_DATABASE: chamados
+      MYSQL_USER: chamados
+      MYSQL_PASSWORD: chamados
+      MYSQL_ROOT_PASSWORD: chamados
+    networks:
+      - chamados-network
+
+  selenium:
+    image: selenium/standalone-chrome
+    container_name: chamados_selenium
+    ports:
+      - "7900:7900" # VNC (pra ver o browser rodando)
+    networks:
+      - chamados-network
+    shm_size: 2gb
+
+  senhaunica-faker:
+    image: uspdev/senhaunica-faker
+    container_name: chamados_senhaunica-faker
+    ports:
+      - "3141:3141"
+    environment:
+          - APP_URL=http://auth.local:3141
+    networks:
+      chamados-network:
+        aliases:
+          - auth.local
+
+networks:
+  chamados-network:
