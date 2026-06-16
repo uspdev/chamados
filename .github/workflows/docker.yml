@@ -1,0 +1,44 @@
+name: Docker
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Login GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: $
+          password: $
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/$
+          tags: |
+            type=ref,event=tag
+
+      - name: Build and Push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: $
+          labels: |
+            org.opencontainers.image.source=https://github.com/$
+            org.opencontainers.image.description=Container image for $
+            org.opencontainers.image.licenses=MIT
