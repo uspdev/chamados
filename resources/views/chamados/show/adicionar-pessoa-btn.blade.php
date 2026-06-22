@@ -26,7 +26,7 @@
             </div>
           </div>
 
-          @if(Gate::check('filas.atendente', $chamado->fila) && Gate::check('perfilatendente'))
+          @if(Gate::check('filas.atendente', $chamado->fila) && Gate::check('perfilatendente')|| session('perfil') == 'admin')
             <div class="form-group row">
               {{ html()->label('Papel', 'papel')->class('col-form-label col-sm-2') }}
               <div class="col-sm-10">
