@@ -30,16 +30,16 @@
     </div>
     <div class="card-body">
 
-      <div class="mt-3">
+<div class="mt-3">
         <span class="text-muted mr-2">Adicionar pessoas por categoria</span>
         <div class="ml-3">
           {{-- <x-checkbox name="config[visibilidade][alunos]" label="alunos" disabled
             checked="{{ $fila->config->visibilidade->alunos ? true : false }}" class="form-check-inline" /> --}}
 
-          <x-checkbox name="config[visibilidade][servidores]" label="servidores"
+          <x-checkbox name="config[visibilidade][servidores]" label="Servidores (e estagiários)"
             checked="{{ $fila->config->visibilidade->servidores ? true : false }}" class="form-check-inline" />
 
-          <x-checkbox name="config[visibilidade][todos]" label="todos (USP)"
+          <x-checkbox name="config[visibilidade][todos]" label="Todos (USP)"
             checked="{{ $fila->config->visibilidade->todos ? true : false }}" class="form-check-inline" />
         </div>
       </div>
@@ -47,10 +47,10 @@
       <div class="mt-3">
         <span class="text-muted">Adicionar pessoas por função no sistema</span>
         <div class="ml-3">
-          <x-checkbox name="config[visibilidade][setor_gerentes]" label="gerentes de setor" class="form-check-inline"
+          <x-checkbox name="config[visibilidade][setor_gerentes]" label="Gerentes de setor" class="form-check-inline"
             checked="{{ $fila->config->visibilidade->setor_gerentes ? true : false }}" />
 
-          <x-checkbox name="config[visibilidade][fila_gerentes]" label="gerentes de fila" class="form-check-inline"
+          <x-checkbox name="config[visibilidade][fila_gerentes]" label="Gerentes de fila" class="form-check-inline"
             checked="{{ $fila->config->visibilidade->fila_gerentes ? true : false }}" />
         </div>
       </div>

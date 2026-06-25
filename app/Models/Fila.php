@@ -313,6 +313,13 @@ class Fila extends Model
                     return true;
                 }
 
+                # igualando Estagiariorh com Servidor para poder abrir chamados fora do setor.
+                # pode ser melhorado futuramente, mas por enquanto vamos manter assim pois implica em correção em todas as filas pelos gerentes.
+                $servidor = \Auth::user()->setores()->wherePivot('funcao', 'Estagiariorh')->first();
+                if ($fila->config->visibilidade->servidores && $servidor) {
+                    return true;
+                }
+
                 # liberando gerentes de todos os setores
                 $gerente_setor = \Auth::user()->setores()->wherePivot('funcao', 'Gerente')->first();
                 if ($fila->config->visibilidade->setor_gerentes && $gerente_setor) {
