@@ -5,6 +5,10 @@ return [
     'admins' => env('ADMINS'),
 
     'usar_replicado' => env('USAR_REPLICADO', true),
+
+    //exibir o link para formulário de login local na página inicial do sistema
+    'usuario_local' => env('USUARIO_LOCAL', true),
+
     'usar_foto' => env('USAR_FOTO', false),
     'upload_max_filesize' => (int) env('UPLOAD_MAX_FILESIZE', '16') * 1024,
 
