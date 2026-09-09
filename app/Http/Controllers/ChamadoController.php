@@ -539,7 +539,7 @@ class ChamadoController extends Controller
 
         $request->validate(
             [
-                'codpes' => ['required', 'regex:/^((codpes|id)-)?\d+$/'],
+                'codpes' => User::identificadorRules,
                 'papel' => 'required|in:' . implode(',', Chamado::pessoaPapeis()),
             ]
         );
@@ -552,15 +552,7 @@ class ChamadoController extends Controller
             $this->authorize('atendente');
         }
 
-        if (is_numeric($codpesField)) {
-            $user = User::obterOuCriarPorCodpes((int) $codpesField);
-        } else {
-            [$searchField, $valueField] = explode('-', $codpesField, 2);
-
-            $user = $searchField === 'codpes'
-                ? User::obterOuCriarPorCodpes((int) $valueField)
-                : User::find((int) $valueField);
-        }
+        $user = User::obterOuCriarPorIdentificador($codpesField);
 
         if (empty($user)) {
             return back()->withErrors(['codpes' => 'Usuário não encontrado.'])->withInput();

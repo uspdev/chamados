@@ -62,6 +62,11 @@ class User extends Authenticatable
         'telefone' => '',
     ];
 
+    public const identificadorRules = [
+        'required',
+        'regex:/^((codpes|id)-)?\d+$/',
+    ];
+
     protected const fields = [
         [
             'name' => 'codpes',
@@ -106,6 +111,7 @@ class User extends Authenticatable
 
     public static function criarPorCodpes($codpes)
     {
+        $codpes = (int) $codpes;
         $user = new User;
         $user->codpes = $codpes;
         if (config('chamados.usar_replicado')) {
@@ -129,6 +135,35 @@ class User extends Authenticatable
     public static function obterPorCodpes($codpes)
     {
         return User::where('codpes', $codpes)->first();
+    }
+
+    /**
+     * Resolve um identificador vindo da busca de pessoas.
+     *
+     * Identificadores codpes-* apontam para uma pessoa do Replicado e
+     * identificadores id-* apontam para um usuário já existente na base local.
+     * Números sem prefixo são aceitos para compatibilidade com chamadas antigas.
+     *
+     * @param string|int|null $identificador
+     * @return User|null
+     */
+    public static function obterOuCriarPorIdentificador($identificador)
+    {
+        $identificador = (string) $identificador;
+
+        if (ctype_digit($identificador)) {
+            return self::obterOuCriarPorCodpes((int) $identificador);
+        }
+
+        if (!preg_match('/^(codpes|id)-(\d+)$/', $identificador, $matches)) {
+            return null;
+        }
+
+        $valor = (int) $matches[2];
+
+        return $matches[1] === 'codpes'
+            ? self::obterOuCriarPorCodpes($valor)
+            : self::find($valor);
     }
 
     /**

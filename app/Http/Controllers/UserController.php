@@ -50,7 +50,16 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $this->authorize('admin');
-        User::obterOuCriarPorCodpes($request->codpes);
+
+        $request->validate([
+            'codpes' => User::identificadorRules,
+        ]);
+
+        $user = User::obterOuCriarPorIdentificador($request->codpes);
+        if (empty($user)) {
+            return back()->withErrors(['codpes' => 'Usuário não encontrado.'])->withInput();
+        }
+
         $request->session()->flash('alert-info', 'Atendente adicionado com sucesso');
         return redirect('/users');
     }
