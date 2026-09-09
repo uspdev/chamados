@@ -94,7 +94,9 @@ class ArquivoController extends Controller
         $this->authorize('chamados.view', $arquivo->chamado);
 
         //https://stackoverflow.com/questions/39329299/laravel-file-downloaded-from-storage-folder-gets-corrupted
-        ob_end_clean();
+        if (ob_get_level() > 0) {
+            ob_end_clean();
+        }
 
         return Storage::download($arquivo->caminho, $arquivo->nome_original);
     }
