@@ -11,6 +11,7 @@ return [
 
     'usar_foto' => env('USAR_FOTO', false),
     'upload_max_filesize' => (int) env('UPLOAD_MAX_FILESIZE', '16') * 1024,
+    'editar_comentarios_timeout_horas' => (int) env('EDITAR_COMENTARIOS_TIMEOUT_HORAS', 12),
 
     // deprecado em 2/23. Remover no próximo release
     'forcar_https' => env('FORCAR_HTTPS', false),

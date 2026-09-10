@@ -190,6 +190,9 @@ class Fila extends Model
         $out = new \StdClass;
         $out->triagem = $value->triagem ?? config('filas.config.triagem');
         $out->patrimonio = $value->patrimonio ?? config('filas.config.patrimonio');
+        $out->editar_comentarios = $value->editar_comentarios ?? config('filas.config.editar_comentarios');
+        $out->editar_comentarios_timeout_horas = $value->editar_comentarios_timeout_horas
+            ?? config('filas.config.editar_comentarios_timeout_horas');
         $out->visibilidade = $v;
         $out->status = $value->status ?? config('filas.config.status');
         return $out;
@@ -219,6 +222,9 @@ class Fila extends Model
         $config = new \StdClass;
         $config->triagem = $value['triagem'];
         $config->patrimonio = $value['patrimonio'];
+        $config->editar_comentarios = $value['editar_comentarios'] ?? 0;
+        $config->editar_comentarios_timeout_horas = $value['editar_comentarios_timeout_horas']
+            ?? config('filas.config.editar_comentarios_timeout_horas');
         $config->visibilidade = $v;
 
         $config->status = $value['status'];

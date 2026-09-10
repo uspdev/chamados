@@ -11,6 +11,8 @@ $config = [
         'setores' => 'todos', # todos ou interno
     ],
     'patrimonio' => 0,
+    'editar_comentarios' => 0,
+    'editar_comentarios_timeout_horas' => config('chamados.editar_comentarios_timeout_horas'),
 ];
 
 $template = '{}';

@@ -25,6 +25,9 @@
 
           <div class="form-group">
             <textarea class="form-control" id="comentario" name="comentario" rows="7" required></textarea>
+            <small class="form-text text-muted">
+              Aceita tags HTML básicas. URLs são convertidas automaticamente em links, exceto quando estiverem entre aspas simples.
+            </small>
           </div>
 
           @if ($chamado->status != 'Fechado')

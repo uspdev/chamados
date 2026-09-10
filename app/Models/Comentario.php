@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Chamado;
 use App\Models\User;
 use App\Observers\ComentarioObserver;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -49,6 +50,33 @@ class Comentario extends Model
     public static function tipos()
     {
         return ['user', 'system'];
+    }
+
+    public function podeSerEditadoPor(User $user)
+    {
+        if ($this->tipo != 'user') {
+            return false;
+        }
+
+        if ($this->user_id != $user->id) {
+            return false;
+        }
+
+        if (!$this->chamado->fila->config->editar_comentarios) {
+            return false;
+        }
+
+        $timeout = $this->chamado->fila->config->editar_comentarios_timeout_horas;
+        if ($timeout == 0) {
+            return true;
+        }
+
+        return $this->created_at->greaterThanOrEqualTo(Carbon::now()->subHours($timeout));
+    }
+
+    public function foiEditado()
+    {
+        return $this->created_at && $this->updated_at && $this->updated_at->greaterThan($this->created_at);
     }
 
     /**

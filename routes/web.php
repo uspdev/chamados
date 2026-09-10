@@ -74,6 +74,7 @@ Route::resource('chamados', ChamadoController::class)->except(['create', 'store'
 
 // COMENTARIOS
 Route::post('comentarios/{chamado}/', [ComentarioController::class, 'store']);
+Route::put('comentarios/{comentario}/', [ComentarioController::class, 'update']);
 
 // ARQUIVOS
 Route::resource('arquivos', ArquivoController::class);

@@ -66,6 +66,37 @@
       </div>
     </div>
 
+    <div class="ml-2 mt-3">
+      <span class="font-weight-bold">Comentários</span>
+
+      <div class="ml-2">
+        <span class="text-muted mr-2">permitir edição pelo autor:</span>
+
+        <div class="form-check form-check-inline">
+          <label class="form-check-label">
+            <input class="form-check-input" type="radio" name="config[editar_comentarios]" value="1"
+              {{ $fila->config->editar_comentarios ? 'checked' : '' }}>
+            Sim
+          </label>
+        </div>
+        <div class="form-check form-check-inline">
+          <label class="form-check-label">
+            <input class="form-check-input" type="radio" name="config[editar_comentarios]" value="0"
+              {{ $fila->config->editar_comentarios ? '' : 'checked' }}>
+            Não
+          </label>
+        </div>
+
+        <div class="form-group mt-2">
+          <label for="editar_comentarios_timeout_horas" class="text-muted">timeout para edição em horas:</label>
+          <input class="form-control form-control-sm col-md-2" type="number" min="0"
+            id="editar_comentarios_timeout_horas" name="config[editar_comentarios_timeout_horas]"
+            value="{{ $fila->config->editar_comentarios_timeout_horas }}">
+          <small class="form-text text-muted">Use 0 para permitir edição sem limite de tempo.</small>
+        </div>
+      </div>
+    </div>
+
     <x-textarea class="mt-3" label="<b>Instruções</b>" name="settings[instrucoes]"
       value="{!! $fila->settings()->get('instrucoes') !!}" helpView="ajuda.filas.config-instrucoes" />
 

@@ -6,6 +6,7 @@ use App\Models\Chamado;
 use App\Models\Comentario;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ComentarioController extends Controller
 {
@@ -58,5 +59,45 @@ class ComentarioController extends Controller
 
         $request->session()->flash('alert-info', 'Comentário enviado com sucesso');
         return redirect("chamados/$chamado->id");
+    }
+
+    public function update(Request $request, Comentario $comentario)
+    {
+        $this->authorize('chamados.update', $comentario->chamado);
+
+        if (!$comentario->podeSerEditadoPor(\Auth::user())) {
+            abort(403);
+        }
+
+        $request->validate([
+            'comentario' => ['required'],
+        ]);
+
+        $comentarioOriginal = $comentario->comentario;
+        $comentarioEditado = $request->comentario;
+
+        if ($comentarioOriginal == $comentarioEditado) {
+            $request->session()->flash('alert-info', 'Nenhuma alteração realizada');
+            return redirect("chamados/{$comentario->chamado->id}");
+        }
+
+        $comentario->comentario = $comentarioEditado;
+        $comentario->save();
+
+        Log::info('Comentário editado', [
+            'comentario_id' => $comentario->id,
+            'chamado_id' => $comentario->chamado_id,
+            'user_id' => \Auth::user()->id,
+            'comentario_original' => $comentarioOriginal,
+            'comentario_editado' => $comentarioEditado,
+        ]);
+
+        Comentario::criarSystem(
+            $comentario->chamado,
+            'O comentário de ' . e($comentario->user->name) . ' foi editado.'
+        );
+
+        $request->session()->flash('alert-info', 'Comentário editado com sucesso');
+        return redirect("chamados/{$comentario->chamado->id}");
     }
 }

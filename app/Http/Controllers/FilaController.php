@@ -104,6 +104,10 @@ class FilaController extends Controller
         }
 
         if ($request->card == 'config') {
+            $request->validate([
+                'config.editar_comentarios_timeout_horas' => 'required|integer|min:0',
+            ]);
+
             $settings = $request->settings;
             $fila->settings()->set('instrucoes', $settings['instrucoes']);
 

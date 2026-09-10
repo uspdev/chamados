@@ -151,6 +151,8 @@ Cadastre uma nova URL no configurador de senha única utilizando o caminho `http
 
 Há várias opções que precisam ser ajustadas nesse arquivo. Faça com atenção para não deixar passar nada. O arquivo está todo documentado.
 
+A variável `EDITAR_COMENTARIOS_TIMEOUT_HORAS` define o timeout padrão, em horas, para edição de comentários próprios nas filas que habilitarem essa opção. Cada fila pode sobrescrever esse valor nas suas configurações; use `0` para permitir edição sem limite de tempo.
+
 ### Popular banco de dados
 
     php artisan migrate
