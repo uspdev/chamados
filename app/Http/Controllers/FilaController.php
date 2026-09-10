@@ -187,11 +187,19 @@ class FilaController extends Controller
     {
         $this->authorize('filas.update', $fila);
 
-        [$searchField, $valueField] = explode('-', $request->codpes_id);
+        // codpes era o nome usado por clientes antigos; o formulário atual usa codpes_id.
+        $identificador = $request->input('codpes_id', $request->input('codpes'));
+        $request->merge(['codpes_id' => $identificador]);
+        $request->validate([
+            'codpes_id' => User::identificadorRules,
+            'funcao' => 'required|in:Gerente,Atendente',
+        ]);
 
-        $user = $searchField === 'codpes' ?
-            User::obterOuCriarPorCodpes($valueField) :
-            User::find($valueField);
+        $user = User::obterOuCriarPorIdentificador($identificador);
+        if (empty($user)) {
+            return back()->withErrors(['codpes_id' => 'Usuário não encontrado.'])->withInput();
+        }
+
         $fila->users()->detach($user->id);
         $fila->users()->attach($user->id, ['funcao' => $request->funcao]);
 

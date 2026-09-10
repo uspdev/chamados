@@ -136,7 +136,15 @@ class SetorController extends Controller
     {
         $this->authorize('setores.view', $setor);
 
-        $user = User::obterOuCriarPorCodpes($request->codpes);
+        $request->validate([
+            'codpes' => User::identificadorRules,
+        ]);
+
+        $user = User::obterOuCriarPorIdentificador($request->codpes);
+        if (empty($user)) {
+            return back()->withErrors(['codpes' => 'Usuário não encontrado.'])->withInput();
+        }
+
         Setor::vincularPessoa($setor, $user, 'Gerente');
 
         $request->session()->flash('alert-info', 'Pessoa adicionada com sucesso');
