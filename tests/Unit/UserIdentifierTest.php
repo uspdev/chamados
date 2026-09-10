@@ -40,7 +40,7 @@ class UserIdentifierTest extends TestCase
         $this->assertTrue($resolved->is($user));
     }
 
-    public function test_it_creates_a_user_with_a_numeric_codpes(): void
+    public function test_it_creates_a_user_with_a_prefixed_codpes_identifier(): void
     {
         $user = User::obterOuCriarPorIdentificador('codpes-17971882');
 
