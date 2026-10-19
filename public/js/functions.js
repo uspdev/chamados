@@ -62,6 +62,19 @@ function mudarCampoInputTextarea(campo) {
     });
   }
 }
+function aplicarMascaraData() {
+  $('.date-mask').each(function () {
+    $(this).on('input', function () {
+      var valor = $(this).val().replace(/\D/g, '').slice(0, 8);
+      if (valor.length > 4) {
+        valor = valor.replace(/(\d{2})(\d{2})(\d{1,4})/, '$1/$2/$3');
+      } else if (valor.length > 2) {
+        valor = valor.replace(/(\d{2})(\d{1,2})/, '$1/$2');
+      }
+      $(this).val(valor);
+    });
+  });
+}
 
 /* @autor uspdev/alecosta 10/04/2026
 * Habilita o campo de limite de caracteres apenas quando tipo é texto
