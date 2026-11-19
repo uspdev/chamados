@@ -143,7 +143,7 @@ return [
     'right_menu' => $right_menu,
 
     # mensagens flash - https://uspdev.github.io/laravel#31-mensagens-flash
-    'mensagensFlash' => false,
+    'mensagensFlash' => true,
 
     # container ou container-fluid
     'container' => 'container-fluid',
