@@ -57,7 +57,7 @@ Caso você já tenha instalado o sistema e aplique uma nova atualização, sempr
     git pull
     composer install --no-dev
     php artisan migrate
-    
+
 Caso tenha alguma atualização, não deixe de conferir o readme.md quanto a outras providências que podem ser necessárias.
 
 Também deve observar no [changelog](docs/changelog.md) se tem alguma outra coisa a ser ajustada, por exemplo o arquivo .env
@@ -95,7 +95,7 @@ Criar user e banco de dados (em mysql):
     create user 'chamados'@'%' identified by '<<password here>>';
     grant all privileges on chamados.* to 'chamados'@'%';
     flush privileges;
-    
+
 Rodar a importação/atualização de setores e chefes de setores
 
     php artisan setores:sync
@@ -152,12 +152,6 @@ Cadastre uma nova URL no configurador de senha única utilizando o caminho `http
 Há várias opções que precisam ser ajustadas nesse arquivo. Faça com atenção para não deixar passar nada. O arquivo está todo documentado.
 
 A variável `EDITAR_COMENTARIOS_TIMEOUT_HORAS` define o timeout padrão, em horas, para edição de comentários próprios nas filas que habilitarem essa opção. Cada fila pode sobrescrever esse valor nas suas configurações; use `0` para permitir edição sem limite de tempo.
-
-Login com usuário local(USUARIO_LOCAL): A variável USUARIO_LOCAL controla a exibição do link para o formulário de login local na página inicial. Essa opção permite que usuários com conta local utilizem suas credenciais para acessar o sistema sem autenticação pela Senha Única USP, para isso configure no arquivo .env:
-
-    USUARIO_LOCAL=true
-
-Use true para exibir o link ou false para ocultá-lo. Quando a variável não estiver definida, o valor padrão em config/chamados.php é true. O .env.example disponibilizado define false. Essa variável controla apenas a exibição do link e não altera as rotas de autentificação local
 
 ### Popular banco de dados
 
