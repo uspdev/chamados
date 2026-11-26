@@ -57,7 +57,7 @@ Caso você já tenha instalado o sistema e aplique uma nova atualização, sempr
     git pull
     composer install --no-dev
     php artisan migrate
-    
+
 Caso tenha alguma atualização, não deixe de conferir o readme.md quanto a outras providências que podem ser necessárias.
 
 Também deve observar no [changelog](docs/changelog.md) se tem alguma outra coisa a ser ajustada, por exemplo o arquivo .env
@@ -95,7 +95,7 @@ Criar user e banco de dados (em mysql):
     create user 'chamados'@'%' identified by '<<password here>>';
     grant all privileges on chamados.* to 'chamados'@'%';
     flush privileges;
-    
+
 Rodar a importação/atualização de setores e chefes de setores
 
     php artisan setores:sync
