@@ -7856,20 +7856,20 @@
         },
         {
             "name": "uspdev/laravel-usp-theme",
-            "version": "2.8.28",
+            "version": "2.8.45",
             "source": {
                 "type": "git",
                 "url": "https://github.com/uspdev/laravel-usp-theme.git",
-                "reference": "466d42a78b0ce30ccb1aba25f0a1762fc555adf1"
+                "reference": "4a70df1390b90e7afdbda428ae333701959f6575"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/uspdev/laravel-usp-theme/zipball/466d42a78b0ce30ccb1aba25f0a1762fc555adf1",
-                "reference": "466d42a78b0ce30ccb1aba25f0a1762fc555adf1",
+                "url": "https://api.github.com/repos/uspdev/laravel-usp-theme/zipball/4a70df1390b90e7afdbda428ae333701959f6575",
+                "reference": "4a70df1390b90e7afdbda428ae333701959f6575",
                 "shasum": ""
             },
             "require": {
-                "uspdev/cadastros-auxiliares-client": "^1.0"
+                "uspdev/cadastros-auxiliares-client": "^1"
             },
             "type": "library",
             "extra": {
@@ -7903,9 +7903,10 @@
             "description": "usp theme for laravel",
             "support": {
                 "issues": "https://github.com/uspdev/laravel-usp-theme/issues",
-                "source": "https://github.com/uspdev/laravel-usp-theme/tree/2.8.28"
+                "source": "https://github.com/uspdev/laravel-usp-theme/tree/2.8.45"
             },
-            "time": "2026-04-07T18:57:38+00:00"
+            "time": "2026-11-25T17:18:53+00:00",
+            "published-time": "2026-11-25T17:19:44+00:00"
         },
         {
             "name": "uspdev/laravel-usp-validators",
@@ -8005,16 +8006,16 @@
         },
         {
             "name": "uspdev/senhaunica-socialite",
-            "version": "4.5.8",
+            "version": "4.5.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/uspdev/senhaunica-socialite.git",
-                "reference": "8f78488132fefa7f4198fba71c681195b659502a"
+                "reference": "993e9fc71b39f7d3760edf9207bcb7f6f2b0f19c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/uspdev/senhaunica-socialite/zipball/8f78488132fefa7f4198fba71c681195b659502a",
-                "reference": "8f78488132fefa7f4198fba71c681195b659502a",
+                "url": "https://api.github.com/repos/uspdev/senhaunica-socialite/zipball/993e9fc71b39f7d3760edf9207bcb7f6f2b0f19c",
+                "reference": "993e9fc71b39f7d3760edf9207bcb7f6f2b0f19c",
                 "shasum": ""
             },
             "require": {
@@ -8023,7 +8024,7 @@
                 "laravel/socialite": "^5",
                 "php": "^7 | ^8",
                 "socialiteproviders/manager": "^3 | ^4",
-                "spatie/laravel-permission": "^4 | ^5 | ^6 | ^7"
+                "spatie/laravel-permission": "^4 | ^5 | ^6 | ^7 | ^8"
             },
             "type": "library",
             "extra": {
@@ -8056,9 +8057,10 @@
             "homepage": "https://github.com/uspdev/senhaunica-socialite",
             "support": {
                 "issues": "https://github.com/uspdev/senhaunica-socialite/issues",
-                "source": "https://github.com/uspdev/senhaunica-socialite/tree/4.5.8"
+                "source": "https://github.com/uspdev/senhaunica-socialite/tree/4.5.13"
             },
-            "time": "2026-03-20T14:12:15+00:00"
+            "time": "2026-11-26T01:17:06+00:00",
+            "published-time": "2026-11-26T01:17:50+00:00"
         },
         {
             "name": "uspdev/wsfoto",
@@ -10974,5 +10976,5 @@
         "php": "^8.2"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.11.0"
 }
